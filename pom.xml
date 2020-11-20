@@ -8,7 +8,23 @@
 		<version>2.3.6.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+	<repositories>
+		<repository>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<id>central</id>
+			<url>http://repo.maven.apache.org/maven2</url>
 
+		</repository>
+		<repository>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<id>central</id>
+			<url>https://repo1.maven.org/maven2/</url>
+		</repository>
+	</repositories>
 	<groupId>my.myungjin</groupId>
 	<artifactId>academyDemo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -21,6 +37,8 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<undertow.version>2.1.0.Final</undertow.version>
 		<h2.version>1.4.199</h2.version>
+		<log4jdbc.version>0.2.7</log4jdbc.version>
+		<hikariCP.version>3.4.5</hikariCP.version>
 	</properties>
 
 	<dependencies>
@@ -80,14 +98,31 @@
 			<version>${undertow.version}</version>
 		</dependency>
 
-
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>${h2.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.lazyluke</groupId>
+			<artifactId>log4jdbc-remix</artifactId>
+			<version>${log4jdbc.version}</version>
+		</dependency>
 
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+			<version>${hikariCP.version}</version>
+		</dependency>
+
+		<!-- lombok -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.10</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -104,6 +139,12 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.2</version>
 			</plugin>
 		</plugins>
 	</build>
