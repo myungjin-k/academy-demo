@@ -12,7 +12,17 @@ const sample = {
             dataType: 'json',
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
-            console.log(response);
+            $.each(response, function(){
+                const item = this;
+                const row = '<tr>'
+                    + '<td>' + item.code +'</td>'
+                    + '<td>' + item.nameEng +'</td>'
+                    + '<td>' + item.nameKor +'</td>'
+                    + '<td>' + item.createAt +'</td>'
+                    + '</tr>';
+                console.log(row);
+                $('#samples').append(row);
+            });
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });

@@ -13,14 +13,14 @@ public class WebMvcConfigure implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/**/*.css", "/**/*.html", "/**/*.js", "/**/*.png")
+        registry.addResourceHandler("/**/*.css", "/**/*.html", "/**/*.js", "/**/*.png", "/**/*.mustache")
                 .setCachePeriod(0)
-                .addResourceLocations("classpath:/static/");
+                .addResourceLocations("classpath:/templates/");
 
-        registry.addResourceHandler("/", "/**")
+        registry.addResourceHandler("/")
                 .setCachePeriod(0)
-                .addResourceLocations("classpath:/static/index.html")
-                .resourceChain(true)
+                .addResourceLocations("classpath:/templates/index.mustache");
+                /*.resourceChain(true)
                 .addResolver(new PathResourceResolver() {
                     @Override
                     protected Resource getResource(String resourcePath, Resource location) {
@@ -29,7 +29,7 @@ public class WebMvcConfigure implements WebMvcConfigurer {
                         }
                         return location.exists() && location.isReadable() ? location : null;
                     }
-                });
+                });*/
 
     }
 }
