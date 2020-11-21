@@ -1,0 +1,36 @@
+{{>layout/header}}
+
+<!-- 목록 출력 영역 -->
+<a class="btn btn-primary" id="btn-load-samples">코드그룹 불러오기 &raquo;</a>
+<a class="btn btn-primary" id="btn-add-sample">코드그룹 등록 &raquo;</a>
+<table class="table table-horizontal table-bordered">
+    <thead class="thead-strong">
+    <tr>
+        <th>그룹코드</th>
+        <th>코드이름(영문)</th>
+        <th>코드이름(국문)</th>
+        <th>작성일시</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody id="samples">
+
+    </tbody>
+</table>
+<form id="form-save-sample">
+    <div class="form-group">
+        <input type="hidden" name="id" id="id" />
+        <label for="code">그룹코드</label>
+        <input type="text" class="form-control" name="code" id="code" />
+    </div>
+    <div class="form-group">
+        <label for="nameEng">코드이름(영문)</label>
+        <input type="text" class="form-control" name="nameEng" id="nameEng" />
+        <label for="nameKor">코드이름(국문)</label>
+        <input type="text" class="form-control" name="nameKor" id="nameKor" />
+    </div>
+    <a class="btn btn-primary" id="btn-save">Submit</a>
+</form>
+<script src="static/js/sample.js"></script>
+{{>layout/footer}}

@@ -5,6 +5,7 @@ import my.myungjin.academyDemo.util.Util;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,14 +43,13 @@ public class CodeGroup {
     private List<CommonCode> codes = new ArrayList<>();
 
     @Builder
-    public CodeGroup(String code, String nameEng, String nameKor) {
-        this.id = Util.getUUID();
+    public CodeGroup(String id, String code, String nameEng, String nameKor, Timestamp createAt, Timestamp updateAt) {
+        this.id = id;
         this.code = code;
         this.nameEng = nameEng;
         this.nameKor = nameKor;
-        Timestamp now = timestampOf(now());
-        this.createAt = now;
-        this.updateAt = now;
+        this.createAt = createAt;
+        this.updateAt = updateAt;
     }
 
     public void update(String code, String nameEng, String nameKor){

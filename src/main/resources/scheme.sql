@@ -21,6 +21,6 @@ CREATE TABLE common_code (
                              update_at       datetime NOT NULL DEFAULT CURRENT_TIMESTAMP(),
                              PRIMARY KEY (id),
                              CONSTRAINT unq_common_code UNIQUE (code),
-                             CONSTRAINT fk_common_code_to_code_group FOREIGN KEY (group_id) REFERENCES code_group (id) ON DELETE RESTRICT ON UPDATE RESTRICT
+                             CONSTRAINT fk_common_code_to_code_group FOREIGN KEY (group_id) REFERENCES code_group (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
