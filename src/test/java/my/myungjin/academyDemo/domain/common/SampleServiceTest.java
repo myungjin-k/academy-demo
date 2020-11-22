@@ -1,6 +1,8 @@
 package my.myungjin.academyDemo.domain.common;
 
+import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.service.sample.SampleService;
+import my.myungjin.academyDemo.util.Util;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
@@ -9,9 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 
@@ -34,6 +36,7 @@ public class SampleServiceTest {
 
     @BeforeAll
     void setUp() {
+        groupId = Util.getUUID();
         groupCode = "999";
         groupNameEng = "TEST";
         groupNameKor = "테스트";
@@ -41,14 +44,17 @@ public class SampleServiceTest {
     @Test
     @Order(1)
     void 코드그룹_작성하기(){
-        CodeGroup codeGroup = new CodeGroup.CodeGroupBuilder()
+        LocalDateTime now = LocalDateTime.now();
+        CodeGroup codeGroup = CodeGroup.builder()
+                .id(groupId)
                 .code(groupCode)
                 .nameEng(groupNameEng)
                 .nameKor(groupNameKor)
+                .createAt(now)
+                .updateAt(now)
                 .build();
 
         CodeGroup result = commonService.saveGroup(codeGroup);
-        groupId = result.getId();
 
         //then
         MatcherAssert.assertThat(result, is(notNullValue()));
@@ -71,9 +77,7 @@ public class SampleServiceTest {
     @Test
     @Order(3)
     void 코드그룹_수정하기(){
-        CodeGroup group = commonService.findGroupByCode(groupCode).orElse(null);
-        MatcherAssert.assertThat(group, is(notNullValue()));
-        String id = group.getId();
+        String id = groupId;
         String code = "XXX";
         String nameEng = "EMPTY";
         String nameKor = "빈값";
@@ -85,5 +89,33 @@ public class SampleServiceTest {
         MatcherAssert.assertThat(updated.getNameKor(), is(nameKor));
 
         log.info("Updated codeGroup: {}", updated);
+    }
+
+    @Test
+    @Order(4)
+    void 공통코드_작성하기(){
+        LocalDateTime now = LocalDateTime.now();
+        CommonCode commonCode = CommonCode.builder()
+                .id(Util.getUUID())
+                .code("XXX100")
+                .nameEng("EMPTY_100")
+                .nameKor("빈값_100")
+                .groupId(groupId)
+                .createAt(now)
+                .updateAt(now)
+                .build();
+        CommonCode result = commonService.saveCommonCode(commonCode);
+
+        //then
+        MatcherAssert.assertThat(result, is(notNullValue()));
+        log.info("Written commonCode: {}", result);
+    }
+
+
+    @Test
+    @Order(5)
+    void 공통코드_조회하기(){
+        List<CommonCode> commonCodes = commonService.findAllCommonCodesByGroupId(Id.of(CodeGroup.class, groupId));
+        MatcherAssert.assertThat(commonCodes.size(), is(1));
     }
 }
