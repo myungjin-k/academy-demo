@@ -1,4 +1,38 @@
-var sample = {
+var main = {
+    init : function() {
+        codeGroup.init();
+        commonCode.init();
+
+        $(document).on('click', '.btn-search-codes', function(){
+            var id = $(this).parents('tr').find('input[name="id"]').val();
+            $('#div-code-group').hide();
+            $('#div-code').show();
+            $('#tab-code-group a').removeClass('active');
+            $('#tab-code').show();
+            $('#tab-code a').addClass('active');
+            commonCode.list(id);
+        });
+
+
+        $('#tab-code-group').click(function(){
+            $('#div-code-group').show();
+            $('#div-code').hide();
+            $('#tab-code').hide();
+            $('#tab-code a').removeClass('active');
+            $('#tab-code-group a').addClass('active');
+        });
+
+        $('#tab-code').click(function(){
+            $('#div-code-group').hide();
+            $('#div-code').show();
+            $('#tab-code-group a').removeClass('active');
+            $('#tab-code').show();
+            $('#tab-code a').addClass('active');
+        });
+
+    }
+}
+var codeGroup = {
     init : function () {
         var _this = this;
         $('#btn-load-samples').click(function () {
@@ -7,7 +41,7 @@ var sample = {
         $('#btn-add-sample').click(function () {
             _this.clearForm();
         });
-        $('#btn-save').click(function (){
+        $('#btn-save-sample').click(function (){
             var id = $('#form-save-sample').find('input[name="id"]').val();
             if(id !== ''){
                 _this.update();
@@ -59,6 +93,7 @@ var sample = {
                     + '<td>' + item.createAt +'</td>'
                     + '<td><a class="btn btn-primary btn-modify">수정</a></td>'
                     + '<td><a class="btn btn-primary btn-delete">삭제</a></td>'
+                    + '<td><a class="btn btn-primary btn-search-codes">공통코드 보기</a></td>'
                     + '</tr>';
                 $('#samples').append(row);
             });
@@ -121,7 +156,77 @@ var sample = {
         });
 
     }
-
 };
+var commonCode = {
+    init : function () {
+        var _this = this;
+        $('#btn-add-code').click(function () {
+            _this.clearForm();
+        });
+        $('#btn-save-code').click(function (){
+            var id = $('#form-save-sample').find('input[name="id"]').val();
+            if(id !== ''){
+                _this.update();
+            } else {
+                _this.save();
+            }
+        });
+    },
+    clearTable : function(){
+        $('#codes').empty();
+    },
+    clearForm : function(){
+        var form = $('#form-save-code');
+        form.find('input[name="id"]').val('');
+        form.find('input[name="code"]').val('');
+        form.find('input[name="nameEng"]').val('');
+        form.find('input[name="nameKor"]').val('');
+    },
+    list : function (id){
+        this.clearTable();
+        $.ajax({
+            type: 'GET',
+            url: '/codeGroup/' + id + '/commonCodes/list',
+            dataType: 'json',
+            contentType:'application/json; charset=utf-8'
+        }).done(function(response) {
+            $.each(response, function(){
+                const item = this;
+                //console.log(item);
+                const row = '<tr>'
+                    + '<input type="hidden" name="id" value="' + item.id + '"/>'
+                    + '<td class="groupId">' + item.groupId +'</td>'
+                    + '<td class="code">' + item.code +'</td>'
+                    + '<td class="nameEng">' + item.nameEng +'</td>'
+                    + '<td class="nameKor">' + item.nameKor +'</td>'
+                    + '<td>' + item.createAt +'</td>'
+                    + '<td><a class="btn btn-primary btn-modify">수정</a></td>'
+                    + '<td><a class="btn btn-primary btn-delete">삭제</a></td>'
+                    + '</tr>';
+                $('#codes').append(row);
+                $('#form-save-code input[name="groupId"]').val(item.groupId);
+            });
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
 
-sample.init();
+    },
+    save : function (){
+        var _this = this;
+        var data = $('#form-save-code').serializeObject();
+        //console.log(data.groupId);
+        $.ajax({
+            type: 'POST',
+            url: '/codeGroup/' + data.groupId + '/commonCodes',
+            dataType: 'json',
+            contentType:'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function(response) {
+            _this.list(response.groupId);
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+
+    }
+};
+main.init();

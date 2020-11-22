@@ -1,36 +1,85 @@
 {{>layout/header}}
+<ul class="nav nav-tabs">
+    <li class="nav-item" id="tab-code-group">
+        <a class="nav-link active" href="#">코드그룹</a>
+    </li>
+    <li class="nav-item" id="tab-code" style="display: none;">
+        <a class="nav-link" href="#">공통코드</a>
+    </li>
+</ul>
+<!-- 코드그룹 목록 출력 영역 -->
+<div id = "div-code-group">
+    <a class="btn btn-primary" id="btn-load-samples">코드그룹 불러오기 &raquo;</a>
+    <a class="btn btn-primary" id="btn-add-sample">코드그룹 등록 &raquo;</a>
+    <table class="table table-horizontal table-bordered">
+        <thead class="thead-strong">
+        <tr>
+            <th>그룹코드</th>
+            <th>코드이름(영문)</th>
+            <th>코드이름(국문)</th>
+            <th>작성일시</th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody id="samples">
 
-<!-- 목록 출력 영역 -->
-<a class="btn btn-primary" id="btn-load-samples">코드그룹 불러오기 &raquo;</a>
-<a class="btn btn-primary" id="btn-add-sample">코드그룹 등록 &raquo;</a>
-<table class="table table-horizontal table-bordered">
-    <thead class="thead-strong">
-    <tr>
-        <th>그룹코드</th>
-        <th>코드이름(영문)</th>
-        <th>코드이름(국문)</th>
-        <th>작성일시</th>
-        <th></th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody id="samples">
+        </tbody>
+    </table>
+    <form id="form-save-sample">
+        <div class="form-group">
+            <input type="hidden" name="id" id="id" />
+            <label for="code">그룹코드</label>
+            <input type="text" class="form-control" name="code" id="code" />
+        </div>
+        <div class="form-group">
+            <label for="nameEng">코드이름(영문)</label>
+            <input type="text" class="form-control" name="nameEng" id="nameEng" />
+            <label for="nameKor">코드이름(국문)</label>
+            <input type="text" class="form-control" name="nameKor" id="nameKor" />
+        </div>
+        <a class="btn btn-primary" id="btn-save-sample">Submit</a>
+    </form>
+</div>
+<!-- 공통코드 목록 출력 영역 -->
+<div id = "div-code" style="display: none;">
+    <a class="btn btn-primary" id="btn-add-code">공통코드 등록 &raquo;</a>
+    <table class="table table-horizontal table-bordered">
+        <thead class="thead-strong">
+        <tr>
+            <th>코드그룹</th>
+            <th>코드</th>
+            <th>코드이름(영문)</th>
+            <th>코드이름(국문)</th>
+            <th>작성일시</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody id="codes">
 
-    </tbody>
-</table>
-<form id="form-save-sample">
-    <div class="form-group">
-        <input type="hidden" name="id" id="id" />
-        <label for="code">그룹코드</label>
-        <input type="text" class="form-control" name="code" id="code" />
-    </div>
-    <div class="form-group">
-        <label for="nameEng">코드이름(영문)</label>
-        <input type="text" class="form-control" name="nameEng" id="nameEng" />
-        <label for="nameKor">코드이름(국문)</label>
-        <input type="text" class="form-control" name="nameKor" id="nameKor" />
-    </div>
-    <a class="btn btn-primary" id="btn-save">Submit</a>
-</form>
+        </tbody>
+    </table>
+    <form id="form-save-code">
+        <div class="form-group">
+            <input type="hidden" name="id" id="id" />
+            <label for="common-code">코드</label>
+            <input type="text" class="form-control" name="code" id="common-code" />
+        </div>
+        <div class="form-group">
+            <label for="code-nameEng">코드이름(영문)</label>
+            <input type="text" class="form-control" name="nameEng" id="code-nameEng" />
+            <label for="code-nameKor">코드이름(국문)</label>
+            <input type="text" class="form-control" name="nameKor" id="code-nameKor" />
+        </div>
+        <div class="form-group">
+            <label for="groupId">코드그룹</label>
+            <input type="text" class="form-control" name="groupId" id="groupId" readonly/>
+        </div>
+        <a class="btn btn-primary" id="btn-save-code">Submit</a>
+    </form>
+</div>
+
 <script src="static/js/sample.js"></script>
 {{>layout/footer}}
