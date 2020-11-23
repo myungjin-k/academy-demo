@@ -83,7 +83,7 @@ var codeGroup = {
             dataType: 'json',
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
-            $.each(response, function(){
+            $.each(response.response, function(){
                 const item = this;
                 const row = '<tr>'
                     + '<input type="hidden" name="id" value="' + item.id + '"/>'
@@ -207,8 +207,9 @@ var commonCode = {
             dataType: 'json',
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
-            var codeGroup = response.code;
-            $.each(response.commonCodes, function(){
+            var resultData = response.response;
+            var codeGroup = resultData.code;
+            $.each(resultData.commonCodes, function(){
                 var item = this;
                 //console.log(item);
                 var row = '<tr>'
