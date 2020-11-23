@@ -5,30 +5,31 @@ var main = {
 
         $(document).on('click', '.btn-search-codes', function(){
             var id = $(this).parents('tr').find('input[name="id"]').val();
-            $('#div-code-group').hide();
-            $('#div-code').show();
-            $('#tab-code-group a').removeClass('active');
+            $('#div-code-group').removeClass('active');
+            $('#div-code').addClass('active').addClass('show');
+
+            $('#tab-code-group a').removeClass('active').prop('aria-selected', false);
             $('#tab-code').show();
-            $('#tab-code a').addClass('active');
+            $('#tab-code a').addClass('active').prop('aria-selected', true);
             commonCode.list(id);
         });
 
 
-        $('#tab-code-group').click(function(){
+        /*$('#tab-code-group').click(function(){
             $('#div-code-group').show();
             $('#div-code').hide();
             $('#tab-code').hide();
             $('#tab-code a').removeClass('active');
             $('#tab-code-group a').addClass('active');
-        });
+        });*/
 
-        $('#tab-code').click(function(){
+        /*$('#tab-code').click(function(){
             $('#div-code-group').hide();
             $('#div-code').show();
             $('#tab-code-group a').removeClass('active');
             $('#tab-code').show();
             $('#tab-code a').addClass('active');
-        });
+        });*/
 
     }
 }

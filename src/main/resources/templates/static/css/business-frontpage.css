@@ -6,3 +6,12 @@
 body {
   padding-top: 56px;
 }
+.container .nav-tabs {
+  margin-bottom: 1rem;
+}
+.div-crud-buttons {
+  padding: 1.5rem;
+  text-align: right;
+}
+
+
