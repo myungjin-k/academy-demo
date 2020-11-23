@@ -1,4 +1,4 @@
-package my.myungjin.academyDemo.domain.common;
+package my.myungjin.academyDemo.domain.commonCode;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

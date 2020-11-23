@@ -1,11 +1,11 @@
-package my.myungjin.academyDemo.service.sample;
+package my.myungjin.academyDemo.service.commonCode;
 
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
-import my.myungjin.academyDemo.domain.common.CodeGroup;
-import my.myungjin.academyDemo.domain.common.CodeGroupRepository;
-import my.myungjin.academyDemo.domain.common.CommonCode;
-import my.myungjin.academyDemo.domain.common.CommonCodeRepository;
+import my.myungjin.academyDemo.domain.commonCode.CodeGroup;
+import my.myungjin.academyDemo.domain.commonCode.CodeGroupRepository;
+import my.myungjin.academyDemo.domain.commonCode.CommonCode;
+import my.myungjin.academyDemo.domain.commonCode.CommonCodeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-public class SampleService {
+public class CommonCodeService {
     private final CodeGroupRepository codeGroupRepository;
     private final CommonCodeRepository commonCodeRepository;
 

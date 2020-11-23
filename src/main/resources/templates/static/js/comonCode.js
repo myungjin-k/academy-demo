@@ -35,14 +35,14 @@ var main = {
 var codeGroup = {
     init : function () {
         var _this = this;
-        $('#btn-load-samples').click(function () {
+        $('#btn-load-groups').click(function () {
             _this.list();
         });
-        $('#btn-add-sample').click(function () {
+        $('#btn-add-group').click(function () {
             _this.clearForm();
         });
-        $('#btn-save-sample').click(function (){
-            var id = $('#form-save-sample').find('input[name="id"]').val();
+        $('#btn-save-group').click(function (){
+            var id = $('#form-save-group').find('input[name="id"]').val();
             if(id !== ''){
                 _this.update();
             } else {
@@ -66,10 +66,10 @@ var codeGroup = {
 
     },
     clearTable : function(){
-        $('#samples').empty();
+        $('#groups').empty();
     },
     clearForm : function(){
-        var form = $('#form-save-sample');
+        var form = $('#form-save-group');
         form.find('input[name="id"]').val('');
         form.find('input[name="code"]').val('');
         form.find('input[name="nameEng"]').val('');
@@ -95,7 +95,7 @@ var codeGroup = {
                     + '<td><a class="btn btn-primary btn-delete">삭제</a></td>'
                     + '<td><a class="btn btn-primary btn-search-codes">공통코드 보기</a></td>'
                     + '</tr>';
-                $('#samples').append(row);
+                $('#groups').append(row);
             });
         }).fail(function (error) {
             alert(JSON.stringify(error));
@@ -104,7 +104,7 @@ var codeGroup = {
     },
     save : function (){
         var _this = this;
-        var data = $('#form-save-sample').serializeObject();
+        var data = $('#form-save-group').serializeObject();
         $.ajax({
             type: 'POST',
             url: '/codeGroup',
@@ -120,7 +120,7 @@ var codeGroup = {
 
     },
     setData : function(data){
-        var form = $('#form-save-sample');
+        var form = $('#form-save-group');
         form.find('input[name="id"]').val(data.id);
         form.find('input[name="code"]').val(data.code);
         form.find('input[name="nameEng"]').val(data.nameEng);
@@ -128,7 +128,7 @@ var codeGroup = {
     },
     update : function (){
         var _this = this;
-        var data = $('#form-save-sample').serializeObject();
+        var data = $('#form-save-group').serializeObject();
         $.ajax({
             type: 'PUT',
             url: '/codeGroup/' + data.id,
@@ -164,13 +164,30 @@ var commonCode = {
             _this.clearForm();
         });
         $('#btn-save-code').click(function (){
-            var id = $('#form-save-sample').find('input[name="id"]').val();
+            var id = $('#form-save-group').find('input[name="id"]').val();
             if(id !== ''){
                 _this.update();
             } else {
                 _this.save();
             }
         });
+        $(document).on('click', '.btn-modify-code', function(){
+            var tr = $(this).parents('tr');
+            var data = {
+                "id" : tr.find('input[name="id"]').val(),
+                "code" : tr.find('.code').text(),
+                "nameEng" : tr.find('.nameEng').text(),
+                "nameKor" : tr.find('.nameKor').text(),
+                "groupId" : tr.find('input[name="groupId"]').val()
+            };
+            _this.setData(data);
+        });
+        $(document).on('click', '.btn-delete-code', function(){
+            var groupId = $(this).parents('tr').find('input[name="groupId"]').val();
+            var id = $(this).parents('tr').find('input[name="id"]').val();
+            _this.delete(groupId, id);
+        });
+
     },
     clearTable : function(){
         $('#codes').empty();
@@ -186,22 +203,25 @@ var commonCode = {
         this.clearTable();
         $.ajax({
             type: 'GET',
-            url: '/codeGroup/' + id + '/commonCodes/list',
+            url: '/codeGroup/' + id + '/commonCode/list',
             dataType: 'json',
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
-            $.each(response, function(){
-                const item = this;
+            var codeGroup = response.code;
+            $.each(response.commonCodes, function(){
+                var item = this;
                 //console.log(item);
-                const row = '<tr>'
+                var row = '<tr>'
                     + '<input type="hidden" name="id" value="' + item.id + '"/>'
-                    + '<td class="groupId">' + item.groupId +'</td>'
+                    + '<td class="codeGroup">'
+                    + '<input type="hidden" name="groupId" value="'+ item.groupId +'" />'
+                    + codeGroup +'</td>'
                     + '<td class="code">' + item.code +'</td>'
                     + '<td class="nameEng">' + item.nameEng +'</td>'
                     + '<td class="nameKor">' + item.nameKor +'</td>'
                     + '<td>' + item.createAt +'</td>'
-                    + '<td><a class="btn btn-primary btn-modify">수정</a></td>'
-                    + '<td><a class="btn btn-primary btn-delete">삭제</a></td>'
+                    + '<td><a class="btn btn-primary btn-modify-code">수정</a></td>'
+                    + '<td><a class="btn btn-primary btn-delete-code">삭제</a></td>'
                     + '</tr>';
                 $('#codes').append(row);
                 $('#form-save-code input[name="groupId"]').val(item.groupId);
@@ -217,12 +237,49 @@ var commonCode = {
         //console.log(data.groupId);
         $.ajax({
             type: 'POST',
-            url: '/codeGroup/' + data.groupId + '/commonCodes',
+            url: '/codeGroup/' + data.groupId + '/commonCode',
             dataType: 'json',
             contentType:'application/json; charset=utf-8',
             data: JSON.stringify(data)
         }).done(function(response) {
             _this.list(response.groupId);
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+
+    },
+    setData : function(data){
+        var form = $('#form-save-code');
+        form.find('input[name="id"]').val(data.id);
+        form.find('input[name="code"]').val(data.code);
+        form.find('input[name="nameEng"]').val(data.nameEng);
+        form.find('input[name="nameKor"]').val(data.nameKor);
+    },
+    update : function (){
+        var _this = this;
+        var data = $('#form-save-code').serializeObject();
+        $.ajax({
+            type: 'PUT',
+            url: '/codeGroup/' + data.groupId + '/commonCode/' + data.id,
+            dataType: 'json',
+            contentType:'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function(response) {
+            //console.log(response);
+            _this.list(response.groupId);
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+
+    },
+    delete : function (groupId, codeId){
+        var _this = this;
+        $.ajax({
+            type: 'DELETE',
+            url: '/codeGroup/' + groupId + '/commonCode/' + codeId,
+        }).done(function(response) {
+            //console.log(response);
+            _this.list(groupId);
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });

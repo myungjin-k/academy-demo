@@ -1,7 +1,7 @@
-package my.myungjin.academyDemo.domain.common;
+package my.myungjin.academyDemo.domain.commonCode;
 
 import my.myungjin.academyDemo.commons.Id;
-import my.myungjin.academyDemo.service.sample.SampleService;
+import my.myungjin.academyDemo.service.commonCode.CommonCodeService;
 import my.myungjin.academyDemo.util.Util;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.*;
@@ -21,13 +21,13 @@ import static org.hamcrest.core.Is.is;
 @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SampleServiceTest {
+public class CommonCodeServiceTest {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
 
     @Autowired
-    private SampleService commonService;
+    private CommonCodeService commonService;
 
     private String groupCode;
     private String groupNameEng;

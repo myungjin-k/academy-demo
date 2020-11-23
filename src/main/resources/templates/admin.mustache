@@ -9,8 +9,8 @@
 </ul>
 <!-- 코드그룹 목록 출력 영역 -->
 <div id = "div-code-group">
-    <a class="btn btn-primary" id="btn-load-samples">코드그룹 불러오기 &raquo;</a>
-    <a class="btn btn-primary" id="btn-add-sample">코드그룹 등록 &raquo;</a>
+    <a class="btn btn-primary" id="btn-load-groups">코드그룹 불러오기 &raquo;</a>
+    <a class="btn btn-primary" id="btn-add-group">코드그룹 등록 &raquo;</a>
     <table class="table table-horizontal table-bordered">
         <thead class="thead-strong">
         <tr>
@@ -23,11 +23,11 @@
             <th></th>
         </tr>
         </thead>
-        <tbody id="samples">
+        <tbody id="groups">
 
         </tbody>
     </table>
-    <form id="form-save-sample">
+    <form id="form-save-group">
         <div class="form-group">
             <input type="hidden" name="id" id="id" />
             <label for="code">그룹코드</label>
@@ -39,7 +39,7 @@
             <label for="nameKor">코드이름(국문)</label>
             <input type="text" class="form-control" name="nameKor" id="nameKor" />
         </div>
-        <a class="btn btn-primary" id="btn-save-sample">Submit</a>
+        <a class="btn btn-primary" id="btn-save-group">Submit</a>
     </form>
 </div>
 <!-- 공통코드 목록 출력 영역 -->
@@ -74,12 +74,11 @@
             <input type="text" class="form-control" name="nameKor" id="code-nameKor" />
         </div>
         <div class="form-group">
-            <label for="groupId">코드그룹</label>
-            <input type="text" class="form-control" name="groupId" id="groupId" readonly/>
+            <input type="hidden" class="form-control" name="groupId" id="groupId" readonly/>
         </div>
         <a class="btn btn-primary" id="btn-save-code">Submit</a>
     </form>
 </div>
 
-<script src="static/js/sample.js"></script>
+<script src="static/js/comonCode.js"></script>
 {{>layout/footer}}

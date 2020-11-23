@@ -3,7 +3,7 @@ package my.myungjin.academyDemo.web.request;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
-import my.myungjin.academyDemo.domain.common.CodeGroup;
+import my.myungjin.academyDemo.domain.commonCode.CodeGroup;
 import my.myungjin.academyDemo.util.Util;
 
 import java.time.LocalDateTime;
