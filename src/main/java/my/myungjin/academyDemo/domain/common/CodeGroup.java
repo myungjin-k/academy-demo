@@ -4,7 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Collection;
 
 import static java.time.LocalDateTime.now;
 
@@ -33,8 +33,8 @@ public class CodeGroup {
     @Column(name = "update_at", nullable = false)
     private LocalDateTime updateAt;
 
-    @OneToMany(mappedBy = "groupId", fetch = FetchType.EAGER) //JOIN
-    private List<CommonCode> commonCodes;
+    @OneToMany(mappedBy = "groupId", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) //JOIN
+    private Collection<CommonCode> commonCodes;
 
     @Builder
     public CodeGroup(String id, String code, String nameEng, String nameKor, LocalDateTime createAt, LocalDateTime updateAt) {
