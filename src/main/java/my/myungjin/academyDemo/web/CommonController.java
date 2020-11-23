@@ -23,8 +23,8 @@ public class CommonController {
     }
 
     @PostMapping("/codeGroup")
-    public CodeGroup newCodeGroup(@RequestBody CodeGroupRequest request){
-        return sampleService.saveGroup(request.newCodeGroup());
+    public CodeGroup registGroup(@RequestBody CodeGroupRequest request){
+        return sampleService.registGroup(request.newCodeGroup());
     }
 
     @PutMapping("/codeGroup/{id}")
@@ -34,17 +34,29 @@ public class CommonController {
 
     @DeleteMapping("/codeGroup/{id}")
     public void removeCodeGroup(@PathVariable String id){
-        sampleService.deleteGroup(id);
+        sampleService.removeGroup(id);
     }
 
 
-    @GetMapping("/codeGroup/{id}/commonCodes/list")
-    public List<CommonCode> commonCodesByGroupId(@PathVariable String id){
+    @GetMapping("/codeGroup/{id}/commonCode/list")
+    public CodeGroup commonCodesByGroupId(@PathVariable String id){
         return sampleService.findAllCommonCodesByGroupId(Id.of(CodeGroup.class, id));
     }
 
-    @PostMapping("/codeGroup/{id}/commonCodes")
+    @PostMapping("/codeGroup/{id}/commonCode")
     public CommonCode newCommonCode(@PathVariable String id, @RequestBody CommonCodeRequest request){
-        return sampleService.saveCommonCode(request.newCommonCode(id));
+        return sampleService.registCommonCode(Id.of(CodeGroup.class, id), request.newCommonCode(Id.of(CodeGroup.class, id)));
     }
+
+    @PutMapping("/codeGroup/{groupId}/commonCode/{id}")
+    public CommonCode modifyCode(@PathVariable String groupId, @PathVariable String id, @RequestBody CommonCodeRequest request){
+        return sampleService.modifyCode(Id.of(CodeGroup.class, groupId), Id.of(CommonCode.class, id),
+                request.getCode(), request.getNameEng(), request.getNameKor());
+    }
+
+    @DeleteMapping("/codeGroup/{groupId}/commonCode/{id}")
+    public void removeCode(@PathVariable String groupId, @PathVariable String id){
+        sampleService.removeCode(Id.of(CodeGroup.class, groupId), Id.of(CommonCode.class, id));
+    }
+
 }
