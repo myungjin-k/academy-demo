@@ -164,7 +164,7 @@ var commonCode = {
             _this.clearForm();
         });
         $('#btn-save-code').click(function (){
-            var id = $('#form-save-group').find('input[name="id"]').val();
+            var id = $('#form-save-code').find('input[name="id"]').val();
             if(id !== ''){
                 _this.update();
             } else {
@@ -209,6 +209,7 @@ var commonCode = {
         }).done(function(response) {
             var resultData = response.response;
             var codeGroup = resultData.code;
+            $('#form-save-code input[name="groupId"]').val(resultData.id);
             $.each(resultData.commonCodes, function(){
                 var item = this;
                 //console.log(item);
@@ -225,8 +226,8 @@ var commonCode = {
                     + '<td><a class="btn btn-primary btn-delete-code">삭제</a></td>'
                     + '</tr>';
                 $('#codes').append(row);
-                $('#form-save-code input[name="groupId"]').val(item.groupId);
             });
+
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
@@ -243,7 +244,7 @@ var commonCode = {
             contentType:'application/json; charset=utf-8',
             data: JSON.stringify(data)
         }).done(function(response) {
-            _this.list(response.groupId);
+            _this.list(data.groupId);
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
@@ -267,7 +268,7 @@ var commonCode = {
             data: JSON.stringify(data)
         }).done(function(response) {
             //console.log(response);
-            _this.list(response.groupId);
+            _this.list(data.groupId);
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
