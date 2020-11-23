@@ -1,4 +1,4 @@
-package my.myungjin.academyDemo.domain.commonCode;
+package my.myungjin.academyDemo.domain.common;
 
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.service.commonCode.CommonCodeService;

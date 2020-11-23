@@ -1,48 +1,47 @@
-package my.myungjin.academyDemo.domain.commonCode;
+package my.myungjin.academyDemo.domain.common;
 
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static java.time.LocalDateTime.now;
 
 @Entity
-@Table(name = "common_code")
+@Table(name = "code_group")
 @ToString
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = {"id"})
-public class CommonCode {
-
+public class CodeGroup {
     @Id
     private String id;
 
-    @Column(nullable = false)
+    @Column(name = "code", nullable = false, unique = true)
     private String code;
 
-    @Column(nullable = false)
+    @Column(name = "name_eng", nullable = false)
     private String nameEng;
 
-    @Column(nullable = false)
+    @Column(name = "name_kor", nullable = false)
     private String nameKor;
 
-    @Column(nullable = false)
-    private String groupId;
-
-    @Column(nullable = false, updatable = false)
+    @Column(name = "create_at", nullable = false, updatable = false)
     private LocalDateTime createAt;
 
-    @Column(nullable = false)
+    @Column(name = "update_at", nullable = false)
     private LocalDateTime updateAt;
 
+    @OneToMany(mappedBy = "groupId", fetch = FetchType.EAGER) //JOIN
+    private List<CommonCode> commonCodes;
+
     @Builder
-    public CommonCode(String id, String code, String nameEng, String nameKor, String groupId, LocalDateTime createAt, LocalDateTime updateAt) {
+    public CodeGroup(String id, String code, String nameEng, String nameKor, LocalDateTime createAt, LocalDateTime updateAt) {
         this.id = id;
         this.code = code;
         this.nameEng = nameEng;
         this.nameKor = nameKor;
-        this.groupId = groupId;
         this.createAt = createAt;
         this.updateAt = updateAt;
     }
