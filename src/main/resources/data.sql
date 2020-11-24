@@ -15,6 +15,11 @@ INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('8afe84
 INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('a77275df422a439f97b22e95d7223260', 'C100100', 'coat', '코트', '0a08e9fc691642ee9c270d056ec28e6d' );
 INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('88b09a7b0a7d4390a67ab3adf1d6d378', 'C100200', 'jumper', '점퍼', '0a08e9fc691642ee9c270d056ec28e6d' );
 INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('26020f22b15d4a7f9d78c2b7fc19f832', 'C100300', 'jacket', '자켓', '0a08e9fc691642ee9c270d056ec28e6d' );
+INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('14c39ed0110f451e8b37c9f400946039', 'C100400', 'cardigan', '가디건', '0a08e9fc691642ee9c270d056ec28e6d' );
 
-INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('a06e93c2fbec4e82a7c6a0c1e31a6025', 'C200100', 'shirts', '셔츠', '19a8a63adaf8449489058cda44df35f3' );
+INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('73fad711fbc548be85c10c9e0e8b0f1c', 'C200100', 't-shirts', '티셔츠', '19a8a63adaf8449489058cda44df35f3' );
+INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('a06e93c2fbec4e82a7c6a0c1e31a6025', 'C200100', 'shirts', '셔츠·블라우스', '19a8a63adaf8449489058cda44df35f3' );
 INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('02049afe906d4be595aeb782c11a780e', 'C200200', 'knit', '니트', '19a8a63adaf8449489058cda44df35f3' );
+
+INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('b4c6320a278040daa407eb57b3775253', 'C300100', 'pants', '바지', '19a8a63adaf8449489058cda44df35f3' );
+INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('fa9c27d308d7448e84665a7ee06e7544', 'C300200', 'skirts', '치마', '19a8a63adaf8449489058cda44df35f3' );
