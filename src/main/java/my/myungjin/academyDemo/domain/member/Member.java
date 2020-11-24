@@ -73,4 +73,8 @@ public class Member {
         this.addr2 = addr2;
         this.updateAt = now();
     }
+
+    public void setPassword(String encoded){
+        password = encoded;
+    }
 }
