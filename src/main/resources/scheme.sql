@@ -28,7 +28,7 @@ DROP TABLE IF EXISTS member CASCADE;
 CREATE TABLE member (
                              id              varchar(50) NOT NULL,
                              user_id         varchar(50) NOT NULL,
-                             password        varchar(50) NOT NULL,
+                             password        varchar(255) NOT NULL,
                              name            varchar(50) NOT NULL,
                              tel             varchar(50),
                              addr1           varchar(255),
