@@ -33,7 +33,7 @@ public class MemberServiceTest {
     void setup(){
         id = Util.getUUID();
         userId = "test";
-        password = "test_password";
+        password = "mjkim_password";
     }
 
     @Test

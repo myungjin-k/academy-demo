@@ -1,5 +1,8 @@
 package my.myungjin.academyDemo.configure;
 
+import my.myungjin.academyDemo.security.MyAuthenticationProvider;
+import my.myungjin.academyDemo.service.member.MemberService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,7 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
-
+/*
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
@@ -23,16 +26,30 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
                 .inMemoryAuthentication()
                 .withUser("mjkim").password(passwordEncoder().encode("mjkim_password")).roles("ADMIN");
     }
-
+*/
     @Override
     public void configure(WebSecurity web) {
         web.ignoring().antMatchers("/templates/**", "/h2/**");
+    }
 
+    @Autowired
+    public void configureAuthentication(AuthenticationManagerBuilder builder, MyAuthenticationProvider authenticationProvider) {
+        builder.authenticationProvider(authenticationProvider);
     }
 
     @Bean
+    public MyAuthenticationProvider authenticationProvider(MemberService memberService) {
+        return new MyAuthenticationProvider(memberService);
+    }
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
     @Override
@@ -40,27 +57,27 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
         http
                 // CSRF(Cross Site Request Forgery : 사이트 간 요청 위조) protection 해제
                 // 개발 옵션
-               // .csrf()
-                //.disable()
+                .csrf()
+                .disable()
                 // 개발 옵션
-                //.headers()
-                //.disable()
+                .headers()
+                .disable()
                 //.exceptionHandling()
                 //.accessDeniedHandler(accessDeniedHandler)
                 //.authenticationEntryPoint(unauthorizedHandler)
                 //.and()
                 // No session will be created or used by spring security
-                //.sessionManagement()
-                //.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                //.and()
-                .authorizeRequests()
-                //.antMatchers("/member/**").authenticated()
-                //.accessDecisionManager(accessDecisionManager())
-                .anyRequest().authenticated()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                //.formLogin()
-                //.disable()
-                .httpBasic()
+                .authorizeRequests()
+                .antMatchers("/member/auth").permitAll()
+                .antMatchers("/member/**").authenticated()
+                //.accessDecisionManager(accessDecisionManager())
+                .anyRequest().permitAll()
+                .and()
+                .formLogin()
+                .disable()
         ;
         //http.addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }

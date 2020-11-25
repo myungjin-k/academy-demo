@@ -1,11 +1,13 @@
 package my.myungjin.academyDemo.domain.member;
 
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import static java.time.LocalDateTime.now;
@@ -16,7 +18,7 @@ import static java.time.LocalDateTime.now;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
-public class Member {
+public class Member implements Serializable {
     @Id
     private String id;
 
@@ -81,7 +83,13 @@ public class Member {
         this.updateAt = now();
     }
 
-    public void setPassword(String encoded){
-        password = encoded;
+    public void encryptPassword(PasswordEncoder encoder){
+        password = encoder.encode(password);
+    }
+
+    public void login(PasswordEncoder encoder, String credentials){
+        if(!encoder.matches(credentials, password)){
+            throw new IllegalArgumentException("Bad Credential");
+        }
     }
 }

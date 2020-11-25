@@ -1,0 +1,44 @@
+{{>layout/header}}
+<div class="container">
+    <div class="row m-5">
+        <div class="col-lg"></div>
+        <div class="col-lg">
+            <form id="form-login">
+                <div class="form-group">
+                    <label for="principal">아이디</label>
+                    <input type="text" class="form-control" name="principal" id="principal" />
+                </div>
+                <div class="form-group">
+                    <label for="credentials">비밀번호</label>
+                    <input type="password" class="form-control" name="credentials" id="credentials" />
+                </div>
+                <a class="btn btn-primary" id="btn-login">로그인</a>
+            </form>
+        </div>
+        <div class="col-lg"></div>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+       $("#btn-login").click(function () {
+           save();
+       });
+    });
+    function save(){
+        var data = $('#form-login').serializeObject();
+        //console.log(data.groupId);
+        $.ajax({
+            type: 'POST',
+            url: '/member/auth',
+            dataType: 'json',
+            contentType:'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function(response) {
+            console.log(response);
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+
+    }
+</script>
+{{>layout/footer}}

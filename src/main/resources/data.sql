@@ -24,4 +24,4 @@ INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('02049a
 INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('b4c6320a278040daa407eb57b3775253', 'C300100', 'pants', '바지', '19a8a63adaf8449489058cda44df35f3' );
 INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('fa9c27d308d7448e84665a7ee06e7544', 'C300200', 'skirts', '치마', '19a8a63adaf8449489058cda44df35f3' );
 
-INSERT INTO member (id, user_id, password, name, tel, addr1, addr2) VALUES ('3a18e633a5db4dbd8aaee218fe447fa4', 'mjkim', '$2a$10$tp2h2O2jG62pITCh3dhvwuAANA0Uk/TAh.UgTFS0LJaXqydqKm7jm', '명진','010-1234-5678','XX시 XX구 XX로', '1-1111');
+INSERT INTO member (id, user_id, password, name, tel, addr1, addr2) VALUES ('3a18e633a5db4dbd8aaee218fe447fa4', 'mjkim', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진','010-1234-5678','XX시 XX구 XX로', '1-1111');
