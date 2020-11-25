@@ -14,24 +14,25 @@ import java.util.List;
 
 import static my.myungjin.academyDemo.web.Response.OK;
 
+@RequestMapping("/admin/codeGroup")
 @RequiredArgsConstructor
 @RestController
 public class CommonController {
 
     private final CommonCodeService sampleService;
 
-    @GetMapping("/codeGroup/list")
+    @GetMapping("/list")
     public Response<List<CodeGroup>> codeGroups(){
         return OK(sampleService.findAllGroups());
     }
 
-    @PostMapping("/codeGroup")
+    @PostMapping
     public Response<CodeGroup> registGroup(@RequestBody CodeGroupRequest request){
         return OK(sampleService.registGroup(request.newCodeGroup()));
 
     }
 
-    @PutMapping("/codeGroup/{id}")
+    @PutMapping("/{id}")
     public Response<CodeGroup> modifyCodeGroup(@PathVariable String id, @RequestBody CodeGroupRequest request){
         return OK(
                 sampleService.modifyGroup(id,
@@ -41,18 +42,18 @@ public class CommonController {
         );
     }
 
-    @DeleteMapping("/codeGroup/{id}")
+    @DeleteMapping("/{id}")
     public void removeCodeGroup(@PathVariable String id){
         sampleService.removeGroup(id);
     }
 
 
-    @GetMapping("/codeGroup/{id}/commonCode/list")
+    @GetMapping("/{id}/commonCode/list")
     public Response<CodeGroup> commonCodesByGroupId(@PathVariable String id){
         return OK(sampleService.findAllCommonCodesByGroupId(Id.of(CodeGroup.class, id)));
     }
 
-    @PostMapping("/codeGroup/{id}/commonCode")
+    @PostMapping("/{id}/commonCode")
     public Response<CommonCode> newCommonCode(@PathVariable String id, @RequestBody CommonCodeRequest request){
         return OK(
                 sampleService.registCommonCode(Id.of(CodeGroup.class, id),
@@ -60,7 +61,7 @@ public class CommonController {
         );
     }
 
-    @PutMapping("/codeGroup/{groupId}/commonCode/{id}")
+    @PutMapping("/{groupId}/commonCode/{id}")
     public Response<CommonCode> modifyCode(@PathVariable String groupId, @PathVariable String id, @RequestBody CommonCodeRequest request){
         return OK(
                 sampleService.modifyCode(Id.of(CodeGroup.class, groupId),
@@ -71,7 +72,7 @@ public class CommonController {
         );
     }
 
-    @DeleteMapping("/codeGroup/{groupId}/commonCode/{id}")
+    @DeleteMapping("/{groupId}/commonCode/{id}")
     public void removeCode(@PathVariable String groupId, @PathVariable String id){
         sampleService.removeCode(Id.of(CodeGroup.class, groupId), Id.of(CommonCode.class, id));
     }
