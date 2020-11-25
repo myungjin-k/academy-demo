@@ -6,6 +6,7 @@ import my.myungjin.academyDemo.domain.member.MemberRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -16,7 +17,7 @@ public class MemberService {
 
     private final PasswordEncoder passwordEncoder;
 
-    public Member join(Member newMember) {
+    public Member join(@Valid Member newMember) {
         newMember.setPassword(passwordEncoder.encode(newMember.getPassword()));
         Member saved = save(newMember);
         return findById(saved.getId()).orElse(newMember);

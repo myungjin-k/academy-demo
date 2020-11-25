@@ -3,6 +3,9 @@ package my.myungjin.academyDemo.domain.member;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 import static java.time.LocalDateTime.now;
@@ -17,15 +20,19 @@ public class Member {
     @Id
     private String id;
 
+    @Size(min = 1, max = 50)
     @Column(name = "user_id", nullable = false, updatable = false, unique = true)
     private String userId;
 
+    @Size(min = 1, max = 255)
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Size(min = 1, max = 10)
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$")
     @Column(name = "tel")
     private String tel;
 
