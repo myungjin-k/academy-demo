@@ -25,7 +25,7 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
     private Authentication processUserAuthentication(MyAuthenticationToken token){
         Member member = memberService.login(token.getPrincipal(), String.valueOf(token.getCredentials()));
         // TODO Role
-        MyAuthenticationToken authenticated = new MyAuthenticationToken(member.getId(), member.getPassword(), createAuthorityList(Role.USER.getValue()));
+        MyAuthenticationToken authenticated = new MyAuthenticationToken(member.getUserId(), member.getPassword(), createAuthorityList(Role.USER.getValue()));
         authenticated.setDetails(member);
         // TODO Exception
         return authenticated;
