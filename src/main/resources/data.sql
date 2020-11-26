@@ -21,7 +21,7 @@ INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('73fad7
 INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('a06e93c2fbec4e82a7c6a0c1e31a6025', 'C200100', 'shirts', '셔츠·블라우스', '19a8a63adaf8449489058cda44df35f3' );
 INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('02049afe906d4be595aeb782c11a780e', 'C200200', 'knit', '니트', '19a8a63adaf8449489058cda44df35f3' );
 
-INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('b4c6320a278040daa407eb57b3775253', 'C300100', 'pants', '바지', '19a8a63adaf8449489058cda44df35f3' );
-INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('fa9c27d308d7448e84665a7ee06e7544', 'C300200', 'skirts', '치마', '19a8a63adaf8449489058cda44df35f3' );
+INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('b4c6320a278040daa407eb57b3775253', 'C300100', 'pants', '바지', '0b304ee35d124ce49f0266214dee9f3d' );
+INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('fa9c27d308d7448e84665a7ee06e7544', 'C300200', 'skirts', '치마', '0b304ee35d124ce49f0266214dee9f3d' );
 
 INSERT INTO member (id, user_id, password, name, tel, addr1, addr2) VALUES ('3a18e633a5db4dbd8aaee218fe447fa4', 'mjkim', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진','010-1234-5678','XX시 XX구 XX로', '1-1111');
