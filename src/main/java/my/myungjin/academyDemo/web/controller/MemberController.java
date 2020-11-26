@@ -18,8 +18,6 @@ import static my.myungjin.academyDemo.web.Response.OK;
 @RequiredArgsConstructor
 @RestController
 public class MemberController {
-
-    private final AuthenticationManager authenticationManager;
     private final MemberService memberService;
 
     @PostMapping("/join")
@@ -30,12 +28,4 @@ public class MemberController {
         );
     }
 
-    @PostMapping("/auth")
-    public Response<Authentication> auth(@RequestBody AuthenticationRequest request) {
-        MyAuthenticationToken token = new MyAuthenticationToken(request.getPrincipal(), request.getCredentials());
-
-        Authentication authentication = authenticationManager.authenticate(token);
-        SecurityContextHolder.getContext().setAuthentication(token);
-        return OK(authentication);
-    }
 }

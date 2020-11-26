@@ -1,8 +1,11 @@
 package my.myungjin.academyDemo.security;
 
 import lombok.RequiredArgsConstructor;
+import my.myungjin.academyDemo.domain.member.Admin;
 import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.member.Role;
+import my.myungjin.academyDemo.domain.member.User;
+import my.myungjin.academyDemo.service.admin.AdminService;
 import my.myungjin.academyDemo.service.member.MemberService;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
@@ -15,6 +18,7 @@ import static org.springframework.util.ClassUtils.isAssignable;
 public class MyAuthenticationProvider implements AuthenticationProvider {
 
     private final MemberService memberService;
+    private final AdminService adminService;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -23,10 +27,21 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
     }
 
     private Authentication processUserAuthentication(MyAuthenticationToken token){
-        Member member = memberService.login(token.getPrincipal(), String.valueOf(token.getCredentials()));
+        // TODO Admin
+        User user = new User();
+
+        if(token.getType().name().equals("ADMIN"))
+                user =  adminService.login(token.getPrincipal(), String.valueOf(token.getCredentials()));
+        else
+                user = memberService.login(token.getPrincipal(), String.valueOf(token.getCredentials()));
+
+        System.out.println(user.getUserId());
+        System.out.println(user.getPassword());
+        System.out.println(user.getRole());
+
         // TODO Role
-        MyAuthenticationToken authenticated = new MyAuthenticationToken(member.getUserId(), member.getPassword(), createAuthorityList(Role.ADMIN.getValue()));
-        authenticated.setDetails(member);
+        MyAuthenticationToken authenticated = new MyAuthenticationToken(user.getUserId(), user.getPassword(), createAuthorityList(user.getRole().name()));
+        authenticated.setDetails(user);
         // TODO Exception
         return authenticated;
     }

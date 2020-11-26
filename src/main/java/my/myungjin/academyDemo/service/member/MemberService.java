@@ -3,6 +3,7 @@ package my.myungjin.academyDemo.service.member;
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.member.MemberRepository;
+import my.myungjin.academyDemo.domain.member.Role;
 import org.springframework.data.domain.Example;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ public class MemberService {
         // TODO validation
         return findByUserId(userId).map(member -> {
             member.login(passwordEncoder, password);
+            member.setRole(Role.MEMBER);
             return member;
         }).orElseThrow(() -> new IllegalArgumentException("invalid id =" + userId));
     }

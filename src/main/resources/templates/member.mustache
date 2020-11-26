@@ -12,6 +12,8 @@
                     <label for="credentials">비밀번호</label>
                     <input type="password" class="form-control" name="credentials" id="credentials" />
                 </div>
+
+                <input type="hidden" class="form-control" name="role" id="role" value="MEMBER"/>
                 <a class="btn btn-primary" id="btn-login">로그인</a>
                 <a class="btn" id="btn-go-join">회원가입</a>
             </form>
@@ -89,7 +91,7 @@
         //console.log(data.groupId);
         $.ajax({
             type: 'POST',
-            url: '/member/auth',
+            url: '/auth',
             dataType: 'json',
             contentType:'application/json; charset=utf-8',
             data: JSON.stringify(data)

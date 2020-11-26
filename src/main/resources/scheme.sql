@@ -42,4 +42,15 @@ CREATE TABLE member (
 );
 
 
+DROP TABLE IF EXISTS admin CASCADE;
+CREATE TABLE admin (
+                        id              varchar(50) NOT NULL,
+                        admin_id         varchar(50) NOT NULL,
+                        password        varchar(255) NOT NULL,
+                        create_at       datetime NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+                        update_at       datetime NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+                        PRIMARY KEY (id),
+                        CONSTRAINT unq_admin_id UNIQUE (admin_id)
+);
+
 

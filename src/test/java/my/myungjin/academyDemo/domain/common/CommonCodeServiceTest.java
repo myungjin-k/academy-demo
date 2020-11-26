@@ -1,7 +1,7 @@
 package my.myungjin.academyDemo.domain.common;
 
 import my.myungjin.academyDemo.commons.Id;
-import my.myungjin.academyDemo.service.commonCode.CommonCodeService;
+import my.myungjin.academyDemo.service.admin.CommonCodeService;
 import my.myungjin.academyDemo.util.Util;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.*;

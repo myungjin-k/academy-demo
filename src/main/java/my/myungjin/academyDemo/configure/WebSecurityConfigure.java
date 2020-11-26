@@ -2,6 +2,7 @@ package my.myungjin.academyDemo.configure;
 
 import my.myungjin.academyDemo.domain.member.Role;
 import my.myungjin.academyDemo.security.MyAuthenticationProvider;
+import my.myungjin.academyDemo.service.admin.AdminService;
 import my.myungjin.academyDemo.service.member.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -39,8 +40,8 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public MyAuthenticationProvider authenticationProvider(MemberService memberService) {
-        return new MyAuthenticationProvider(memberService);
+    public MyAuthenticationProvider authenticationProvider(MemberService memberService, AdminService adminService) {
+        return new MyAuthenticationProvider(memberService, adminService);
     }
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -72,7 +73,7 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
                 //.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 //.and()
                 .authorizeRequests()
-                .antMatchers("/member/auth").permitAll()
+                .antMatchers("/auth").permitAll()
                 .antMatchers("/member/join").permitAll()
                 .antMatchers("/member/**").authenticated()
                 .antMatchers("/admin/**").hasRole(Role.ADMIN.name())

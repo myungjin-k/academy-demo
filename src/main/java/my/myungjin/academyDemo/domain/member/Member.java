@@ -4,10 +4,8 @@ import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import static java.time.LocalDateTime.now;
@@ -17,8 +15,8 @@ import static java.time.LocalDateTime.now;
 @ToString
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode(of = "id")
-public class Member implements Serializable {
+@EqualsAndHashCode(of = "id", callSuper = false)
+public class Member extends User{
     @Id
     private String id;
 

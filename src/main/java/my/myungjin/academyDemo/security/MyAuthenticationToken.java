@@ -1,6 +1,7 @@
 package my.myungjin.academyDemo.security;
 
 import lombok.ToString;
+import my.myungjin.academyDemo.domain.member.Role;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -13,12 +14,15 @@ public class MyAuthenticationToken extends AbstractAuthenticationToken {
 
     private Object credentials;
 
-    public MyAuthenticationToken(String principal, Object credentials) {
+    private Role type;
+
+    public MyAuthenticationToken(String principal, Object credentials, Role type) {
         super(null);
         super.setAuthenticated(false);
 
         this.principal = principal;
         this.credentials = credentials;
+        this.type = type;
     }
 
     MyAuthenticationToken(String principal, Object credentials, Collection<? extends GrantedAuthority> authorities) {
@@ -37,6 +41,10 @@ public class MyAuthenticationToken extends AbstractAuthenticationToken {
     @Override
     public String getPrincipal() {
         return principal;
+    }
+
+    public Role getType() {
+        return type;
     }
 
     public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {

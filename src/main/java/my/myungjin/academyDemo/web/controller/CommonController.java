@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.common.CodeGroup;
 import my.myungjin.academyDemo.domain.common.CommonCode;
-import my.myungjin.academyDemo.service.commonCode.CommonCodeService;
+import my.myungjin.academyDemo.service.admin.CommonCodeService;
 import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.CodeGroupRequest;
 import my.myungjin.academyDemo.web.request.CommonCodeRequest;
