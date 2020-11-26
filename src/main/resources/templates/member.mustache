@@ -1,0 +1,104 @@
+{{>layout/header}}
+<div class="container">
+    <div class="row m-5" id="div-login">
+        <div class="col-lg"></div>
+        <div class="col-lg">
+            <form id="form-login">
+                <div class="form-group">
+                    <label for="principal">아이디</label>
+                    <input type="text" class="form-control" name="principal" id="principal" />
+                </div>
+                <div class="form-group">
+                    <label for="credentials">비밀번호</label>
+                    <input type="password" class="form-control" name="credentials" id="credentials" />
+                </div>
+                <a class="btn btn-primary" id="btn-login">로그인</a>
+                <a class="btn" id="btn-go-join">회원가입</a>
+            </form>
+        </div>
+        <div class="col-lg"></div>
+    </div>
+    <div class="m-5" id="div-join" style="display: none;">
+        <div class="col-lg">
+            <form id="form-join">
+                <div class="form-group">
+                    <label for="userId">아이디</label>
+                    <input type="text" class="form-control" name="userId" id="userId" />
+                </div>
+                <div class="form-group">
+                    <label for="password">비밀번호</label>
+                    <input type="password" class="form-control" name="password" id="password" />
+                </div>
+                <div class="form-group">
+                    <label for="name">닉네임</label>
+                    <input type="text" class="form-control" name="name" id="name" />
+                </div>
+                <div class="form-group">
+                    <label for="tel">휴대전화</label>
+                    <input type="hidden" name="tel" id="tel"/>
+                    <input type="text" class="form-control" id="tel1" /> -
+                    <input type="text" class="form-control" id="tel2" /> -
+                    <input type="text" class="form-control" id="tel3" />
+                </div>
+                <div class="form-group">
+                    <label for="addr">주소</label>
+                    <input type="hidden" name="addr" id="addr"/>
+                    <input type="text" class="form-control" id="addr1" />
+                    <input type="text" class="form-control" id="addr2" />
+                </div>
+                <a class="btn btn-primary" id="btn-join">가입</a>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+       $("#btn-login").click(function () {
+           auth();
+       });
+        $("#btn-go-join").click(function () {
+            $("#div-login").hide();
+            $("#div-join").show();
+        });
+
+        $("#btn-join").click(function () {
+            $("#tel").val($("#tel1").val() + "-" + $("#tel2").val() + "-" + $("#tel3").val());
+            $("#addr").val($("#addr1").val() + " " + $("#addr2").val());
+            join();
+        });
+    });
+    function join(){
+        var data = $('#form-join').serializeObject();
+
+        $.ajax({
+            type: 'POST',
+            url: '/member/join',
+            dataType: 'json',
+            contentType:'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function(response) {
+            console.log(response);
+            alert("가입 되었습니다.")
+            location.href = "/login";
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+    }
+    function auth(){
+        var data = $('#form-login').serializeObject();
+        //console.log(data.groupId);
+        $.ajax({
+            type: 'POST',
+            url: '/member/auth',
+            dataType: 'json',
+            contentType:'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function(response) {
+            console.log(response);
+            location.href = "/";
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+    }
+</script>
+{{>layout/footer}}

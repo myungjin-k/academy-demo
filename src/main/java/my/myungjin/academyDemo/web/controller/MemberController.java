@@ -10,10 +10,7 @@ import my.myungjin.academyDemo.web.request.MemberRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static my.myungjin.academyDemo.web.Response.OK;
 
@@ -25,8 +22,8 @@ public class MemberController {
     private final AuthenticationManager authenticationManager;
     private final MemberService memberService;
 
-    @PostMapping
-    public Response<Member> join(MemberRequest request){
+    @PostMapping("/join")
+    public Response<Member> join(@RequestBody MemberRequest request){
         // TODO Front page
         return OK(
                 memberService.join(request.newMember())
