@@ -1,5 +1,6 @@
 package my.myungjin.academyDemo.configure;
 
+import my.myungjin.academyDemo.domain.member.Role;
 import my.myungjin.academyDemo.security.MyAuthenticationProvider;
 import my.myungjin.academyDemo.service.member.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,12 +68,13 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
                 //.authenticationEntryPoint(unauthorizedHandler)
                 //.and()
                 // No session will be created or used by spring security
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+                //.sessionManagement()
+                //.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                //.and()
                 .authorizeRequests()
                 .antMatchers("/member/auth").permitAll()
                 .antMatchers("/member/**").authenticated()
+                .antMatchers("/admin/**").hasRole(Role.ADMIN.name())
                 //.accessDecisionManager(accessDecisionManager())
                 .anyRequest().permitAll()
                 .and()

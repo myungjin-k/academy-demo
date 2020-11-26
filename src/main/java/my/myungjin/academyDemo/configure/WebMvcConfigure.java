@@ -1,15 +1,20 @@
 package my.myungjin.academyDemo.configure;
 
 
+import lombok.RequiredArgsConstructor;
+import my.myungjin.academyDemo.configure.support.AuthenticationInterceptor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.resource.PathResourceResolver;
 
+@RequiredArgsConstructor
 @Configuration
 public class WebMvcConfigure implements WebMvcConfigurer {
-    private final String baseApiPath = "api";
+//    private final String baseApiPath = "api";
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -31,5 +36,19 @@ public class WebMvcConfigure implements WebMvcConfigurer {
                     }
                 });*/
 
+    }
+
+    @Bean
+    public AuthenticationInterceptor authenticationInterceptor(){
+        return new AuthenticationInterceptor();
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(authenticationInterceptor())
+                .addPathPatterns("/sample")
+                .addPathPatterns("/admin/*")
+                .addPathPatterns("/order/*")
+        ;
     }
 }
