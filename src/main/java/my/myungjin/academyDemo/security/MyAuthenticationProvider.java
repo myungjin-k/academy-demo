@@ -35,10 +35,6 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
         else
                 user = memberService.login(token.getPrincipal(), String.valueOf(token.getCredentials()));
 
-        System.out.println(user.getUserId());
-        System.out.println(user.getPassword());
-        System.out.println(user.getRole());
-
         // TODO Role
         MyAuthenticationToken authenticated = new MyAuthenticationToken(user.getUserId(), user.getPassword(), createAuthorityList(user.getRole().name()));
         authenticated.setDetails(user);
