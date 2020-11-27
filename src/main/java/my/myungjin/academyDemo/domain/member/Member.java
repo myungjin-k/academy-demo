@@ -4,6 +4,7 @@ import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
@@ -32,6 +33,10 @@ public class Member extends User{
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Email
+    @Column(name = "email", nullable = false)
+    private String email;
+
     @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$")
     @Column(name = "tel")
     private String tel;
@@ -58,12 +63,13 @@ public class Member extends User{
     private LocalDateTime updateAt;
 
     @Builder
-    public Member(String id, String userId, String password, String name, String tel, String addr1, String addr2,
+    public Member(String id, String userId, String password, String name, String email, String tel, String addr1, String addr2,
                   Rating rating, int reserves, LocalDateTime createAt, LocalDateTime updateAt) {
         this.id = id;
         this.userId = userId;
         this.password = password;
         this.name = name;
+        this.email = email;
         this.tel = tel;
         this.addr1 = addr1;
         this.addr2 = addr2;
@@ -73,8 +79,9 @@ public class Member extends User{
         this.updateAt = updateAt;
     }
 
-    public void update(String name, String tel, String addr1, String addr2){
+    public void update(String name, String email, String tel, String addr1, String addr2){
         this.name = name;
+        this.email = email;
         this.tel = tel;
         this.addr1 = addr1;
         this.addr2 = addr2;

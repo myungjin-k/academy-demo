@@ -30,7 +30,8 @@ CREATE TABLE member (
                              user_id         varchar(50) NOT NULL,
                              password        varchar(255) NOT NULL,
                              name            varchar(50) NOT NULL,
-                             tel             varchar(50),
+                             email           varchar(100) NOT NULL,
+                             tel             varchar(50) NOT NULL,
                              addr1           varchar(255),
                              addr2           varchar(255),
                              rating          char NOT NULL DEFAULT 'B',
@@ -38,7 +39,9 @@ CREATE TABLE member (
                              create_at       datetime NOT NULL DEFAULT CURRENT_TIMESTAMP(),
                              update_at       datetime NOT NULL DEFAULT CURRENT_TIMESTAMP(),
                              PRIMARY KEY (id),
-                             CONSTRAINT unq_user_id UNIQUE (user_id)
+                             CONSTRAINT unq_user_id UNIQUE (user_id),
+                             CONSTRAINT unq_email UNIQUE (email),
+                             CONSTRAINT unq_tel UNIQUE (tel)
 );
 
 

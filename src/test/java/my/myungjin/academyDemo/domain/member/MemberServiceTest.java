@@ -40,7 +40,8 @@ public class MemberServiceTest {
     @Order(1)
     void 사용자_가입(){
         String name = "테스트";
-        String tel = "010-1234-5678";
+        String email = "open7894.v2@gmail.com";
+        String tel = "010-2345-5678";
         String addr1 = "XX시 OO구 XXXX로 12";
         String addr2 = "1-1111";
 
@@ -49,6 +50,7 @@ public class MemberServiceTest {
                 .userId(userId)
                 .password(password)
                 .name(name)
+                .email(email)
                 .tel(tel)
                 .addr1(addr1)
                 .addr2(addr2)
@@ -56,6 +58,30 @@ public class MemberServiceTest {
         Member saved = memberService.join(newMember);
         assertThat(saved, is(notNullValue()));
         log.info("Saved Member: {}", saved);
+
+    }
+
+    @Test
+    @Order(2)
+    void 사용자_아이디_찾기(){
+        String tel = "010-2345-5678";
+
+        String found = memberService.findUserId(tel);
+        assertThat(found, is(notNullValue()));
+        assertThat(found, is(userId));
+        log.info("Found Member Id: {}", found);
+
+    }
+
+
+    @Test
+    @Order(3)
+    void 사용자_비밀번호_찾기(){
+        String email = "open7894.v2@gmail.com";
+
+        String found = memberService.findPassword(email).orElse(null);
+        assertThat(found, is(notNullValue()));
+        assertThat(found, is(email));
 
     }
 
