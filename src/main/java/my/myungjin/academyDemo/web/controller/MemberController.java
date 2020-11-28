@@ -1,17 +1,11 @@
 package my.myungjin.academyDemo.web.controller;
 
 import lombok.RequiredArgsConstructor;
-import my.myungjin.academyDemo.domain.mail.Mail;
 import my.myungjin.academyDemo.domain.member.Member;
-import my.myungjin.academyDemo.security.AuthenticationRequest;
-import my.myungjin.academyDemo.security.MyAuthenticationToken;
-import my.myungjin.academyDemo.service.mail.MailService;
 import my.myungjin.academyDemo.service.member.MemberService;
 import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.MemberRequest;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import my.myungjin.academyDemo.web.request.PwChangeRequest;
 import org.springframework.web.bind.annotation.*;
 
 import static my.myungjin.academyDemo.web.Response.OK;
@@ -21,7 +15,6 @@ import static my.myungjin.academyDemo.web.Response.OK;
 @RestController
 public class MemberController {
     private final MemberService memberService;
-    private final MailService mailService;
 
     @PostMapping("/join")
     public Response<Member> join(@RequestBody MemberRequest request){
@@ -31,7 +24,7 @@ public class MemberController {
         );
     }
 
-    @GetMapping("/forgot/id")
+    @GetMapping("/id")
     public Response<String> forgotUserId(@RequestBody String tel){
         return OK(
                 memberService.findUserId(tel)
@@ -39,7 +32,7 @@ public class MemberController {
         );
     }
 
-    @GetMapping("/forgot/password")
+    @GetMapping("/password")
     public Response<String> forgotUserPwd(@RequestBody String email){
         return OK(
                 memberService.findPassword(email)
@@ -47,6 +40,12 @@ public class MemberController {
         );
     }
 
+    @PatchMapping("/password")
+    public Response<Member> changePassword(@RequestBody PwChangeRequest request){
+        return OK(
+          memberService.modifyPassword(request.getId(), request.getNewPassword())
+        );
+    }
 
 
 

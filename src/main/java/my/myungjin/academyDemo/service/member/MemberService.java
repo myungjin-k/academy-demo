@@ -1,10 +1,10 @@
 package my.myungjin.academyDemo.service.member;
 
 import lombok.RequiredArgsConstructor;
-import my.myungjin.academyDemo.domain.mail.Mail;
 import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.member.MemberRepository;
 import my.myungjin.academyDemo.domain.member.Role;
+import my.myungjin.academyDemo.mail.Mail;
 import my.myungjin.academyDemo.service.mail.MailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,14 +49,15 @@ public class MemberService {
     }
 
     public Optional<String> findPassword(String email){
-        Optional<String> result = memberRepository.findByEmail(email)
-                .map(Member::getEmail);
-
-        if(result.isPresent()){
+        return memberRepository.findByEmail(email).map(member -> {
+            String id = member.getId();
             Mail mail = Mail.builder()
-                    .address(email)
+                    .to(email)
                     .title("[demo] 비밀번호 찾기/변경 안내")
-                    .content("<p> 아래 링크에서 비밀번호 변경 가능합니다.</p> ")
+                    .content(
+                                    "<p> 아래 링크에서 비밀번호 변경 가능합니다.</p> " +
+                                    "<a href='http://localhost:7090/changePassword/"+ id + "'>비밀번호 변경하기</a>"
+                    )
                     .build();
             try {
                 mailService.sendMail(mail);
@@ -65,12 +66,17 @@ public class MemberService {
             } catch (MailException me){
                 log.warn("Mailing Error : {}", me.getMessage(), me);
             }
-
-        }
-
-        return result;
+            return member.getEmail();
+        });
     }
 
+    public Member modifyPassword(String id, String newPassword){
+        return findById(id).map(member -> {
+            member.updatePassword(passwordEncoder.encode(newPassword));
+            save(member);
+            return member;
+        }).orElseThrow(() -> new IllegalArgumentException("invalid id=" + id));
+    }
     private Optional<Member> findByUserId(String userId){
         return memberRepository.findByUserId(userId);
     }

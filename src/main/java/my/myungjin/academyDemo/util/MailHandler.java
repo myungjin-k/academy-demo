@@ -2,7 +2,6 @@ package my.myungjin.academyDemo.util;
 
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -23,7 +22,7 @@ public class MailHandler {
     }
 
     public void setTo(String toAddress) throws MessagingException {
-        messageHelper.setFrom(toAddress);
+        messageHelper.setTo(toAddress);
     }
 
     public void setSubject(String subject) throws MessagingException {

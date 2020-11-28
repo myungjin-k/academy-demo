@@ -79,6 +79,10 @@ public class Member extends User{
         this.updateAt = updateAt;
     }
 
+    public void updatePassword(String newPassword){
+        password = newPassword;
+        this.updateAt = now();
+    }
     public void update(String name, String email, String tel, String addr1, String addr2){
         this.name = name;
         this.email = email;

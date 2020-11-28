@@ -101,4 +101,15 @@ public class MemberServiceTest {
         assertThat(found, is(emptyString()));
 
     }
+    @Test
+    @Order(6)
+    void 사용자_비밀번호_변경(){
+        String newPwd = "new_password";
+        Member modified = memberService.modifyPassword(id, newPwd);
+        assertThat(modified, is(notNullValue()));
+        log.info("Modified Member: {}", modified);
+
+        Member logined = memberService.login(userId, newPwd);
+        assertThat(logined, is(notNullValue()));
+    }
 }
