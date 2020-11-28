@@ -6,15 +6,21 @@ import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.member.MemberRepository;
 import my.myungjin.academyDemo.domain.member.Role;
 import my.myungjin.academyDemo.service.mail.MailService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.mail.MailException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 public class MemberService {
+
+    private Logger log = LoggerFactory.getLogger(MemberService.class);
 
     private final MemberRepository memberRepository;
 
@@ -43,16 +49,26 @@ public class MemberService {
     }
 
     public Optional<String> findPassword(String email){
-        return memberRepository.findByEmail(email)
-                .map(member -> {
-                    mailService.sendMail(Mail.builder()
-                            .address(email)
-                            .title("[demo] 비밀번호 찾기/변경 안내")
-                            .content("<p> 아래 링크에서 비밀번호 변경 가능합니다.</p> ")
-                            .build()
-                    );
-                    return  member.getEmail();
-                });
+        Optional<String> result = memberRepository.findByEmail(email)
+                .map(Member::getEmail);
+
+        if(result.isPresent()){
+            Mail mail = Mail.builder()
+                    .address(email)
+                    .title("[demo] 비밀번호 찾기/변경 안내")
+                    .content("<p> 아래 링크에서 비밀번호 변경 가능합니다.</p> ")
+                    .build();
+            try {
+                mailService.sendMail(mail);
+            } catch (MessagingException e){
+                log.warn("Messaging Error ({}) : {}", mail, e.getMessage(), e);
+            } catch (MailException me){
+                log.warn("Mailing Error : {}", me.getMessage(), me);
+            }
+
+        }
+
+        return result;
     }
 
     private Optional<Member> findByUserId(String userId){
