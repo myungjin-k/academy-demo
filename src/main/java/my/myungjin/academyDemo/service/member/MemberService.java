@@ -37,10 +37,9 @@ public class MemberService {
         }).orElseThrow(() -> new IllegalArgumentException("invalid id =" + userId));
     }
 
-    public String findUserId(String tel){
+    public Optional<String> findUserId(String tel){
         return memberRepository.findByTel(tel)
-                .map(Member::getUserId)
-                .orElse(null);
+                .map(Member::getUserId);
     }
 
     public Optional<String> findPassword(String email){

@@ -35,13 +35,15 @@ public class MemberController {
     public Response<String> forgotUserId(@RequestBody String tel){
         return OK(
                 memberService.findUserId(tel)
+                        .orElse("")
         );
     }
 
     @GetMapping("/forgot/password")
     public Response<String> forgotUserPwd(@RequestBody String email){
         return OK(
-                memberService.findPassword(email).orElse(null)
+                memberService.findPassword(email)
+                        .orElse("")
         );
     }
 

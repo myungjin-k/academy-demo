@@ -10,8 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 
 
 @SpringBootTest // H2 데이터베이스를 자동으로 실행
@@ -66,23 +65,40 @@ public class MemberServiceTest {
     void 사용자_아이디_찾기(){
         String tel = "010-2345-5678";
 
-        String found = memberService.findUserId(tel);
+        String found = memberService.findUserId(tel).orElse("");
         assertThat(found, is(notNullValue()));
+        assertThat(found, not(emptyString()));
         assertThat(found, is(userId));
         log.info("Found Member Id: {}", found);
 
     }
-
-
     @Test
     @Order(3)
+    void 사용자_아이디_찾기_사용자_없음(){
+        String tel = "010-2345-7890";
+
+        String found = memberService.findUserId(tel).orElse("");
+        assertThat(found, is(emptyString()));
+
+    }
+
+    @Test
+    @Order(4)
     void 사용자_비밀번호_찾기(){
         String email = "open7894.v2@gmail.com";
 
-        String found = memberService.findPassword(email).orElse(null);
+        String found = memberService.findPassword(email).orElse("");
         assertThat(found, is(notNullValue()));
         assertThat(found, is(email));
 
     }
+    @Test
+    @Order(5)
+    void 사용자_비밀번호_찾기_사용자_없음(){
+        String email = "open7894.v3@gmail.com";
 
+        String found = memberService.findPassword(email).orElse("");
+        assertThat(found, is(emptyString()));
+
+    }
 }
