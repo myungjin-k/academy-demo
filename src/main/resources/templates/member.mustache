@@ -1,7 +1,6 @@
 {{>layout/header}}
 <div class="container">
     <div class="row m-5" id="div-login">
-        <div class="col-lg"></div>
         <div class="col-lg">
             <form id="form-login">
                 <div class="form-group">
@@ -19,9 +18,8 @@
                 <a class="btn" id="btn-forgot">ID/비밀번호 찾기</a>
             </form>
         </div>
-        <div class="col-lg"></div>
     </div>
-    <div class="m-5" id="div-join" style="display: none;">
+    <div class="m-5 d-none" id="div-join">
         <div class="col-lg">
             <form id="form-join">
                 <div class="form-group">
@@ -51,6 +49,77 @@
                 </div>
                 <a class="btn btn-primary" id="btn-join">가입</a>
             </form>
+        </div>
+    </div>
+    <div class="m-5 d-none" id="div-find">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="tab-forgot-id" data-toggle="tab" href="#div-forgot-id" role="tab" aria-controls="div-forgot-id" aria-selected="true">ID 찾기</a>
+            </li>
+            <li class="nav-item" >
+                <a class="nav-link" id="tab-code" data-toggle="tab" href="#div-code" role="tab" aria-controls="div-code" aria-selected="false" style="display: none;">공통코드</a>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="div-forgot-id" role="tabpanel" aria-labelledby="tab-find-id">
+                <div class="m-5">
+                    <p><input type="text" class="form-control" id="id-find-key" name="tel" placeholder="가입시 등록한 휴대폰 번호를 입력하세요. ex) 010-0000-0000" /></p>
+                    <p>
+                        <a class="btn btn-primary" id="btn-forgot-id">ID 확인하기</a>
+                        <a class="btn" id="btn-back-login">로그인으로 돌아가기</a>
+                    </p>
+                </div>
+                <div class="m-5">
+                    <span class="d-none" id="id-present-area" >
+                        <span>조회된 사용자 ID : </span>
+                        <span class="text-info" id="found-id"></span>
+                    </span>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="div-code" role="tabpanel" aria-labelledby="tab-code" >
+                <div class="div-crud-buttons">
+                    <a class="btn btn-primary" id="btn-add-code">공통코드 등록</a>
+                </div>
+
+                <div class="mb-3">
+                    <table class="table table-horizontal table-bordered">
+                        <thead class="thead-strong">
+                        <tr>
+                            <th>코드그룹</th>
+                            <th>코드</th>
+                            <th>코드이름(영문)</th>
+                            <th>코드이름(국문)</th>
+                            <th>작성일시</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody id="codes">
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mb-5">
+                    <form id="form-save-code">
+                        <div class="form-group">
+                            <input type="hidden" name="id" id="id" />
+                            <label for="common-code">코드</label>
+                            <input type="text" class="form-control" name="code" id="common-code" />
+                        </div>
+                        <div class="form-group">
+                            <label for="code-nameEng">코드이름(영문)</label>
+                            <input type="text" class="form-control" name="nameEng" id="code-nameEng" />
+                            <label for="code-nameKor">코드이름(국문)</label>
+                            <input type="text" class="form-control" name="nameKor" id="code-nameKor" />
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" name="groupId" id="groupId" readonly/>
+                        </div>
+                        <a class="btn btn-primary" id="btn-save-code">Submit</a>
+                    </form>
+                </div>
+
+            </div>
         </div>
     </div>
 </div>

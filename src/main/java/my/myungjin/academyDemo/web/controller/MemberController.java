@@ -8,6 +8,8 @@ import my.myungjin.academyDemo.web.request.MemberRequest;
 import my.myungjin.academyDemo.web.request.PwChangeRequest;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 import static my.myungjin.academyDemo.web.Response.OK;
 
 @RequestMapping("/member")
@@ -25,17 +27,17 @@ public class MemberController {
     }
 
     @GetMapping("/id")
-    public Response<String> forgotUserId(@RequestBody String tel){
+    public Response<String> forgotUserId(@RequestParam Map<String, String> params){
         return OK(
-                memberService.findUserId(tel)
+                memberService.findUserId(params.get("tel"))
                         .orElse("")
         );
     }
 
     @GetMapping("/password")
-    public Response<String> forgotUserPwd(@RequestBody String email){
+    public Response<String> forgotUserPwd(@RequestParam Map<String, String> paramMap){
         return OK(
-                memberService.findPassword(email)
+                memberService.findPassword(paramMap.get("email"))
                         .orElse("")
         );
     }
