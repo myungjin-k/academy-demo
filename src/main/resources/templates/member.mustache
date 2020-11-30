@@ -1,5 +1,5 @@
 {{>layout/header}}
-<div class="container pt-3 pb-3">
+<div class="container pt-3 pb-3" >
     <div class="row m-lg-5" id="div-login">
         <div class="col-lg">
             <h2 class="mb-5">로그인</h2>
@@ -59,44 +59,45 @@
         </div>
 
     </div>
-    <div class="m-5 d-none" id="div-find">
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item">
-                <a class="nav-link active" id="tab-forgot-id" data-toggle="tab" href="#div-forgot-id" role="tab" aria-controls="div-forgot-id" aria-selected="true">ID 찾기</a>
-            </li>
-            <li class="nav-item" >
-                <a class="nav-link" id="tab-forgot-password" data-toggle="tab" href="#div-forgot-password" role="tab" aria-controls="div-forgot-password" aria-selected="false">비밀번호 찾기/변경</a>
-            </li>
-        </ul>
-        <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade show active" id="div-forgot-id" role="tabpanel" aria-labelledby="tab-find-id">
-                <div class="m-5">
-                    <p><label for="id-find-key">가입 시 등록한 휴대전화 번호를 입력해 주세요. </label>
-                        <input type="text" class="form-control" id="id-find-key" name="tel" placeholder="ex) 010-0000-0000" />
-                    </p>
-                    <p>
-                        <a class="btn btn-primary" id="btn-forgot-id">ID 확인하기</a>
-                        <a class="btn btn-secondary btn-back-login" >로그인으로 돌아가기</a>
-                    </p>
-                </div>
-                <div class="m-5">
+    <div class="row m-5 d-none" id="div-find">
+        <div class="col">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="tab-forgot-id" data-toggle="tab" href="#div-forgot-id" role="tab" aria-controls="div-forgot-id" aria-selected="true">ID 찾기</a>
+                </li>
+                <li class="nav-item" >
+                    <a class="nav-link" id="tab-forgot-password" data-toggle="tab" href="#div-forgot-password" role="tab" aria-controls="div-forgot-password" aria-selected="false">비밀번호 찾기/변경</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="div-forgot-id" role="tabpanel" aria-labelledby="tab-find-id">
+                    <div class="m-5">
+                        <p><label for="id-find-key">가입 시 등록한 휴대전화 번호를 입력해 주세요. </label>
+                            <input type="text" class="form-control" id="id-find-key" name="tel" placeholder="ex) 010-0000-0000" />
+                        </p>
+                        <p>
+                            <a class="btn btn-primary" id="btn-forgot-id">ID 확인</a>
+                            <a class="btn btn-secondary btn-back-login" >로그인으로 돌아가기</a>
+                        </p>
+                    </div>
+                    <div class="m-5">
                     <span class="d-none" id="id-present-area" >
                         <span>조회된 사용자 ID : </span>
                         <span class="text-info" id="found-id"></span>
                     </span>
+                    </div>
                 </div>
-            </div>
-            <div class="tab-pane fade" id="div-forgot-password" role="tabpanel" aria-labelledby="tab-forgot-password" >
-                <div class="m-5">
-                    <p><label for="password-find-key">가입 시 등록한 이메일을 입력해 주세요. </label>
-                        <input type="text" class="form-control" id="password-find-key" name="email" placeholder="ex) example@gmail.com" />
-                    </p>
-                    <p>
-                        <a class="btn btn-primary" id="btn-forgot-password">비밀번호 확인</a>
-                        <a class="btn btn-secondary btn-back-login" >로그인으로 돌아가기</a>
-                    </p>
+                <div class="tab-pane fade" id="div-forgot-password" role="tabpanel" aria-labelledby="tab-forgot-password" >
+                    <div class="m-5">
+                        <p><label for="password-find-key">가입 시 등록한 이메일을 입력해 주세요. </label>
+                            <input type="text" class="form-control" id="password-find-key" name="email" placeholder="ex) example@gmail.com" />
+                        </p>
+                        <p>
+                            <a class="btn btn-primary" id="btn-forgot-password">비밀번호 확인</a>
+                            <a class="btn btn-secondary btn-back-login" >로그인으로 돌아가기</a>
+                        </p>
+                    </div>
                 </div>
-
             </div>
         </div>
     </div>

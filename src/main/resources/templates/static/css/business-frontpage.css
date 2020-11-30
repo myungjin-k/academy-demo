@@ -5,6 +5,12 @@
  */
 body {
   padding-top: 56px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+footer {
+  margin-top: auto;
 }
 .container .nav-tabs {
   margin-bottom: 1rem;
@@ -13,5 +19,4 @@ body {
   padding: 1.5rem;
   text-align: right;
 }
-
 
