@@ -24,9 +24,13 @@ var main = {
         $("#btn-forgot-id").click(function (){
             _this.forgotId();
         });
-        $("#btn-back-login").click(function () {
+        $("#btn-forgot-password").click(function (){
+            _this.forgotPassword();
+        });
+        $(".btn-back-login").click(function () {
 
             $("#div-login").removeClass("d-none");
+            $("#div-join").addClass("d-none");
             $("#div-find").addClass("d-none");
         });
     },
@@ -82,6 +86,25 @@ var main = {
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
+    },
+    forgotPassword : function() {
+        var _this = this;
+        var data = {"email" : $('#password-find-key').val()};
+        $.ajax({
+            type: 'GET',
+            url: 'member/password',
+            dataType: 'json',
+            contentType:'application/json; charset=utf-8',
+            data: data
+        }).done(function(response) {
+            if(response.response === "")
+                alert("일치하는 회원정보가 없습니다.");
+            else
+                alert("입력하신 이메일 주소로 비밀번호 변경 메일이 발송되었습니다.");
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
     }
+
 };
 main.init();
