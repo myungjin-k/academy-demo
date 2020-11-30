@@ -1,4 +1,4 @@
-package my.myungjin.academyDemo.util;
+package my.myungjin.academyDemo.commons.mail;
 
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;

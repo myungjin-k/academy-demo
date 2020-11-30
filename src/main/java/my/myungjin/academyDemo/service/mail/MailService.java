@@ -1,8 +1,8 @@
 package my.myungjin.academyDemo.service.mail;
 
 import lombok.RequiredArgsConstructor;
-import my.myungjin.academyDemo.mail.Mail;
-import my.myungjin.academyDemo.util.MailHandler;
+import my.myungjin.academyDemo.commons.mail.Mail;
+import my.myungjin.academyDemo.commons.mail.MailHandler;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 

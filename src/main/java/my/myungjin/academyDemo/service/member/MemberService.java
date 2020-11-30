@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.member.MemberRepository;
 import my.myungjin.academyDemo.domain.member.Role;
-import my.myungjin.academyDemo.mail.Mail;
+import my.myungjin.academyDemo.commons.mail.Mail;
 import my.myungjin.academyDemo.service.mail.MailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

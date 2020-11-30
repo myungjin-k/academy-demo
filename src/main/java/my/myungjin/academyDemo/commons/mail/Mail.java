@@ -1,4 +1,4 @@
-package my.myungjin.academyDemo.mail;
+package my.myungjin.academyDemo.commons.mail;
 
 
 import lombok.*;
