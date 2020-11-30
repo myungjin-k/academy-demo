@@ -90,6 +90,8 @@ var main = {
     forgotPassword : function() {
         var _this = this;
         var data = {"email" : $('#password-find-key').val()};
+        $("#mail-spinner").removeClass("d-none");
+        $("#btn-forgot-password").attr("disabled", true);
         $.ajax({
             type: 'GET',
             url: 'member/password',
@@ -101,6 +103,8 @@ var main = {
                 alert("일치하는 회원정보가 없습니다.");
             else
                 alert("입력하신 이메일 주소로 비밀번호 변경 메일이 발송되었습니다.");
+            $("#mail-spinner").addClass("d-none");
+            $("#btn-forgot-password").attr("disabled", false);
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
