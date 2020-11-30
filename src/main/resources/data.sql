@@ -25,3 +25,9 @@ INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('b4c632
 INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('fa9c27d308d7448e84665a7ee06e7544', 'C300200', 'skirts', '치마', 'fa52f7959c2647f3a902980c92ea9789' );
 
 INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2) VALUES ('3a18e633a5db4dbd8aaee218fe447fa4', 'mjkim', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진', 'open7894.v2@gmail.com', '010-1234-5678','XX시 XX구 XX로', '1-1111');
+
+
+
+INSERT INTO item_master (id, item_name, main_category_id, sub_category_id, price) VALUES ('8c1cbb792b8d447e9128d53920cf9366', '보더 알파카 니트', '5105a5a02b754b4f9975975c1f1f58ea', '02049afe906d4be595aeb782c11a780e', 72000);
+INSERT INTO item_option (id, color, master_id) VALUES ('fb32787a91614b978cb94b0d47d7c676', '콘베이지', '8c1cbb792b8d447e9128d53920cf9366');
+INSERT INTO item_option (id, color, master_id) VALUES ('af412e9968dc4f11a83f9352a251f0aa', '크림아이보리', '8c1cbb792b8d447e9128d53920cf9366');

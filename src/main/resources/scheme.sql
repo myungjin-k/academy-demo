@@ -57,3 +57,33 @@ CREATE TABLE admin (
 );
 
 
+
+DROP TABLE IF EXISTS item_master CASCADE;
+CREATE TABLE item_master (
+                       id                   varchar(50) NOT NULL,
+                       item_name            varchar(50) NOT NULL,
+                       main_category_id     varchar(255) NOT NULL,
+                       sub_category_id      varchar(255) NOT NULL,
+                       price                number NOT NULL DEFAULT 0,
+                       status               number NOT NULL DEFAULT 0,
+                       detail_image_url     varchar(255),
+                       additional_info      varchar(1000),
+                       comment              varchar(1000),
+                       notice               varchar(1000),
+                       create_at            datetime NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+                       update_at            datetime NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+                       PRIMARY KEY (id),
+                       CONSTRAINT unq_item_name UNIQUE (item_name)
+);
+
+DROP TABLE IF EXISTS item_option CASCADE;
+CREATE TABLE item_option (
+                           id                   varchar(50) NOT NULL,
+                           size                 varchar(10) DEFAULT 'FREE',
+                           color                varchar(10) DEFAULT 'ONE COLOR',
+                           master_id            varchar(50) NOT NULL,
+                           create_at            datetime NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+                           update_at            datetime NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+                           PRIMARY KEY (id),
+                           CONSTRAINT fk_item_option_to_item_master FOREIGN KEY (master_id) REFERENCES item_master (id) ON DELETE CASCADE ON UPDATE RESTRICT
+);
