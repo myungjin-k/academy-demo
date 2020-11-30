@@ -11,8 +11,8 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.resource.PathResourceResolver;
 
-@RequiredArgsConstructor
 @Configuration
+@RequiredArgsConstructor
 public class WebMvcConfigure implements WebMvcConfigurer {
 //    private final String baseApiPath = "api";
 

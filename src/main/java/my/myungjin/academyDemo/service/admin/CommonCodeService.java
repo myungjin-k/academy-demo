@@ -6,6 +6,8 @@ import my.myungjin.academyDemo.domain.common.CodeGroup;
 import my.myungjin.academyDemo.domain.common.CodeGroupRepository;
 import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.domain.common.CommonCodeRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,16 +44,19 @@ public class CommonCodeService {
                 .orElseThrow(() -> new IllegalArgumentException("invalid id =" + id));
     }
 
+    @Cacheable(value="commonCodeCache", key="#groupId.value()")
     public CodeGroup findAllCommonCodesByGroupId(Id<CodeGroup, String> groupId){
         return findGroupById(groupId.value()).orElseThrow(() -> new IllegalArgumentException("invalid id =" + groupId));
     }
 
+    @CacheEvict(value="commonCodeCache", key="#groupId.value()")
     public CommonCode registCommonCode(Id<CodeGroup, String> groupId, CommonCode commonCode){
         return findGroupById(groupId.value())
                 .map(code -> saveCode(commonCode))
                 .orElseThrow(() -> new IllegalArgumentException("invalid id =" + groupId));
     }
 
+    @CacheEvict(value="commonCodeCache", key="#groupId.value()")
     public CommonCode modifyCode(Id<CodeGroup, String> groupId, Id<CommonCode, String> codeId,
                                  String code, String nameEng, String nameKor){
         return findCodeById(groupId, codeId)
@@ -61,10 +66,15 @@ public class CommonCodeService {
                 }).orElseThrow(() -> new IllegalArgumentException("invalid id =" + groupId + ", " + codeId));
     }
 
+    @CacheEvict(value="commonCodeCache", key="#groupId.value()")
     public String removeCode(Id<CodeGroup, String> groupId, Id<CommonCode, String> codeId){
         return findCodeById(groupId, codeId)
                 .map(commonCode -> deleteCode(codeId.value()))
                 .orElseThrow(() -> new IllegalArgumentException("invalid id =" + groupId + ", " + codeId));
+    }
+
+    public CodeGroup findAllCommonCodesByGroupCode(String code){
+        return findGroupByCode(code).orElseThrow(() -> new IllegalArgumentException("invalid code =" + code));
     }
 
     private CodeGroup saveGroup(CodeGroup codeGroup){
