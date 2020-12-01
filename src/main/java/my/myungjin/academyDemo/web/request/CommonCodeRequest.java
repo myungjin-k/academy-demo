@@ -28,7 +28,6 @@ public class CommonCodeRequest {
                 .nameEng(nameEng)
                 .nameKor(nameKor)
                 .groupId(groupId.value())
-                .createAt(now)
                 .updateAt(now)
                 .build();
     }

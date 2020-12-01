@@ -8,6 +8,7 @@ import my.myungjin.academyDemo.domain.member.Role;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -19,7 +20,7 @@ public class AdminService {
     private final PasswordEncoder passwordEncoder;
 
 
-    public Admin login(String adminId, String password){
+    public Admin login(@NotBlank String adminId, @NotBlank String password){
         // TODO validation
         return findByAdminId(adminId).map(admin -> {
             admin.login(passwordEncoder, password);

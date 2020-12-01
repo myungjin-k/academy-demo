@@ -10,6 +10,8 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,22 +25,23 @@ public class CommonCodeService {
         return codeGroupRepository.findAll();
     }
 
-    public Optional<CodeGroup> findGroupByCode(String code){
+    public Optional<CodeGroup> findGroupByCode(@NotBlank String code){
         return codeGroupRepository.findByCode(code);
     }
 
-    public CodeGroup registGroup(CodeGroup codeGroup){
+    public CodeGroup registGroup(@Valid CodeGroup codeGroup){
         return saveGroup(codeGroup);
     }
 
-    public CodeGroup modifyGroup(String id, String code, String nameEng, String nameKor){
+    public CodeGroup modifyGroup(@NotBlank String id, @NotBlank String code,
+                                 @NotBlank String nameEng, @NotBlank String nameKor){
         return findGroupById(id).map(codeGroup -> {
             codeGroup.update(code, nameEng, nameKor);
             return saveGroup(codeGroup);
         }).orElseThrow(() -> new IllegalArgumentException("invalid id =" + id));
     }
 
-    public String removeGroup(String id){
+    public String removeGroup(@NotBlank String id){
         return findGroupById(id)
                 .map(codeGroup -> deleteGroup(id))
                 .orElseThrow(() -> new IllegalArgumentException("invalid id =" + id));
@@ -50,15 +53,15 @@ public class CommonCodeService {
     }
 
     @CacheEvict(value="commonCodeCache", key="#groupId.value()")
-    public CommonCode registCommonCode(Id<CodeGroup, String> groupId, CommonCode commonCode){
+    public CommonCode registCommonCode(@NotBlank Id<CodeGroup, String> groupId, @Valid CommonCode commonCode){
         return findGroupById(groupId.value())
                 .map(code -> saveCode(commonCode))
                 .orElseThrow(() -> new IllegalArgumentException("invalid id =" + groupId));
     }
 
     @CacheEvict(value="commonCodeCache", key="#groupId.value()")
-    public CommonCode modifyCode(Id<CodeGroup, String> groupId, Id<CommonCode, String> codeId,
-                                 String code, String nameEng, String nameKor){
+    public CommonCode modifyCode(@NotBlank Id<CodeGroup, String> groupId, @NotBlank Id<CommonCode, String> codeId,
+                                 @NotBlank String code, @NotBlank String nameEng, @NotBlank String nameKor){
         return findCodeById(groupId, codeId)
                 .map(commonCode -> {
                     commonCode.update(code, nameEng, nameKor);
@@ -67,13 +70,13 @@ public class CommonCodeService {
     }
 
     @CacheEvict(value="commonCodeCache", key="#groupId.value()")
-    public String removeCode(Id<CodeGroup, String> groupId, Id<CommonCode, String> codeId){
+    public String removeCode(@NotBlank Id<CodeGroup, String> groupId, @NotBlank Id<CommonCode, String> codeId){
         return findCodeById(groupId, codeId)
                 .map(commonCode -> deleteCode(codeId.value()))
                 .orElseThrow(() -> new IllegalArgumentException("invalid id =" + groupId + ", " + codeId));
     }
 
-    public CodeGroup findAllCommonCodesByGroupCode(String code){
+    public CodeGroup findAllCommonCodesByGroupCode(@NotBlank String code){
         return findGroupByCode(code).orElseThrow(() -> new IllegalArgumentException("invalid code =" + code));
     }
 

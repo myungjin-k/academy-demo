@@ -20,11 +20,11 @@ public class ItemOption {
     private String id;
 
     @Size(min = 1, max = 10)
-    @Column(name = "size", columnDefinition = "DEFAULT 'FREE")
+    @Column(name = "size", columnDefinition = "varchar(10) default 'FREE'")
     private String size;
 
     @Size(min = 1, max = 10)
-    @Column(name = "color", columnDefinition = "DEFAULT 'ONE COLOR")
+    @Column(name = "color", columnDefinition = "varchar(10) default 'ONE COLOR'")
     private String color;
 
 
@@ -36,8 +36,7 @@ public class ItemOption {
             columnDefinition = "datetime default current_timestamp")
     private LocalDateTime createAt;
 
-    @Column(name = "update_at", insertable = false,
-            columnDefinition = "datetime default current_timestamp")
+    @Column(name = "update_at")
     private LocalDateTime updateAt;
 
 }

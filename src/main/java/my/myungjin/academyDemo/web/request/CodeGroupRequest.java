@@ -17,14 +17,13 @@ public class CodeGroupRequest {
     private String nameKor;
 
     public CodeGroup newCodeGroup(){
-        LocalDateTime now = LocalDateTime.now();
         return CodeGroup.builder()
                 .id(Util.getUUID())
                 .code(code)
                 .nameEng(nameEng)
                 .nameKor(nameKor)
-                .createAt(now)
-                .updateAt(now)
                 .build();
     }
+
+
 }

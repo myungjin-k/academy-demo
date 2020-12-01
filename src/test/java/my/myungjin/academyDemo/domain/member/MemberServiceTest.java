@@ -33,13 +33,14 @@ public class MemberServiceTest {
         id = Util.getUUID();
         userId = "test";
         password = "mjkim_password";
+
     }
 
     @Test
     @Order(1)
     void 사용자_가입(){
         String name = "테스트";
-        String email = "open7894.v2@gmail.com";
+        String email = "rla_mj@naver.com";
         String tel = "010-2345-5678";
         String addr1 = "XX시 OO구 XXXX로 12";
         String addr2 = "1-1111";
@@ -85,7 +86,7 @@ public class MemberServiceTest {
     @Test
     @Order(4)
     void 사용자_비밀번호_찾기(){
-        String email = "open7894.v2@gmail.com";
+        String email = "rla_mj@naver.com";
 
         String found = memberService.findPassword(email).orElse("");
         assertThat(found, is(notNullValue()));
@@ -111,5 +112,39 @@ public class MemberServiceTest {
 
         Member logined = memberService.login(userId, newPwd);
         assertThat(logined, is(notNullValue()));
+    }
+
+    @Test
+    @Order(7)
+    void 사용자_정보_조회(){
+
+        Member myInfo = memberService.findMyInfo(id);
+        assertThat(myInfo, is(notNullValue()));
+        log.info("{}", myInfo);
+    }
+
+    @Test
+    @Order(8)
+    void 사용자_정보_변경(){
+
+        String name = "테스트";
+        String email = "rla_mj@naver.com";
+        String tel = "010-9999-9999";
+        String addr1 = "XX시 OO구 XXXX로 12";
+        String addr2 = "1-1111";
+
+        Member member = Member.builder()
+                .id(id)
+                .userId(userId)
+                .name(name)
+                .email(email)
+                .tel(tel)
+                .addr1(addr1)
+                .addr2(addr2)
+                .build();
+
+        Member modified = memberService.modify(id, member);
+        assertThat(modified, is(notNullValue()));
+        log.info("Modified Member: {}", modified);
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -34,8 +35,9 @@ public class MemberService {
         return findById(saved.getId()).orElse(newMember);
     }
 
-    public Member login(String userId, String password){
+    public Member login(@NotBlank String userId, @NotBlank String password){
         // TODO validation
+
         return findByUserId(userId).map(member -> {
             member.login(passwordEncoder, password);
             member.setRole(Role.MEMBER);
@@ -43,12 +45,12 @@ public class MemberService {
         }).orElseThrow(() -> new IllegalArgumentException("invalid id =" + userId));
     }
 
-    public Optional<String> findUserId(String tel){
+    public Optional<String> findUserId(@NotBlank String tel){
         return memberRepository.findByTel(tel)
                 .map(Member::getUserId);
     }
 
-    public Optional<String> findPassword(String email){
+    public Optional<String> findPassword(@NotBlank String email){
         return memberRepository.findByEmail(email).map(member -> {
             String id = member.getId();
             Mail mail = Mail.builder()
@@ -70,13 +72,26 @@ public class MemberService {
         });
     }
 
-    public Member modifyPassword(String id, String newPassword){
+    public Member modifyPassword(@NotBlank String id, @NotBlank String newPassword){
         return findById(id).map(member -> {
             member.updatePassword(passwordEncoder.encode(newPassword));
             save(member);
             return member;
         }).orElseThrow(() -> new IllegalArgumentException("invalid id=" + id));
     }
+
+    public Member findMyInfo(@NotBlank String id){
+        return findById(id).orElseThrow(() -> new IllegalArgumentException("invalid id=" + id));
+    }
+
+    public Member modify(@NotBlank String id, @Valid Member member){
+        return findById(id).map(ori -> {
+            ori.update(member);
+            save(ori);
+            return ori;
+        }).orElseThrow(() -> new IllegalArgumentException("invalid id=" + id));
+    }
+
     private Optional<Member> findByUserId(String userId){
         return memberRepository.findByUserId(userId);
     }

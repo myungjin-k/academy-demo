@@ -52,7 +52,6 @@ public class CommonCodeServiceTest {
                 .code(groupCode)
                 .nameEng(groupNameEng)
                 .nameKor(groupNameKor)
-                .createAt(now)
                 .updateAt(now)
                 .build();
 
@@ -102,7 +101,6 @@ public class CommonCodeServiceTest {
                 .nameEng("EMPTY_100")
                 .nameKor("빈값_100")
                 .groupId(groupId.value())
-                .createAt(now)
                 .updateAt(now)
                 .build();
         CommonCode result = commonService.registCommonCode(groupId, commonCode);

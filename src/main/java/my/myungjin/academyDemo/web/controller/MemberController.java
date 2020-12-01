@@ -6,6 +6,8 @@ import my.myungjin.academyDemo.service.member.MemberService;
 import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.MemberRequest;
 import my.myungjin.academyDemo.web.request.PwChangeRequest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -20,7 +22,6 @@ public class MemberController {
 
     @PostMapping("/join")
     public Response<Member> join(@RequestBody MemberRequest request){
-        // TODO Front page
         return OK(
                 memberService.join(request.newMember())
         );
@@ -49,6 +50,21 @@ public class MemberController {
         );
     }
 
+    @GetMapping("/me")
+    public Response<Member> getMyInfo(@AuthenticationPrincipal Authentication authentication){
+        return OK(
+                memberService.findMyInfo(authentication.getName())
+        );
+    }
 
+    @PutMapping("/me")
+    public Response<Member> changePassword(@AuthenticationPrincipal Authentication authentication,
+                                           @RequestBody MemberRequest request){
+        return OK(
+                memberService.modify(authentication.getName(),
+                       request.toMember(authentication.getName())
+                )
+        );
+    }
 
 }

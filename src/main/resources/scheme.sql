@@ -5,7 +5,7 @@ CREATE TABLE code_group (
                             name_eng     varchar(10) NOT NULL,
                             name_kor     varchar(10) NOT NULL,
                             create_at    datetime DEFAULT CURRENT_TIMESTAMP(),
-                            update_at    datetime DEFAULT CURRENT_TIMESTAMP(),
+                            update_at    datetime DEFAULT null,
                             PRIMARY KEY (id),
                             CONSTRAINT unq_code_group_code UNIQUE (code)
 );
@@ -18,7 +18,7 @@ CREATE TABLE common_code (
                              name_kor        varchar(10) NOT NULL,
                              group_id        varchar(50) NOT NULL,
                              create_at       datetime DEFAULT CURRENT_TIMESTAMP(),
-                             update_at       datetime DEFAULT CURRENT_TIMESTAMP(),
+                             update_at       datetime DEFAULT null,
                              PRIMARY KEY (id),
                              CONSTRAINT unq_common_code UNIQUE (code),
                              CONSTRAINT fk_common_code_to_code_group FOREIGN KEY (group_id) REFERENCES code_group (id) ON DELETE CASCADE ON UPDATE RESTRICT
@@ -37,7 +37,7 @@ CREATE TABLE member (
                              rating          char DEFAULT 'B',
                              reserves        number DEFAULT 0,
                              create_at       datetime DEFAULT CURRENT_TIMESTAMP(),
-                             update_at       datetime DEFAULT CURRENT_TIMESTAMP(),
+                             update_at       datetime DEFAULT null,
                              PRIMARY KEY (id),
                              CONSTRAINT unq_user_id UNIQUE (user_id),
                              CONSTRAINT unq_email UNIQUE (email),
@@ -51,7 +51,7 @@ CREATE TABLE admin (
                         admin_id        varchar(50) NOT NULL,
                         password        varchar(255) NOT NULL,
                         create_at       datetime DEFAULT CURRENT_TIMESTAMP(),
-                        update_at       datetime DEFAULT CURRENT_TIMESTAMP(),
+                        update_at       datetime DEFAULT null,
                         PRIMARY KEY (id),
                         CONSTRAINT unq_admin_id UNIQUE (admin_id)
 );
@@ -68,7 +68,7 @@ CREATE TABLE item_master (
                        detail_image_url     varchar(255),
                        status               number DEFAULT 0,
                        create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
-                       update_at            datetime DEFAULT CURRENT_TIMESTAMP(),
+                       update_at            datetime DEFAULT null,
                        PRIMARY KEY (id),
                        CONSTRAINT unq_item_name UNIQUE (item_name)
 );
@@ -81,7 +81,7 @@ CREATE TABLE item_display (
                              description          varchar(1000),
                              notice               varchar(1000),
                              create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
-                             update_at            datetime DEFAULT CURRENT_TIMESTAMP(),
+                             update_at            datetime DEFAULT null,
                              PRIMARY KEY (id),
                              CONSTRAINT fk_item_display_to_item_master FOREIGN KEY (item_id) REFERENCES item_master (id) ON DELETE CASCADE ON UPDATE RESTRICT
 );
@@ -93,7 +93,7 @@ CREATE TABLE item_option (
                            color                varchar(10) DEFAULT 'ONE COLOR',
                            master_id            varchar(50) NOT NULL,
                            create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
-                           update_at            datetime DEFAULT CURRENT_TIMESTAMP(),
+                           update_at            datetime DEFAULT null,
                            PRIMARY KEY (id),
                            CONSTRAINT fk_item_option_to_item_master FOREIGN KEY (master_id) REFERENCES item_master (id) ON DELETE CASCADE ON UPDATE RESTRICT
 );

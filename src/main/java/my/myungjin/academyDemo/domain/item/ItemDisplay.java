@@ -40,8 +40,7 @@ public class ItemDisplay {
             columnDefinition = "datetime default current_timestamp")
     private LocalDateTime createAt;
 
-    @Column(name = "update_at", insertable = false,
-            columnDefinition = "datetime default current_timestamp")
+    @Column(name = "update_at")
     private LocalDateTime updateAt;
 
 

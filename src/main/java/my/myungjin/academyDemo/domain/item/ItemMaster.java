@@ -45,8 +45,7 @@ public class ItemMaster {
             columnDefinition = "datetime default current_timestamp")
     private LocalDateTime createAt;
 
-    @Column(name = "update_at", insertable = false,
-            columnDefinition = "datetime default current_timestamp")
+    @Column(name = "update_at")
     private LocalDateTime updateAt;
 
     @OneToMany(mappedBy = "masterId", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) //JOIN
