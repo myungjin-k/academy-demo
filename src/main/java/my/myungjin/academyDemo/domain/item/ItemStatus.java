@@ -3,7 +3,6 @@ package my.myungjin.academyDemo.domain.item;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import my.myungjin.academyDemo.domain.member.Role;
 
 @ToString
 @Getter

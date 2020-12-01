@@ -5,8 +5,8 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.Collection;
 
-import static java.time.LocalDateTime.now;
 
 @Entity
 @Table(name = "item_master")
@@ -33,21 +33,13 @@ public class ItemMaster {
     @Column(name = "price", nullable = false)
     private int price;
 
+    @Size(min = 1, max = 255)
+    @Column(name = "detail_image_url", nullable = false)
+    private String detailImgUrl;
+
     @Column(name = "status", nullable = false, columnDefinition = "number default 0")
     @Convert(converter = ItemStatusConverter.class)
     private ItemStatus status;
-
-    @Column(name = "detail_image_url")
-    private String detailImgUrl;
-
-    @Column(name = "additional_info")
-    private String addInfo;
-
-    @Column(name = "comment")
-    private String comment;
-
-    @Column(name = "notice")
-    private String notice;
 
     @Column(name = "create_at", insertable = false, updatable = false,
             columnDefinition = "datetime default current_timestamp")
@@ -57,21 +49,20 @@ public class ItemMaster {
             columnDefinition = "datetime default current_timestamp")
     private LocalDateTime updateAt;
 
+    @OneToMany(mappedBy = "masterId", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) //JOIN
+    private Collection<ItemOption> options;
+
     @Builder
     public ItemMaster(String id, @Size(min = 1, max = 50) String itemName,
                       @Size(min = 1, max = 255) String mainCategoryId, @Size(min = 1, max = 255) String subCategoryId,
-                      int price, ItemStatus status, String detailImgUrl, String addInfo, String comment, String notice,
-                      LocalDateTime createAt, LocalDateTime updateAt) {
+                      int price, String detailImgUrl, ItemStatus status, LocalDateTime createAt, LocalDateTime updateAt) {
         this.id = id;
         this.itemName = itemName;
         this.mainCategoryId = mainCategoryId;
         this.subCategoryId = subCategoryId;
         this.price = price;
-        this.status = status;
         this.detailImgUrl = detailImgUrl;
-        this.addInfo = addInfo;
-        this.comment = comment;
-        this.notice = notice;
+        this.status = status;
         this.createAt = createAt;
         this.updateAt = updateAt;
     }
