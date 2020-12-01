@@ -4,8 +4,8 @@ CREATE TABLE code_group (
                             code         varchar(10) NOT NULL,
                             name_eng     varchar(10) NOT NULL,
                             name_kor     varchar(10) NOT NULL,
-                            create_at    datetime NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-                            update_at    datetime NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+                            create_at    datetime DEFAULT CURRENT_TIMESTAMP(),
+                            update_at    datetime DEFAULT CURRENT_TIMESTAMP(),
                             PRIMARY KEY (id),
                             CONSTRAINT unq_code_group_code UNIQUE (code)
 );
@@ -17,8 +17,8 @@ CREATE TABLE common_code (
                              name_eng        varchar(10) NOT NULL,
                              name_kor        varchar(10) NOT NULL,
                              group_id        varchar(50) NOT NULL,
-                             create_at       datetime NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-                             update_at       datetime NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+                             create_at       datetime DEFAULT CURRENT_TIMESTAMP(),
+                             update_at       datetime DEFAULT CURRENT_TIMESTAMP(),
                              PRIMARY KEY (id),
                              CONSTRAINT unq_common_code UNIQUE (code),
                              CONSTRAINT fk_common_code_to_code_group FOREIGN KEY (group_id) REFERENCES code_group (id) ON DELETE CASCADE ON UPDATE RESTRICT
@@ -34,10 +34,10 @@ CREATE TABLE member (
                              tel             varchar(50) NOT NULL,
                              addr1           varchar(255),
                              addr2           varchar(255),
-                             rating          char NOT NULL DEFAULT 'B',
-                             reserves        number NOT NULL DEFAULT 0,
-                             create_at       datetime NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-                             update_at       datetime NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+                             rating          char DEFAULT 'B',
+                             reserves        number DEFAULT 0,
+                             create_at       datetime DEFAULT CURRENT_TIMESTAMP(),
+                             update_at       datetime DEFAULT CURRENT_TIMESTAMP(),
                              PRIMARY KEY (id),
                              CONSTRAINT unq_user_id UNIQUE (user_id),
                              CONSTRAINT unq_email UNIQUE (email),
@@ -48,10 +48,10 @@ CREATE TABLE member (
 DROP TABLE IF EXISTS admin CASCADE;
 CREATE TABLE admin (
                         id              varchar(50) NOT NULL,
-                        admin_id         varchar(50) NOT NULL,
+                        admin_id        varchar(50) NOT NULL,
                         password        varchar(255) NOT NULL,
-                        create_at       datetime NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-                        update_at       datetime NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+                        create_at       datetime DEFAULT CURRENT_TIMESTAMP(),
+                        update_at       datetime DEFAULT CURRENT_TIMESTAMP(),
                         PRIMARY KEY (id),
                         CONSTRAINT unq_admin_id UNIQUE (admin_id)
 );
@@ -64,16 +64,26 @@ CREATE TABLE item_master (
                        item_name            varchar(50) NOT NULL,
                        main_category_id     varchar(255) NOT NULL,
                        sub_category_id      varchar(255) NOT NULL,
-                       price                number NOT NULL DEFAULT 0,
-                       status               number NOT NULL DEFAULT 0,
+                       price                number DEFAULT 0,
                        detail_image_url     varchar(255),
-                       additional_info      varchar(1000),
-                       comment              varchar(1000),
-                       notice               varchar(1000),
-                       create_at            datetime NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-                       update_at            datetime NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+                       status               number DEFAULT 0,
+                       create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
+                       update_at            datetime DEFAULT CURRENT_TIMESTAMP(),
                        PRIMARY KEY (id),
                        CONSTRAINT unq_item_name UNIQUE (item_name)
+);
+DROP TABLE IF EXISTS item_display CASCADE;
+CREATE TABLE item_display (
+                             id                   varchar(50) NOT NULL,
+                             item_id              varchar(50) NOT NULL,
+                             sale_price           number not null,
+                             material             varchar(255),
+                             description          varchar(1000),
+                             notice               varchar(1000),
+                             create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
+                             update_at            datetime DEFAULT CURRENT_TIMESTAMP(),
+                             PRIMARY KEY (id),
+                             CONSTRAINT fk_item_display_to_item_master FOREIGN KEY (item_id) REFERENCES item_master (id) ON DELETE CASCADE ON UPDATE RESTRICT
 );
 
 DROP TABLE IF EXISTS item_option CASCADE;
@@ -82,8 +92,8 @@ CREATE TABLE item_option (
                            size                 varchar(10) DEFAULT 'FREE',
                            color                varchar(10) DEFAULT 'ONE COLOR',
                            master_id            varchar(50) NOT NULL,
-                           create_at            datetime NOT NULL DEFAULT CURRENT_TIMESTAMP(),
-                           update_at            datetime NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+                           create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
+                           update_at            datetime DEFAULT CURRENT_TIMESTAMP(),
                            PRIMARY KEY (id),
                            CONSTRAINT fk_item_option_to_item_master FOREIGN KEY (master_id) REFERENCES item_master (id) ON DELETE CASCADE ON UPDATE RESTRICT
 );
