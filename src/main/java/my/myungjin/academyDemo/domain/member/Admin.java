@@ -15,7 +15,7 @@ import static java.util.Optional.ofNullable;
 
 @Entity
 @Table(name = "admin")
-@ToString(exclude = "password")
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id", callSuper = false)
 public class Admin extends User {

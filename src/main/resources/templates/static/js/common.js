@@ -17,3 +17,13 @@ jQuery.fn.serializeObject = function() {
 
     return obj;
 };
+
+jQuery.fn.setFormData = function(form, data) {
+
+    try {
+
+    } catch (e) {
+        alert(e.message);
+    } finally {
+    }
+};

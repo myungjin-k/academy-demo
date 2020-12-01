@@ -36,7 +36,6 @@ public class MemberService {
     }
 
     public Member login(@NotBlank String userId, @NotBlank String password){
-        // TODO validation
 
         return findByUserId(userId).map(member -> {
             member.login(passwordEncoder, password);
@@ -87,6 +86,7 @@ public class MemberService {
     public Member modify(@NotBlank String id, @Valid Member member){
         return findById(id).map(ori -> {
             ori.update(member);
+            ori.updatePassword(passwordEncoder.encode(member.getPassword()));
             save(ori);
             return ori;
         }).orElseThrow(() -> new IllegalArgumentException("invalid id=" + id));

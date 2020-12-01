@@ -129,13 +129,14 @@ public class MemberServiceTest {
 
         String name = "테스트";
         String email = "rla_mj@naver.com";
-        String tel = "010-9999-9999";
+        String tel = "010-2345-5678";
         String addr1 = "XX시 OO구 XXXX로 12";
         String addr2 = "1-1111";
 
         Member member = Member.builder()
                 .id(id)
                 .userId(userId)
+                .password("new_password")
                 .name(name)
                 .email(email)
                 .tel(tel)
