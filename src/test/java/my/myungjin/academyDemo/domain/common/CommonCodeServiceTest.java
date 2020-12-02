@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -145,9 +146,18 @@ public class CommonCodeServiceTest {
 
     @Test
     @Order(8)
+    void 코드그룹_검색하기(){
+
+        List<CodeGroup> results = (ArrayList<CodeGroup>) commonService.search("C", null, null);
+        MatcherAssert.assertThat(results.size(), is(6));
+    }
+
+    @Test
+    @Order(9)
     void 코드그룹_삭제하기(){
         String deleted = commonService.removeGroup(groupId);
         MatcherAssert.assertThat(deleted, is(notNullValue()));
         MatcherAssert.assertThat(deleted, is(groupId.value()));
     }
+
 }

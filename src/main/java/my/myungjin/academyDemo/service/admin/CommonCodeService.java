@@ -2,10 +2,7 @@ package my.myungjin.academyDemo.service.admin;
 
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
-import my.myungjin.academyDemo.domain.common.CodeGroup;
-import my.myungjin.academyDemo.domain.common.CodeGroupRepository;
-import my.myungjin.academyDemo.domain.common.CommonCode;
-import my.myungjin.academyDemo.domain.common.CommonCodeRepository;
+import my.myungjin.academyDemo.domain.common.*;
 import my.myungjin.academyDemo.error.NotFoundException;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -15,6 +12,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Optional;
+
+import static java.util.Collections.emptyList;
 
 @RequiredArgsConstructor
 @Service
@@ -48,6 +47,10 @@ public class CommonCodeService {
         return findGroupById(id.value())
                 .map(codeGroup -> deleteGroup(codeGroup.getId()))
                 .orElseThrow(() -> new NotFoundException(CodeGroup.class, id));
+    }
+
+    public Iterable<CodeGroup> search(String code, String nameEng, String nameKor){
+        return  codeGroupRepository.findAll(CodeGroupPredicate.search(code, nameEng, nameKor));
     }
 
     @Cacheable(value="commonCodeCache", key="#groupId.value()")
