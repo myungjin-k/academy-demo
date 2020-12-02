@@ -16,6 +16,7 @@ import static java.util.Optional.ofNullable;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = {"id"})
 public class CodeGroup {
+
     @Id @Getter
     private String id;
 

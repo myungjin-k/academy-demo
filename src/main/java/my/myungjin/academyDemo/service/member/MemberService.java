@@ -1,10 +1,12 @@
 package my.myungjin.academyDemo.service.member;
 
 import lombok.RequiredArgsConstructor;
+import my.myungjin.academyDemo.commons.Id;
+import my.myungjin.academyDemo.commons.mail.Mail;
 import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.member.MemberRepository;
 import my.myungjin.academyDemo.domain.member.Role;
-import my.myungjin.academyDemo.commons.mail.Mail;
+import my.myungjin.academyDemo.error.NotFoundException;
 import my.myungjin.academyDemo.service.mail.MailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,9 +41,9 @@ public class MemberService {
 
         return findByUserId(userId).map(member -> {
             member.login(passwordEncoder, password);
-            member.setRole(Role.MEMBER);
+            member.role(Role.MEMBER);
             return member;
-        }).orElseThrow(() -> new IllegalArgumentException("invalid id =" + userId));
+        }).orElseThrow(() ->  new NotFoundException(Member.class, userId));
     }
 
     public Optional<String> findUserId(@NotBlank String tel){
@@ -71,25 +73,25 @@ public class MemberService {
         });
     }
 
-    public Member modifyPassword(@NotBlank String id, @NotBlank String newPassword){
-        return findById(id).map(member -> {
+    public Member modifyPassword(@NotBlank Id<Member, String> id, @NotBlank String newPassword){
+        return findById(id.value()).map(member -> {
             member.updatePassword(passwordEncoder.encode(newPassword));
             save(member);
             return member;
-        }).orElseThrow(() -> new IllegalArgumentException("invalid id=" + id));
+        }).orElseThrow(() -> new NotFoundException(Member.class, id.value()));
     }
 
-    public Member findMyInfo(@NotBlank String id){
-        return findById(id).orElseThrow(() -> new IllegalArgumentException("invalid id=" + id));
+    public Member findMyInfo(@NotBlank Id<Member, String> id){
+        return findById(id.value()).orElseThrow(() -> new IllegalArgumentException("invalid id=" + id));
     }
 
-    public Member modify(@NotBlank String id, @Valid Member member){
-        return findById(id).map(ori -> {
+    public Member modify(@NotBlank Id<Member, String> id, @Valid Member member){
+        return findById(id.value()).map(ori -> {
             ori.update(member);
             ori.updatePassword(passwordEncoder.encode(member.getPassword()));
             save(ori);
             return ori;
-        }).orElseThrow(() -> new IllegalArgumentException("invalid id=" + id));
+        }).orElseThrow(() -> new NotFoundException(Member.class, id.value()));
     }
 
     private Optional<Member> findByUserId(String userId){

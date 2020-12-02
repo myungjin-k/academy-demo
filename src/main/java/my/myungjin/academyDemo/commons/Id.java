@@ -8,7 +8,9 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 public class Id<R, V> {
+
     private final Class<R> reference;
+
     private final V value;
 
     public static <R, V> Id<R, V> of(Class<R> reference, V value){

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 public class CheckCacheManager implements CommandLineRunner {
+
     private static final Logger logger = LoggerFactory.getLogger(CheckCacheManager.class);
 
     private final CacheManager cacheManager;

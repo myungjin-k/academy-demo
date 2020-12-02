@@ -82,7 +82,7 @@ public class CommonCodeServiceTest {
         String nameEng = "EMPTY";
         String nameKor = "빈값";
 
-        CodeGroup updated = commonService.modifyGroup(groupId.value(), code, nameEng, nameKor);
+        CodeGroup updated = commonService.modifyGroup(groupId, code, nameEng, nameKor);
         MatcherAssert.assertThat(updated.getId(), is(groupId.value()));
         MatcherAssert.assertThat(updated.getCode(), is(code));
         MatcherAssert.assertThat(updated.getNameEng(), is(nameEng));
@@ -146,7 +146,7 @@ public class CommonCodeServiceTest {
     @Test
     @Order(8)
     void 코드그룹_삭제하기(){
-        String deleted = commonService.removeGroup(groupId.value());
+        String deleted = commonService.removeGroup(groupId);
         MatcherAssert.assertThat(deleted, is(notNullValue()));
         MatcherAssert.assertThat(deleted, is(groupId.value()));
     }

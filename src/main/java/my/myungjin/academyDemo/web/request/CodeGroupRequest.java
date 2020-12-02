@@ -6,14 +6,15 @@ import lombok.ToString;
 import my.myungjin.academyDemo.domain.common.CodeGroup;
 import my.myungjin.academyDemo.util.Util;
 
-import java.time.LocalDateTime;
-
 @AllArgsConstructor
 @Getter
 @ToString
 public class CodeGroupRequest {
+
     private String code;
+
     private String nameEng;
+
     private String nameKor;
 
     public CodeGroup newCodeGroup(){

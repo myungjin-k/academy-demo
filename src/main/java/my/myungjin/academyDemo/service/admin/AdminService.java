@@ -3,8 +3,8 @@ package my.myungjin.academyDemo.service.admin;
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.domain.member.Admin;
 import my.myungjin.academyDemo.domain.member.AdminRepository;
-import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.member.Role;
+import my.myungjin.academyDemo.error.NotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,11 +24,11 @@ public class AdminService {
         // TODO validation
         return findByAdminId(adminId).map(admin -> {
             admin.login(passwordEncoder, password);
-            admin.setRole(Role.ADMIN);
+            admin.role(Role.ADMIN);
             return admin;
-        }).orElseThrow(() -> new IllegalArgumentException("invalid id =" + adminId));
+        }).orElseThrow(() -> new NotFoundException(Admin.class, adminId));
     }
-    private Optional<Admin> findByAdminId(String userId){
+    private Optional<Admin> findByAdminId(@NotBlank String userId){
         return adminRepository.findByAdminId(userId);
     }
 }

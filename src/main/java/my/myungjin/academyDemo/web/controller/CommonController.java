@@ -35,7 +35,7 @@ public class CommonController {
     @PutMapping("/{id}")
     public Response<CodeGroup> modifyCodeGroup(@PathVariable String id, @RequestBody CodeGroupRequest request){
         return OK(
-                sampleService.modifyGroup(id,
+                sampleService.modifyGroup(Id.of(CodeGroup.class, id),
                         request.getCode(),
                         request.getNameEng(),
                         request.getNameKor())
@@ -44,7 +44,7 @@ public class CommonController {
 
     @DeleteMapping("/{id}")
     public void removeCodeGroup(@PathVariable String id){
-        sampleService.removeGroup(id);
+        sampleService.removeGroup(Id.of(CodeGroup.class, id));
     }
 
     @GetMapping("/{code}/commonCode/list")

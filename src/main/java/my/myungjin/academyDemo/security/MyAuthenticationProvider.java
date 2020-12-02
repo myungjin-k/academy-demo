@@ -18,6 +18,7 @@ import static org.springframework.util.ClassUtils.isAssignable;
 public class MyAuthenticationProvider implements AuthenticationProvider {
 
     private final MemberService memberService;
+
     private final AdminService adminService;
 
     @Override

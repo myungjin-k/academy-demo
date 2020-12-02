@@ -1,5 +1,6 @@
 package my.myungjin.academyDemo.domain.member;
 
+import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.service.member.MemberService;
 import my.myungjin.academyDemo.util.Util;
 import org.junit.jupiter.api.*;
@@ -24,13 +25,13 @@ public class MemberServiceTest {
     @Autowired
     private MemberService memberService;
 
-    private String id;
+    private Id<Member, String> id;
     private String userId;
     private String password;
 
     @BeforeAll
     void setup(){
-        id = Util.getUUID();
+        id = Id.of(Member.class, Util.getUUID());
         userId = "test";
         password = "mjkim_password";
 
@@ -46,7 +47,7 @@ public class MemberServiceTest {
         String addr2 = "1-1111";
 
         Member newMember = Member.builder()
-                .id(id)
+                .id(id.value())
                 .userId(userId)
                 .password(password)
                 .name(name)
@@ -134,7 +135,7 @@ public class MemberServiceTest {
         String addr2 = "1-1111";
 
         Member member = Member.builder()
-                .id(id)
+                .id(id.value())
                 .userId(userId)
                 .password("new_password")
                 .name(name)

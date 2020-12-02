@@ -19,6 +19,7 @@ import static java.util.Optional.ofNullable;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id", callSuper = false)
 public class Admin extends User {
+
     @Id @Getter
     private String id;
 
@@ -46,7 +47,7 @@ public class Admin extends User {
         this.adminId = adminId;
         this.password = password;
         this.updateAt = updateAt;
-        setRole(Role.of("ADMIN"));
+        role(Role.of("ADMIN"));
     }
 
     public Optional<LocalDateTime> getUpdateAt(){

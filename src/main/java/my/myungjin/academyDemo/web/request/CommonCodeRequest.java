@@ -16,8 +16,11 @@ import static java.time.LocalDateTime.now;
 @Getter
 @ToString
 public class CommonCodeRequest {
+
     private String code;
+
     private String nameEng;
+
     private String nameKor;
 
     public CommonCode newCommonCode(Id<CodeGroup, String> groupId){

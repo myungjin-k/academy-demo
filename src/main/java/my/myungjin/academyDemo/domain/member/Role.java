@@ -8,6 +8,7 @@ import lombok.ToString;
 @Getter
 @RequiredArgsConstructor
 public enum Role {
+
     ADMIN("ROLE_ADMIN"),
     MEMBER("ROLE_MEMBER");
 

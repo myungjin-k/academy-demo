@@ -1,6 +1,7 @@
 package my.myungjin.academyDemo.web.controller;
 
 import lombok.RequiredArgsConstructor;
+import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.service.member.MemberService;
 import my.myungjin.academyDemo.web.Response;
@@ -18,6 +19,7 @@ import static my.myungjin.academyDemo.web.Response.OK;
 @RequiredArgsConstructor
 @RestController
 public class MemberController {
+
     private final MemberService memberService;
 
     @PostMapping("/join")
@@ -53,17 +55,16 @@ public class MemberController {
     @GetMapping("/me")
     public Response<Member> getMyInfo(@AuthenticationPrincipal Authentication authentication){
         return OK(
-                memberService.findMyInfo(authentication.getName())
+                memberService.findMyInfo(Id.of(Member.class, authentication.getName()))
         );
     }
 
     @PutMapping("/me")
     public Response<Member> changePassword(@AuthenticationPrincipal Authentication authentication,
                                            @RequestBody MemberRequest request){
+        Id<Member, String> id = Id.of(Member.class, authentication.getName());
         return OK(
-                memberService.modify(authentication.getName(),
-                       request.toMember(authentication.getName())
-                )
+                memberService.modify(id, request.toMember(id))
         );
     }
 

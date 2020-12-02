@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 @RequiredArgsConstructor
 @Controller
 public class IndexController {
+
     private final CommonCodeService commonCodeService;
 
     @GetMapping("/")

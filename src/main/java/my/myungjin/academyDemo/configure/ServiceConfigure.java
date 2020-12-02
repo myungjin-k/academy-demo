@@ -1,16 +1,21 @@
 package my.myungjin.academyDemo.configure;
 
 import com.zaxxer.hikari.HikariDataSource;
+import my.myungjin.academyDemo.util.MessageUtil;
 import net.sf.log4jdbc.Log4jdbcProxyDataSource;
 import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.support.MessageSourceAccessor;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
 import java.sql.SQLException;
 
+@Configuration
 public class ServiceConfigure {
+
     @Bean
     @Profile("test")
     public DataSource testDataSource() throws SQLException {
@@ -29,5 +34,12 @@ public class ServiceConfigure {
                 .url("jdbc:h2:mem:test_academy;MODE=MYSQL;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1")
                 .build());*/
         return new Log4jdbcProxyDataSource(dataSource);
+    }
+
+    @Bean
+    MessageSourceAccessor messageSourceAccessor(MessageSource messageSource){
+        MessageSourceAccessor messageSourceAccessor = new MessageSourceAccessor(messageSource);
+        MessageUtil.setMessageSourceAccessor(messageSourceAccessor);
+        return messageSourceAccessor;
     }
 }

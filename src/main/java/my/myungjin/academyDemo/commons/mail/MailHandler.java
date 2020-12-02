@@ -7,8 +7,11 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 public class MailHandler {
+
     private final JavaMailSender mailSender;
+
     private final MimeMessage message;
+
     private final MimeMessageHelper messageHelper;
 
     public MailHandler(JavaMailSender mailSender) throws MessagingException {
