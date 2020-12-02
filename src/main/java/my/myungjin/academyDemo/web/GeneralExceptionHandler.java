@@ -1,5 +1,8 @@
 package my.myungjin.academyDemo.web;
 
+import my.myungjin.academyDemo.error.NotFoundException;
+import my.myungjin.academyDemo.error.ServiceRuntimeException;
+import my.myungjin.academyDemo.error.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.TypeMismatchException;
@@ -36,6 +39,17 @@ public class GeneralExceptionHandler {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     protected ResponseEntity<Response<?>> methodNotAllowedHandler(Exception e){
         return newResponse(e, HttpStatus.METHOD_NOT_ALLOWED);
+    }
+
+    @ExceptionHandler(ServiceRuntimeException.class)
+    public ResponseEntity<?> handleServiceRuntimeException(ServiceRuntimeException e) {
+        if (e instanceof NotFoundException)
+            return newResponse(e, HttpStatus.NOT_FOUND);
+        if (e instanceof UnauthorizedException)
+            return newResponse(e, HttpStatus.UNAUTHORIZED);
+
+        log.warn("Unexpected service exception occurred: {}", e.getMessage(), e);
+        return newResponse(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

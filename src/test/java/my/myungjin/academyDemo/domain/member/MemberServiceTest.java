@@ -111,7 +111,7 @@ public class MemberServiceTest {
         assertThat(modified, is(notNullValue()));
         log.info("Modified Member: {}", modified);
 
-        Member logined = memberService.login(userId, newPwd);
+        Role logined = memberService.login(userId, newPwd);
         assertThat(logined, is(notNullValue()));
     }
 

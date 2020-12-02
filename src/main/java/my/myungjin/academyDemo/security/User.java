@@ -1,12 +1,9 @@
-package my.myungjin.academyDemo.domain.member;
+package my.myungjin.academyDemo.security;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
+import my.myungjin.academyDemo.domain.member.Role;
 
-@RequiredArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class User {
 
@@ -14,6 +11,7 @@ public class User {
 
     private String password;
 
+    @Setter
     private Role role;
 
     @Builder
@@ -23,7 +21,4 @@ public class User {
         this.role = role;
     }
 
-    public void role(Role role){
-        this.role = role;
-    }
 }

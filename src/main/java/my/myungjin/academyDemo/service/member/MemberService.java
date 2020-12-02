@@ -37,12 +37,11 @@ public class MemberService {
         return findById(saved.getId()).orElse(newMember);
     }
 
-    public Member login(@NotBlank String userId, @NotBlank String password){
+    public Role login(@NotBlank String userId, @NotBlank String password){
 
         return findByUserId(userId).map(member -> {
             member.login(passwordEncoder, password);
-            member.role(Role.MEMBER);
-            return member;
+            return Role.MEMBER;
         }).orElseThrow(() ->  new NotFoundException(Member.class, userId));
     }
 

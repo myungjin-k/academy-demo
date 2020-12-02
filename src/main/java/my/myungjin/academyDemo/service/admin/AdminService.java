@@ -20,12 +20,11 @@ public class AdminService {
     private final PasswordEncoder passwordEncoder;
 
 
-    public Admin login(@NotBlank String adminId, @NotBlank String password){
+    public Role login(@NotBlank String adminId, @NotBlank String password){
         // TODO validation
         return findByAdminId(adminId).map(admin -> {
             admin.login(passwordEncoder, password);
-            admin.role(Role.ADMIN);
-            return admin;
+            return Role.ADMIN;
         }).orElseThrow(() -> new NotFoundException(Admin.class, adminId));
     }
     private Optional<Admin> findByAdminId(@NotBlank String userId){

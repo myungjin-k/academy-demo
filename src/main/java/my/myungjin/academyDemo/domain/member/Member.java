@@ -17,8 +17,8 @@ import static java.util.Optional.ofNullable;
 @Table(name = "member")
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode(of = "id", callSuper = false)
-public class Member extends User{
+@EqualsAndHashCode(of = "id")
+public class Member{
 
     @Id @Getter
     private String id;
@@ -87,7 +87,6 @@ public class Member extends User{
         this.rating = rating;
         this.reserves = reserves;
         this.updateAt = updateAt;
-        role(Role.of("MEMBER"));
     }
 
     public Optional<LocalDateTime> getUpdateAt(){
