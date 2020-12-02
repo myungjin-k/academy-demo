@@ -61,7 +61,7 @@ var main = {
             contentType:'application/json; charset=utf-8',
             data: JSON.stringify(data)
         }).done(function(response) {
-            console.log(response);
+            //console.log(response);
             location.href = "/";
         }).fail(function (error) {
             alert(JSON.stringify(error));

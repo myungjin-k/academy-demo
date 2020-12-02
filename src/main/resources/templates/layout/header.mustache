@@ -35,7 +35,12 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/login">로그인</a>
+                    {{^loginUser}}
+                        <a class="nav-link" href="/login" id="login">로그인</a>
+                    {{/loginUser}}
+                    {{#loginUser}}
+                        <a class="nav-link" href="/logout" id="logout">로그아웃</a>
+                    {{/loginUser}}
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Services</a>

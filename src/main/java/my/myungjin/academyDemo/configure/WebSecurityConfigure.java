@@ -53,6 +53,7 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
+    // TODO 인가
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

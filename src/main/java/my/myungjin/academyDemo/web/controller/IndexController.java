@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.common.CodeGroup;
 import my.myungjin.academyDemo.service.admin.CommonCodeService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,10 +18,13 @@ public class IndexController {
     private final CommonCodeService commonCodeService;
 
     @GetMapping("/")
-    public String main(Model model){
+    public String main(Model model, @AuthenticationPrincipal Authentication authentication){
         CodeGroup items =
                 commonCodeService.findAllCommonCodesByGroupId(Id.of(CodeGroup.class, "246fa96f9b634a56aaac5884de186ebc"));
         model.addAttribute("items", items.getCommonCodes());
+        if(authentication != null && authentication.isAuthenticated()){
+            model.addAttribute("loginUser", authentication.getDetails());
+        }
         return "index";
     }
 
