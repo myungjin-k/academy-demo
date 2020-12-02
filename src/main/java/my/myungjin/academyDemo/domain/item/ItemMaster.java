@@ -11,36 +11,42 @@ import java.util.Collection;
 @Entity
 @Table(name = "item_master")
 @ToString
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
 public class ItemMaster {
-    @Id
+    @Id @Getter
     private String id;
 
+    @Getter
     @Size(min = 1, max = 50)
     @Column(name = "item_name", nullable = false, unique = true)
     private String itemName;
 
+    @Getter
     @Size(min = 1, max = 255)
     @Column(name = "main_category_id", nullable = false)
     private String mainCategoryId;
 
+    @Getter
     @Size(min = 1, max = 255)
     @Column(name = "sub_category_id", nullable = false)
     private String subCategoryId;
 
+    @Getter
     @Column(name = "price", nullable = false)
     private int price;
 
+    @Getter
     @Size(min = 1, max = 255)
     @Column(name = "detail_image_url", nullable = false)
     private String detailImgUrl;
 
+    @Getter
     @Column(name = "status", nullable = false, columnDefinition = "number default 0")
     @Convert(converter = ItemStatusConverter.class)
     private ItemStatus status;
 
+    @Getter
     @Column(name = "create_at", insertable = false, updatable = false,
             columnDefinition = "datetime default current_timestamp")
     private LocalDateTime createAt;
@@ -48,6 +54,7 @@ public class ItemMaster {
     @Column(name = "update_at")
     private LocalDateTime updateAt;
 
+    @Getter
     @OneToMany(mappedBy = "masterId", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) //JOIN
     private Collection<ItemOption> options;
 
