@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.mail.MailException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import javax.validation.Valid;
@@ -31,12 +32,14 @@ public class MemberService {
 
     private final MailService mailService;
 
+    @Transactional
     public Member join(@Valid Member newMember) {
         newMember.encryptPassword(passwordEncoder);
         Member saved = save(newMember);
         return findById(saved.getId()).orElse(newMember);
     }
 
+    @Transactional
     public String login(@NotBlank String userId, @NotBlank String password){
 
         return findByUserId(userId).map(member -> {
@@ -45,11 +48,13 @@ public class MemberService {
         }).orElseThrow(() ->  new NotFoundException(Member.class, userId));
     }
 
+    @Transactional(readOnly = true)
     public Optional<String> findUserId(@NotBlank String tel){
         return memberRepository.findByTel(tel)
                 .map(Member::getUserId);
     }
 
+    @Transactional(readOnly = true)
     public Optional<String> findPassword(@NotBlank String email){
         return memberRepository.findByEmail(email).map(member -> {
             String id = member.getId();
@@ -72,6 +77,7 @@ public class MemberService {
         });
     }
 
+    @Transactional
     public Member modifyPassword(@NotBlank Id<Member, String> id, @NotBlank String newPassword){
         return findById(id.value()).map(member -> {
             member.updatePassword(passwordEncoder.encode(newPassword));
@@ -80,10 +86,12 @@ public class MemberService {
         }).orElseThrow(() -> new NotFoundException(Member.class, id.value()));
     }
 
+    @Transactional(readOnly = true)
     public Member findMyInfo(@NotBlank Id<Member, String> id){
         return findById(id.value()).orElseThrow(() -> new IllegalArgumentException("invalid id=" + id));
     }
 
+    @Transactional
     public Member modify(@NotBlank Id<Member, String> id, @Valid Member member){
         return findById(id.value()).map(ori -> {
             ori.update(member);

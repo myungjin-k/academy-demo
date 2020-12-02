@@ -7,6 +7,7 @@ import my.myungjin.academyDemo.domain.member.Role;
 import my.myungjin.academyDemo.error.NotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotBlank;
 import java.util.Optional;
@@ -20,6 +21,7 @@ public class AdminService {
     private final PasswordEncoder passwordEncoder;
 
 
+    @Transactional
     public String login(@NotBlank String adminId, @NotBlank String password){
         // TODO validation
         return findByAdminId(adminId).map(admin -> {

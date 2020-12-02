@@ -15,6 +15,4 @@ public interface CodeGroupRepository extends JpaRepository<CodeGroup, String>, Q
 
     Optional<CodeGroup> findByCode(String code);
 
-    List<CodeGroup> findByCodeContainingIgnoreCase(String value);
-
 }

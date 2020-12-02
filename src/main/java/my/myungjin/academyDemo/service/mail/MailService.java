@@ -5,6 +5,7 @@ import my.myungjin.academyDemo.commons.mail.Mail;
 import my.myungjin.academyDemo.commons.mail.MailHandler;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 
@@ -14,6 +15,7 @@ public class MailService {
 
     private final JavaMailSender javaMailSender;
 
+    @Transactional
     public void sendMail(Mail mail) throws MessagingException {
         String FROM = "open7894@gmail.com";
         MailHandler mailHandler = new MailHandler(javaMailSender);
