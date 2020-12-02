@@ -3,6 +3,7 @@ package my.myungjin.academyDemo.web.controller;
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.member.Member;
+import my.myungjin.academyDemo.security.User;
 import my.myungjin.academyDemo.service.member.MemberService;
 import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.MemberRequest;
@@ -55,14 +56,14 @@ public class MemberController {
     @GetMapping("/me")
     public Response<Member> getMyInfo(@AuthenticationPrincipal Authentication authentication){
         return OK(
-                memberService.findMyInfo(Id.of(Member.class, authentication.getName()))
+                memberService.findMyInfo(Id.of(Member.class, ((User) authentication.getDetails()).getId()))
         );
     }
 
     @PutMapping("/me")
     public Response<Member> changePassword(@AuthenticationPrincipal Authentication authentication,
                                            @RequestBody MemberRequest request){
-        Id<Member, String> id = Id.of(Member.class, authentication.getName());
+        Id<Member, String> id = Id.of(Member.class, ((User) authentication.getDetails()).getId());
         return OK(
                 memberService.modify(id, request.toMember(id))
         );

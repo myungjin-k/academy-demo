@@ -45,6 +45,10 @@ public class IndexController {
         return "changePassword";
     }
 
+    @GetMapping("/myPage")
+    public String myPageIndex(){
+        return "mypage";
+    }
 }
 
 

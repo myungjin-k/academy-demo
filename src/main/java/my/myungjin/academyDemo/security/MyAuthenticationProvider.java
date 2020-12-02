@@ -1,6 +1,7 @@
 package my.myungjin.academyDemo.security;
 
 import lombok.RequiredArgsConstructor;
+import my.myungjin.academyDemo.domain.member.Role;
 import my.myungjin.academyDemo.error.NotFoundException;
 import my.myungjin.academyDemo.service.admin.AdminService;
 import my.myungjin.academyDemo.service.member.MemberService;
@@ -33,12 +34,14 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
             User user = User.builder()
                     .userId(token.getPrincipal())
                     .password(String.valueOf(token.getCredentials()))
+                    .role(token.getType())
                     .build();
 
-            if(token.getType().name().equals("ADMIN"))
-                user.setRole(adminService.login(token.getPrincipal(), String.valueOf(token.getCredentials())));
-            else
-                user.setRole(memberService.login(token.getPrincipal(), String.valueOf(token.getCredentials())));
+            if(user.getRole().equals(Role.ADMIN)){
+                user.setId(adminService.login(user.getUserId(), user.getPassword()));;
+            } else {
+                user.setId(memberService.login(user.getUserId(), user.getPassword()));
+            }
 
             MyAuthenticationToken authenticated = new MyAuthenticationToken(user.getUserId(), user.getPassword(), createAuthorityList(user.getRole().name()));
             authenticated.setDetails(user);

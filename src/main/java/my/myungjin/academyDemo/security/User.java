@@ -7,11 +7,13 @@ import my.myungjin.academyDemo.domain.member.Role;
 @Getter
 public class User {
 
+    @Setter
+    private String id;
+
     private String userId;
 
     private String password;
 
-    @Setter
     private Role role;
 
     @Builder

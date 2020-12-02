@@ -43,7 +43,9 @@
                     {{/loginUser}}
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Services</a>
+                    {{#loginUser}}
+                        <a class="nav-link" href="/myPage" id="myPage">회원정보</a>
+                    {{/loginUser}}
                 </li>
             </ul>
         </div>

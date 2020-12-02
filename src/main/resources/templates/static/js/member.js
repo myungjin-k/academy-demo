@@ -11,7 +11,6 @@ var main = {
 
         $("#btn-join").click(function () {
             $("#tel").val($("#tel1").val() + "-" + $("#tel2").val() + "-" + $("#tel3").val());
-            $("#addr").val($("#addr1").val() + " " + $("#addr2").val());
             _this.join();
         });
 
