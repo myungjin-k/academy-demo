@@ -85,6 +85,7 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .disable()
+                .logout().logoutSuccessUrl("/")
         ;
         //http.addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }

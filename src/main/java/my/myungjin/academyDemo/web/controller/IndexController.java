@@ -46,7 +46,10 @@ public class IndexController {
     }
 
     @GetMapping("/myPage")
-    public String myPageIndex(){
+    public String myPageIndex(Model model, @AuthenticationPrincipal Authentication authentication){
+        if(authentication != null && authentication.isAuthenticated()){
+            model.addAttribute("loginUser", authentication.getDetails());
+        }
         return "mypage";
     }
 }
