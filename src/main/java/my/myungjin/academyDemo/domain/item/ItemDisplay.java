@@ -36,6 +36,10 @@ public class ItemDisplay {
     @Column(name = "notice")
     private String notice;
 
+    @Size(min = 1, max = 255)
+    @Column(name = "detail_image")
+    private String detailImage;
+
     @Column(name = "create_at", insertable = false, updatable = false,
             columnDefinition = "datetime default current_timestamp")
     private LocalDateTime createAt;

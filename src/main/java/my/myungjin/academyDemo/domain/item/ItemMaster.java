@@ -38,8 +38,8 @@ public class ItemMaster {
 
     @Getter
     @Size(min = 1, max = 255)
-    @Column(name = "detail_image_url", nullable = false)
-    private String detailImgUrl;
+    @Column(name = "thumbnail", nullable = false)
+    private String thumbnail;
 
     @Getter
     @Column(name = "status", nullable = false, columnDefinition = "number default 0")
@@ -61,13 +61,13 @@ public class ItemMaster {
     @Builder
     public ItemMaster(String id, @Size(min = 1, max = 50) String itemName,
                       @Size(min = 1, max = 255) String mainCategoryId, @Size(min = 1, max = 255) String subCategoryId,
-                      int price, String detailImgUrl, ItemStatus status, LocalDateTime createAt, LocalDateTime updateAt) {
+                      int price, String thumbnail, ItemStatus status, LocalDateTime createAt, LocalDateTime updateAt) {
         this.id = id;
         this.itemName = itemName;
         this.mainCategoryId = mainCategoryId;
         this.subCategoryId = subCategoryId;
         this.price = price;
-        this.detailImgUrl = detailImgUrl;
+        this.thumbnail = thumbnail;
         this.status = status;
         this.createAt = createAt;
         this.updateAt = updateAt;
