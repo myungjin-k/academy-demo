@@ -24,13 +24,8 @@ public class ItemMaster {
 
     @Getter
     @Size(min = 1, max = 255)
-    @Column(name = "main_category_id", nullable = false)
-    private String mainCategoryId;
-
-    @Getter
-    @Size(min = 1, max = 255)
-    @Column(name = "sub_category_id", nullable = false)
-    private String subCategoryId;
+    @Column(name = "category_id", nullable = false)
+    private String categoryId;
 
     @Getter
     @Column(name = "price", nullable = false)
@@ -60,12 +55,11 @@ public class ItemMaster {
 
     @Builder
     public ItemMaster(String id, @Size(min = 1, max = 50) String itemName,
-                      @Size(min = 1, max = 255) String mainCategoryId, @Size(min = 1, max = 255) String subCategoryId,
+                      @Size(min = 1, max = 255) String categoryId,
                       int price, String thumbnail, ItemStatus status, LocalDateTime createAt, LocalDateTime updateAt) {
         this.id = id;
         this.itemName = itemName;
-        this.mainCategoryId = mainCategoryId;
-        this.subCategoryId = subCategoryId;
+        this.categoryId = categoryId;
         this.price = price;
         this.thumbnail = thumbnail;
         this.status = status;

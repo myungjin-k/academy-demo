@@ -3,6 +3,7 @@ package my.myungjin.academyDemo.domain.common;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -20,18 +21,22 @@ public class CommonCode {
     private String id;
 
     @Getter
+    @Size(min = 1, max = 10)
     @Column(nullable = false)
     private String code;
 
     @Getter
+    @Size(min = 1, max = 50)
     @Column(nullable = false)
     private String nameEng;
 
     @Getter
+    @Size(min = 1, max = 50)
     @Column(nullable = false)
     private String nameKor;
 
     @Getter
+    @Size(min = 1, max = 255)
     @Column(nullable = false)
     private String groupId;
 

@@ -2,8 +2,8 @@ DROP TABLE IF EXISTS code_group CASCADE;
 CREATE TABLE code_group (
                             id           varchar(50) NOT NULL,
                             code         varchar(10) NOT NULL,
-                            name_eng     varchar(10) NOT NULL,
-                            name_kor     varchar(10) NOT NULL,
+                            name_eng     varchar(50) NOT NULL,
+                            name_kor     varchar(50) NOT NULL,
                             create_at    datetime DEFAULT CURRENT_TIMESTAMP(),
                             update_at    datetime DEFAULT null,
                             PRIMARY KEY (id),
@@ -14,8 +14,8 @@ DROP TABLE IF EXISTS common_code CASCADE;
 CREATE TABLE common_code (
                              id              varchar(50) NOT NULL,
                              code            varchar(10) NOT NULL,
-                             name_eng        varchar(10) NOT NULL,
-                             name_kor        varchar(10) NOT NULL,
+                             name_eng        varchar(50) NOT NULL,
+                             name_kor        varchar(50) NOT NULL,
                              group_id        varchar(50) NOT NULL,
                              create_at       datetime DEFAULT CURRENT_TIMESTAMP(),
                              update_at       datetime DEFAULT null,
@@ -62,16 +62,17 @@ DROP TABLE IF EXISTS item_master CASCADE;
 CREATE TABLE item_master (
                        id                   varchar(50) NOT NULL,
                        item_name            varchar(50) NOT NULL,
-                       main_category_id     varchar(255) NOT NULL,
-                       sub_category_id      varchar(255) NOT NULL,
+                       category_id          varchar(255) NOT NULL,
                        price                number DEFAULT 0,
                        thumbnail            varchar(255),
                        status               number DEFAULT 0,
                        create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
                        update_at            datetime DEFAULT null,
                        PRIMARY KEY (id),
-                       CONSTRAINT unq_item_name UNIQUE (item_name)
+                       CONSTRAINT unq_item_name UNIQUE (item_name),
+                       CONSTRAINT fk_item_master_to_common_code FOREIGN KEY (category_id) REFERENCES COMMON_CODE (id) ON DELETE RESTRICT ON UPDATE RESTRICT
 );
+
 DROP TABLE IF EXISTS item_display CASCADE;
 CREATE TABLE item_display (
                              id                   varchar(50) NOT NULL,
@@ -90,7 +91,7 @@ CREATE TABLE item_display (
 DROP TABLE IF EXISTS item_option CASCADE;
 CREATE TABLE item_option (
                            id                   varchar(50) NOT NULL,
-                           size                 varchar(10) DEFAULT 'FREE',
+                           size                 varchar(10) DEFAULT 'ONE SIZE',
                            color                varchar(10) DEFAULT 'ONE COLOR',
                            master_id            varchar(50) NOT NULL,
                            create_at            datetime DEFAULT CURRENT_TIMESTAMP(),

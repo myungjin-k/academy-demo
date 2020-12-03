@@ -3,6 +3,7 @@ package my.myungjin.academyDemo.domain.common;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Optional;
@@ -21,14 +22,17 @@ public class CodeGroup {
     private String id;
 
     @Getter
+    @Size(min = 1, max = 10)
     @Column(name = "code", nullable = false, unique = true)
     private String code;
 
     @Getter
+    @Size(min = 1, max = 50)
     @Column(name = "name_eng", nullable = false)
     private String nameEng;
 
     @Getter
+    @Size(min = 1, max = 50)
     @Column(name = "name_kor", nullable = false)
     private String nameKor;
 
