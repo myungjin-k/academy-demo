@@ -17,11 +17,13 @@ public class IndexController {
 
     private final CommonCodeService commonCodeService;
 
+    private CodeGroup itemCategories ;
+
     @GetMapping("/")
     public String main(Model model, @AuthenticationPrincipal Authentication authentication){
-        CodeGroup items =
-                commonCodeService.findAllCommonCodesByGroupId(Id.of(CodeGroup.class, "246fa96f9b634a56aaac5884de186ebc"));
-        model.addAttribute("items", items.getCommonCodes());
+        itemCategories = commonCodeService.findAllCommonCodesByGroupId
+                (Id.of(CodeGroup.class, "246fa96f9b634a56aaac5884de186ebc"));
+        model.addAttribute("items", itemCategories.getCommonCodes());
         if(authentication != null && authentication.isAuthenticated()){
             model.addAttribute("loginUser", authentication.getDetails());
         }
@@ -34,7 +36,11 @@ public class IndexController {
     }
 
     @GetMapping("/login")
-    public String loginIndex(){
+    public String loginIndex(Model model)
+    {
+        itemCategories = commonCodeService.findAllCommonCodesByGroupId
+                (Id.of(CodeGroup.class, "246fa96f9b634a56aaac5884de186ebc"));
+        model.addAttribute("items", itemCategories.getCommonCodes());
         return "member";
     }
 
@@ -47,6 +53,9 @@ public class IndexController {
 
     @GetMapping("/myPage")
     public String myPageIndex(Model model, @AuthenticationPrincipal Authentication authentication){
+        itemCategories = commonCodeService.findAllCommonCodesByGroupId
+                (Id.of(CodeGroup.class, "246fa96f9b634a56aaac5884de186ebc"));
+        model.addAttribute("items", itemCategories.getCommonCodes());
         if(authentication != null && authentication.isAuthenticated()){
             model.addAttribute("loginUser", authentication.getDetails());
         }
