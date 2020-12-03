@@ -2,8 +2,8 @@ package my.myungjin.academyDemo.domain.item;
 
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.common.CodeGroup;
-import my.myungjin.academyDemo.domain.member.Member;
-import my.myungjin.academyDemo.service.item.ItemService;
+import my.myungjin.academyDemo.domain.common.CommonCode;
+import my.myungjin.academyDemo.service.item.ItemMasterService;
 import my.myungjin.academyDemo.util.Util;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
@@ -22,27 +22,44 @@ import static org.hamcrest.Matchers.notNullValue;
 @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ItemServiceTest {
+public class ItemMasterServiceTest {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private ItemService itemService;
+    private ItemMasterService itemMasterService;
 
-    private Id<CodeGroup, String> mainCategoryId;
+    private Id<CommonCode, String> categoryId;
 
 
     @BeforeAll
     void setup(){
-        mainCategoryId = Id.of(CodeGroup.class, "5105a5a02b754b4f9975975c1f1f58ea");
+        categoryId = Id.of(CommonCode.class, "5105a5a02b754b4f9975975c1f1f58ea");
     }
 
     @Test
     @Order(1)
     void 상품_가져오기_메인카테고리(){
-        List<ItemMaster> itemList = itemService.findByMainCategory(mainCategoryId);
+        List<ItemMaster> itemList = itemMasterService.findByMainCategory(categoryId);
         assertThat(itemList, is(notNullValue()));
         //log.info("Saved Member: {}", saved);
+
+    }
+
+    @Test
+    @Order(2)
+    void 상품_등록하기(){
+        ItemMaster newItem = ItemMaster.builder()
+                .id(Util.getUUID())
+                .categoryId(categoryId.value())
+                .itemName("데어 워머 터틀넥 티셔츠 (3color)")
+                .status(ItemStatus.READY_TO_SALE)
+                .thumbnail("/test")
+                .price(19000)
+                .build();
+        ItemMaster saved = itemMasterService.saveItemMaster(newItem);
+        assertThat(saved, is(notNullValue()));
+        log.info("Saved Item: {}", saved);
 
     }
 }
