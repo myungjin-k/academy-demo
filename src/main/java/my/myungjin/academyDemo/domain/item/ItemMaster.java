@@ -31,6 +31,7 @@ public class ItemMaster {
     @Column(name = "price", nullable = false)
     private int price;
 
+    @Setter
     @Getter
     @Size(min = 1, max = 255)
     @Column(name = "thumbnail", nullable = false)
@@ -66,4 +67,5 @@ public class ItemMaster {
         this.createAt = createAt;
         this.updateAt = updateAt;
     }
+
 }
