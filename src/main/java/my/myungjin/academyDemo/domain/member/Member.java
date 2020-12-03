@@ -44,7 +44,7 @@ public class Member{
     private String email;
 
     @Getter
-    @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$")
+    @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$", message = "전화번호는 010-0000-0000 형태여야 합니다.")
     @Column(name = "tel" , nullable = false)
     private String tel;
 

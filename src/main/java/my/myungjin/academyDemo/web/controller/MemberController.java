@@ -61,7 +61,7 @@ public class MemberController {
     }
 
     @PutMapping("/me")
-    public Response<Member> changePassword(@AuthenticationPrincipal Authentication authentication,
+    public Response<Member> modifyMyInfo(@AuthenticationPrincipal Authentication authentication,
                                            @RequestBody MemberRequest request){
         Id<Member, String> id = Id.of(Member.class, ((User) authentication.getDetails()).getId());
         return OK(

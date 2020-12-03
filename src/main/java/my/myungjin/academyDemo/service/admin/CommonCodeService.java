@@ -8,13 +8,14 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Optional;
 
-
+@Validated
 @RequiredArgsConstructor
 @Service
 public class CommonCodeService {
@@ -39,7 +40,7 @@ public class CommonCodeService {
     }
 
     @Transactional
-    public CodeGroup modifyGroup(@NotBlank Id<CodeGroup, String> id, @NotBlank String code,
+    public CodeGroup modifyGroup(@Valid Id<CodeGroup, String> id, @NotBlank String code,
                                  @NotBlank String nameEng, @NotBlank String nameKor){
         return findGroupById(id.value()).map(codeGroup -> {
             codeGroup.update(code, nameEng, nameKor);
@@ -48,7 +49,7 @@ public class CommonCodeService {
     }
 
     @Transactional
-    public String removeGroup(@NotBlank Id<CodeGroup, String> id){
+    public String removeGroup(@Valid Id<CodeGroup, String> id){
         return findGroupById(id.value())
                 .map(codeGroup -> deleteGroup(codeGroup.getId()))
                 .orElseThrow(() -> new NotFoundException(CodeGroup.class, id));
@@ -61,13 +62,13 @@ public class CommonCodeService {
 
     @Cacheable(value="commonCodeCache", key="#groupId.value()")
     @Transactional(readOnly = true)
-    public CodeGroup findAllCommonCodesByGroupId(Id<CodeGroup, String> groupId){
+    public CodeGroup findAllCommonCodesByGroupId(@Valid Id<CodeGroup, String> groupId){
         return findGroupById(groupId.value()).orElseThrow(() -> new NotFoundException(CodeGroup.class, groupId));
     }
 
     @CacheEvict(value="commonCodeCache", key="#groupId.value()")
     @Transactional
-    public CommonCode registCommonCode(@NotBlank Id<CodeGroup, String> groupId, @Valid CommonCode commonCode){
+    public CommonCode registCommonCode(@Valid Id<CodeGroup, String> groupId, @Valid CommonCode commonCode){
         return findGroupById(groupId.value())
                 .map(code -> saveCode(commonCode))
                 .orElseThrow(() -> new NotFoundException(CodeGroup.class, groupId));
@@ -75,7 +76,7 @@ public class CommonCodeService {
 
     @CacheEvict(value="commonCodeCache", key="#groupId.value()")
     @Transactional
-    public CommonCode modifyCode(@NotBlank Id<CodeGroup, String> groupId, @NotBlank Id<CommonCode, String> codeId,
+    public CommonCode modifyCode(@Valid Id<CodeGroup, String> groupId, @Valid Id<CommonCode, String> codeId,
                                  @NotBlank String code, @NotBlank String nameEng, @NotBlank String nameKor){
         return findCodeById(groupId, codeId)
                 .map(commonCode -> {
@@ -86,7 +87,7 @@ public class CommonCodeService {
 
     @CacheEvict(value="commonCodeCache", key="#groupId.value()")
     @Transactional
-    public String removeCode(@NotBlank Id<CodeGroup, String> groupId, @NotBlank Id<CommonCode, String> codeId){
+    public String removeCode(@Valid Id<CodeGroup, String> groupId, @Valid Id<CommonCode, String> codeId){
         return findCodeById(groupId, codeId)
                 .map(commonCode -> deleteCode(codeId.value()))
                 .orElseThrow(() -> new NotFoundException(CommonCode.class, groupId, codeId));

@@ -10,10 +10,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import javax.validation.ValidationException;
 
 import static my.myungjin.academyDemo.web.Response.ERROR;
 
@@ -30,7 +33,7 @@ public class GeneralExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = {IllegalStateException.class, IllegalArgumentException.class, TypeMismatchException.class,
-            MissingServletRequestParameterException.class})
+            MissingServletRequestParameterException.class, ValidationException.class})
     protected ResponseEntity<Response<?>> badRequestHandler(Exception e){
         return newResponse(e, HttpStatus.BAD_REQUEST);
     }

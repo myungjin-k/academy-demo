@@ -14,12 +14,14 @@ import org.springframework.mail.MailException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import javax.mail.MessagingException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.util.Optional;
 
+@Validated
 @RequiredArgsConstructor
 @Service
 public class MemberService {
@@ -78,7 +80,7 @@ public class MemberService {
     }
 
     @Transactional
-    public Member modifyPassword(@NotBlank Id<Member, String> id, @NotBlank String newPassword){
+    public Member modifyPassword(@Valid Id<Member, String> id, @NotBlank String newPassword){
         return findById(id.value()).map(member -> {
             member.updatePassword(passwordEncoder.encode(newPassword));
             save(member);
@@ -87,12 +89,12 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public Member findMyInfo(@NotBlank Id<Member, String> id){
+    public Member findMyInfo(@Valid Id<Member, String> id){
         return findById(id.value()).orElseThrow(() -> new IllegalArgumentException("invalid id=" + id));
     }
 
     @Transactional
-    public Member modify(@NotBlank Id<Member, String> id, @Valid Member member){
+    public Member modify(@Valid Id<Member, String> id, @Valid Member member){
         return findById(id.value()).map(ori -> {
             ori.update(member);
             ori.updatePassword(passwordEncoder.encode(member.getPassword()));

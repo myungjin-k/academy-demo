@@ -41,6 +41,7 @@ public class MemberRequest {
     public Member toMember(Id<Member, String> id){
         return Member.builder()
                 .id(id.value())
+                .userId(userId)
                 .password(password)
                 .name(name)
                 .email(email)
