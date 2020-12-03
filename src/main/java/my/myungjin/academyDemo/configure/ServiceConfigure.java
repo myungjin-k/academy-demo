@@ -1,6 +1,11 @@
 package my.myungjin.academyDemo.configure;
 
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.zaxxer.hikari.HikariDataSource;
+import my.myungjin.academyDemo.aws.S3Client;
 import my.myungjin.academyDemo.util.MessageUtil;
 import net.sf.log4jdbc.Log4jdbcProxyDataSource;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -37,9 +42,28 @@ public class ServiceConfigure {
     }
 
     @Bean
-    MessageSourceAccessor messageSourceAccessor(MessageSource messageSource){
+    public MessageSourceAccessor messageSourceAccessor(MessageSource messageSource){
         MessageSourceAccessor messageSourceAccessor = new MessageSourceAccessor(messageSource);
         MessageUtil.setMessageSourceAccessor(messageSourceAccessor);
         return messageSourceAccessor;
+    }
+
+    @Bean
+    public AmazonS3 amazonS3(AwsConfigure awsConfigure){
+        return AmazonS3ClientBuilder.standard()
+                .withRegion(awsConfigure.getRegion())
+                .withCredentials(
+                    new AWSStaticCredentialsProvider(
+                            new BasicAWSCredentials(
+                                awsConfigure.getAccessKey(),
+                                awsConfigure.getSecretKey()
+                            )
+                    )
+                ).build();
+    }
+
+    @Bean
+    public S3Client s3Client(AmazonS3 amazonS3, AwsConfigure awsConfigure){
+        return new S3Client(amazonS3, awsConfigure.getUrl(), awsConfigure.getBucketName());
     }
 }
