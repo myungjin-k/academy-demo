@@ -43,7 +43,7 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
                 user.setId(memberService.login(user.getUserId(), user.getPassword()));
             }
 
-            MyAuthenticationToken authenticated = new MyAuthenticationToken(user.getUserId(), user.getPassword(), createAuthorityList(user.getRole().name()));
+            MyAuthenticationToken authenticated = new MyAuthenticationToken(user.getUserId(), user.getPassword(), createAuthorityList(user.getRole().getValue()));
             authenticated.setDetails(user);
 
             return authenticated;

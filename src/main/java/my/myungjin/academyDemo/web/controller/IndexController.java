@@ -3,6 +3,7 @@ package my.myungjin.academyDemo.web.controller;
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.common.CodeGroup;
+import my.myungjin.academyDemo.security.User;
 import my.myungjin.academyDemo.service.admin.CommonCodeService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,20 +20,19 @@ public class IndexController {
 
     private CodeGroup itemCategories ;
 
-    @GetMapping("/")
+    @GetMapping("/index")
     public String main(Model model, @AuthenticationPrincipal Authentication authentication){
         itemCategories = commonCodeService.findAllCommonCodesByGroupId
                 (Id.of(CodeGroup.class, "246fa96f9b634a56aaac5884de186ebc"));
         model.addAttribute("items", itemCategories.getCommonCodes());
+
         if(authentication != null && authentication.isAuthenticated()){
-            model.addAttribute("loginUser", authentication.getDetails());
+            User loginUser = (User) authentication.getDetails();
+            model.addAttribute("loginUser", loginUser);
+            if(loginUser.getRole().name().equalsIgnoreCase("ADMIN"))
+                model.addAttribute("isAdmin", true);
         }
         return "index";
-    }
-
-    @GetMapping("/adminLogin")
-    public String sampleIndex(){
-        return "admin";
     }
 
     @GetMapping("/login")
@@ -56,10 +56,32 @@ public class IndexController {
         itemCategories = commonCodeService.findAllCommonCodesByGroupId
                 (Id.of(CodeGroup.class, "246fa96f9b634a56aaac5884de186ebc"));
         model.addAttribute("items", itemCategories.getCommonCodes());
+
         if(authentication != null && authentication.isAuthenticated()){
-            model.addAttribute("loginUser", authentication.getDetails());
+            User loginUser = (User) authentication.getDetails();
+            model.addAttribute("loginUser", loginUser);
+            if(loginUser.getRole().name().equalsIgnoreCase("ADMIN"))
+                model.addAttribute("isAdmin", true);
         }
         return "mypage";
+    }
+
+    @GetMapping("/adminLogin")
+    public String adminLoginIndex(){
+
+        return "admin/admin";
+    }
+
+    @GetMapping("/admin/codeIndex")
+    public String adminCodeIndex(Model model, @AuthenticationPrincipal Authentication authentication){
+
+        if(authentication != null && authentication.isAuthenticated()){
+            User loginUser = (User) authentication.getDetails();
+            model.addAttribute("loginUser", loginUser);
+            if(loginUser.getRole().name().equalsIgnoreCase("ADMIN"))
+                model.addAttribute("isAdmin", true);
+        }
+        return "admin/code";
     }
 }
 

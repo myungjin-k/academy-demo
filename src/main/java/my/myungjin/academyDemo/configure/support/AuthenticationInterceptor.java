@@ -11,10 +11,24 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        String uri = request.getRequestURI();
+        int port = request.getServerPort();
+        if(uri.equals("/")){
+            if(port == 7090)
+                response.sendRedirect("/index");
+            else if(port == 7091)
+                response.sendRedirect("/adminLogin");
+            return false;
+        }
+
+
         HttpSession session = request.getSession();
         SecurityContextImpl securityContext = (SecurityContextImpl) (session.getAttribute("SPRING_SECURITY_CONTEXT"));
         if(securityContext == null || !securityContext.getAuthentication().isAuthenticated()) {
-            response.sendRedirect("/login");
+            if(port == 7090)
+                response.sendRedirect("/login");
+            else if(port == 7091)
+                response.sendRedirect("/adminLogin");
             return false;
         }
 

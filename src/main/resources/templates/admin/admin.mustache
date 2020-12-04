@@ -1,0 +1,47 @@
+{{>admin/layout/header}}
+<div class="container">
+    <div class="row m-5" id="div-login">
+        <div class="col-lg"></div>
+        <div class="col-lg">
+            <form id="form-login">
+                <div class="form-group">
+                    <label for="principal">아이디</label>
+                    <input type="text" class="form-control" name="principal" id="principal" />
+                </div>
+                <div class="form-group">
+                    <label for="credentials">비밀번호</label>
+                    <input type="password" class="form-control" name="credentials" id="credentials" />
+                </div>
+
+                <input type="hidden" class="form-control" name="role" id="role" value="ADMIN"/>
+                <a class="btn btn-primary" id="btn-login">로그인</a>
+            </form>
+        </div>
+        <div class="col-lg"></div>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        $("#btn-login").click(function () {
+            auth();
+        });
+    });
+
+    function auth(){
+        var data = $('#form-login').serializeObject();
+        //console.log(data.groupId);
+        $.ajax({
+            type: 'POST',
+            url: '/auth',
+            dataType: 'json',
+            contentType:'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function(response) {
+            console.log(response);
+            location.href = "/admin/codeIndex";
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+    }
+</script>
+{{>layout/footer}}

@@ -47,10 +47,10 @@ public class CommonController {
         sampleService.removeGroup(Id.of(CodeGroup.class, id));
     }
 
-    @GetMapping("/{code}/commonCode/list")
+/*    @GetMapping("/{code}/commonCode/list")
     public Response<CodeGroup> commonCodesByGroupCode(@PathVariable String code){
         return OK(sampleService.findAllCommonCodesByGroupCode(code));
-    }
+    }*/
 
     @GetMapping("/{id}/commonCode/list")
     public Response<CodeGroup> commonCodesByGroupId(@PathVariable String id){

@@ -13,7 +13,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -55,6 +54,14 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
     }
     // TODO 인가
 
+/*    @Bean
+    public AccessDecisionManager accessDecisionManager() {
+        List<AccessDecisionVoter<?>> decisionVoters = new ArrayList<>();
+        decisionVoters.add(new WebExpressionVoter());
+        // 모든 voter가 승인해야 해야한다.
+        return new UnanimousBased(decisionVoters);
+    }*/
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -86,8 +93,12 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .disable()
                 .logout().logoutSuccessUrl("/")
+                .and()
+                .sessionManagement()
+                .maximumSessions(1) /* session 허용 갯수 */
+                .expiredUrl("/login") /* session 만료시 이동 페이지*/
+                .maxSessionsPreventsLogin(true)
         ;
-        //http.addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
 
