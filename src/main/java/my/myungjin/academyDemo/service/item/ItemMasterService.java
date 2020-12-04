@@ -5,9 +5,7 @@ import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.aws.S3Client;
 import my.myungjin.academyDemo.commons.AttachedFile;
 import my.myungjin.academyDemo.commons.Id;
-import my.myungjin.academyDemo.domain.common.CodeGroup;
 import my.myungjin.academyDemo.domain.common.CommonCode;
-import my.myungjin.academyDemo.domain.common.CommonCodeRepository;
 import my.myungjin.academyDemo.domain.item.ItemMaster;
 import my.myungjin.academyDemo.domain.item.ItemMasterRepository;
 import org.slf4j.Logger;
@@ -17,12 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Optional;
-
-import static java.util.Optional.ofNullable;
 
 @Validated
 @RequiredArgsConstructor
@@ -37,7 +31,7 @@ public class ItemMasterService {
 
     @Transactional(readOnly = true)
     public List<ItemMaster> findAllItems(){
-        return itemMasterRepository.findAllDesc();
+        return itemMasterRepository.findAllOnSaleDesc();
     }
 
     @Transactional(readOnly = true)

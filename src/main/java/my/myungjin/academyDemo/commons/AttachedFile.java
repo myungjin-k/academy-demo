@@ -1,6 +1,7 @@
 package my.myungjin.academyDemo.commons;
 
 
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,6 +13,7 @@ import java.util.UUID;
 import static org.apache.commons.io.FilenameUtils.getExtension;
 import static org.apache.commons.lang3.StringUtils.*;
 
+@RequiredArgsConstructor
 public class AttachedFile {
 
     private final String originalFileName;
@@ -19,12 +21,6 @@ public class AttachedFile {
     private final String contentType;
 
     private final byte[] bytes;
-
-    public AttachedFile(String originalFileName, String contentType, byte[] bytes) {
-        this.originalFileName = originalFileName;
-        this.contentType = contentType;
-        this.bytes = bytes;
-    }
 
     private static boolean verify(MultipartFile multipartFile) {
         if (multipartFile != null && multipartFile.getSize() > 0 && multipartFile.getOriginalFilename() != null) {

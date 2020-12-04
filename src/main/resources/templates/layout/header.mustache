@@ -50,11 +50,12 @@
     </div>
 </nav>
 <!-- Navigation End -->
-<div class="container-fluid">
+<div class="container-fluid" style="position:fixed; ">
     <!-- Category -->
     <div class="row">
         <div class="col-sm-2" id="div-item-menu">
             <ul class="nav flex-column">
+                <li><a class="nav-link" href="#">BEST SELLERS</a></li>
                 {{#items}}
                 <li class="nav-item">
                     <a class="nav-link" href="#">{{nameKor}}</a>
@@ -64,6 +65,6 @@
         </div>
         <!-- Category End -->
         <!-- Content -->
-        <div class="col-sm-8" id="root">
+        <div class="col-sm-10" id="root" style="position: absolute; right: 0;">
 
 

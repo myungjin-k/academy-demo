@@ -29,10 +29,14 @@ ul {
 .btn {
   margin-right: 1rem;
 }
+.categoryTitle {
+  margin-bottom: 2rem;
+}
 .itemThumb {
-  width: 33.333%;
-  padding: 0 2rem;
-  margin: 0 1.5rem;
+  width: 25%;
+  padding-right: 2rem;
+  margin-right: 2rem;
+  margin-bottom: 2rem;
 }
 
 .itemThumb img {
@@ -40,7 +44,6 @@ ul {
   margin-bottom: 1rem;
 }
 .itemThumb .itemName {
-
   float: left;
 }
 

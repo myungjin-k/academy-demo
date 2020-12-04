@@ -4,7 +4,6 @@ import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.service.item.ItemMasterService;
 import my.myungjin.academyDemo.util.Util;
-import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +20,7 @@ import java.net.URL;
 import java.util.List;
 
 import static my.myungjin.academyDemo.commons.AttachedFile.toAttachedFile;
+import static org.apache.commons.io.IOUtils.toByteArray;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -63,11 +63,11 @@ public class ItemMasterServiceTest {
                 .status(ItemStatus.READY_TO_SALE)
                 .price(19000)
                 .build();
-        URL testProfile = getClass().getResource("/logo.png");
-        File file = new File(testProfile.getFile());
+        URL testThumbnail = getClass().getResource("/logo.png");
+        File file = new File(testThumbnail.getFile());
         FileInputStream input = new FileInputStream(file);
-        MultipartFile multipartFile =  new MockMultipartFile("file",
-                file.getName(), "image/jpeg", IOUtils.toByteArray(input));
+        MultipartFile multipartFile =
+                new MockMultipartFile("file", file.getName(), "image/jpeg", toByteArray(input));
         ItemMaster saved = itemMasterService.saveItemMaster(newItem, toAttachedFile(multipartFile));
         assertThat(saved, is(notNullValue()));
         log.info("Saved Item: {}", saved);

@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface ItemMasterRepository extends JpaRepository<ItemMaster, String>, QuerydslPredicateExecutor<ItemMaster> {
 
-    @Query("select im from ItemMaster im order by im.createAt desc")
-    List<ItemMaster> findAllDesc();
+    @Query("select im from ItemMaster im where im.status = 1 order by im.createAt desc")
+    List<ItemMaster> findAllOnSaleDesc();
 
     List<ItemMaster> findAllByCategoryId(String categoryId);
 
