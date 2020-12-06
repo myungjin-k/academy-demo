@@ -3,6 +3,7 @@ package my.myungjin.academyDemo.web.controller;
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.common.CodeGroup;
+import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.security.User;
 import my.myungjin.academyDemo.service.admin.CommonCodeService;
 import org.springframework.security.core.Authentication;
@@ -12,19 +13,21 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Controller
 public class IndexController {
 
     private final CommonCodeService commonCodeService;
 
-    private CodeGroup itemCategories ;
+    private List<CommonCode> itemCategories ;
 
     @GetMapping("/index")
     public String main(Model model, @AuthenticationPrincipal Authentication authentication){
         itemCategories = commonCodeService.findAllCommonCodesByGroupId
                 (Id.of(CodeGroup.class, "246fa96f9b634a56aaac5884de186ebc"));
-        model.addAttribute("items", itemCategories.getCommonCodes());
+        model.addAttribute("items", itemCategories);
 
         if(authentication != null && authentication.isAuthenticated()){
             User loginUser = (User) authentication.getDetails();
@@ -40,7 +43,7 @@ public class IndexController {
     {
         itemCategories = commonCodeService.findAllCommonCodesByGroupId
                 (Id.of(CodeGroup.class, "246fa96f9b634a56aaac5884de186ebc"));
-        model.addAttribute("items", itemCategories.getCommonCodes());
+        model.addAttribute("items", itemCategories);
         return "member";
     }
 
@@ -55,7 +58,7 @@ public class IndexController {
     public String myPageIndex(Model model, @AuthenticationPrincipal Authentication authentication){
         itemCategories = commonCodeService.findAllCommonCodesByGroupId
                 (Id.of(CodeGroup.class, "246fa96f9b634a56aaac5884de186ebc"));
-        model.addAttribute("items", itemCategories.getCommonCodes());
+        model.addAttribute("items", itemCategories);
 
         if(authentication != null && authentication.isAuthenticated()){
             User loginUser = (User) authentication.getDetails();

@@ -1,5 +1,6 @@
 package my.myungjin.academyDemo.domain.common;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -44,8 +45,9 @@ public class CodeGroup {
     @Column(name = "update_at")
     private LocalDateTime updateAt;
 
+    @JsonManagedReference
     @Getter
-    @OneToMany(mappedBy = "groupId", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) //JOIN
+    @OneToMany(mappedBy = "codeGroup", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) //JOIN
     private Collection<CommonCode> commonCodes;
 
     @Builder
@@ -55,6 +57,11 @@ public class CodeGroup {
         this.nameEng = nameEng;
         this.nameKor = nameKor;
         this.updateAt = updateAt;
+    }
+
+    public void addCommonCode(CommonCode commonCode) {
+        commonCodes.add(commonCode);
+        commonCode.setCodeGroup(this);
     }
 
     public Optional<LocalDateTime> getUpdateAt(){

@@ -24,14 +24,12 @@ public class CommonCodeRequest {
     private String nameKor;
 
     public CommonCode newCommonCode(Id<CodeGroup, String> groupId){
-        LocalDateTime now = now();
         return CommonCode.builder()
                 .id(Util.getUUID())
                 .code(code)
                 .nameEng(nameEng)
                 .nameKor(nameKor)
-                .groupId(groupId.value())
-                .updateAt(now)
+                .codeGroup(CodeGroup.builder().id(groupId.value()).build())
                 .build();
     }
 }

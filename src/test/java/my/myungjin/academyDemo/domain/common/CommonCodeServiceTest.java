@@ -55,7 +55,6 @@ public class CommonCodeServiceTest {
                 .code(groupCode)
                 .nameEng(groupNameEng)
                 .nameKor(groupNameKor)
-                .updateAt(now)
                 .build();
 
         CodeGroup result = commonService.registGroup(codeGroup);
@@ -74,7 +73,7 @@ public class CommonCodeServiceTest {
         //then
         MatcherAssert.assertThat(codeGroups, is(notNullValue()));
         //MatcherAssert.assertThat(codeGroups.size(), is(1));
-        log.info("Read codeGroup: {}", codeGroups.get(0));
+        log.info("Read codeGroup: {}", codeGroups);
     }
 
 
@@ -85,6 +84,7 @@ public class CommonCodeServiceTest {
         String nameEng = "EMPTY";
         String nameKor = "빈값";
 
+        groupCode = code;
         CodeGroup updated = commonService.modifyGroup(groupId, code, nameEng, nameKor);
         MatcherAssert.assertThat(updated.getId(), is(groupId.value()));
         MatcherAssert.assertThat(updated.getCode(), is(code));
@@ -97,14 +97,15 @@ public class CommonCodeServiceTest {
     @Test
     @Order(4)
     void 공통코드_작성하기(){
-        LocalDateTime now = LocalDateTime.now();
+        CodeGroup codeGroup = commonService.findGroupByCode(groupCode).orElse(null);
+        MatcherAssert.assertThat(codeGroup, is(notNullValue()));
+
         CommonCode commonCode = CommonCode.builder()
                 .id(codeId.value())
                 .code("XXX100")
                 .nameEng("EMPTY_100")
                 .nameKor("빈값_100")
-                .groupId(groupId.value())
-                .updateAt(now)
+                .codeGroup(codeGroup)
                 .build();
         CommonCode result = commonService.registCommonCode(groupId, commonCode);
 
@@ -116,10 +117,10 @@ public class CommonCodeServiceTest {
     @Test
     @Order(5)
     void 공통코드_조회하기(){
-        CodeGroup group = commonService.findAllCommonCodesByGroupId(groupId);
-        log.info("Group: {}", group);
-        MatcherAssert.assertThat(group, is(notNullValue()));
-        MatcherAssert.assertThat(group.getCommonCodes().size(), is(1));
+        List<CommonCode> commonCodes = commonService.findAllCommonCodesByGroupId(groupId);
+        MatcherAssert.assertThat(commonCodes, is(notNullValue()));
+        MatcherAssert.assertThat(commonCodes.size(), is(1));
+        log.info("Read CommonCodes: {}", commonCodes);
     }
 
     @Test
@@ -141,8 +142,8 @@ public class CommonCodeServiceTest {
         MatcherAssert.assertThat(deleted, is(notNullValue()));
         MatcherAssert.assertThat(deleted, is(codeId.value()));
 
-        CodeGroup chk = commonService.findAllCommonCodesByGroupId(groupId);
-        MatcherAssert.assertThat(chk.getCommonCodes().size(), is(0));
+        List<CommonCode> chk = commonService.findAllCommonCodesByGroupId(groupId);
+        MatcherAssert.assertThat(chk.size(), is(0));
 
     }
 

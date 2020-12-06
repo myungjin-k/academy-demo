@@ -4,8 +4,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface CommonCodeRepository extends JpaRepository<CommonCode, String> {
 
-    Page<CommonCode> findAllByGroupId(String groupId, Pageable pageable);
+    List<CommonCode> findAllByCodeGroup(CodeGroup codeGroup);
+
+    Page<CommonCode> findAllByCodeGroup(CodeGroup codeGroup, Pageable pageable);
 
 }

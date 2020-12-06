@@ -64,13 +64,18 @@ public class CommonCodeService {
 
     @Cacheable(value="commonCodeCache", key="#groupId.value()")
     @Transactional(readOnly = true)
-    public CodeGroup findAllCommonCodesByGroupId(@Valid Id<CodeGroup, String> groupId){
-        return findGroupById(groupId.value()).orElseThrow(() -> new NotFoundException(CodeGroup.class, groupId));
+    public List<CommonCode> findAllCommonCodesByGroupId(@Valid Id<CodeGroup, String> groupId){
+        return findGroupById(groupId.value())
+                .map(commonCodeRepository::findAllByCodeGroup)
+                .orElseThrow(() -> new NotFoundException(CodeGroup.class, groupId));
     }
 
     @Transactional(readOnly = true)
     public Page<CommonCode> findAllCommonCodeByGroupIdWithPage(@Valid Id<CodeGroup, String> groupId, Pageable pageable){
-        return commonCodeRepository.findAllByGroupId(groupId.value(), pageable);
+        return findGroupById(groupId.value())
+                .map(group ->
+                    commonCodeRepository.findAllByCodeGroup(group, pageable)
+                ).orElseThrow(() -> new NotFoundException(CodeGroup.class, groupId));
     }
 
     @CacheEvict(value="commonCodeCache", key="#groupId.value()")

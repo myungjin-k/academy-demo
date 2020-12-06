@@ -1,5 +1,6 @@
 package my.myungjin.academyDemo.domain.common;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -36,25 +37,30 @@ public class CommonCode {
     private String nameKor;
 
     @Getter
-    @Size(min = 1, max = 255)
-    @Column(nullable = false)
-    private String groupId;
-
-    @Getter
     @Column(name = "create_at", insertable = false, updatable = false,
             columnDefinition = "datetime default current_timestamp")
     private LocalDateTime createAt;
 
     private LocalDateTime updateAt;
 
+    @JsonBackReference
+    @Getter
+    @ManyToOne
+    @JoinColumn(name = "group_id", nullable = false)
+    private CodeGroup codeGroup;
+
     @Builder
-    public CommonCode(String id, String code, String nameEng, String nameKor, String groupId, LocalDateTime updateAt) {
+    public CommonCode(String id, String code, String nameEng, String nameKor, CodeGroup codeGroup, LocalDateTime updateAt) {
         this.id = id;
         this.code = code;
         this.nameEng = nameEng;
         this.nameKor = nameKor;
-        this.groupId = groupId;
+        this.codeGroup = codeGroup;
         this.updateAt = updateAt;
+    }
+
+    public void setCodeGroup(CodeGroup codeGroup){
+        this.codeGroup = codeGroup;
     }
 
     public Optional<LocalDateTime> getUpdateAt(){

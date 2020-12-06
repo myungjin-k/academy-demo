@@ -8,6 +8,8 @@ import my.myungjin.academyDemo.service.admin.CommonCodeService;
 import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.CodeGroupRequest;
 import my.myungjin.academyDemo.web.request.CommonCodeRequest;
+import my.myungjin.academyDemo.web.request.PageRequest;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -52,9 +54,15 @@ public class CommonController {
         return OK(sampleService.findAllCommonCodesByGroupCode(code));
     }*/
 
-    @GetMapping("/{id}/commonCode/list")
-    public Response<CodeGroup> commonCodesByGroupId(@PathVariable String id){
+/*    @GetMapping("/{id}/commonCode/list")
+    public Response<List<CommonCode>> commonCodesByGroupId(@PathVariable String id){
         return OK(sampleService.findAllCommonCodesByGroupId(Id.of(CodeGroup.class, id)));
+    }*/
+
+
+    @GetMapping("/{id}/commonCode/list")
+    public Response<Page<CommonCode>> commonCodesByGroupIdWithPage(@PathVariable String id, PageRequest pageRequest){
+        return OK(sampleService.findAllCommonCodeByGroupIdWithPage(Id.of(CodeGroup.class, id), pageRequest.of()));
     }
 
     @PostMapping("/{id}/commonCode")
