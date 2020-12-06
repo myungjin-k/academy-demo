@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
@@ -149,11 +151,23 @@ public class CommonCodeServiceTest {
     void 코드그룹_검색하기(){
 
         List<CodeGroup> results = (ArrayList<CodeGroup>) commonService.search("C", null, null);
-        MatcherAssert.assertThat(results.size(), is(6));
+        MatcherAssert.assertThat(results.size(), is(1));
     }
 
     @Test
     @Order(9)
+    void 공통코드_조회하기_페이징(){
+        PageRequest pageRequest = PageRequest.of(0, 5);
+        Page<CommonCode> page = commonService.findAllCommonCodeByGroupIdWithPage(
+                Id.of(CodeGroup.class, "246fa96f9b634a56aaac5884de186ebc"),
+                pageRequest
+        );
+        List<CommonCode> list = page.getContent();
+        MatcherAssert.assertThat(list.size(), is(5));
+        log.info("Result: {}", list);
+    }
+    @Test
+    @Order(10)
     void 코드그룹_삭제하기(){
         String deleted = commonService.removeGroup(groupId);
         MatcherAssert.assertThat(deleted, is(notNullValue()));

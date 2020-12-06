@@ -6,6 +6,8 @@ import my.myungjin.academyDemo.domain.common.*;
 import my.myungjin.academyDemo.error.NotFoundException;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -64,6 +66,11 @@ public class CommonCodeService {
     @Transactional(readOnly = true)
     public CodeGroup findAllCommonCodesByGroupId(@Valid Id<CodeGroup, String> groupId){
         return findGroupById(groupId.value()).orElseThrow(() -> new NotFoundException(CodeGroup.class, groupId));
+    }
+
+    @Transactional(readOnly = true)
+    public Page<CommonCode> findAllCommonCodeByGroupIdWithPage(@Valid Id<CodeGroup, String> groupId, Pageable pageable){
+        return commonCodeRepository.findAllByGroupId(groupId.value(), pageable);
     }
 
     @CacheEvict(value="commonCodeCache", key="#groupId.value()")
