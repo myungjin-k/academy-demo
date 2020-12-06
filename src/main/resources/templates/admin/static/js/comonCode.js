@@ -10,7 +10,7 @@ var main = {
 
             $('#tab-code-group').removeClass('active').prop('aria-selected', false);
             $('#tab-code').show().addClass('active').prop('aria-selected', true);
-            commonCode.list(id);
+            commonCode.list(id, 1);
         });
 
 
@@ -158,6 +158,7 @@ var codeGroup = {
     }
 };
 var commonCode = {
+    groupId: null,
     init : function () {
         var _this = this;
         $('#btn-add-code').click(function () {
@@ -188,6 +189,10 @@ var commonCode = {
             _this.delete(groupId, id);
         });
 
+        $(document).on('click', '.page-link', function(){
+            var page = $(this).text();
+            _this.list(_this.groupId, page);
+        });
     },
     clearTable : function(){
         $('#codes').empty();
@@ -199,35 +204,43 @@ var commonCode = {
         form.find('input[name="nameEng"]').val('');
         form.find('input[name="nameKor"]').val('');
     },
-    list : function (id){
+    list : function (id, page){
+        this.groupId = id;
         this.clearTable();
         this.clearForm();
         $.ajax({
             type: 'GET',
-            url: '/admin/codeGroup/' + id + '/commonCode/list',
+            url: '/admin/codeGroup/' + id + '/commonCode/list' + '?page=' + page +'&size=' + 5 + '&direction=ASC',
             dataType: 'json',
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
+            //console.log(response);
             var resultData = response.response;
             var codeGroup = resultData.code;
-            $('#form-save-code input[name="groupId"]').val(resultData.id);
-            $.each(resultData.commonCodes, function(){
-                var item = this;
-                //console.log(item);
-                var row = '<tr>'
-                    + '<input type="hidden" name="id" value="' + item.id + '"/>'
-                    + '<td class="codeGroup">'
-                    + '<input type="hidden" name="groupId" value="'+ item.groupId +'" />'
-                    + codeGroup +'</td>'
-                    + '<td class="code">' + item.code +'</td>'
-                    + '<td class="nameEng">' + item.nameEng +'</td>'
-                    + '<td class="nameKor">' + item.nameKor +'</td>'
-                    + '<td>' + item.createAt +'</td>'
-                    + '<td><a class="btn btn-primary btn-modify-code">수정</a></td>'
-                    + '<td><a class="btn btn-primary btn-delete-code">삭제</a></td>'
-                    + '</tr>';
-                $('#codes').append(row);
-            });
+            $('#form-save-code input[name="groupId"]').val(id);
+            if(resultData.totalElements > 0){
+                for(var i = 1; i <= resultData.totalPages; i++){
+                    $('#pagination-code').append('<li class="page-item"><a class="page-link">'+ i +'</a></li>');
+                }
+                $.each(resultData.content, function(){
+                    var item = this;
+                    console.log(item);
+                    var row = '<tr>'
+                        + '<input type="hidden" name="id" value="' + id+ '"/>'
+                        + '<td class="codeGroup">'
+                        + '<input type="hidden" name="groupId" value="'+ item.groupId +'" />'
+                        + codeGroup +'</td>'
+                        + '<td class="code">' + item.code +'</td>'
+                        + '<td class="nameEng">' + item.nameEng +'</td>'
+                        + '<td class="nameKor">' + item.nameKor +'</td>'
+                        + '<td>' + item.createAt +'</td>'
+                        + '<td><a class="btn btn-primary btn-modify-code">수정</a></td>'
+                        + '<td><a class="btn btn-primary btn-delete-code">삭제</a></td>'
+                        + '</tr>';
+                    $('#codes').append(row);
+                });
+
+            }
 
         }).fail(function (error) {
             alert(JSON.stringify(error));

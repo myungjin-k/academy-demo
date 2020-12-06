@@ -29,6 +29,9 @@ ul {
 .btn {
   margin-right: 1rem;
 }
+.pagination .link{
+  font-size: 12px !important;
+}
 .categoryTitle {
   margin-bottom: 2rem;
 }
