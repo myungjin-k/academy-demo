@@ -21,8 +21,23 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             return false;
         }
 
+        if(uri.equals("/login")){
+            if(port == 7090)
+                response.sendRedirect("/index");
+            else if(port == 7091)
+                response.sendRedirect("/adminLogin");
+            return false;
+        }
 
         HttpSession session = request.getSession();
+        /*if(session.getLastAccessedTime() + session.getMaxInactiveInterval() <= System.currentTimeMillis()){
+            if(port == 7090)
+                response.sendRedirect("/index");
+            else if(port == 7091)
+                response.sendRedirect("/codeIndex");
+            return true;
+        }*/
+
         SecurityContextImpl securityContext = (SecurityContextImpl) (session.getAttribute("SPRING_SECURITY_CONTEXT"));
         if(securityContext == null || !securityContext.getAuthentication().isAuthenticated()) {
             if(port == 7090)
