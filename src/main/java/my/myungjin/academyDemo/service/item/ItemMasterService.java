@@ -35,7 +35,7 @@ public class ItemMasterService {
     }
 
     @Transactional(readOnly = true)
-    public List<ItemMaster> findByMainCategory(@Valid Id<CommonCode, String> categoryId){
+    public List<ItemMaster> findByCategory(@Valid Id<CommonCode, String> categoryId){
         return itemMasterRepository.findAllByCategoryId(categoryId.value());
     }
 

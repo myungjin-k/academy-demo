@@ -47,7 +47,7 @@ public class ItemMasterServiceTest {
     @Test
     @Order(1)
     void 상품_가져오기_메인카테고리(){
-        List<ItemMaster> itemList = itemMasterService.findByMainCategory(categoryId);
+        List<ItemMaster> itemList = itemMasterService.findByCategory(categoryId);
         assertThat(itemList, is(notNullValue()));
         //log.info("Saved Member: {}", saved);
 
