@@ -1,7 +1,10 @@
 package my.myungjin.academyDemo.domain.item;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import my.myungjin.academyDemo.domain.common.CodeGroup;
+import my.myungjin.academyDemo.domain.common.CommonCode;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -27,17 +30,12 @@ public class ItemMaster {
     private String itemName;
 
     @Getter
-    @Size(min = 1, max = 255)
-    @Column(name = "category_id", nullable = false)
-    private String categoryId;
-
-    @Getter
     @Column(name = "price", nullable = false)
     private int price;
 
     @Setter
     @Getter
-    @Size(max = 255)
+    @Size(min = 1, max = 255)
     @Column(name = "thumbnail")
     private String thumbnail;
 
@@ -55,13 +53,18 @@ public class ItemMaster {
     @OneToMany(mappedBy = "itemMaster", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) //JOIN
     private Collection<ItemOption> options;
 
+    @JsonBackReference
+    @Setter
+    @Getter
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private CommonCode category;
+
     @Builder
     public ItemMaster(String id, @Size(min = 1, max = 50) String itemName,
-                      @Size(min = 1, max = 255) String categoryId,
                       int price, String thumbnail, LocalDateTime createAt, LocalDateTime updateAt) {
         this.id = id;
         this.itemName = itemName;
-        this.categoryId = categoryId;
         this.price = price;
         this.thumbnail = thumbnail;
         this.createAt = createAt;

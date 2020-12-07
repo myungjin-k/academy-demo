@@ -6,6 +6,7 @@ import my.myungjin.academyDemo.aws.S3Client;
 import my.myungjin.academyDemo.commons.AttachedFile;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.common.CommonCode;
+import my.myungjin.academyDemo.domain.common.CommonCodeRepository;
 import my.myungjin.academyDemo.domain.item.ItemMaster;
 import my.myungjin.academyDemo.domain.item.ItemMasterRepository;
 import org.slf4j.Logger;
@@ -24,6 +25,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class ItemMasterService {
+
+    private final CommonCodeRepository commonCodeRepository;
 
     private final ItemMasterRepository itemMasterRepository;
 
@@ -61,8 +64,9 @@ public class ItemMasterService {
     }
 
     @Transactional
-    public ItemMaster saveItemMaster(@Valid ItemMaster newItem, @NotNull AttachedFile thumbnailFile) {
+    public ItemMaster saveItemMaster(@Valid Id<CommonCode, String> categoryId, @Valid ItemMaster newItem, @NotNull AttachedFile thumbnailFile) {
         newItem.setThumbnail(uploadThumbnail(thumbnailFile));
+        newItem.setCategory(commonCodeRepository.getOne(categoryId.value()));
         return save(newItem);
     }
 

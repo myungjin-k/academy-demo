@@ -23,7 +23,6 @@ public class ItemMasterRequest {
         return ItemMaster.builder()
                 .id(Util.getUUID())
                 .itemName(itemName)
-                .categoryId(categoryId)
                 .price(price)
                 .build();
     }

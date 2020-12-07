@@ -1,6 +1,8 @@
 package my.myungjin.academyDemo.web.controller;
 
 import lombok.RequiredArgsConstructor;
+import my.myungjin.academyDemo.commons.Id;
+import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.domain.item.ItemMaster;
 import my.myungjin.academyDemo.service.item.ItemMasterService;
 import my.myungjin.academyDemo.web.Response;
@@ -36,7 +38,11 @@ public class ItemAdminController {
             @ModelAttribute ItemMasterRequest request,
             @RequestPart MultipartFile thumbnail) throws IOException {
         return OK(
-                itemMasterService.saveItemMaster(request.newItemMaster(), toAttachedFile(thumbnail))
+                itemMasterService.saveItemMaster(
+                        Id.of(CommonCode.class,request.getCategoryId()),
+                        request.newItemMaster(),
+                        toAttachedFile(thumbnail)
+                )
         );
     }
 }
