@@ -25,8 +25,9 @@ footer {
 a {
   color: #1d2124;
 }
-a .hover, span .hover {
-  text-decoration: underline;
+a .hover{
+  text-decoration: none !important;
+  cursor: pointer !important;
 }
 ul {
   padding-left: 0;
@@ -64,4 +65,9 @@ ul {
 }
 .itemThumb .discount {
   text-decoration: line-through;
+}
+.div-crud-buttons {
+  text-align: right;
+  margin-top: 1.75em;
+  margin-bottom: .75em;
 }

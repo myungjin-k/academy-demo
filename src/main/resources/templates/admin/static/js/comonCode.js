@@ -117,9 +117,9 @@ var codeGroup = {
                         + '<td class="nameEng">' + item.nameEng +'</td>'
                         + '<td class="nameKor">' + item.nameKor +'</td>'
                         + '<td>' + item.createAt +'</td>'
-                        + '<td><a class="btn btn-primary btn-sm btn-modify">수정</a></td>'
-                        + '<td><a class="btn btn-primary btn-sm btn-delete">삭제</a></td>'
-                        + '<td><a class="btn btn-primary btn-sm btn-search-codes">공통코드 보기</a></td>'
+                        + '<td><a class="btn-modify">수정</a></td>'
+                        + '<td><a class="btn-delete">삭제</a></td>'
+                        + '<td><a class="btn-search-codes">공통코드 보기</a></td>'
                         + '</tr>';
                     $('#groups').append(row);
                 });
@@ -273,8 +273,8 @@ var commonCode = {
                         + '<td class="nameEng">' + item.nameEng +'</td>'
                         + '<td class="nameKor">' + item.nameKor +'</td>'
                         + '<td>' + item.createAt +'</td>'
-                        + '<td><a class="btn btn-primary btn-sm btn-modify-code">수정</a></td>'
-                        + '<td><a class="btn btn-primary btn-sm btn-delete-code">삭제</a></td>'
+                        + '<td><a class="btn-modify-code">수정</a></td>'
+                        + '<td><a class="btn-delete-code">삭제</a></td>'
                         + '</tr>';
                     $('#codes').append(row);
                 });
