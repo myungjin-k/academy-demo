@@ -27,3 +27,24 @@ jQuery.fn.setFormData = function(form, data) {
     } finally {
     }
 };
+
+jQuery.fn.setPagination = function( start, end, size, totalPages) {
+    try {
+        this[0].innerText = '';
+        var innerHtml = '';
+        if(start > size){
+            innerHtml += '<li class="page-item"><a class="page-link previous" href="#">prev</a></li>';
+        }
+        for(var i = start; i <= end; i++){
+            innerHtml += '<li class="page-item"><a class="page-link" href="#">'+i+'</a></li>';
+        }
+        if(end < totalPages){
+            innerHtml += '<li class="page-item"><a class="page-link next" href="#">next</a></li>';
+        }
+        this[0].innerHTML = innerHtml;
+    } catch (e) {
+        alert(e.message);
+    } finally {
+    }
+};
+

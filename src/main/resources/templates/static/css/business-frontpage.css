@@ -3,7 +3,12 @@
  * Copyright 2013-2020 Start Bootstrap
  * Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-business-frontpage/blob/master/LICENSE)
  */
-
+.h300 {
+  height: 300px !important;
+}
+.h250 {
+  height: 250px !important;
+}
 body {
   padding-top: 150px;
   min-height: 100vh;
@@ -25,6 +30,9 @@ a .hover, span .hover {
 }
 ul {
   padding-left: 0;
+}
+.table td, .table th {
+  padding: .375rem !important;
 }
 .btn {
   margin-right: 1rem;

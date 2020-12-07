@@ -68,7 +68,8 @@ public class CommonCodeServiceTest {
     @Order(2)
     void 코드그룹_불러오기(){
 
-        List<CodeGroup> codeGroups = commonService.findAllGroups();
+        PageRequest pageRequest = PageRequest.of(0, 5);
+        Page<CodeGroup> codeGroups = commonService.findAllGroups(pageRequest);
 
         //then
         MatcherAssert.assertThat(codeGroups, is(notNullValue()));

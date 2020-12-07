@@ -24,8 +24,8 @@ public class CommonController {
     private final CommonCodeService sampleService;
 
     @GetMapping("/list")
-    public Response<List<CodeGroup>> codeGroups(){
-        return OK(sampleService.findAllGroups());
+    public Response<Page<CodeGroup>> codeGroups(PageRequest pageRequest){
+        return OK(sampleService.findAllGroups(pageRequest.of()));
     }
 
     @PostMapping

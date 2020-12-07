@@ -27,8 +27,8 @@ public class CommonCodeService {
     private final CommonCodeRepository commonCodeRepository;
     //TODO 페이징 처리
     @Transactional(readOnly = true)
-    public List<CodeGroup> findAllGroups(){
-        return codeGroupRepository.findAll();
+    public Page<CodeGroup> findAllGroups(Pageable pageable){
+        return codeGroupRepository.findAll(pageable);
     }
 
     @Transactional(readOnly = true)
