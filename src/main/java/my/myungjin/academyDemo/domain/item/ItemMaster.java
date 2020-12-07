@@ -1,11 +1,15 @@
 package my.myungjin.academyDemo.domain.item;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Optional;
+
+import static java.util.Optional.ofNullable;
 
 
 @Entity
@@ -33,14 +37,10 @@ public class ItemMaster {
 
     @Setter
     @Getter
-    @Size(min = 1, max = 255)
-    @Column(name = "thumbnail", nullable = false)
+    @Size(max = 255)
+    @Column(name = "thumbnail")
     private String thumbnail;
 
-    @Getter
-    @Column(name = "status", nullable = false, columnDefinition = "number default 0")
-    @Convert(converter = ItemStatusConverter.class)
-    private ItemStatus status;
 
     @Getter
     @Column(name = "create_at", insertable = false, updatable = false,
@@ -50,22 +50,30 @@ public class ItemMaster {
     @Column(name = "update_at")
     private LocalDateTime updateAt;
 
+    @JsonManagedReference
     @Getter
-    @OneToMany(mappedBy = "masterId", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) //JOIN
+    @OneToMany(mappedBy = "itemMaster", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) //JOIN
     private Collection<ItemOption> options;
 
     @Builder
     public ItemMaster(String id, @Size(min = 1, max = 50) String itemName,
                       @Size(min = 1, max = 255) String categoryId,
-                      int price, String thumbnail, ItemStatus status, LocalDateTime createAt, LocalDateTime updateAt) {
+                      int price, String thumbnail, LocalDateTime createAt, LocalDateTime updateAt) {
         this.id = id;
         this.itemName = itemName;
         this.categoryId = categoryId;
         this.price = price;
         this.thumbnail = thumbnail;
-        this.status = status;
         this.createAt = createAt;
         this.updateAt = updateAt;
     }
 
+    public Optional<LocalDateTime> getUpdateAt(){
+        return ofNullable(updateAt);
+    }
+
+    public void addOption(ItemOption option){
+        options.add(option);
+        option.setItemMaster(this);
+    }
 }

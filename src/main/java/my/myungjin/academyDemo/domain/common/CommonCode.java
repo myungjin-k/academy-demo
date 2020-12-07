@@ -44,6 +44,7 @@ public class CommonCode {
     private LocalDateTime updateAt;
 
     @JsonBackReference
+    @Setter
     @Getter
     @ManyToOne
     @JoinColumn(name = "group_id", nullable = false)
@@ -57,10 +58,6 @@ public class CommonCode {
         this.nameKor = nameKor;
         this.codeGroup = codeGroup;
         this.updateAt = updateAt;
-    }
-
-    public void setCodeGroup(CodeGroup codeGroup){
-        this.codeGroup = codeGroup;
     }
 
     public Optional<LocalDateTime> getUpdateAt(){

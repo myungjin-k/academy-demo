@@ -60,7 +60,7 @@ public class ItemMasterServiceTest {
                 .id(Util.getUUID())
                 .categoryId(categoryId.value())
                 .itemName("데어 워머 터틀넥 티셔츠 (3color)")
-                .status(ItemStatus.READY_TO_SALE)
+                //.status(ItemStatus.READY_TO_SALE)
                 .price(19000)
                 .build();
         URL testThumbnail = getClass().getResource("/logo.png");

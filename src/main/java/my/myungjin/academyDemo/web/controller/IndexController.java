@@ -86,6 +86,18 @@ public class IndexController {
         }
         return "admin/code";
     }
+
+    @GetMapping("/admin/itemIndex")
+    public String adminItemIndex(Model model, @AuthenticationPrincipal Authentication authentication){
+
+        if(authentication != null && authentication.isAuthenticated()){
+            User loginUser = (User) authentication.getDetails();
+            model.addAttribute("loginUser", loginUser);
+            if(loginUser.getRole().name().equalsIgnoreCase("ADMIN"))
+                model.addAttribute("isAdmin", true);
+        }
+        return "admin/item";
+    }
 }
 
 

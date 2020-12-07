@@ -10,6 +10,8 @@ import my.myungjin.academyDemo.domain.item.ItemMaster;
 import my.myungjin.academyDemo.domain.item.ItemMasterRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -29,9 +31,11 @@ public class ItemMasterService {
 
     private Logger log = LoggerFactory.getLogger(ItemMasterService.class);
 
+
+
     @Transactional(readOnly = true)
-    public List<ItemMaster> findAllItems(){
-        return itemMasterRepository.findAllOnSaleDesc();
+    public Page<ItemMaster> findAllItems(Pageable pageable){
+        return itemMasterRepository.findAll(pageable);
     }
 
     @Transactional(readOnly = true)

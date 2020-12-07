@@ -36,6 +36,11 @@ public class ItemDisplay {
     @Column(name = "notice")
     private String notice;
 
+    @Getter
+    @Column(name = "status", nullable = false, columnDefinition = "number default 0")
+    @Convert(converter = ItemStatusConverter.class)
+    private ItemStatus status;
+
     @Size(min = 1, max = 255)
     @Column(name = "detail_image")
     private String detailImage;

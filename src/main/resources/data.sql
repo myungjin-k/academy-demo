@@ -16,7 +16,7 @@ INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2) VALUE
 INSERT INTO admin (id, admin_id, password) VALUES ('3a18e633a5db4dbd8aaee218fe447fa4', 'mjkim', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq');
 
 
-INSERT INTO item_master (id, item_name, category_id, price, status, thumbnail) VALUES ('8c1cbb792b8d447e9128d53920cf9366', '보더 알파카 니트', '3ebebfeb9fbe4ecfa5935f96ed308854', 72000, 1, 'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/itemMaster/e58bfe723dbb7e2c927887606aaf8ec7.jpg');
-INSERT INTO item_display (id, item_id, sale_price, material, description, notice) VALUES ('f0abb4e0bb1e4a0caa6dc8ace5eb29ca', '8c1cbb792b8d447e9128d53920cf9366', 72000*0.8, '알파카', '예뻐유', '배송지연' );
+INSERT INTO item_master (id, item_name, category_id, price, thumbnail) VALUES ('8c1cbb792b8d447e9128d53920cf9366', '보더 알파카 니트', '3ebebfeb9fbe4ecfa5935f96ed308854', 72000, 'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/itemMaster/e58bfe723dbb7e2c927887606aaf8ec7.jpg');
+INSERT INTO item_display (id, item_id, sale_price, material, description, notice, status) VALUES ('f0abb4e0bb1e4a0caa6dc8ace5eb29ca', '8c1cbb792b8d447e9128d53920cf9366', 72000*0.8, '알파카', '예뻐유', '배송지연', 1 );
 INSERT INTO item_option (id, color, master_id) VALUES ('fb32787a91614b978cb94b0d47d7c676', '콘베이지', '8c1cbb792b8d447e9128d53920cf9366');
 INSERT INTO item_option (id, color, master_id) VALUES ('af412e9968dc4f11a83f9352a251f0aa', '크림아이보리', '8c1cbb792b8d447e9128d53920cf9366');
