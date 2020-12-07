@@ -23,8 +23,8 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
         if(uri.equals("/login")){
             if(port == 7090)
-                response.sendRedirect("/index");
-            else if(port == 7091)
+                return true;
+            if(port == 7091)
                 response.sendRedirect("/adminLogin");
             return false;
         }

@@ -95,7 +95,7 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
                 .logout().logoutSuccessUrl("/")
                 .and()
                 .sessionManagement()
-                .maximumSessions(1) /* session 허용 갯수 */
+                .maximumSessions(2) /* session 허용 갯수 */
                 .expiredUrl("/login") /* session 만료시 이동 페이지*/
                 .maxSessionsPreventsLogin(true)
         ;
