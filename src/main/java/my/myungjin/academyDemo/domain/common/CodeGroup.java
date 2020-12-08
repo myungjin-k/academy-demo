@@ -1,6 +1,5 @@
 package my.myungjin.academyDemo.domain.common;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -14,7 +13,7 @@ import static java.util.Optional.ofNullable;
 
 @Entity
 @Table(name = "code_group")
-@ToString
+@ToString(exclude = "commonCodes")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = {"id"})
 public class CodeGroup {
@@ -45,7 +44,6 @@ public class CodeGroup {
     @Column(name = "update_at")
     private LocalDateTime updateAt;
 
-    @JsonManagedReference
     @Getter
     @OneToMany(mappedBy = "codeGroup", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) //JOIN
     private Collection<CommonCode> commonCodes;

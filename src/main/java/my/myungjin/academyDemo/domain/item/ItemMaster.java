@@ -1,9 +1,7 @@
 package my.myungjin.academyDemo.domain.item;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
-import my.myungjin.academyDemo.domain.common.CodeGroup;
 import my.myungjin.academyDemo.domain.common.CommonCode;
 
 import javax.persistence.*;
@@ -53,7 +51,6 @@ public class ItemMaster {
     @OneToMany(mappedBy = "itemMaster", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) //JOIN
     private Collection<ItemOption> options;
 
-    @JsonBackReference
     @Setter
     @Getter
     @ManyToOne
