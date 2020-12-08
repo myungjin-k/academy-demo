@@ -7,7 +7,9 @@ import my.myungjin.academyDemo.domain.common.CommonCode;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Optional;
 
 import static java.util.Optional.ofNullable;
@@ -15,7 +17,7 @@ import static java.util.Optional.ofNullable;
 
 @Entity
 @Table(name = "item_master")
-@ToString
+@ToString(exclude = "options")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
 public class ItemMaster {
@@ -46,7 +48,6 @@ public class ItemMaster {
     @Column(name = "update_at")
     private LocalDateTime updateAt;
 
-    @JsonManagedReference
     @Getter
     @OneToMany(mappedBy = "itemMaster", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) //JOIN
     private Collection<ItemOption> options;
@@ -66,6 +67,7 @@ public class ItemMaster {
         this.thumbnail = thumbnail;
         this.createAt = createAt;
         this.updateAt = updateAt;
+        this.options = new HashSet<>();
     }
 
     public Optional<LocalDateTime> getUpdateAt(){

@@ -9,6 +9,8 @@ import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.domain.common.CommonCodeRepository;
 import my.myungjin.academyDemo.domain.item.ItemMaster;
 import my.myungjin.academyDemo.domain.item.ItemMasterRepository;
+import my.myungjin.academyDemo.domain.item.ItemOption;
+import my.myungjin.academyDemo.domain.item.ItemOptionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -17,10 +19,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import javax.mail.FetchProfile;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Optional;
 
 @Validated
 @RequiredArgsConstructor
@@ -30,6 +34,8 @@ public class ItemMasterService {
     private final CommonCodeRepository commonCodeRepository;
 
     private final ItemMasterRepository itemMasterRepository;
+
+    private final ItemOptionRepository itemOptionRepository;
 
     private final S3Client s3Client;
 
@@ -67,6 +73,17 @@ public class ItemMasterService {
     }
 
     @Transactional
+    public ItemMaster saveItem(@Valid Id<CommonCode, String> categoryId, @Valid ItemMaster newItem,
+                               @NotNull AttachedFile thumbnailFile, @NotNull List<ItemOption> itemOptions){
+        ItemMaster master = saveItemMaster(categoryId, newItem, thumbnailFile);
+        for(ItemOption itemOption : itemOptions){
+            itemOption.setItemMaster(master);
+            ItemOption option = save(itemOption);
+            master.addOption(option);
+        }
+        return master;
+    }
+
     public ItemMaster saveItemMaster(@Valid Id<CommonCode, String> categoryId, @Valid ItemMaster newItem, @NotNull AttachedFile thumbnailFile) {
         newItem.setThumbnail(uploadThumbnail(thumbnailFile));
         newItem.setCategory(commonCodeRepository.getOne(categoryId.value()));
@@ -93,11 +110,16 @@ public class ItemMasterService {
     public ItemMaster modifyItemMaster(@Valid Id<ItemMaster, String> itemMasterId, @Valid Id<CommonCode, String> categoryId, @NotBlank String itemName,
                                        @NotNull int price, @NotNull AttachedFile thumbnailFile) {
         ItemMaster itemMaster = getOne(itemMasterId.value());
+        deleteThumbnail(itemMaster.getThumbnail());
         itemMaster.modify(itemName, price);
         itemMaster.setThumbnail(uploadThumbnail(thumbnailFile));
-        deleteThumbnail(itemMaster.getThumbnail());
         itemMaster.setCategory(commonCodeRepository.getOne(categoryId.value()));
         return save(itemMaster);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<ItemMaster> findById(Id<ItemMaster, String> itemMasterId){
+        return itemMasterRepository.findById(itemMasterId.value());
     }
 
     private ItemMaster getOne(String id){
@@ -108,4 +130,7 @@ public class ItemMasterService {
         return itemMasterRepository.save(itemMaster);
     }
 
+    private ItemOption save(ItemOption itemOption) {
+        return itemOptionRepository.save(itemOption);
+    }
 }

@@ -17,13 +17,13 @@ public class ItemOption {
     private String id;
 
     @Getter
-    @Size(min = 1, max = 10)
-    @Column(name = "size", columnDefinition = "varchar(10) default 'FREE'")
+    @Size(max = 10)
+    @Column(name = "size", nullable = false, columnDefinition = "varchar(10) default 'ONE SIZE'")
     private String size;
 
     @Getter
-    @Size(min = 1, max = 10)
-    @Column(name = "color", columnDefinition = "varchar(10) default 'ONE COLOR'")
+    @Size(max = 10)
+    @Column(name = "color", nullable = false, columnDefinition = "varchar(10) default 'ONE COLOR'")
     private String color;
 
     @Getter

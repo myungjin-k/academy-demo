@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import static my.myungjin.academyDemo.commons.AttachedFile.toAttachedFile;
@@ -69,7 +70,14 @@ public class ItemMasterServiceTest {
         FileInputStream input = new FileInputStream(file);
         MultipartFile multipartFile =
                 new MockMultipartFile("file", file.getName(), "image/jpeg", toByteArray(input));
-        ItemMaster saved = itemMasterService.saveItemMaster(categoryId, newItem, toAttachedFile(multipartFile));
+        ItemOption option = ItemOption.builder()
+                .id(Util.getUUID())
+                .color("ONE COLOR")
+                .size("ONE SIZE")
+                .build();
+        List<ItemOption> options = new ArrayList<>();
+        options.add(option);
+        ItemMaster saved = itemMasterService.saveItem(categoryId, newItem, toAttachedFile(multipartFile), options);
         assertThat(saved, is(notNullValue()));
         log.info("Saved Item: {}", saved);
 
@@ -77,6 +85,16 @@ public class ItemMasterServiceTest {
 
     @Test
     @Order(3)
+    void 상품_조회하기(){
+        ItemMaster found = itemMasterService.findById(itemMasterId).orElse(null);
+        assertThat(found, is(notNullValue()));
+
+        log.info("Found Item: {}", found);
+        log.info("Found Option: {}", found.getOptions());
+    }
+
+    @Test
+    @Order(4)
     void 상품_수정하기() throws IOException {
 
         URL testThumbnail = getClass().getResource("/item1.jpg");
@@ -96,7 +114,7 @@ public class ItemMasterServiceTest {
 
     }
     @Test
-    @Order(4)
+    @Order(5)
     void 상품_삭제하기() {
         ItemMaster deleted = itemMasterService.deleteItemMasterById(itemMasterId);
         assertThat(deleted, is(notNullValue()));
