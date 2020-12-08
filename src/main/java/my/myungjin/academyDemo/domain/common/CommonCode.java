@@ -53,7 +53,7 @@ public class CommonCode {
 
     @JsonIgnore
     @Getter
-    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) //JOIN
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) //JOIN
     private Collection<ItemMaster> items;
 
     @Builder

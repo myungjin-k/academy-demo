@@ -38,6 +38,7 @@ public class ItemMasterServiceTest {
 
     private Id<CommonCode, String> categoryId;
 
+    private Id<ItemMaster, String> itemMasterId;
 
     @BeforeAll
     void setup(){
@@ -56,8 +57,10 @@ public class ItemMasterServiceTest {
     @Test
     @Order(2)
     void 상품_등록하기() throws IOException {
+        Id<ItemMaster, String> itemMasterId = Id.of(ItemMaster.class, Util.getUUID());
+        this.itemMasterId = itemMasterId;
         ItemMaster newItem = ItemMaster.builder()
-                .id(Util.getUUID())
+                .id(itemMasterId.value())
                 //.categoryId(categoryId.value())
                 .itemName("데어 워머 터틀넥 티셔츠 (3color)")
                 //.status(ItemStatus.READY_TO_SALE)
@@ -73,4 +76,13 @@ public class ItemMasterServiceTest {
         log.info("Saved Item: {}", saved);
 
     }
+
+    @Test
+    @Order(3)
+    void 상품_삭제하기() {
+        ItemMaster deleted = itemMasterService.deleteItemMasterById(itemMasterId);
+        assertThat(deleted, is(notNullValue()));
+        log.info("Delete item: {}", deleted);
+    }
+
 }

@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.util.Map;
 
 import static org.apache.commons.io.FilenameUtils.getName;
+import static org.junit.gen5.commons.util.StringUtils.isEmpty;
 
 @RequiredArgsConstructor
 public final class S3Client {
@@ -43,8 +44,8 @@ public final class S3Client {
     return executePut(request);
   }
 
-  public void delete(String url) {
-    String key = getName(url);
+  public void delete(String url, String basePath) {
+    String key = isEmpty(basePath) ? getName(url) : basePath + "/" +getName(url);
     DeleteObjectRequest request = new DeleteObjectRequest(bucketName, key);
     executeDelete(request);
   }

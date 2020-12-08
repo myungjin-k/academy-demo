@@ -32,6 +32,8 @@ public class ItemMasterService {
 
     private final S3Client s3Client;
 
+    private final String S3_BASE_PATH = "itemMaster";
+
     private Logger log = LoggerFactory.getLogger(ItemMasterService.class);
 
 
@@ -49,7 +51,7 @@ public class ItemMasterService {
     private String uploadThumbnail(AttachedFile thumbnailFile) {
         String thumbnailUrl = null;
         if (thumbnailFile != null) {
-            String key = thumbnailFile.randomName("itemMaster", "jpeg");
+            String key = thumbnailFile.randomName(S3_BASE_PATH, "jpeg");
             try {
                 thumbnailUrl = s3Client.upload(thumbnailFile.inputStream(),
                         thumbnailFile.length(),
@@ -68,6 +70,21 @@ public class ItemMasterService {
         newItem.setThumbnail(uploadThumbnail(thumbnailFile));
         newItem.setCategory(commonCodeRepository.getOne(categoryId.value()));
         return save(newItem);
+    }
+
+    private void deleteThumbnail(String thumbnail){
+        try{
+            s3Client.delete(thumbnail, S3_BASE_PATH);
+        } catch (AmazonS3Exception e){
+            log.warn("Amazon S3 error (key: {}): {}", thumbnail, e.getMessage(), e);
+        }
+    }
+    @Transactional
+    public ItemMaster deleteItemMasterById(@Valid Id<ItemMaster, String> itemMasterId){
+        ItemMaster itemMaster = itemMasterRepository.getOne(itemMasterId.value());
+        itemMasterRepository.delete(itemMaster);
+        deleteThumbnail(itemMaster.getThumbnail());
+        return itemMaster;
     }
 
     private ItemMaster save(ItemMaster itemMaster){
