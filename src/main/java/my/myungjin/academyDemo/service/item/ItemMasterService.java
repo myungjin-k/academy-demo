@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -79,12 +80,28 @@ public class ItemMasterService {
             log.warn("Amazon S3 error (key: {}): {}", thumbnail, e.getMessage(), e);
         }
     }
+
     @Transactional
     public ItemMaster deleteItemMasterById(@Valid Id<ItemMaster, String> itemMasterId){
-        ItemMaster itemMaster = itemMasterRepository.getOne(itemMasterId.value());
+        ItemMaster itemMaster = getOne(itemMasterId.value());
         itemMasterRepository.delete(itemMaster);
         deleteThumbnail(itemMaster.getThumbnail());
         return itemMaster;
+    }
+
+    @Transactional
+    public ItemMaster modifyItemMaster(@Valid Id<ItemMaster, String> itemMasterId, @Valid Id<CommonCode, String> categoryId, @NotBlank String itemName,
+                                       @NotNull int price, @NotNull AttachedFile thumbnailFile) {
+        ItemMaster itemMaster = getOne(itemMasterId.value());
+        itemMaster.modify(itemName, price);
+        itemMaster.setThumbnail(uploadThumbnail(thumbnailFile));
+        deleteThumbnail(itemMaster.getThumbnail());
+        itemMaster.setCategory(commonCodeRepository.getOne(categoryId.value()));
+        return save(itemMaster);
+    }
+
+    private ItemMaster getOne(String id){
+        return itemMasterRepository.getOne(id);
     }
 
     private ItemMaster save(ItemMaster itemMaster){

@@ -61,9 +61,7 @@ public class ItemMasterServiceTest {
         this.itemMasterId = itemMasterId;
         ItemMaster newItem = ItemMaster.builder()
                 .id(itemMasterId.value())
-                //.categoryId(categoryId.value())
                 .itemName("데어 워머 터틀넥 티셔츠 (3color)")
-                //.status(ItemStatus.READY_TO_SALE)
                 .price(19000)
                 .build();
         URL testThumbnail = getClass().getResource("/logo.png");
@@ -79,6 +77,26 @@ public class ItemMasterServiceTest {
 
     @Test
     @Order(3)
+    void 상품_수정하기() throws IOException {
+
+        URL testThumbnail = getClass().getResource("/item1.jpg");
+        File file = new File(testThumbnail.getFile());
+        FileInputStream input = new FileInputStream(file);
+        MultipartFile multipartFile =
+                new MockMultipartFile("file", file.getName(), "image/jpeg", toByteArray(input));
+        ItemMaster updated = itemMasterService.modifyItemMaster(
+                itemMasterId,
+                categoryId,
+                "데어 워머 터틀넥 티셔츠 (3color)",
+                12900,
+                toAttachedFile(multipartFile)
+        );
+        assertThat(updated, is(notNullValue()));
+        log.info("Updated Item: {}", updated);
+
+    }
+    @Test
+    @Order(4)
     void 상품_삭제하기() {
         ItemMaster deleted = itemMasterService.deleteItemMasterById(itemMasterId);
         assertThat(deleted, is(notNullValue()));

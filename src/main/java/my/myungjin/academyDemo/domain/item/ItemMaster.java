@@ -76,4 +76,9 @@ public class ItemMaster {
         options.add(option);
         option.setItemMaster(this);
     }
+
+    public void modify(String itemName, int price){
+        this.itemName = itemName;
+        this.price = price;
+    }
 }
