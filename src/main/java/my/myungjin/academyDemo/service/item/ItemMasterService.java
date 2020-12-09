@@ -78,8 +78,8 @@ public class ItemMasterService {
         ItemMaster master = saveItemMaster(categoryId, newItem, thumbnailFile);
         for(ItemOption itemOption : itemOptions){
             itemOption.setItemMaster(master);
-            ItemOption option = save(itemOption);
-            master.addOption(option);
+            ItemOption saved = save(itemOption);
+            master.addOption(saved);
         }
         return master;
     }

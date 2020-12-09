@@ -153,7 +153,7 @@ public class CommonCodeServiceTest {
     void 코드그룹_검색하기(){
 
         List<CodeGroup> results = (ArrayList<CodeGroup>) commonService.search("C", null, null);
-        MatcherAssert.assertThat(results.size(), is(1));
+        MatcherAssert.assertThat(results.size(), is(3));
     }
 
     @Test

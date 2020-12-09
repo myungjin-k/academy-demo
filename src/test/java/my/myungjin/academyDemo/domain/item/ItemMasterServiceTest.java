@@ -43,7 +43,7 @@ public class ItemMasterServiceTest {
 
     @BeforeAll
     void setup(){
-        categoryId = Id.of(CommonCode.class, "5105a5a02b754b4f9975975c1f1f58ea");
+        categoryId = Id.of(CommonCode.class, "44e94265588b428e8e01bbc23dfc0f7e");
     }
 
     @Test
@@ -58,8 +58,7 @@ public class ItemMasterServiceTest {
     @Test
     @Order(2)
     void 상품_등록하기() throws IOException {
-        Id<ItemMaster, String> itemMasterId = Id.of(ItemMaster.class, Util.getUUID());
-        this.itemMasterId = itemMasterId;
+        itemMasterId = Id.of(ItemMaster.class, Util.getUUID());
         ItemMaster newItem = ItemMaster.builder()
                 .id(itemMasterId.value())
                 .itemName("데어 워머 터틀넥 티셔츠 (3color)")

@@ -51,10 +51,10 @@ public class CommonCode {
     @JoinColumn(name = "group_id", nullable = false)
     private CodeGroup codeGroup;
 
-    @JsonIgnore
+/*    @JsonIgnore
     @Getter
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) //JOIN
-    private Collection<ItemMaster> items;
+    private Collection<ItemMaster> items;*/
 
     @Builder
     public CommonCode(String id, String code, String nameEng, String nameKor, CodeGroup codeGroup, LocalDateTime updateAt) {
@@ -77,8 +77,8 @@ public class CommonCode {
         this.updateAt = now();
     }
 
-    public void addItems(ItemMaster item){
+/*    public void addItems(ItemMaster item){
         items.add(item);
         item.setCategory(this);
-    }
+    }*/
 }
