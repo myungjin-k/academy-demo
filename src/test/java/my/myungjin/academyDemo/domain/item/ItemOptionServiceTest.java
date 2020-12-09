@@ -60,9 +60,17 @@ public class ItemOptionServiceTest {
     }
 
     @Test
+    @Order(3)
+    void 상품_옵션_수정하기() {
+        ItemOption updated = itemOptionService.modify(itemOptionId, "라이트카키", "ONE SIZE");
+        assertThat(updated, is(notNullValue()));
+        log.info("Updated Option: {}", updated);
+    }
+
+    @Test
     @Order(4)
     void 상품_옵션_삭제하기() {
-        Id<ItemOption, String> deleted = itemOptionService.deleteById(itemMasterId, itemOptionId);
+        Id<ItemOption, String> deleted = itemOptionService.deleteById(itemOptionId);
         assertThat(deleted, is(notNullValue()));
         log.info("Deleted Option: {}", deleted);
 

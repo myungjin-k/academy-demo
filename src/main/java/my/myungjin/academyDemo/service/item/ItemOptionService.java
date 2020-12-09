@@ -1,7 +1,6 @@
 package my.myungjin.academyDemo.service.item;
 
 import lombok.RequiredArgsConstructor;
-import my.myungjin.academyDemo.aws.S3Client;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.item.ItemMaster;
 import my.myungjin.academyDemo.domain.item.ItemMasterRepository;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,12 +42,16 @@ public class ItemOptionService {
     }
 
     @Transactional
-    public Id<ItemOption, String> deleteById(@Valid Id<ItemMaster, String> itemMasterId, @Valid Id<ItemOption, String> itemOptionId){
-        return findMaster(itemMasterId)
-                .map(itemMaster -> {
-                    itemOptionRepository.deleteById(itemOptionId.value());
-                    return itemOptionId;
-                }).orElseThrow(() -> new NotFoundException(ItemMaster.class, itemMasterId));
+    public Id<ItemOption, String> deleteById(@Valid Id<ItemOption, String> itemOptionId){
+        itemOptionRepository.deleteById(itemOptionId.value());
+        return itemOptionId;
+    }
+
+    @Transactional
+    public ItemOption modify(@Valid Id<ItemOption, String> itemOptionId, @NotBlank String color, @NotBlank String size){
+        ItemOption option = itemOptionRepository.getOne(itemOptionId.value());
+        option.modify(color, size);
+        return option;
     }
 
     private Optional<ItemMaster> findMaster(Id<ItemMaster, String> itemMasterId){

@@ -47,4 +47,9 @@ public class ItemOption {
         this.size = size;
         this.color = color;
     }
+
+    public void modify(String color, String size){
+        this.color = color;
+        this.size = size;
+    }
 }

@@ -1,17 +1,16 @@
 package my.myungjin.academyDemo.domain.item;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import my.myungjin.academyDemo.domain.common.CommonCode;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
 
+import static java.time.LocalDateTime.now;
 import static java.util.Optional.ofNullable;
 
 
@@ -82,5 +81,6 @@ public class ItemMaster {
     public void modify(String itemName, int price){
         this.itemName = itemName;
         this.price = price;
+        this.updateAt = now();
     }
 }
