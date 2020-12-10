@@ -4,6 +4,8 @@ import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.service.item.ItemMasterService;
 import my.myungjin.academyDemo.util.Util;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.core.Is;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -112,8 +114,18 @@ public class ItemMasterServiceTest {
         log.info("Updated Item: {}", updated);
 
     }
+
+
     @Test
     @Order(5)
+    void 상품_검색하기(){
+
+        List<ItemMaster> results = (ArrayList<ItemMaster>) itemMasterService.search("알파카", null, null);
+        MatcherAssert.assertThat(results.size(), Is.is(1));
+    }
+
+    @Test
+    @Order(6)
     void 상품_삭제하기() {
         ItemMaster deleted = itemMasterService.deleteItemMasterById(itemMasterId);
         assertThat(deleted, is(notNullValue()));

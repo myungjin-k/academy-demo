@@ -19,10 +19,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
-import javax.mail.FetchProfile;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -120,6 +120,11 @@ public class ItemMasterService {
     @Transactional(readOnly = true)
     public Optional<ItemMaster> findById(Id<ItemMaster, String> itemMasterId){
         return itemMasterRepository.findById(itemMasterId.value());
+    }
+
+    @Transactional(readOnly = true)
+    public Iterable<ItemMaster> search(String itemName, LocalDate start, LocalDate end){
+        return itemMasterRepository.findAll(ItemMasterPredicate.search(itemName, start, end));
     }
 
     private ItemMaster getOne(String id){
