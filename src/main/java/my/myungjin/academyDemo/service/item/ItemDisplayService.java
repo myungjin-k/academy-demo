@@ -48,6 +48,11 @@ public class ItemDisplayService {
         return itemDisplayRepository.findByItemMaster(itemMasterRepository.getOne(itemMasterId.value()));
     }
 
+    @Transactional(readOnly = true)
+    public ItemDisplay findById(@Valid Id<ItemDisplay, String> itemDisplayId){
+        return itemDisplayRepository.findById(itemDisplayId.value())
+                .orElseThrow(() -> new NotFoundException(ItemDisplay.class, itemDisplayId));
+    }
     private String uploadDetailImage(AttachedFile detailImageFile) {
         String detailImageUrl = null;
         if (detailImageFile != null) {

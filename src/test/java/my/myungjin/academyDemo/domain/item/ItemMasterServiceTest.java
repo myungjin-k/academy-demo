@@ -71,14 +71,7 @@ public class ItemMasterServiceTest {
         FileInputStream input = new FileInputStream(file);
         MultipartFile multipartFile =
                 new MockMultipartFile("file", file.getName(), "image/jpeg", toByteArray(input));
-        ItemOption option = ItemOption.builder()
-                .id(Util.getUUID())
-                .color("ONE COLOR")
-                .size("ONE SIZE")
-                .build();
-        List<ItemOption> options = new ArrayList<>();
-        options.add(option);
-        ItemMaster saved = itemMasterService.saveItem(categoryId, newItem, toAttachedFile(multipartFile), options);
+        ItemMaster saved = itemMasterService.saveItemMaster(categoryId, newItem, toAttachedFile(multipartFile));
         assertThat(saved, is(notNullValue()));
         log.info("Saved Item: {}", saved);
 
