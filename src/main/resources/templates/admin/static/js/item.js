@@ -38,7 +38,6 @@ var itemMaster = {
             var tr = $(this).parents('tr');
             var data = {
                 "id" : tr.find('input[name="id"]').val(),
-                "categoryId" : tr.find('.categorId').text(),
                 "itemName" : tr.find('.itemName').text(),
                 "categoryId" : tr.find('.categoryId').text(),
                 "price" : tr.find('.price').text(),
@@ -88,20 +87,23 @@ var itemMaster = {
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
             var resultData = response.response;
-           // console.log(resultData);
+           //console.log(resultData);
             if(resultData.totalElements > 0){
                 $('#pagination-item-master').setPagination(
+                    page,
                     _this.firstPage,
                     Math.min(resultData.totalPages, _this.lastPage),
                     5,
                     resultData.totalPages
                 );
                 $.each(resultData.content, function(){
-                   // console.log(this);
+                    //console.log(this);
                     const item = this;
                     const row = '<tr>'
                         + '<input type="hidden" name="id" value="' + item.id + '"/>'
-                        + '<td class="categoryId">' + item.categoryId +'</td>'
+                        + '<td class="categoryId">' + item.category.nameKor
+                        + '<input type="hidden" name="categoryId" value="' + item.category.id + '"/>'
+                        +'</td>'
                         + '<td class="itemName">' + item.itemName+'</td>'
                         + '<td class="price">' + item.price +'</td>'
                         + '<td>' + item.createAt +'</td>'

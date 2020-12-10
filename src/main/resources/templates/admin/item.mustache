@@ -42,7 +42,11 @@
                     <input type="hidden" name="id" id="master-id" />
 
                     <label for="categoryId">분류</label>
-                    <input type="text" class="form-control" name="categoryId" id="categoryId" />
+                    <select class="form-control"  id="categoryId" >
+                        {{#categories}}
+                            <option value="{{id}}">{{nameKor}}</option>
+                        {{/categories}}
+                    </select>
                     <label for="itemName">이름</label>
                     <input type="text" class="form-control" name="itemName" id="itemName" />
                     <label for="price">가격</label>

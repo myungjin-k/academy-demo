@@ -13,7 +13,7 @@ import static java.util.Optional.ofNullable;
 
 @Entity
 @Table(name = "code_group")
-@ToString
+@ToString(exclude = "commonCodes")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = {"id"})
 public class CodeGroup {
@@ -44,10 +44,10 @@ public class CodeGroup {
     @Column(name = "update_at")
     private LocalDateTime updateAt;
 
- /*   @Getter
+    @Getter
     @OneToMany(mappedBy = "codeGroup", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) //JOIN
     private Collection<CommonCode> commonCodes;
-*/
+
     @Builder
     public CodeGroup(String id, String code, String nameEng, String nameKor, LocalDateTime updateAt) {
         this.id = id;
@@ -57,10 +57,10 @@ public class CodeGroup {
         this.updateAt = updateAt;
     }
 
-/*    public void addCommonCode(CommonCode commonCode) {
+    public void addCommonCode(CommonCode commonCode) {
         commonCodes.add(commonCode);
         commonCode.setCodeGroup(this);
-    }*/
+    }
 
     public Optional<LocalDateTime> getUpdateAt(){
         return ofNullable(updateAt);

@@ -90,6 +90,9 @@ public class IndexController {
     @GetMapping("/admin/itemIndex")
     public String adminItemIndex(Model model, @AuthenticationPrincipal Authentication authentication){
 
+        itemCategories = commonCodeService.findAllCommonCodesByGroupId
+                (Id.of(CodeGroup.class, "246fa96f9b634a56aaac5884de186ebc"));
+        model.addAttribute("items", itemCategories);
         if(authentication != null && authentication.isAuthenticated()){
             User loginUser = (User) authentication.getDetails();
             model.addAttribute("loginUser", loginUser);
