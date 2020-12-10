@@ -28,7 +28,7 @@ jQuery.fn.setFormData = function(form, data) {
     }
 };
 
-jQuery.fn.setPagination = function( start, end, size, totalPages) {
+jQuery.fn.setPagination = function( page, start, end, size, totalPages) {
     try {
         this[0].innerText = '';
         var innerHtml = '';
@@ -36,7 +36,10 @@ jQuery.fn.setPagination = function( start, end, size, totalPages) {
             innerHtml += '<li class="page-item"><a class="page-link previous" href="#">prev</a></li>';
         }
         for(var i = start; i <= end; i++){
-            innerHtml += '<li class="page-item"><a class="page-link" href="#">'+i+'</a></li>';
+            if(i == page)
+                innerHtml += '<li class="page-item active"><a class="page-link" href="#">'+i+'</a></li>';
+            else
+                innerHtml += '<li class="page-item"><a class="page-link" href="#">'+i+'</a></li>';
         }
         if(end < totalPages){
             innerHtml += '<li class="page-item"><a class="page-link next" href="#">next</a></li>';
