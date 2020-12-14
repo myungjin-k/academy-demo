@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.aws.S3Client;
 import my.myungjin.academyDemo.commons.AttachedFile;
 import my.myungjin.academyDemo.commons.Id;
+import my.myungjin.academyDemo.domain.common.CodeGroupRepository;
 import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.domain.common.CommonCodeRepository;
 import my.myungjin.academyDemo.domain.item.ItemMaster;
@@ -30,6 +31,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class ItemMasterService {
+
+    private final CodeGroupRepository codeGroupRepository;
 
     private final CommonCodeRepository commonCodeRepository;
 
@@ -125,6 +128,11 @@ public class ItemMasterService {
     @Transactional(readOnly = true)
     public Iterable<ItemMaster> search(String itemName, LocalDate start, LocalDate end){
         return itemMasterRepository.findAll(ItemMasterPredicate.search(itemName, start, end));
+    }
+
+    @Transactional(readOnly = true)
+    public List<CommonCode> searchCategoryByNameKor(@NotBlank String nameKor){
+        return commonCodeRepository.searchByGroupCodeAndNameKor("C", nameKor);
     }
 
     private ItemMaster getOne(String id){

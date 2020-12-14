@@ -37,16 +37,20 @@
                     </ul>
                 </div>
             </div>
+
+
             <div class="mb-5">
                 <form id="form-save-item-master" enctype="multipart/form-data">
                     <input type="hidden" name="id" id="master-id" />
 
                     <label for="categoryId">분류</label>
-                    <select class="form-control"  id="categoryId" >
-                        {{#categories}}
-                            <option value="{{id}}">{{nameKor}}</option>
-                        {{/categories}}
-                    </select>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-sm btn-outline-primary ml-3" data-toggle="modal" data-target="#categorySearchModal">
+                        검색
+                    </button>
+                    <input type="hidden" class="form-control" name="categoryId" id="categoryId" />
+                    <input type="text" class="form-control" name="categoryName" id="categoryName" />
+
                     <label for="itemName">이름</label>
                     <input type="text" class="form-control" name="itemName" id="itemName" />
                     <label for="price">가격</label>
@@ -109,7 +113,5 @@
         </div>
     </div>
 </div>
-
-
 <script src="static/js/item.js"></script>
-{{>layout/footer}}
+{{>admin/layout/footer}}

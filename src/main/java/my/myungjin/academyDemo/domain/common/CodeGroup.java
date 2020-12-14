@@ -1,5 +1,6 @@
 package my.myungjin.academyDemo.domain.common;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -45,6 +46,7 @@ public class CodeGroup {
     private LocalDateTime updateAt;
 
     @Getter
+    @JsonManagedReference
     @OneToMany(mappedBy = "codeGroup", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) //JOIN
     private Collection<CommonCode> commonCodes;
 

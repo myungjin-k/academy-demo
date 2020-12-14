@@ -1,13 +1,12 @@
 package my.myungjin.academyDemo.domain.common;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
-import my.myungjin.academyDemo.domain.item.ItemMaster;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.Optional;
 
 import static java.time.LocalDateTime.now;
@@ -15,7 +14,7 @@ import static java.util.Optional.ofNullable;
 
 @Entity
 @Table(name = "common_code")
-@ToString(exclude = "items")
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = {"id"})
 public class CommonCode {
@@ -47,6 +46,7 @@ public class CommonCode {
 
     @Setter
     @Getter
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "group_id", nullable = false)
     private CodeGroup codeGroup;

@@ -125,4 +125,11 @@ public class ItemMasterServiceTest {
         log.info("Delete item: {}", deleted);
     }
 
+    @Test
+    @Order(7)
+    void 상품_카테고리_검색하기(){
+
+        List<CommonCode> results = itemMasterService.searchCategoryByNameKor("바지");
+        MatcherAssert.assertThat(results.size(), Is.is(1));
+    }
 }
