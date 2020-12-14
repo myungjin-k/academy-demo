@@ -1,5 +1,7 @@
 package my.myungjin.academyDemo.web.controller;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.common.CommonCode;
@@ -35,6 +37,7 @@ public class ItemAdminController {
     private final ItemDisplayService itemDisplayService;
 
     @GetMapping("/all")
+    @ApiOperation(value = "상품 마스터 전체 목록 조회")
     public Response<Page<ItemMaster>> allItems(PageRequest pageRequest){
         return OK(
                 itemMasterService.findAllItems(pageRequest.of())
@@ -42,13 +45,15 @@ public class ItemAdminController {
     }
 
     @GetMapping("/category")
-    public Response<List<CommonCode>> searchCategory(@RequestParam String searchParam){
+    @ApiOperation(value = "상품 카테고리 검색")
+    public Response<List<CommonCode>> searchCategory(@RequestParam @ApiParam(value = "상품 카테고리 검색어(카테고리 한글이름)") String searchParam){
         return OK(
                 itemMasterService.searchCategoryByNameKor(searchParam)
         );
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ApiOperation(value = "상품 마스터 등록")
     public Response<ItemMaster> saveMaster(
             @ModelAttribute ItemMasterRequest request,
             @RequestPart MultipartFile thumbnail
@@ -63,8 +68,9 @@ public class ItemAdminController {
     }
 
     @PutMapping(path = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ApiOperation(value = "상품 마스터 수정")
     public Response<ItemMaster> updateMaster(
-            @PathVariable String id,
+            @PathVariable @ApiParam(value = "대상 상품 마스터 PK") String  id,
             @ModelAttribute ItemMasterRequest request,
             @RequestPart MultipartFile thumbnail
     ) throws IOException {
@@ -80,13 +86,15 @@ public class ItemAdminController {
     }
 
     @DeleteMapping("/{id}")
-    public Response<ItemMaster> deleteMaster(@PathVariable String id){
+    @ApiOperation(value = "상품 마스터 삭제")
+    public Response<ItemMaster> deleteMaster(@PathVariable @ApiParam(value = "대상 상품 마스터 PK") String id){
         return OK(
                 itemMasterService.deleteItemMasterById(Id.of(ItemMaster.class, id))
         );
     }
 
     @GetMapping("/search")
+    @ApiOperation(value = "상품 마스터 검색(코드, 한글명, 영어명)")
     public Response<List<ItemMaster>> searchMaster(@RequestBody ItemMasterSearchRequest request){
         return  OK(
                 (List<ItemMaster>) itemMasterService.search(request.getItemName(), request.getStart(), request.getEnd())
@@ -94,21 +102,24 @@ public class ItemAdminController {
     }
 
     @PostMapping( "/{id}/option")
-    public Response<ItemOption> saveOption(@PathVariable String id, @RequestBody ItemOptionRequest request) {
+    @ApiOperation(value = "상품 옵션 등록")
+    public Response<ItemOption> saveOption(@PathVariable @ApiParam(value = "대상 상품 마스터 PK") String id, @RequestBody ItemOptionRequest request) {
         return OK(
                 itemOptionService.add(Id.of(ItemMaster.class, id), request.newItemOption())
         );
     }
 
     @PutMapping( "/{id}/option/{optionId}")
-    public Response<ItemOption> updateOption(@PathVariable String optionId, @RequestBody ItemOptionRequest request) {
+    @ApiOperation(value = "상품 옵션 수정")
+    public Response<ItemOption> updateOption(@PathVariable @ApiParam(value = "대상 상품 옵션 PK") String optionId, @RequestBody ItemOptionRequest request) {
         return OK(
                 itemOptionService.modify(Id.of(ItemOption.class, optionId), request.getColor(), request.getSize())
         );
     }
 
     @DeleteMapping("/{id}/option/{optionId}")
-    public Response<Id<ItemOption, String>> deleteOption(@PathVariable String optionId){
+    @ApiOperation(value = "상품 옵션 삭제")
+    public Response<Id<ItemOption, String>> deleteOption(@PathVariable @ApiParam(value = "대상 상품 옵션 PK")  String optionId){
         return OK(
                 itemOptionService.deleteById(Id.of(ItemOption.class, optionId))
         );
@@ -116,6 +127,7 @@ public class ItemAdminController {
 
 
     @GetMapping("/display/all")
+    @ApiOperation(value = "전시상품 리스트 전체 조회")
     public Response<Page<ItemDisplay>> allDisplayItems(PageRequest pageRequest){
         return OK(
                 itemDisplayService.findAll(pageRequest.of())
@@ -123,15 +135,17 @@ public class ItemAdminController {
     }
 
     @GetMapping("/display/{displayId}")
-    public Response<ItemDisplay> getDisplayItem(@PathVariable String displayId){
+    @ApiOperation(value = "전시상품 단건 조회")
+    public Response<ItemDisplay> getDisplayItem(@PathVariable @ApiParam(value = "대상 전시상품 PK") String displayId){
         return OK(
                 itemDisplayService.findById(Id.of(ItemDisplay.class, displayId))
         );
     }
 
     @PostMapping(value = "/{masterId}/display", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ApiOperation(value = "전시상품 등록")
     public Response<ItemDisplay> saveDisplayItem(
-            @PathVariable String masterId,
+            @PathVariable @ApiParam(value = "대상 상품 마스터 PK") String masterId,
             @ModelAttribute ItemDisplayRequest request,
             @RequestPart MultipartFile detailImageFile
     ) throws IOException {
@@ -141,9 +155,10 @@ public class ItemAdminController {
     }
 
     @PostMapping(value = "/{masterId}/display/{displayId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ApiOperation(value = "전시상품 수정")
     public Response<ItemDisplay> updateDisplayItem(
-            @PathVariable String masterId,
-            @PathVariable String displayId,
+            @PathVariable @ApiParam(value = "대상 상품 마스터 PK") String masterId,
+            @PathVariable @ApiParam(value = "대상 전시상품 PK") String displayId,
             @ModelAttribute ItemDisplayRequest request,
             @RequestPart MultipartFile detailImageFile
     ) throws IOException {
@@ -158,7 +173,8 @@ public class ItemAdminController {
     }
 
     @DeleteMapping("/{id}/display/{displayId}")
-    public Response<ItemDisplay> deleteDisplayItem(@PathVariable String displayId){
+    @ApiOperation(value = "전시상품 삭제")
+    public Response<ItemDisplay> deleteDisplayItem(@PathVariable @ApiParam(value = "대상 전시상품 PK") String displayId){
         return OK(
                 itemDisplayService.deleteItemById(Id.of(ItemDisplay.class, displayId))
         );

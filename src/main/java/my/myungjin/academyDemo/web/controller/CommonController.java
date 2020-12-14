@@ -3,6 +3,7 @@ package my.myungjin.academyDemo.web.controller;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.common.CodeGroup;
@@ -43,7 +44,9 @@ public class CommonController {
     }
 
     @PutMapping("/{id}")
-    public Response<CodeGroup> modifyCodeGroup(@PathVariable String id, @RequestBody CodeGroupRequest request){
+    @ApiOperation(value = "코드 그룹 수정")
+    public Response<CodeGroup> modifyCodeGroup(@PathVariable @ApiParam(value = "대상 코드그룹 PK") String id,
+                                               @RequestBody CodeGroupRequest request){
         return OK(
                 sampleService.modifyGroup(Id.of(CodeGroup.class, id),
                         request.getCode(),
@@ -53,7 +56,8 @@ public class CommonController {
     }
 
     @DeleteMapping("/{id}")
-    public void removeCodeGroup(@PathVariable String id){
+    @ApiOperation(value = "코드 그룹 삭제")
+    public void removeCodeGroup(@PathVariable @ApiParam(value = "대상 코드그룹 PK") String id){
         sampleService.removeGroup(Id.of(CodeGroup.class, id));
     }
 
@@ -69,12 +73,16 @@ public class CommonController {
 
 
     @GetMapping("/{id}/commonCode/list")
-    public Response<Page<CommonCode>> commonCodesByGroupIdWithPage(@PathVariable String id, PageRequest pageRequest){
+    @ApiOperation(value = "공통 코드 목록 조회")
+    public Response<Page<CommonCode>> commonCodesByGroupIdWithPage(
+            @PathVariable @ApiParam(value = "대상 코드그룹 PK") String id, PageRequest pageRequest){
         return OK(sampleService.findAllCommonCodeByGroupIdWithPage(Id.of(CodeGroup.class, id), pageRequest.of()));
     }
 
     @PostMapping("/{id}/commonCode")
-    public Response<CommonCode> newCommonCode(@PathVariable String id, @RequestBody CommonCodeRequest request){
+    @ApiOperation(value = "공통 코드 등록")
+    public Response<CommonCode> newCommonCode(@PathVariable @ApiParam(value = "대상 코드그룹 PK") String id,
+                                              @RequestBody CommonCodeRequest request){
         return OK(
                 sampleService.registCommonCode(Id.of(CodeGroup.class, id),
                         request.newCommonCode(Id.of(CodeGroup.class, id)))
@@ -82,7 +90,10 @@ public class CommonController {
     }
 
     @PutMapping("/{groupId}/commonCode/{id}")
-    public Response<CommonCode> modifyCode(@PathVariable String groupId, @PathVariable String id, @RequestBody CommonCodeRequest request){
+    @ApiOperation(value = "공통 코드 수정")
+    public Response<CommonCode> modifyCode(@PathVariable @ApiParam(value = "대상 코드그룹 PK") String groupId,
+                                           @PathVariable @ApiParam(value = "대상 공통코드 PK") String id,
+                                           @RequestBody CommonCodeRequest request){
         return OK(
                 sampleService.modifyCode(Id.of(CodeGroup.class, groupId),
                         Id.of(CommonCode.class, id),
@@ -93,7 +104,9 @@ public class CommonController {
     }
 
     @DeleteMapping("/{groupId}/commonCode/{id}")
-    public void removeCode(@PathVariable String groupId, @PathVariable String id){
+    @ApiOperation(value = "공통 코드 삭제")
+    public void removeCode(@PathVariable @ApiParam(value = "대상 코드그룹 PK") String groupId,
+                           @PathVariable @ApiParam(value = "대상 공통코드 PK") String id){
         sampleService.removeCode(Id.of(CodeGroup.class, groupId), Id.of(CommonCode.class, id));
     }
 

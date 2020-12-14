@@ -1,5 +1,7 @@
 package my.myungjin.academyDemo.web.controller;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.member.Member;
@@ -24,6 +26,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/join")
+    @ApiOperation(value = "회원 가입")
     public Response<Member> join(@RequestBody MemberRequest request){
         return OK(
                 memberService.join(request.newMember())
@@ -31,7 +34,8 @@ public class MemberController {
     }
 
     @GetMapping("/id")
-    public Response<String> forgotUserId(@RequestParam Map<String, String> params){
+    @ApiOperation(value = "회원 아이디 찾기")
+    public Response<String> forgotUserId(@RequestParam @ApiParam(value = "조회 대상 회원 정보(전화번호)") Map<String, String> params){
         return OK(
                 memberService.findUserId(params.get("tel"))
                         .orElse("")
@@ -39,7 +43,8 @@ public class MemberController {
     }
 
     @GetMapping("/password")
-    public Response<String> forgotUserPwd(@RequestParam Map<String, String> paramMap){
+    @ApiOperation(value = "회원 비밀번호 찾기")
+    public Response<String> forgotUserPwd(@RequestParam @ApiParam(value = "조회 대상 회원 정보(이메일)") Map<String, String> paramMap){
         return OK(
                 memberService.findPassword(paramMap.get("email"))
                         .orElse("")
@@ -47,6 +52,7 @@ public class MemberController {
     }
 
     @PatchMapping("/password")
+    @ApiOperation(value = "회원 비밀번호 변경")
     public Response<Member> changePassword(@RequestBody PwChangeRequest request){
         return OK(
           memberService.modifyPassword(request.getId(), request.getNewPassword())
@@ -54,6 +60,7 @@ public class MemberController {
     }
 
     @GetMapping("/me")
+    @ApiOperation(value = "회원 정보 조회")
     public Response<Member> getMyInfo(@AuthenticationPrincipal Authentication authentication){
         return OK(
                 memberService.findMyInfo(Id.of(Member.class, ((User) authentication.getDetails()).getId()))
@@ -61,6 +68,7 @@ public class MemberController {
     }
 
     @PutMapping("/me")
+    @ApiOperation(value = "회원 정보 수정")
     public Response<Member> modifyMyInfo(@AuthenticationPrincipal Authentication authentication,
                                            @RequestBody MemberRequest request){
         Id<Member, String> id = Id.of(Member.class, ((User) authentication.getDetails()).getId());
