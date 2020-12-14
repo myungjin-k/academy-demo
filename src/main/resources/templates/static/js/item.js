@@ -6,7 +6,7 @@ var main = {
     loadAllItems : function (){
         $.ajax({
             type: 'GET',
-            url: '/item/all',
+            url: '/api/item/all',
             dataType: 'json',
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
@@ -40,7 +40,7 @@ var main = {
         var _this = this;
         $.ajax({
             type: 'PUT',
-            url: '/member/me',
+            url: '/api/member/me',
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(data)

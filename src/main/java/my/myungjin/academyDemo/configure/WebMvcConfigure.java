@@ -5,11 +5,9 @@ import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.configure.support.AuthenticationInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.Resource;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.resource.PathResourceResolver;
 
 @Configuration
 @RequiredArgsConstructor
@@ -47,11 +45,11 @@ public class WebMvcConfigure implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authenticationInterceptor())
                 .addPathPatterns("/")
-                .addPathPatterns("/login")
-                .addPathPatterns("/order/*")
-                .addPathPatterns("/myPage")
-                .addPathPatterns("/member/me")
-                .addPathPatterns("/admin/**")
+                .addPathPatterns("/api/login")
+                .addPathPatterns("/api/order/*")
+                .addPathPatterns("/api/myPage")
+                .addPathPatterns("/api/member/me")
+                .addPathPatterns("/api/admin/**")
         ;
     }
 }

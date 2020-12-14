@@ -82,7 +82,7 @@ var itemMaster = {
         this.clearTable();
         $.ajax({
             type: 'GET',
-            url: '/admin/item/all?page=' + page +'&size=' + 5 + '&direction=ASC',
+            url: '/api/admin/item/all?page=' + page +'&size=' + 5 + '&direction=ASC',
             dataType: 'json',
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
@@ -137,7 +137,7 @@ var itemMaster = {
         console.log(data.getAll("thumbnail"));
         $.ajax({
             type: 'POST',
-            url: '/admin/item',
+            url: '/api/admin/item',
             processData: false,
             contentType: false,
             data: data
@@ -162,7 +162,7 @@ var itemMaster = {
         var data = $('#form-save-group').serializeObject();
         $.ajax({
             type: 'PUT',
-            url: '/admin/item',
+            url: '/api/admin/item',
             dataType: 'json',
             contentType:'application/json; charset=utf-8',
             data: JSON.stringify(data)
@@ -178,7 +178,7 @@ var itemMaster = {
         var _this = this;
         $.ajax({
             type: 'DELETE',
-            url: '/admin/item'
+            url: '/api/admin/item'
         }).done(function(response) {
             //console.log(response);
             _this.list(1);

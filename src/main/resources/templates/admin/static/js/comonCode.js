@@ -95,7 +95,7 @@ var codeGroup = {
         this.clearTable();
         $.ajax({
             type: 'GET',
-            url: '/admin/codeGroup/list?page=' + page +'&size=' + 5 + '&direction=ASC',
+            url: '/api/admin/codeGroup/list?page=' + page +'&size=' + 5 + '&direction=ASC',
             dataType: 'json',
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
@@ -136,7 +136,7 @@ var codeGroup = {
         var data = $('#form-save-group').serializeObject();
         $.ajax({
             type: 'POST',
-            url: '/admin/codeGroup',
+            url: '/api/admin/codeGroup',
             dataType: 'json',
             contentType:'application/json; charset=utf-8',
             data: JSON.stringify(data)
@@ -160,7 +160,7 @@ var codeGroup = {
         var data = $('#form-save-group').serializeObject();
         $.ajax({
             type: 'PUT',
-            url: '/admin/codeGroup/' + data.id,
+            url: '/api/admin/codeGroup/' + data.id,
             dataType: 'json',
             contentType:'application/json; charset=utf-8',
             data: JSON.stringify(data)
@@ -176,7 +176,7 @@ var codeGroup = {
         var _this = this;
         $.ajax({
             type: 'DELETE',
-            url: '/admin/codeGroup/' + id
+            url: '/api/admin/codeGroup/' + id
         }).done(function(response) {
             //console.log(response);
             _this.list(1);
@@ -251,7 +251,7 @@ var commonCode = {
         this.clearForm();
         $.ajax({
             type: 'GET',
-            url: '/admin/codeGroup/' + id + '/commonCode/list?page=' + page +'&size=5&direction=ASC',
+            url: '/api/admin/codeGroup/' + id + '/commonCode/list?page=' + page +'&size=5&direction=ASC',
             dataType: 'json',
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
@@ -294,7 +294,7 @@ var commonCode = {
         //console.log(data.groupId);
         $.ajax({
             type: 'POST',
-            url: '/admin/codeGroup/' + data.groupId + '/commonCode',
+            url: '/api/admin/codeGroup/' + data.groupId + '/commonCode',
             dataType: 'json',
             contentType:'application/json; charset=utf-8',
             data: JSON.stringify(data)
@@ -317,7 +317,7 @@ var commonCode = {
         var data = $('#form-save-code').serializeObject();
         $.ajax({
             type: 'PUT',
-            url: '/admin/codeGroup/' + data.groupId + '/commonCode/' + data.id,
+            url: '/api/admin/codeGroup/' + data.groupId + '/commonCode/' + data.id,
             dataType: 'json',
             contentType:'application/json; charset=utf-8',
             data: JSON.stringify(data)
@@ -333,7 +333,7 @@ var commonCode = {
         var _this = this;
         $.ajax({
             type: 'DELETE',
-            url: '/admin/codeGroup/' + groupId + '/commonCode/' + codeId,
+            url: '/api/admin/codeGroup/' + groupId + '/commonCode/' + codeId,
         }).done(function(response) {
             //console.log(response);
             _this.list(groupId, 1);

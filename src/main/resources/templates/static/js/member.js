@@ -38,7 +38,7 @@ var main = {
 
         $.ajax({
             type: 'POST',
-            url: '/member/join',
+            url: '/api/member/join',
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(data)
@@ -55,7 +55,7 @@ var main = {
         //console.log(data.groupId);
         $.ajax({
             type: 'POST',
-            url: '/auth',
+            url: '/api/auth',
             dataType: 'json',
             contentType:'application/json; charset=utf-8',
             data: JSON.stringify(data)
