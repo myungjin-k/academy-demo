@@ -23,7 +23,7 @@ public class IndexController {
 
     private List<CommonCode> itemCategories ;
 
-    @GetMapping("/index")
+    @GetMapping("/mall/index")
     public String main(Model model, @AuthenticationPrincipal Authentication authentication){
         itemCategories = commonCodeService.findAllCommonCodesByGroupId
                 (Id.of(CodeGroup.class, "246fa96f9b634a56aaac5884de186ebc"));
@@ -38,7 +38,7 @@ public class IndexController {
         return "index";
     }
 
-    @GetMapping("/login")
+    @GetMapping("/mall/login")
     public String loginIndex(Model model)
     {
         itemCategories = commonCodeService.findAllCommonCodesByGroupId
@@ -47,14 +47,14 @@ public class IndexController {
         return "member";
     }
 
-    @GetMapping(path = "/changePassword/{id}")
+    @GetMapping(path = "/mall/changePassword/{id}")
     public String changePasswordIndex(@PathVariable String id, Model model)
     {
         model.addAttribute("id", id);
         return "changePassword";
     }
 
-    @GetMapping("/myPage")
+    @GetMapping("/mall/myPage")
     public String myPageIndex(Model model, @AuthenticationPrincipal Authentication authentication){
         itemCategories = commonCodeService.findAllCommonCodesByGroupId
                 (Id.of(CodeGroup.class, "246fa96f9b634a56aaac5884de186ebc"));
@@ -69,7 +69,7 @@ public class IndexController {
         return "mypage";
     }
 
-    @GetMapping("/adminLogin")
+    @GetMapping("/admin/login")
     public String adminLoginIndex(){
 
         return "admin/admin";

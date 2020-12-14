@@ -13,22 +13,23 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String uri = request.getRequestURI();
         int port = request.getServerPort();
-        if(uri.equals("/")){
-            if(port == 7090)
-                response.sendRedirect("/index");
-            else if(port == 7091)
-                response.sendRedirect("/adminLogin");
-            return false;
-        }
 
-        if(uri.equals("/login")){
+        if(uri.startsWith("/mall") || uri.startsWith("/api/mall")){
             if(port == 7090)
                 return true;
-            if(port == 7091)
-                response.sendRedirect("/adminLogin");
+            if(port == 7091){
+                response.sendRedirect("/");
+            }
             return false;
         }
 
+        if(uri.startsWith("/admin") || uri.startsWith("/api/admin")){
+            if(port == 7091)
+                return true;
+            if(port == 7090)
+                response.sendRedirect("/");
+            return false;
+        }
         HttpSession session = request.getSession();
         /*if(session.getLastAccessedTime() + session.getMaxInactiveInterval() <= System.currentTimeMillis()){
             if(port == 7090)
@@ -41,13 +42,21 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         SecurityContextImpl securityContext = (SecurityContextImpl) (session.getAttribute("SPRING_SECURITY_CONTEXT"));
         if(securityContext == null || !securityContext.getAuthentication().isAuthenticated()) {
             if(port == 7090)
-                response.sendRedirect("/login");
+                response.sendRedirect("/mall/login");
             else if(port == 7091)
-                response.sendRedirect("/adminLogin");
+                response.sendRedirect("/admin/login");
             return false;
-        }
+        } else {
 
-        session.setMaxInactiveInterval(30 * 60);
-        return true;
+            if(uri.equals("/")){
+                if(port == 7090)
+                    response.sendRedirect("/mall/index");
+                else if(port == 7091)
+                    response.sendRedirect("/admin/codeIndex");
+            }
+            session.setMaxInactiveInterval(30 * 60);
+
+            return true;
+        }
     }
 }

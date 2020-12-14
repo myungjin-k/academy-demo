@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import static my.myungjin.academyDemo.web.Response.OK;
 
 @RequiredArgsConstructor
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 @RestController
 public class AuthenticationController {
 

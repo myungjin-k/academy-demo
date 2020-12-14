@@ -45,11 +45,9 @@ public class WebMvcConfigure implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authenticationInterceptor())
                 .addPathPatterns("/")
-                .addPathPatterns("/api/login")
-                .addPathPatterns("/api/order/*")
-                .addPathPatterns("/api/myPage")
-                .addPathPatterns("/api/member/me")
-                .addPathPatterns("/api/admin/**")
+                .addPathPatterns("/mall/**")
+                .addPathPatterns("/admin/**")
+                .addPathPatterns("/api/**")
         ;
     }
 }

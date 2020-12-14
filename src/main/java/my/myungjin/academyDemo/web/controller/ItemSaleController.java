@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import static my.myungjin.academyDemo.web.Response.OK;
 
 @RequiredArgsConstructor
-@RequestMapping("/api/item")
+@RequestMapping("/api/mall/item")
 @Controller
 public class ItemSaleController {
     private final ItemMasterService itemMasterService;
