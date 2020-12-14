@@ -16,7 +16,7 @@ import java.util.Map;
 
 import static my.myungjin.academyDemo.web.Response.OK;
 
-@RequestMapping("/member")
+@RequestMapping("/api/member")
 @RequiredArgsConstructor
 @RestController
 public class MemberController {

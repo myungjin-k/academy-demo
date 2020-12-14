@@ -30,7 +30,9 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 */
     @Override
     public void configure(WebSecurity web) {
-        web.ignoring().antMatchers("/templates/**", "/h2/**");
+        web.ignoring().antMatchers("/templates/**", "/h2/**",
+                "/v2/api-docs", "/configuration/ui", "/configuration/security",
+                "/swagger-ui.html", "/swagger-resources", "/webjars/**", "/swagger/**");
     }
 
     @Autowired
@@ -81,12 +83,12 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
                 //.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 //.and()
                 .authorizeRequests()
-                .antMatchers("/auth").permitAll()
-                .antMatchers("/member/join").permitAll()
-                .antMatchers("/member/id").permitAll()
-                .antMatchers("/member/password").permitAll()
-                .antMatchers("/member/**").authenticated()
-                .antMatchers("/admin/**").hasRole(Role.ADMIN.name())
+                .antMatchers("/api/auth").permitAll()
+                .antMatchers("/api/member/join").permitAll()
+                .antMatchers("/api/member/id").permitAll()
+                .antMatchers("/api/member/password").permitAll()
+                .antMatchers("/api/member/**").authenticated()
+                .antMatchers("/api/admin/**").hasRole(Role.ADMIN.name())
                 //.accessDecisionManager(accessDecisionManager())
                 .anyRequest().permitAll()
                 .and()

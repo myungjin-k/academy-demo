@@ -24,7 +24,7 @@ import static my.myungjin.academyDemo.commons.AttachedFile.toAttachedFile;
 import static my.myungjin.academyDemo.web.Response.OK;
 
 @RequiredArgsConstructor
-@RequestMapping("/admin/item")
+@RequestMapping("/api/admin/item")
 @RestController
 public class ItemAdminController {
 
@@ -38,6 +38,13 @@ public class ItemAdminController {
     public Response<Page<ItemMaster>> allItems(PageRequest pageRequest){
         return OK(
                 itemMasterService.findAllItems(pageRequest.of())
+        );
+    }
+
+    @GetMapping("/category")
+    public Response<List<CommonCode>> searchCategory(@RequestParam String searchParam){
+        return OK(
+                itemMasterService.searchCategoryByNameKor(searchParam)
         );
     }
 
