@@ -50,7 +50,7 @@ public class ItemDisplayService {
         return itemDisplayRepository.findById(itemDisplayId.value())
                 .orElseThrow(() -> new NotFoundException(ItemDisplay.class, itemDisplayId));
     }
-    
+
     private String uploadDetailImage(AttachedFile detailImageFile) {
         String detailImageUrl = null;
         if (detailImageFile != null) {

@@ -94,21 +94,21 @@ public class CommonCodeService {
 
     @CacheEvict(value="commonCodeCache", key="#groupId.value()")
     @Transactional
-    public CommonCode modifyCode(@Valid Id<CodeGroup, String> groupId, @Valid Id<CommonCode, String> codeId,
+    public CommonCode modifyCode(@Valid Id<CommonCode, String> codeId,
                                  @NotBlank String code, @NotBlank String nameEng, @NotBlank String nameKor){
-        return findCodeById(groupId, codeId)
+        return findCodeById(codeId)
                 .map(commonCode -> {
                     commonCode.update(code, nameEng, nameKor);
                     return saveCode(commonCode);
-                }).orElseThrow(() -> new NotFoundException(CommonCode.class, groupId, codeId));
+                }).orElseThrow(() -> new NotFoundException(CommonCode.class, codeId));
     }
 
     @CacheEvict(value="commonCodeCache", key="#groupId.value()")
     @Transactional
-    public String removeCode(@Valid Id<CodeGroup, String> groupId, @Valid Id<CommonCode, String> codeId){
-        return findCodeById(groupId, codeId)
+    public String removeCode(@Valid Id<CommonCode, String> codeId){
+        return findCodeById(codeId)
                 .map(commonCode -> deleteCode(codeId.value()))
-                .orElseThrow(() -> new NotFoundException(CommonCode.class, groupId, codeId));
+                .orElseThrow(() -> new NotFoundException(CommonCode.class, codeId));
     }
 
     @Transactional(readOnly = true)
@@ -128,10 +128,8 @@ public class CommonCodeService {
         return codeGroupRepository.findById(id);
     }
 
-    private Optional<CommonCode> findCodeById(Id<CodeGroup, String> groupId, Id<CommonCode, String> codeId){
-        return findGroupById(groupId.value())
-                .map(codeGroup -> commonCodeRepository.findById(codeId.value()))
-                .orElseThrow(() ->  new NotFoundException(CodeGroup.class, groupId));
+    private Optional<CommonCode> findCodeById(Id<CommonCode, String> codeId){
+        return commonCodeRepository.findById(codeId.value());
     }
 
     private String deleteGroup(String id){

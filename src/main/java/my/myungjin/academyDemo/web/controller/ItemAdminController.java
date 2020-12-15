@@ -27,7 +27,7 @@ import static my.myungjin.academyDemo.commons.AttachedFile.toAttachedFile;
 import static my.myungjin.academyDemo.web.Response.OK;
 
 @RequiredArgsConstructor
-@RequestMapping("/api/admin/item")
+@RequestMapping("/api/admin")
 @RestController
 public class ItemAdminController {
 
@@ -37,7 +37,7 @@ public class ItemAdminController {
 
     private final ItemDisplayService itemDisplayService;
 
-    @GetMapping("/all")
+    @GetMapping("/itemMaster/all")
     @ApiOperation(value = "상품 마스터 전체 목록 조회")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "direction", dataType = "string", paramType = "query", defaultValue = "ASC", value = "정렬 방향"),
@@ -50,7 +50,7 @@ public class ItemAdminController {
         );
     }
 
-    @GetMapping("/category")
+    @GetMapping("/commonCode/category")
     @ApiOperation(value = "상품 카테고리 검색")
     public Response<List<CommonCode>> searchCategory(@RequestParam @ApiParam(value = "상품 카테고리 검색어(카테고리 한글이름)", defaultValue = "니트") String searchParam){
         return OK(
@@ -58,7 +58,7 @@ public class ItemAdminController {
         );
     }
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(path = "/itemMaster", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiOperation(value = "상품 마스터 등록")
     public Response<ItemMaster> saveMaster(
             @ModelAttribute ItemMasterRequest request,
@@ -73,7 +73,7 @@ public class ItemAdminController {
         );
     }
 
-    @PutMapping(path = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(path = "/itemMaster/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiOperation(value = "상품 마스터 수정")
     public Response<ItemMaster> updateMaster(
             @PathVariable @ApiParam(value = "대상 상품 마스터 PK", defaultValue = "8c1cbb792b8d447e9128d53920cf9366") String  id,
@@ -91,7 +91,7 @@ public class ItemAdminController {
         );
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/itemMaster/{id}")
     @ApiOperation(value = "상품 마스터 삭제")
     public Response<ItemMaster> deleteMaster(@PathVariable @ApiParam(value = "대상 상품 마스터 PK", defaultValue = "8c1cbb792b8d447e9128d53920cf9366") String id){
         return OK(
@@ -99,7 +99,7 @@ public class ItemAdminController {
         );
     }
 
-    @GetMapping("/search")
+    @GetMapping("/itemMaster/search")
     @ApiOperation(value = "상품 마스터 검색(상품명, 등록일(from), 등록일(to)")
     public Response<List<ItemMaster>> searchMaster(ItemMasterSearchRequest request){
         return  OK(
@@ -107,7 +107,7 @@ public class ItemAdminController {
         );
     }
 
-    @PostMapping( "/{id}/option")
+    @PostMapping( "/itemMaster/{id}/itemOption")
     @ApiOperation(value = "상품 옵션 등록")
     public Response<ItemOption> saveOption(@PathVariable @ApiParam(value = "대상 상품 마스터 PK", defaultValue = "8c1cbb792b8d447e9128d53920cf9366") String id, @RequestBody ItemOptionRequest request) {
         return OK(
@@ -115,29 +115,27 @@ public class ItemAdminController {
         );
     }
 
-    @PutMapping( "/{id}/option/{optionId}")
+    @PutMapping( "/itemOption/{optionId}")
     @ApiOperation(value = "상품 옵션 수정")
     public Response<ItemOption> updateOption(
-            @PathVariable @ApiParam(value = "대상 상품 마스터 PK", defaultValue = "8c1cbb792b8d447e9128d53920cf9366")  String id,
             @PathVariable @ApiParam(value = "대상 상품 옵션 PK", defaultValue = "fb32787a91614b978cb94b0d47d7c676") String optionId,
             @RequestBody ItemOptionRequest request) {
         return OK(
-                itemOptionService.modify(Id.of(ItemMaster.class, id), Id.of(ItemOption.class, optionId), request.getColor(), request.getSize())
+                itemOptionService.modify(Id.of(ItemOption.class, optionId), request.getColor(), request.getSize())
         );
     }
 
-    @DeleteMapping("/{id}/option/{optionId}")
+    @DeleteMapping("/itemOption/{optionId}")
     @ApiOperation(value = "상품 옵션 삭제")
     public Response<Id<ItemOption, String>> deleteOption(
-            @PathVariable @ApiParam(value = "대상 상품 마스터 PK", defaultValue = "8c1cbb792b8d447e9128d53920cf9366")  String id,
             @PathVariable @ApiParam(value = "대상 상품 옵션 PK", defaultValue = "fb32787a91614b978cb94b0d47d7c676")  String optionId){
         return OK(
-                itemOptionService.deleteById(Id.of(ItemMaster.class, id), Id.of(ItemOption.class, optionId))
+                itemOptionService.deleteById(Id.of(ItemOption.class, optionId))
         );
     }
 
 
-    @GetMapping("/display/all")
+    @GetMapping("/itemDisplay/all")
     @ApiOperation(value = "전시상품 리스트 전체 조회")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "direction", dataType = "string", paramType = "query", defaultValue = "ASC", value = "정렬 방향"),
@@ -150,17 +148,16 @@ public class ItemAdminController {
         );
     }
 
-    @GetMapping("/{masterId}/display/{displayId}")
+    @GetMapping("/itemDisplay/{displayId}")
     @ApiOperation(value = "전시상품 단건 조회")
     public Response<ItemDisplay> getDisplayItem(
-            @PathVariable @ApiParam(value = "대상 상품 마스터 PK", defaultValue = "8c1cbb792b8d447e9128d53920cf9366")  String masterId,
             @PathVariable @ApiParam(value = "대상 전시상품 PK", defaultValue = "f23ba30a47194a2c8a3fd2ccadd952a4") String displayId){
         return OK(
                 itemDisplayService.findById(Id.of(ItemDisplay.class, displayId))
         );
     }
 
-    @PostMapping(value = "/{masterId}/display", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/itemMaster/{masterId}/itemDisplay", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiOperation(value = "전시상품 등록")
     public Response<ItemDisplay> saveDisplayItem(
             @PathVariable @ApiParam(value = "대상 상품 마스터 PK", defaultValue = "8c1cbb792b8d447e9128d53920cf9366") String masterId,
@@ -172,7 +169,7 @@ public class ItemAdminController {
         );
     }
 
-    @PostMapping(value = "/{masterId}/display/{displayId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/itemMaster/{masterId}/itemDisplay/{displayId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiOperation(value = "전시상품 수정")
     public Response<ItemDisplay> updateDisplayItem(
             @PathVariable @ApiParam(value = "대상 상품 마스터 PK", defaultValue = "8c1cbb792b8d447e9128d53920cf9366") String masterId,
@@ -190,10 +187,9 @@ public class ItemAdminController {
         );
     }
 
-    @DeleteMapping("/{masterId}/display/{displayId}")
+    @DeleteMapping("/itemDisplay/{displayId}")
     @ApiOperation(value = "전시상품 삭제")
     public Response<ItemDisplay> deleteDisplayItem(
-            @PathVariable @ApiParam(value = "대상 상품 마스터 PK", defaultValue = "8c1cbb792b8d447e9128d53920cf9366") String masterId,
             @PathVariable @ApiParam(value = "대상 전시상품 PK", defaultValue = "f23ba30a47194a2c8a3fd2ccadd952a4") String displayId){
         return OK(
                 itemDisplayService.deleteItemById(Id.of(ItemDisplay.class, displayId))

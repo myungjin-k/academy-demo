@@ -130,7 +130,7 @@ public class CommonCodeServiceTest {
         String code = "M";
         String nameEng = "MODIFIED";
         String nameKor = "수정";
-        CommonCode updated = commonService.modifyCode(groupId, codeId, code, nameEng, nameKor);
+        CommonCode updated = commonService.modifyCode(codeId, code, nameEng, nameKor);
         MatcherAssert.assertThat(updated, is(notNullValue()));
         log.info("Updated CommonCode: {}", updated);
     }
@@ -139,7 +139,7 @@ public class CommonCodeServiceTest {
     @Test
     @Order(7)
     void 공통코드_삭제하기(){
-        String deleted = commonService.removeCode(groupId, codeId);
+        String deleted = commonService.removeCode(codeId);
         MatcherAssert.assertThat(deleted, is(notNullValue()));
         MatcherAssert.assertThat(deleted, is(codeId.value()));
 

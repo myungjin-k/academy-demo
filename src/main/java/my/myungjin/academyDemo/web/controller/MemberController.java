@@ -26,7 +26,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/join")
-    @ApiOperation(value = "회원 가입")
+    @ApiOperation(value = "회원 가입(api 키 필요 없음)")
     public Response<Member> join(@RequestBody MemberRequest request){
         return OK(
                 memberService.join(request.newMember())
@@ -34,19 +34,19 @@ public class MemberController {
     }
 
     @GetMapping("/id")
-    @ApiOperation(value = "회원 아이디 찾기")
-    public Response<String> forgotUserId(@RequestParam @ApiParam(value = "조회 대상 회원 정보(전화번호)", defaultValue = "010-1234-5678") Map<String, String> params){
+    @ApiOperation(value = "회원 아이디 찾기(api 키 필요 없음)")
+    public Response<String> forgotUserId(@RequestParam @ApiParam(value = "조회 대상 회원 정보(전화번호)", defaultValue = "010-1234-5678") String tel){
         return OK(
-                memberService.findUserId(params.get("tel"))
+                memberService.findUserId(tel)
                         .orElse("")
         );
     }
 
     @GetMapping("/password")
-    @ApiOperation(value = "회원 비밀번호 찾기")
-    public Response<String> forgotUserPwd(@RequestParam @ApiParam(value = "조회 대상 회원 정보(이메일)", defaultValue = "open7894.v2@gmail.com") Map<String, String> paramMap){
+    @ApiOperation(value = "회원 비밀번호 찾기(api 키 필요 없음)")
+    public Response<String> forgotUserPwd(@RequestParam @ApiParam(value = "조회 대상 회원 정보(이메일)", defaultValue = "open7894.v2@gmail.com") String email){
         return OK(
-                memberService.findPassword(paramMap.get("email"))
+                memberService.findPassword(email)
                         .orElse("")
         );
     }

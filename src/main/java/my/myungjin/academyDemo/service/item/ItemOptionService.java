@@ -42,27 +42,29 @@ public class ItemOptionService {
     }
 
     @Transactional
-    public Id<ItemOption, String> deleteById(@Valid Id<ItemMaster, String> itemMasterId, @Valid Id<ItemOption, String> itemOptionId){
-        return findMaster(itemMasterId)
-                .map(itemMaster -> {
+    public Id<ItemOption, String> deleteById(@Valid Id<ItemOption, String> itemOptionId){
+        return findById(itemOptionId)
+                .map(itemOption -> {
                     itemOptionRepository.deleteById(itemOptionId.value());
                     return itemOptionId;
-                }).orElseThrow(() -> new NotFoundException(ItemMaster.class, itemMasterId));
+                }).orElseThrow(() -> new NotFoundException(ItemOption.class, itemOptionId));
     }
 
     @Transactional
-    public ItemOption modify(@Valid Id<ItemMaster, String> itemMasterId, @Valid Id<ItemOption, String> itemOptionId, @NotBlank String color, @NotBlank String size){
-        return findMaster(itemMasterId)
-                .map(itemMaster -> {
-
-                    ItemOption option = itemOptionRepository.getOne(itemOptionId.value());
-                    option.modify(color, size);
-                    return option;
-                }).orElseThrow(() -> new NotFoundException(ItemMaster.class, itemMasterId));
+    public ItemOption modify(@Valid Id<ItemOption, String> itemOptionId, @NotBlank String color, @NotBlank String size){
+        return findById(itemOptionId)
+                .map(itemOption -> {
+                    itemOption.modify(color, size);
+                    return save(itemOption);
+                }).orElseThrow(() -> new NotFoundException(ItemOption.class, itemOptionId));
     }
 
     private Optional<ItemMaster> findMaster(Id<ItemMaster, String> itemMasterId){
         return itemMasterRepository.findById(itemMasterId.value());
+    }
+
+    private Optional<ItemOption> findById(Id<ItemOption, String> optionId){
+        return itemOptionRepository.findById(optionId.value());
     }
 
     private ItemOption save(ItemOption itemOption){
