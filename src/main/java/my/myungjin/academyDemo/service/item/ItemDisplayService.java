@@ -5,11 +5,13 @@ import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.aws.S3Client;
 import my.myungjin.academyDemo.commons.AttachedFile;
 import my.myungjin.academyDemo.commons.Id;
+import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.domain.item.*;
 import my.myungjin.academyDemo.error.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -42,9 +45,21 @@ public class ItemDisplayService {
         return itemDisplayRepository.findAllByStatusEquals(ItemStatus.ON_SALE, pageable);
     }
 
+    //TODO 카테고리별 상품 조회
     @Transactional(readOnly = true)
-    public Optional<ItemDisplay> findByItemMaster(@Valid Id<ItemMaster, String> itemMasterId){
-        return itemDisplayRepository.findByItemMaster(itemMasterRepository.getOne(itemMasterId.value()));
+    public Page<ItemDisplay> findAllByCategory(@Valid Id<CommonCode, String> categoryId, Pageable pageable){
+        List<ItemDisplay> list = itemMasterRepository.findAllByCategoryId(categoryId.value())
+                .stream()
+                .map(itemMaster -> findByItemMaster(Id.of(ItemMaster.class, itemMaster.getId())))
+                .filter(itemDisplay -> itemDisplay.getStatus().equals(ItemStatus.ON_SALE))
+                .collect(Collectors.toList());
+        return new PageImpl<>(list, pageable, list.size());
+    }
+
+    @Transactional(readOnly = true)
+    public ItemDisplay findByItemMaster(@Valid Id<ItemMaster, String> itemMasterId){
+        return itemDisplayRepository.findByItemMaster(itemMasterRepository.getOne(itemMasterId.value()))
+                .orElseThrow(() -> new NotFoundException(ItemMaster.class, itemMasterId));
     }
 
     @Transactional(readOnly = true)

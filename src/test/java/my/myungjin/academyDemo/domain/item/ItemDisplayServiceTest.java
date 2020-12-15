@@ -1,6 +1,7 @@
 package my.myungjin.academyDemo.domain.item;
 
 import my.myungjin.academyDemo.commons.Id;
+import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.service.item.ItemDisplayService;
 import my.myungjin.academyDemo.util.Util;
 import my.myungjin.academyDemo.web.request.PageRequest;
@@ -184,12 +185,24 @@ public class ItemDisplayServiceTest {
 
     @Test
     @Order(6)
+    void 전시_상품_카테고리별_조회() {
+        PageRequest request = new PageRequest();
+        request.setPage(0);
+        request.setSize(5);
+        request.setDirection(Sort.Direction.DESC);
+
+        Page<ItemDisplay> results = itemDisplayService.findAllByCategory(Id.of(CommonCode.class, "44e94265588b428e8e01bbc23dfc0f7e"), request.of());
+        assertThat(results, is(notNullValue()));
+        log.info("Results: {}", results.getContent());
+
+    }
+
+    @Test
+    @Order(7)
     void 전시_상품_삭제하기() {
         ItemDisplay deleted = itemDisplayService.deleteItemById(itemDisplayId);
         assertThat(deleted, is(notNullValue()));
         log.info("Deleted Display Item: {}", deleted);
 
-        ItemDisplay found = itemDisplayService.findByItemMaster(itemMasterId).orElse(null);
-        assertThat(found, is(Matchers.nullValue()));
     }
 }
