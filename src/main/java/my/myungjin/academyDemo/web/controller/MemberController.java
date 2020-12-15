@@ -35,7 +35,7 @@ public class MemberController {
 
     @GetMapping("/id")
     @ApiOperation(value = "회원 아이디 찾기")
-    public Response<String> forgotUserId(@RequestParam @ApiParam(value = "조회 대상 회원 정보(전화번호)") Map<String, String> params){
+    public Response<String> forgotUserId(@RequestParam @ApiParam(value = "조회 대상 회원 정보(전화번호)", defaultValue = "010-1234-5678") Map<String, String> params){
         return OK(
                 memberService.findUserId(params.get("tel"))
                         .orElse("")
@@ -44,7 +44,7 @@ public class MemberController {
 
     @GetMapping("/password")
     @ApiOperation(value = "회원 비밀번호 찾기")
-    public Response<String> forgotUserPwd(@RequestParam @ApiParam(value = "조회 대상 회원 정보(이메일)") Map<String, String> paramMap){
+    public Response<String> forgotUserPwd(@RequestParam @ApiParam(value = "조회 대상 회원 정보(이메일)", defaultValue = "open7894.v2@gmail.com") Map<String, String> paramMap){
         return OK(
                 memberService.findPassword(paramMap.get("email"))
                         .orElse("")

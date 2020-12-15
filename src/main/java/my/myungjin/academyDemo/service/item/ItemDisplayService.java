@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.aws.S3Client;
 import my.myungjin.academyDemo.commons.AttachedFile;
 import my.myungjin.academyDemo.commons.Id;
-import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.item.ItemDisplayRepository;
 import my.myungjin.academyDemo.domain.item.ItemMaster;
@@ -19,9 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -53,6 +50,7 @@ public class ItemDisplayService {
         return itemDisplayRepository.findById(itemDisplayId.value())
                 .orElseThrow(() -> new NotFoundException(ItemDisplay.class, itemDisplayId));
     }
+    
     private String uploadDetailImage(AttachedFile detailImageFile) {
         String detailImageUrl = null;
         if (detailImageFile != null) {

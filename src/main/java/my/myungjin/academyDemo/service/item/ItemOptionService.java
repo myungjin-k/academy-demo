@@ -42,16 +42,23 @@ public class ItemOptionService {
     }
 
     @Transactional
-    public Id<ItemOption, String> deleteById(@Valid Id<ItemOption, String> itemOptionId){
-        itemOptionRepository.deleteById(itemOptionId.value());
-        return itemOptionId;
+    public Id<ItemOption, String> deleteById(@Valid Id<ItemMaster, String> itemMasterId, @Valid Id<ItemOption, String> itemOptionId){
+        return findMaster(itemMasterId)
+                .map(itemMaster -> {
+                    itemOptionRepository.deleteById(itemOptionId.value());
+                    return itemOptionId;
+                }).orElseThrow(() -> new NotFoundException(ItemMaster.class, itemMasterId));
     }
 
     @Transactional
-    public ItemOption modify(@Valid Id<ItemOption, String> itemOptionId, @NotBlank String color, @NotBlank String size){
-        ItemOption option = itemOptionRepository.getOne(itemOptionId.value());
-        option.modify(color, size);
-        return option;
+    public ItemOption modify(@Valid Id<ItemMaster, String> itemMasterId, @Valid Id<ItemOption, String> itemOptionId, @NotBlank String color, @NotBlank String size){
+        return findMaster(itemMasterId)
+                .map(itemMaster -> {
+
+                    ItemOption option = itemOptionRepository.getOne(itemOptionId.value());
+                    option.modify(color, size);
+                    return option;
+                }).orElseThrow(() -> new NotFoundException(ItemMaster.class, itemMasterId));
     }
 
     private Optional<ItemMaster> findMaster(Id<ItemMaster, String> itemMasterId){
