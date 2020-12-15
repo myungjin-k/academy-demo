@@ -8,9 +8,14 @@ import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.ApiKey;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.time.LocalDate;
+
+import static java.util.Collections.singletonList;
 
 @Configuration
 @EnableSwagger2
@@ -20,6 +25,8 @@ public class Swagger2Configure implements WebMvcConfigurer {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .groupName("example")
+                .securitySchemes(singletonList(apiKey()))
+                .directModelSubstitute(LocalDate.class, String.class)
                 .select()
                 .apis(RequestHandlerSelectors
                         .basePackage("my.myungjin.academyDemo.web.controller"))
@@ -34,6 +41,10 @@ public class Swagger2Configure implements WebMvcConfigurer {
                 .title("Demo")
                 .description("API EXAMPLE")
                 .build();
+    }
+
+    private ApiKey apiKey() {
+        return new ApiKey("apiKey", "Cookie", "header");
     }
 
     @Override
