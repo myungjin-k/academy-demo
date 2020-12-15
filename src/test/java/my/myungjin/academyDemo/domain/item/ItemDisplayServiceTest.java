@@ -112,9 +112,8 @@ public class ItemDisplayServiceTest {
 
     @Test
     @Order(3)
-    void 상품_마스터로_전시_상품_가져오기() {
-        ItemDisplay found = itemDisplayService.findByItemMaster(itemMasterId)
-                .orElse(null);
+    void 전시_상품_조회하기_아이디로() {
+        ItemDisplay found = itemDisplayService.findById(itemDisplayId);
         assertThat(found, is(notNullValue()));
         log.info("Found Display Item: {}", found);
     }
@@ -201,8 +200,7 @@ public class ItemDisplayServiceTest {
         assertThat(deleted, is(notNullValue()));
         log.info("Deleted Display Item: {}", deleted);
 
-        ItemDisplay found = itemDisplayService.findByItemMaster(itemMasterId)
-                .orElse(null);
+        ItemDisplay found = itemDisplayService.findByItemMaster(itemMasterId).orElse(null);
         assertThat(found, is(Matchers.nullValue()));
     }
 }
