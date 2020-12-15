@@ -67,6 +67,7 @@ public class ItemDisplayServiceTest {
         itemDisplayId = Id.of(ItemDisplay.class, Util.getUUID());
         ItemDisplay newDisplay = ItemDisplay.builder()
                 .id(itemDisplayId.value())
+                .itemDisplayName("보더 알파카 니트")
                 .material("알파카86 나일론13 스판1")
                 .salePrice(72000)
                 .size("one size\n어깨 36 가슴 43.5 암홀 20 팔통 13.5 소매단 9 팔길이 56 총길이 49")
@@ -123,6 +124,7 @@ public class ItemDisplayServiceTest {
     void 전시_상품_수정하기() throws IOException {
         ItemDisplay tobeUpdated = ItemDisplay.builder()
                 .id(itemDisplayId.value())
+                .itemDisplayName("보더 알파카 니트")
                 .material("알파카86 나일론13 스판1")
                 .salePrice((int) (72000*0.8))
                 .size("one size\n어깨 36 가슴 43.5 암홀 20 팔통 13.5 소매단 9 팔길이 56 총길이 49")
@@ -168,28 +170,28 @@ public class ItemDisplayServiceTest {
 
     @Test
     @Order(5)
-    void 전시_상품_검색하기_상품명으로_페이징() {
+    void 전시_상품_검색하기_마스터_상품명으로_페이징() {
         PageRequest request = new PageRequest();
         request.setPage(0);
         request.setSize(5);
         request.setDirection(Sort.Direction.DESC);
-        Page<ItemDisplay> results = itemDisplayService.searchByItemName("니트", request.of());
+        Page<ItemDisplay> results = itemDisplayService.searchByItemMasterName("R", request.of());
 
-        assertThat(results.getTotalElements(), is(1L));
+        assertThat(results.getTotalElements(), is(2L));
         log.info("Result ItemDisplay: {}", results.getContent());
     }
 
 
     @Test
     @Order(6)
-    void 전시_상품_검색하기_등록일로_페이징() {
+    void 전시_상품_검색하기_페이징() {
         PageRequest request = new PageRequest();
         request.setPage(0);
         request.setSize(5);
         request.setDirection(Sort.Direction.DESC);
-        Page<ItemDisplay> results = itemDisplayService.searchByCreateAt(LocalDate.now(), null,  request.of());
+        Page<ItemDisplay> results = itemDisplayService.searchByNameAndCreateAt("니트", LocalDate.now(), null,  request.of());
 
-        assertThat(results.getTotalElements(), is(2L));
+        assertThat(results.getTotalElements(), is(1L));
         log.info("Result item: {}", results.getContent());
     }
 

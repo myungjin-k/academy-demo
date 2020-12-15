@@ -106,14 +106,14 @@ public class ItemDisplayService {
     }
 
     @Transactional
-    public Page<ItemDisplay> searchByItemName(@NotBlank String itemName, Pageable pageable){
+    public Page<ItemDisplay> searchByItemMasterName(@NotBlank String itemName, Pageable pageable){
         return itemMasterRepository.findAll(ItemMasterPredicate.search(itemName, null, null), pageable)
                 .map(ItemMaster::getDisplay);
     }
 
     @Transactional
-    public Page<ItemDisplay> searchByCreateAt(LocalDate start, LocalDate end, Pageable pageable){
-        return itemDisplayRepository.findAll(ItemDisplayPredicate.searchByDate(start, end), pageable);
+    public Page<ItemDisplay> searchByNameAndCreateAt(String displayName, LocalDate start, LocalDate end, Pageable pageable){
+        return itemDisplayRepository.findAll(ItemDisplayPredicate.searchByNameAndDate(displayName, start, end), pageable);
     }
 
     private ItemDisplay getOne(String id){

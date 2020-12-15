@@ -27,6 +27,11 @@ public class ItemDisplay {
     private String itemId;*/
 
     @Getter
+    @Size(min = 1, max = 50)
+    @Column(name = "item_display_name", nullable = false)
+    private String itemDisplayName;
+
+    @Getter
     @Column(name = "sale_price", nullable = false)
     private int salePrice;
 
@@ -75,10 +80,12 @@ public class ItemDisplay {
     private ItemMaster itemMaster;
 
     @Builder
-    public ItemDisplay(String id, int salePrice, @Size(min = 1, max = 255) String material, @Size(min = 1, max = 255) String size,
+    public ItemDisplay(String id,
+                       @Size(min = 1, max = 50) String itemDisplayName, int salePrice, @Size(min = 1, max = 255) String material, @Size(min = 1, max = 255) String size,
                        @Size(min = 1, max = 1000) String description, @Size(min = 1, max = 1000) String notice,
                        ItemStatus status, @Size(min = 1, max = 255) String detailImage) {
         this.id = id;
+        this.itemDisplayName = itemDisplayName;
         this.salePrice = salePrice;
         this.size = size;
         this.material = material;

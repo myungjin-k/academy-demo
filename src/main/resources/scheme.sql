@@ -76,6 +76,7 @@ DROP TABLE IF EXISTS item_display CASCADE;
 CREATE TABLE item_display (
                              id                   varchar(50) NOT NULL,
                              item_id              varchar(50) NOT NULL,
+                             item_display_name    varchar(50) NOT NULL,
                              sale_price           number not null,
                              material             varchar(255),
                              size                 varchar(255),
