@@ -5,10 +5,7 @@ import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.aws.S3Client;
 import my.myungjin.academyDemo.commons.AttachedFile;
 import my.myungjin.academyDemo.commons.Id;
-import my.myungjin.academyDemo.domain.item.ItemDisplay;
-import my.myungjin.academyDemo.domain.item.ItemDisplayRepository;
-import my.myungjin.academyDemo.domain.item.ItemMaster;
-import my.myungjin.academyDemo.domain.item.ItemMasterRepository;
+import my.myungjin.academyDemo.domain.item.*;
 import my.myungjin.academyDemo.error.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -104,6 +103,17 @@ public class ItemDisplayService {
         itemDisplay.setDetailImage(uploadDetailImage(detailImgFile));
         itemDisplay.setItemMaster(itemMasterRepository.getOne(itemMasterId.value()));
         return save(itemDisplay);
+    }
+
+    @Transactional
+    public Page<ItemDisplay> searchByItemName(@NotBlank String itemName, Pageable pageable){
+        return itemMasterRepository.findAll(ItemMasterPredicate.search(itemName, null, null), pageable)
+                .map(ItemMaster::getDisplay);
+    }
+
+    @Transactional
+    public Page<ItemDisplay> searchByCreateAt(LocalDate start, LocalDate end, Pageable pageable){
+        return itemDisplayRepository.findAll(ItemDisplayPredicate.searchByDate(start, end), pageable);
     }
 
     private ItemDisplay getOne(String id){

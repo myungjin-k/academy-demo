@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 
 import static my.myungjin.academyDemo.commons.AttachedFile.toAttachedFile;
 import static org.apache.commons.io.IOUtils.toByteArray;
@@ -168,6 +169,33 @@ public class ItemDisplayServiceTest {
 
     @Test
     @Order(5)
+    void 전시_상품_검색하기_상품명으로_페이징() {
+        PageRequest request = new PageRequest();
+        request.setPage(0);
+        request.setSize(5);
+        request.setDirection(Sort.Direction.DESC);
+        Page<ItemDisplay> results = itemDisplayService.searchByItemName("니트", request.of());
+
+        assertThat(results.getTotalElements(), is(1L));
+        log.info("Result ItemDisplay: {}", results.getContent());
+    }
+
+
+    @Test
+    @Order(6)
+    void 전시_상품_검색하기_등록일로_페이징() {
+        PageRequest request = new PageRequest();
+        request.setPage(0);
+        request.setSize(5);
+        request.setDirection(Sort.Direction.DESC);
+        Page<ItemDisplay> results = itemDisplayService.searchByCreateAt(LocalDate.now(), null,  request.of());
+
+        assertThat(results.getTotalElements(), is(2L));
+        log.info("Result item: {}", results.getContent());
+    }
+
+    @Test
+    @Order(7)
     void 전시_상품_삭제하기() {
         ItemDisplay deleted = itemDisplayService.deleteItemById(itemDisplayId);
         assertThat(deleted, is(notNullValue()));

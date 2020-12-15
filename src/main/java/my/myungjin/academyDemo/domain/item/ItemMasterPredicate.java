@@ -1,8 +1,7 @@
-package my.myungjin.academyDemo.service.item;
+package my.myungjin.academyDemo.domain.item;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
-import my.myungjin.academyDemo.domain.item.QItemMaster;
 
 import java.time.LocalDate;
 

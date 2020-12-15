@@ -70,6 +70,7 @@ public class ItemDisplay {
 
     @Getter @Setter
     @OneToOne
+    // TODO History 저장
     @JoinColumn(name = "item_id", nullable = false)
     private ItemMaster itemMaster;
 

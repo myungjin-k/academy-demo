@@ -16,7 +16,7 @@ import static java.util.Optional.ofNullable;
 
 @Entity
 @Table(name = "item_master")
-@ToString(exclude = "options")
+@ToString(exclude = {"options", "display"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
 public class ItemMaster {
@@ -56,6 +56,10 @@ public class ItemMaster {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private CommonCode category;
+
+    @Getter
+    @OneToOne(mappedBy = "itemMaster", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private ItemDisplay display;
 
     @Builder
     public ItemMaster(String id, @Size(min = 1, max = 50) String itemName,
