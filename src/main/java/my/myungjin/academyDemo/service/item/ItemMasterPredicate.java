@@ -5,7 +5,6 @@ import com.querydsl.core.types.Predicate;
 import my.myungjin.academyDemo.domain.item.QItemMaster;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class ItemMasterPredicate {
     public static Predicate search(String itemName, LocalDate start, LocalDate end){
@@ -15,10 +14,11 @@ public class ItemMasterPredicate {
             builder.and(itemMaster.itemName.containsIgnoreCase(itemName));
         }
         if(start != null){
-            builder.and(itemMaster.createAt.after(LocalDateTime.from(start)));
+            builder.and(itemMaster.createAt.after(start.atStartOfDay()));
         }
         if(end != null){
-            builder.and(itemMaster.createAt.before(LocalDateTime.from(end)));
+            LocalDate endPlus1 = end.plusDays(1);
+            builder.and(itemMaster.createAt.before(endPlus1.atStartOfDay()));
         }
         return builder;
     }

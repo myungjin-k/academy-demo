@@ -94,7 +94,7 @@ public class ItemAdminController {
     }
 
     @GetMapping("/search")
-    @ApiOperation(value = "상품 마스터 검색(코드, 한글명, 영어명)")
+    @ApiOperation(value = "상품 마스터 검색(상품명, 등록일(from), 등록일(to)")
     public Response<List<ItemMaster>> searchMaster(ItemMasterSearchRequest request){
         return  OK(
                 (List<ItemMaster>) itemMasterService.search(request.getItemName(), request.getStart(), request.getEnd())
