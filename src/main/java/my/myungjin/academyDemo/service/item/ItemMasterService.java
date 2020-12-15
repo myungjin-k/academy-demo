@@ -74,11 +74,11 @@ public class ItemMasterService {
 
     @Transactional
     public ItemMaster saveItem(@Valid Id<CommonCode, String> categoryId, @Valid ItemMaster newItem,
-                               @NotNull AttachedFile thumbnailFile, @NotNull List<ItemOption> itemOptions){
+                               @NotNull AttachedFile thumbnailFile, @NotNull List<ItemMaster.ItemOption> itemOptions){
         ItemMaster master = saveItemMaster(categoryId, newItem, thumbnailFile);
-        for(ItemOption itemOption : itemOptions){
+        for(ItemMaster.ItemOption itemOption : itemOptions){
             itemOption.setItemMaster(master);
-            ItemOption saved = save(itemOption);
+            ItemMaster.ItemOption saved = save(itemOption);
             master.addOption(saved);
         }
         return master;
@@ -140,7 +140,7 @@ public class ItemMasterService {
         return itemMasterRepository.save(itemMaster);
     }
 
-    private ItemOption save(ItemOption itemOption) {
+    private ItemMaster.ItemOption save(ItemMaster.ItemOption itemOption) {
         return itemOptionRepository.save(itemOption);
     }
 }

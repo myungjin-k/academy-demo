@@ -95,23 +95,28 @@ public class CommonController {
         );
     }
 
-    @PutMapping("/commonCode/{id}")
+    @PutMapping("/codeGroup/{id}/commonCode/{codeId}")
     @ApiOperation(value = "공통 코드 수정")
-    public Response<CommonCode> modifyCode(@PathVariable @ApiParam(value = "대상 공통코드 PK", defaultValue = "36f651a982274a5b95dac3e9d85b0d1a") String id,
-                                           @RequestBody CommonCodeRequest request){
+    public Response<CommonCode> modifyCode(
+            @PathVariable @ApiParam(value = "대상 코드그룹 PK", defaultValue = "246fa96f9b634a56aaac5884de186ebc") String id,
+            @PathVariable @ApiParam(value = "대상 공통코드 PK", defaultValue = "36f651a982274a5b95dac3e9d85b0d1a") String codeId,
+            @RequestBody CommonCodeRequest request){
         return OK(
                 sampleService.modifyCode(
-                        Id.of(CommonCode.class, id),
+                        Id.of(CodeGroup.class, id),
+                        Id.of(CommonCode.class, codeId),
                         request.getCode(),
                         request.getNameEng(),
                         request.getNameKor())
         );
     }
 
-    @DeleteMapping("/commonCode/{id}")
+    @DeleteMapping("/codeGroup/{id}/commonCode/{codeId}")
     @ApiOperation(value = "공통 코드 삭제")
-    public void removeCode(@PathVariable @ApiParam(value = "대상 공통코드 PK", defaultValue = "36f651a982274a5b95dac3e9d85b0d1a") String id){
-        sampleService.removeCode(Id.of(CommonCode.class, id));
+    public void removeCode(
+            @PathVariable @ApiParam(value = "대상 코드그룹 PK", defaultValue = "246fa96f9b634a56aaac5884de186ebc") String id,
+            @PathVariable @ApiParam(value = "대상 공통코드 PK", defaultValue = "36f651a982274a5b95dac3e9d85b0d1a") String codeId){
+        sampleService.removeCode(Id.of(CodeGroup.class, id), Id.of(CommonCode.class, codeId));
     }
 
 }

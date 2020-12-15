@@ -1,5 +1,7 @@
 package my.myungjin.academyDemo.domain.item;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import my.myungjin.academyDemo.domain.common.CommonCode;
 
@@ -48,17 +50,20 @@ public class ItemMaster {
     private LocalDateTime updateAt;
 
     @Getter
-    @OneToMany(mappedBy = "itemMaster", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) //JOIN
+    @JsonManagedReference
+    @OneToMany(mappedBy = "itemMaster", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) //JOIN
     private Collection<ItemOption> options;
 
     @Setter
     @Getter
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private CommonCode category;
 
-    @Getter
-    @OneToOne(mappedBy = "itemMaster", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @Getter @Setter
+    @JsonManagedReference
+    @OneToOne(mappedBy = "itemMaster", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private ItemDisplay display;
 
     @Builder
@@ -86,5 +91,56 @@ public class ItemMaster {
         this.itemName = itemName;
         this.price = price;
         this.updateAt = now();
+    }
+
+    @Entity
+    @Table(name = "item_option")
+    @ToString
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @EqualsAndHashCode(of = "id")
+    public static class ItemOption {
+        @Id @Getter
+        private String id;
+
+        @Getter
+        @Size(max = 10)
+        @Column(name = "size", nullable = false, columnDefinition = "varchar(10) default 'ONE SIZE'")
+        private String size;
+
+        @Getter
+        @Size(max = 10)
+        @Column(name = "color", nullable = false, columnDefinition = "varchar(10) default 'ONE COLOR'")
+        private String color;
+
+        @Getter
+        @Column(name = "create_at", insertable = false, updatable = false,
+                columnDefinition = "datetime default current_timestamp")
+        private LocalDateTime createAt;
+
+        @Column(name = "update_at")
+        private LocalDateTime updateAt;
+
+        @Setter
+        @Getter
+        @JsonBackReference
+        @ManyToOne
+        @JoinColumn(name = "master_id", nullable = false)
+        private ItemMaster itemMaster;
+
+        @Builder
+        public ItemOption(String id, @Size(min = 1, max = 10) String size, @Size(min = 1, max = 10) String color) {
+            this.id = id;
+            this.size = size;
+            this.color = color;
+        }
+
+        public Optional<LocalDateTime> getUpdateAt(){
+            return ofNullable(updateAt);
+        }
+
+        public void modify(String color, String size){
+            this.color = color;
+            this.size = size;
+        }
     }
 }

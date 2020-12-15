@@ -1,7 +1,7 @@
 package my.myungjin.academyDemo.domain.item;
 
 import my.myungjin.academyDemo.commons.Id;
-import my.myungjin.academyDemo.service.item.ItemOptionService;
+import my.myungjin.academyDemo.service.item.ItemDisplayOptionService;
 import my.myungjin.academyDemo.util.Util;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
@@ -20,32 +20,33 @@ import static org.hamcrest.Matchers.notNullValue;
 @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ItemOptionServiceTest {
+public class ItemDisplayOptionServiceTest {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private ItemOptionService itemOptionService;
+    private ItemDisplayOptionService itemDisplayOptionService;
 
-    private Id<ItemMaster, String> itemMasterId;
+    private Id<ItemDisplay, String> itemDisplayId;
 
-    private Id<ItemMaster.ItemOption, String> itemOptionId;
+    private Id<ItemDisplay.ItemDisplayOption, String> itemDisplayOptionId;
 
     @BeforeAll
     void setup(){
-        itemMasterId = Id.of(ItemMaster.class, "8c1cbb792b8d447e9128d53920cf9366");
+        itemDisplayId = Id.of(ItemDisplay.class, "f23ba30a47194a2c8a3fd2ccadd952a4");
     }
 
     @Test
     @Order(1)
     void 상품_옵션_등록하기() {
-        this.itemOptionId = Id.of(ItemMaster.ItemOption.class, Util.getUUID());
-        ItemMaster.ItemOption newOption = ItemMaster.ItemOption.builder()
-                .id(itemOptionId.value())
+        this.itemDisplayOptionId = Id.of(ItemDisplay.ItemDisplayOption.class, Util.getUUID());
+        ItemDisplay.ItemDisplayOption newOption = ItemDisplay.ItemDisplayOption.builder()
+                .id(itemDisplayOptionId.value())
                 .color("멜란지그레이")
                 .size("ONE SIZE")
+                .status(ItemStatus.ON_SALE)
                 .build();
-        ItemMaster.ItemOption saved = itemOptionService.add(itemMasterId, newOption);
+        ItemDisplay.ItemDisplayOption saved = itemDisplayOptionService.add(itemDisplayId, newOption);
         assertThat(saved, is(notNullValue()));
         log.info("Saved Option: {}", saved);
 
@@ -54,7 +55,7 @@ public class ItemOptionServiceTest {
     @Test
     @Order(2)
     void 상품_옵션_마스터별로_조회하기() {
-        List<ItemMaster.ItemOption> options = itemOptionService.findAllByMasterId(itemMasterId);
+        List<ItemDisplay.ItemDisplayOption> options = itemDisplayOptionService.findAllByMasterId(itemDisplayId);
         assertThat(options.size(), is(3));
         log.info("Found Options: {}", options);
     }
@@ -62,7 +63,7 @@ public class ItemOptionServiceTest {
     @Test
     @Order(3)
     void 상품_옵션_수정하기() {
-        ItemMaster.ItemOption updated = itemOptionService.modify(itemOptionId, "라이트카키", "ONE SIZE");
+        ItemDisplay.ItemDisplayOption updated = itemDisplayOptionService.modify(itemDisplayOptionId, "라이트카키", "ONE SIZE", ItemStatus.ON_SALE);
         assertThat(updated, is(notNullValue()));
         log.info("Updated Option: {}", updated);
     }
@@ -70,11 +71,11 @@ public class ItemOptionServiceTest {
     @Test
     @Order(4)
     void 상품_옵션_삭제하기() {
-        Id<ItemMaster.ItemOption, String> deleted = itemOptionService.deleteById(itemOptionId);
+        Id<ItemDisplay.ItemDisplayOption, String> deleted = itemDisplayOptionService.deleteById(itemDisplayOptionId);
         assertThat(deleted, is(notNullValue()));
         log.info("Deleted Option: {}", deleted);
 
-        List<ItemMaster.ItemOption> options = itemOptionService.findAllByMasterId(itemMasterId);
+        List<ItemDisplay.ItemDisplayOption> options = itemDisplayOptionService.findAllByMasterId(itemDisplayId);
         assertThat(options.size(), is(2));
     }
 }

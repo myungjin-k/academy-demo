@@ -4,8 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ItemOptionRepository extends JpaRepository<ItemOption, String> {
+public interface ItemOptionRepository extends JpaRepository<ItemMaster.ItemOption, String> {
 
-    List<ItemOption> findAllByItemMaster(ItemMaster itemMaster);
+    List<ItemMaster.ItemOption> findAllByItemMaster(ItemMaster itemMaster);
 
 }

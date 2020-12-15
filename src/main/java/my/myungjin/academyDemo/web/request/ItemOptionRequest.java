@@ -3,7 +3,7 @@ package my.myungjin.academyDemo.web.request;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
-import my.myungjin.academyDemo.domain.item.ItemOption;
+import my.myungjin.academyDemo.domain.item.ItemMaster;
 import my.myungjin.academyDemo.util.Util;
 
 @ToString
@@ -15,8 +15,8 @@ public class ItemOptionRequest {
 
     private String color;
 
-    public ItemOption newItemOption(){
-        return ItemOption.builder()
+    public ItemMaster.ItemOption newItemOption(){
+        return ItemMaster.ItemOption.builder()
                 .id(Util.getUUID())
                 .size(size)
                 .color(color)

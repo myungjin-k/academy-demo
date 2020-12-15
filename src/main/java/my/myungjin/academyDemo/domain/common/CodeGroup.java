@@ -1,5 +1,6 @@
 package my.myungjin.academyDemo.domain.common;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
@@ -46,8 +47,8 @@ public class CodeGroup {
     private LocalDateTime updateAt;
 
     @Getter
-    @JsonManagedReference
-    @OneToMany(mappedBy = "codeGroup", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE) //JOIN
+    @JsonIgnore
+    @OneToMany(mappedBy = "codeGroup", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) //JOIN
     private Collection<CommonCode> commonCodes;
 
     @Builder

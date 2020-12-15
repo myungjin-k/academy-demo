@@ -94,7 +94,7 @@ public class CommonCodeService {
 
     @CacheEvict(value="commonCodeCache", key="#groupId.value()")
     @Transactional
-    public CommonCode modifyCode(@Valid Id<CommonCode, String> codeId,
+    public CommonCode modifyCode(@Valid Id<CodeGroup, String> groupId, @Valid Id<CommonCode, String> codeId,
                                  @NotBlank String code, @NotBlank String nameEng, @NotBlank String nameKor){
         return findCodeById(codeId)
                 .map(commonCode -> {
@@ -105,7 +105,7 @@ public class CommonCodeService {
 
     @CacheEvict(value="commonCodeCache", key="#groupId.value()")
     @Transactional
-    public String removeCode(@Valid Id<CommonCode, String> codeId){
+    public String removeCode(@Valid Id<CodeGroup, String> groupId, @Valid Id<CommonCode, String> codeId){
         return findCodeById(codeId)
                 .map(commonCode -> deleteCode(codeId.value()))
                 .orElseThrow(() -> new NotFoundException(CommonCode.class, codeId));

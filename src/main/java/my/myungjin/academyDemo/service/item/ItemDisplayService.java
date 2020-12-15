@@ -18,6 +18,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -28,6 +29,8 @@ public class ItemDisplayService {
 
     private final ItemMasterRepository itemMasterRepository;
 
+    private final ItemDisplayOptionRepository itemDisplayOptionRepository;
+
     private final S3Client s3Client;
 
     private final String S3_BASE_PATH = "itemDisplay";
@@ -36,7 +39,7 @@ public class ItemDisplayService {
 
     @Transactional(readOnly = true)
     public Page<ItemDisplay> findAll(Pageable pageable){
-        return itemDisplayRepository.findAll(pageable);
+        return itemDisplayRepository.findAllByStatusEquals(ItemStatus.ON_SALE, pageable);
     }
 
     @Transactional(readOnly = true)
@@ -48,6 +51,18 @@ public class ItemDisplayService {
     public ItemDisplay findById(@Valid Id<ItemDisplay, String> itemDisplayId){
         return itemDisplayRepository.findById(itemDisplayId.value())
                 .orElseThrow(() -> new NotFoundException(ItemDisplay.class, itemDisplayId));
+    }
+
+    @Transactional(readOnly = true)
+    public ItemDisplay findByIdWithOptions(@Valid Id<ItemDisplay, String> itemDisplayId){
+        return itemDisplayRepository.findById(itemDisplayId.value())
+                .map(itemDisplay -> {
+                    List<ItemDisplay.ItemDisplayOption> options = itemDisplayOptionRepository.findAllByItemDisplay(itemDisplay);
+                    if(!options.isEmpty())
+                        itemDisplay.setOptions(options);
+                    itemDisplay.setOriginalPrice(itemDisplay.getItemMaster().getPrice());
+                    return itemDisplay;
+                }).orElseThrow(() -> new NotFoundException(ItemDisplay.class, itemDisplayId));
     }
 
     private String uploadDetailImage(AttachedFile detailImageFile) {
@@ -103,12 +118,6 @@ public class ItemDisplayService {
         itemDisplay.setDetailImage(uploadDetailImage(detailImgFile));
         itemDisplay.setItemMaster(itemMasterRepository.getOne(itemMasterId.value()));
         return save(itemDisplay);
-    }
-
-    @Transactional
-    public Page<ItemDisplay> searchByItemMasterName(@NotBlank String itemName, Pageable pageable){
-        return itemMasterRepository.findAll(ItemMasterPredicate.search(itemName, null, null), pageable)
-                .map(ItemMaster::getDisplay);
     }
 
     @Transactional

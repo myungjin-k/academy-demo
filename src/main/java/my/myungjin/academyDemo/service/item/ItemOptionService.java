@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.item.ItemMaster;
 import my.myungjin.academyDemo.domain.item.ItemMasterRepository;
-import my.myungjin.academyDemo.domain.item.ItemOption;
 import my.myungjin.academyDemo.domain.item.ItemOptionRepository;
 import my.myungjin.academyDemo.error.NotFoundException;
 import org.springframework.stereotype.Service;
@@ -26,14 +25,14 @@ public class ItemOptionService {
     private final ItemMasterRepository itemMasterRepository;
 
     @Transactional(readOnly = true)
-    public List<ItemOption> findAllByMasterId(Id<ItemMaster, String> itemMasterId){
+    public List<ItemMaster.ItemOption> findAllByMasterId(Id<ItemMaster, String> itemMasterId){
         return findMaster(itemMasterId)
                 .map(itemOptionRepository::findAllByItemMaster)
                 .orElse(emptyList());
     }
 
     @Transactional
-    public ItemOption add(@Valid Id<ItemMaster, String> itemMasterId, @Valid ItemOption newOption){
+    public ItemMaster.ItemOption add(@Valid Id<ItemMaster, String> itemMasterId, @Valid ItemMaster.ItemOption newOption){
         return findMaster(itemMasterId)
                 .map(itemMaster -> {
                     itemMaster.addOption(newOption);
@@ -42,32 +41,32 @@ public class ItemOptionService {
     }
 
     @Transactional
-    public Id<ItemOption, String> deleteById(@Valid Id<ItemOption, String> itemOptionId){
+    public Id<ItemMaster.ItemOption, String> deleteById(@Valid Id<ItemMaster.ItemOption, String> itemOptionId){
         return findById(itemOptionId)
                 .map(itemOption -> {
                     itemOptionRepository.deleteById(itemOptionId.value());
                     return itemOptionId;
-                }).orElseThrow(() -> new NotFoundException(ItemOption.class, itemOptionId));
+                }).orElseThrow(() -> new NotFoundException(ItemMaster.ItemOption.class, itemOptionId));
     }
 
     @Transactional
-    public ItemOption modify(@Valid Id<ItemOption, String> itemOptionId, @NotBlank String color, @NotBlank String size){
+    public ItemMaster.ItemOption modify(@Valid Id<ItemMaster.ItemOption, String> itemOptionId, @NotBlank String color, @NotBlank String size){
         return findById(itemOptionId)
                 .map(itemOption -> {
                     itemOption.modify(color, size);
                     return save(itemOption);
-                }).orElseThrow(() -> new NotFoundException(ItemOption.class, itemOptionId));
+                }).orElseThrow(() -> new NotFoundException(ItemMaster.ItemOption.class, itemOptionId));
     }
 
     private Optional<ItemMaster> findMaster(Id<ItemMaster, String> itemMasterId){
         return itemMasterRepository.findById(itemMasterId.value());
     }
 
-    private Optional<ItemOption> findById(Id<ItemOption, String> optionId){
+    private Optional<ItemMaster.ItemOption> findById(Id<ItemMaster.ItemOption, String> optionId){
         return itemOptionRepository.findById(optionId.value());
     }
 
-    private ItemOption save(ItemOption itemOption){
+    private ItemMaster.ItemOption save(ItemMaster.ItemOption itemOption){
         return itemOptionRepository.save(itemOption);
     }
 

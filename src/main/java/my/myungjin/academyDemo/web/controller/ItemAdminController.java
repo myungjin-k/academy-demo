@@ -9,7 +9,6 @@ import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.item.ItemMaster;
-import my.myungjin.academyDemo.domain.item.ItemOption;
 import my.myungjin.academyDemo.service.item.ItemDisplayService;
 import my.myungjin.academyDemo.service.item.ItemMasterService;
 import my.myungjin.academyDemo.service.item.ItemOptionService;
@@ -109,7 +108,7 @@ public class ItemAdminController {
 
     @PostMapping( "/itemMaster/{id}/itemOption")
     @ApiOperation(value = "상품 옵션 등록")
-    public Response<ItemOption> saveOption(@PathVariable @ApiParam(value = "대상 상품 마스터 PK", defaultValue = "8c1cbb792b8d447e9128d53920cf9366") String id, @RequestBody ItemOptionRequest request) {
+    public Response<ItemMaster.ItemOption> saveOption(@PathVariable @ApiParam(value = "대상 상품 마스터 PK", defaultValue = "8c1cbb792b8d447e9128d53920cf9366") String id, @RequestBody ItemOptionRequest request) {
         return OK(
                 itemOptionService.add(Id.of(ItemMaster.class, id), request.newItemOption())
         );
@@ -117,20 +116,20 @@ public class ItemAdminController {
 
     @PutMapping( "/itemOption/{optionId}")
     @ApiOperation(value = "상품 옵션 수정")
-    public Response<ItemOption> updateOption(
+    public Response<ItemMaster.ItemOption> updateOption(
             @PathVariable @ApiParam(value = "대상 상품 옵션 PK", defaultValue = "fb32787a91614b978cb94b0d47d7c676") String optionId,
             @RequestBody ItemOptionRequest request) {
         return OK(
-                itemOptionService.modify(Id.of(ItemOption.class, optionId), request.getColor(), request.getSize())
+                itemOptionService.modify(Id.of(ItemMaster.ItemOption.class, optionId), request.getColor(), request.getSize())
         );
     }
 
     @DeleteMapping("/itemOption/{optionId}")
     @ApiOperation(value = "상품 옵션 삭제")
-    public Response<Id<ItemOption, String>> deleteOption(
+    public Response<Id<ItemMaster.ItemOption, String>> deleteOption(
             @PathVariable @ApiParam(value = "대상 상품 옵션 PK", defaultValue = "fb32787a91614b978cb94b0d47d7c676")  String optionId){
         return OK(
-                itemOptionService.deleteById(Id.of(ItemOption.class, optionId))
+                itemOptionService.deleteById(Id.of(ItemMaster.ItemOption.class, optionId))
         );
     }
 

@@ -168,22 +168,9 @@ public class ItemDisplayServiceTest {
 
     }
 
+
     @Test
     @Order(5)
-    void 전시_상품_검색하기_마스터_상품명으로_페이징() {
-        PageRequest request = new PageRequest();
-        request.setPage(0);
-        request.setSize(5);
-        request.setDirection(Sort.Direction.DESC);
-        Page<ItemDisplay> results = itemDisplayService.searchByItemMasterName("R", request.of());
-
-        assertThat(results.getTotalElements(), is(2L));
-        log.info("Result ItemDisplay: {}", results.getContent());
-    }
-
-
-    @Test
-    @Order(6)
     void 전시_상품_검색하기_페이징() {
         PageRequest request = new PageRequest();
         request.setPage(0);
@@ -196,7 +183,7 @@ public class ItemDisplayServiceTest {
     }
 
     @Test
-    @Order(7)
+    @Order(6)
     void 전시_상품_삭제하기() {
         ItemDisplay deleted = itemDisplayService.deleteItemById(itemDisplayId);
         assertThat(deleted, is(notNullValue()));

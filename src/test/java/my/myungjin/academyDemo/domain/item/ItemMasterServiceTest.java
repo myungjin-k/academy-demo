@@ -84,7 +84,7 @@ public class ItemMasterServiceTest {
         assertThat(found, is(notNullValue()));
 
         log.info("Found Item: {}", found);
-        log.info("Found Option: {}", found.getOptions());
+        //log.info("Found Option: {}", found.getOptions());
     }
 
     @Test

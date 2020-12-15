@@ -42,7 +42,11 @@ M(28-29) 허리 35 엉덩이 50.5 허벅지 32.5 밑위 29.5 밑단 21 총길이
 안개가 낀 듯 오묘한 색감의 차분한 포그그레이 색상준비했습니다.
 크림-부드럽고 은은한 빛의 화사한 크림
 포그그레이-안개가 낀듯 오묘한 색감의 차분하고 딥한 그레이
-신축성-없음｜계절감-가을/겨울｜비침-없음｜촉감-부드러운 편', '크림 S사이즈 상품 준비 기간이 일주일 가량 소요됩니다.', 0 ,
+신축성-없음｜계절감-가을/겨울｜비침-없음｜촉감-부드러운 편', '크림 S사이즈 상품 준비 기간이 일주일 가량 소요됩니다.', 1 ,
 'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/itemDisplay/2385b9ac472e4e2d835c59ce11379512.jpeg');
+
+INSERT INTO item_display_option (id, color, display_id) VALUES ('91cc1c18f11e4d018566524b51d8419a', '콘베이지', 'f23ba30a47194a2c8a3fd2ccadd952a4');
+INSERT INTO item_display_option (id, color, display_id) VALUES ('c9402883dbe540e898a417e4884845bf', '크림아이보리', 'f23ba30a47194a2c8a3fd2ccadd952a4');
+
 INSERT INTO item_option (id, color, master_id) VALUES ('fb32787a91614b978cb94b0d47d7c676', '콘베이지', '8c1cbb792b8d447e9128d53920cf9366');
 INSERT INTO item_option (id, color, master_id) VALUES ('af412e9968dc4f11a83f9352a251f0aa', '크림아이보리', '8c1cbb792b8d447e9128d53920cf9366');

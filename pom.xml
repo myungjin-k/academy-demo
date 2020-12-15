@@ -37,7 +37,7 @@
 		<commons.io.version>2.6</commons.io.version>
 		<jackson.datatype.version>2.11.0</jackson.datatype.version>
 		<json.version>20190722</json.version>
-		<springfox.swagger2.version>3.0.0</springfox.swagger2.version>
+		<springfox.swagger2.version>2.9.2</springfox.swagger2.version>
 	</properties>
 
 	<dependencies>

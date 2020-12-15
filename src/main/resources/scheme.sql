@@ -90,6 +90,19 @@ CREATE TABLE item_display (
                              CONSTRAINT fk_item_display_to_item_master FOREIGN KEY (item_id) REFERENCES item_master (id) ON DELETE CASCADE ON UPDATE RESTRICT
 );
 
+DROP TABLE IF EXISTS item_display_option CASCADE;
+CREATE TABLE item_display_option (
+                                     id                   varchar(50) NOT NULL,
+                                     size                 varchar(10) DEFAULT 'ONE SIZE',
+                                     color                varchar(10) DEFAULT 'ONE COLOR',
+                                     display_id           varchar(50) NOT NULL,
+                                     status               number DEFAULT 0,
+                                     create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
+                                     update_at            datetime DEFAULT null,
+                                     PRIMARY KEY (id),
+                                     CONSTRAINT fk_item_display_option_to_item_display FOREIGN KEY (display_id) REFERENCES item_display (id) ON DELETE CASCADE ON UPDATE RESTRICT
+);
+
 DROP TABLE IF EXISTS item_option CASCADE;
 CREATE TABLE item_option (
                            id                   varchar(50) NOT NULL,
