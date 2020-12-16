@@ -1,6 +1,7 @@
 package my.myungjin.academyDemo.domain.item;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import my.myungjin.academyDemo.domain.common.CommonCode;
@@ -49,13 +50,12 @@ public class ItemMaster {
     @Column(name = "update_at")
     private LocalDateTime updateAt;
 
-    @Getter
-    @JsonManagedReference
+    @Getter @Setter
+    @JsonIgnore
     @OneToMany(mappedBy = "itemMaster", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) //JOIN
     private Collection<ItemOption> options;
 
-    @Setter
-    @Getter
+    @Setter @Getter
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
@@ -120,8 +120,7 @@ public class ItemMaster {
         @Column(name = "update_at")
         private LocalDateTime updateAt;
 
-        @Setter
-        @Getter
+        @Setter @Getter
         @JsonBackReference
         @ManyToOne
         @JoinColumn(name = "master_id", nullable = false)
