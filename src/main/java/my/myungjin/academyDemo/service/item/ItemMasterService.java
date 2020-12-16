@@ -47,7 +47,9 @@ public class ItemMasterService {
 
     @Transactional(readOnly = true)
     public Page<ItemMaster> findAllItems(Pageable pageable){
-        return itemMasterRepository.findAll(pageable);
+        Page<ItemMaster> res = itemMasterRepository.findAll(pageable);
+        log.info("Result: {}", res.getContent().get(0).getOptions());
+        return res;
     }
 
     @Transactional(readOnly = true)

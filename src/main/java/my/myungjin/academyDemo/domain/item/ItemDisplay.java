@@ -88,7 +88,7 @@ public class ItemDisplay {
     private ItemMaster itemMaster;
 
     @Getter @Setter
-    @JsonManagedReference
+    @JsonIgnore
     @OneToMany(mappedBy = "itemDisplay", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Collection<ItemDisplayOption> options;
 
@@ -160,8 +160,7 @@ public class ItemDisplay {
         @Column(name = "update_at")
         private LocalDateTime updateAt;
 
-        @Setter
-        @Getter
+        @Getter @Setter
         @JsonBackReference
         @ManyToOne
         @JoinColumn(name = "display_id", nullable = false)

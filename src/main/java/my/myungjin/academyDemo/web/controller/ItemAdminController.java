@@ -14,8 +14,11 @@ import my.myungjin.academyDemo.service.item.ItemMasterService;
 import my.myungjin.academyDemo.service.item.ItemOptionService;
 import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,6 +39,8 @@ public class ItemAdminController {
 
     private final ItemDisplayService itemDisplayService;
 
+    private final Logger log = LoggerFactory.getLogger(getClass());
+
     @GetMapping("/itemMaster/list")
     @ApiOperation(value = "상품 마스터 전체 목록 조회")
     @ApiImplicitParams({
@@ -44,9 +49,9 @@ public class ItemAdminController {
             @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query", defaultValue = "5", value = "조회 갯수")
     })
     public Response<Page<ItemMaster>> allItems(PageRequest pageRequest){
-        return OK(
-                itemMasterService.findAllItems(pageRequest.of())
-        );
+        Page<ItemMaster> res = itemMasterService.findAllItems(pageRequest.of());
+        log.info("Result: {}", res.getContent().get(0).getOptions());
+        return OK(res);
     }
 
     @GetMapping("/commonCode/category/list")

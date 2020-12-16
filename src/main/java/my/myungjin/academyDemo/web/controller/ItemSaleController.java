@@ -25,7 +25,7 @@ import static my.myungjin.academyDemo.web.Response.OK;
 public class ItemSaleController {
     private final ItemDisplayService itemDisplayService;
 
-    @GetMapping(path = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/list")
     @ApiOperation(value = "전시상품 전체 리스트 조회(API 키 필요없음)")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "direction", dataType = "string", paramType = "query", defaultValue = "DESC", value = "정렬 방향"),
@@ -38,7 +38,7 @@ public class ItemSaleController {
         );
     }
 
-    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/{id}")
     @ApiOperation(value = "전시상품 상세 조회")
     public Response<ItemDisplay> itemDetail(@PathVariable @ApiParam(value = "대상 전시상품 PK", defaultValue = "f23ba30a47194a2c8a3fd2ccadd952a4") String id){
         return OK(
