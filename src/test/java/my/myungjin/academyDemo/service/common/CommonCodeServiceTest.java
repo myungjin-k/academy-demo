@@ -1,6 +1,8 @@
-package my.myungjin.academyDemo.domain.common;
+package my.myungjin.academyDemo.service.common;
 
 import my.myungjin.academyDemo.commons.Id;
+import my.myungjin.academyDemo.domain.common.CodeGroup;
+import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.service.admin.CommonCodeService;
 import my.myungjin.academyDemo.util.Util;
 import org.hamcrest.MatcherAssert;

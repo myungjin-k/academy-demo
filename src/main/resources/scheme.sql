@@ -119,11 +119,10 @@ DROP TABLE IF EXISTS cart CASCADE;
 CREATE TABLE cart (
                              id                   varchar(50) NOT NULL,
                              member_id            varchar(50),
-                             item_id              varchar(50) NOT NULL,
-                             amount               number NOT NULL,
+                             item_id              varchar(50)  NOT NULL,
                              create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
                              update_at            datetime DEFAULT null,
-                             PRIMARY KEY (id),
-                             CONSTRAINT fk_cart_to_item_display FOREIGN KEY (item_id) REFERENCES item_master (id) ON DELETE CASCADE ON UPDATE RESTRICT,
-                             CONSTRAINT fk_cart_to_member FOREIGN KEY (member_id) REFERENCES member (id) ON DELETE CASCADE ON UPDATE RESTRICT
+                             PRIMARY KEY (id, member_id),
+                             CONSTRAINT fk_cart_to_member FOREIGN KEY (member_id) REFERENCES member (id) ON DELETE CASCADE ON UPDATE RESTRICT,
+                             CONSTRAINT fk_cart_to_item_display_option FOREIGN KEY (item_id) REFERENCES item_display_option (id) ON DELETE CASCADE ON UPDATE RESTRICT
 );

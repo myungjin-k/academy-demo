@@ -1,7 +1,7 @@
-package my.myungjin.academyDemo.domain.member;
+package my.myungjin.academyDemo.service.member;
 
 import my.myungjin.academyDemo.commons.Id;
-import my.myungjin.academyDemo.service.member.MemberService;
+import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.util.Util;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;

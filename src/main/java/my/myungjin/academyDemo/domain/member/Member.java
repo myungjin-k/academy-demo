@@ -1,6 +1,8 @@
 package my.myungjin.academyDemo.domain.member;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import my.myungjin.academyDemo.domain.order.CartItem;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
@@ -8,6 +10,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Optional;
 
 import static java.time.LocalDateTime.now;
@@ -73,6 +76,11 @@ public class Member{
     @Column(name = "update_at")
     private LocalDateTime updateAt;
 
+    @Getter
+    @JsonIgnore
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private Collection<CartItem> cartItems;
+
     @Builder
     public Member(String id, String userId, String password, String name, String email, String tel, String addr1, String addr2,
                   Rating rating, int reserves, LocalDateTime updateAt) {
@@ -115,5 +123,10 @@ public class Member{
         if(!encoder.matches(credentials, password)){
             throw new IllegalArgumentException("Bad Credential");
         }
+    }
+
+    public void addCartItem(CartItem item){
+        cartItems.add(item);
+        item.setMember(this);
     }
 }

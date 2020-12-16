@@ -1,7 +1,8 @@
-package my.myungjin.academyDemo.domain.item;
+package my.myungjin.academyDemo.service.item;
 
 import my.myungjin.academyDemo.commons.Id;
-import my.myungjin.academyDemo.service.item.ItemDisplayOptionService;
+import my.myungjin.academyDemo.domain.item.ItemDisplay;
+import my.myungjin.academyDemo.domain.item.ItemStatus;
 import my.myungjin.academyDemo.util.Util;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;

@@ -50,7 +50,7 @@ public class ItemMaster {
     @Column(name = "update_at")
     private LocalDateTime updateAt;
 
-    @Getter @Setter
+    @Getter
     @JsonIgnore
     @OneToMany(mappedBy = "itemMaster", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) //JOIN
     private Collection<ItemOption> options;
@@ -61,7 +61,7 @@ public class ItemMaster {
     @JoinColumn(name = "category_id", nullable = false)
     private CommonCode category;
 
-    @Getter @Setter
+    @Getter
     @JsonManagedReference
     @OneToOne(mappedBy = "itemMaster", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private ItemDisplay display;
