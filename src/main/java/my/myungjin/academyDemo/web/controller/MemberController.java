@@ -25,7 +25,7 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @PostMapping("/join")
+    @PostMapping
     @ApiOperation(value = "회원 가입(api 키 필요 없음)")
     public Response<Member> join(@RequestBody MemberRequest request){
         return OK(

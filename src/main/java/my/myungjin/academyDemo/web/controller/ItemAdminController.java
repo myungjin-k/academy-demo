@@ -36,7 +36,7 @@ public class ItemAdminController {
 
     private final ItemDisplayService itemDisplayService;
 
-    @GetMapping("/itemMaster/all")
+    @GetMapping("/itemMaster/list")
     @ApiOperation(value = "상품 마스터 전체 목록 조회")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "direction", dataType = "string", paramType = "query", defaultValue = "ASC", value = "정렬 방향"),
@@ -49,7 +49,7 @@ public class ItemAdminController {
         );
     }
 
-    @GetMapping("/commonCode/category")
+    @GetMapping("/commonCode/category/list")
     @ApiOperation(value = "상품 카테고리 검색")
     public Response<List<CommonCode>> searchCategory(@RequestParam @ApiParam(value = "상품 카테고리 검색어(카테고리 한글이름)", defaultValue = "니트") String searchParam){
         return OK(
@@ -98,7 +98,7 @@ public class ItemAdminController {
         );
     }
 
-    @GetMapping("/itemMaster/search")
+    @GetMapping("/itemMaster")
     @ApiOperation(value = "상품 마스터 검색(상품명, 등록일(from), 등록일(to)")
     public Response<List<ItemMaster>> searchMaster(ItemMasterSearchRequest request){
         return  OK(
@@ -134,7 +134,7 @@ public class ItemAdminController {
     }
 
 
-    @GetMapping("/itemDisplay/all")
+    @GetMapping("/itemDisplay/list")
     @ApiOperation(value = "전시상품 리스트 전체 조회")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "direction", dataType = "string", paramType = "query", defaultValue = "ASC", value = "정렬 방향"),
