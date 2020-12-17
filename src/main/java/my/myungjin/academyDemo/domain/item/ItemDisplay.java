@@ -161,7 +161,7 @@ public class ItemDisplay {
         private LocalDateTime updateAt;
 
         @Getter @Setter
-        @JsonBackReference
+        //@JsonBackReference
         @ManyToOne
         @JoinColumn(name = "display_id", nullable = false)
         private ItemDisplay itemDisplay;

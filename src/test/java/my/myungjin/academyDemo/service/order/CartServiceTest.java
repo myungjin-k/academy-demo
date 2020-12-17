@@ -71,7 +71,7 @@ public class CartServiceTest {
     @Test
     @Order(4)
     void 장바구니_상품_삭제하기() {
-        Id<CartItem, String> deleted = cartService.delete(memberId, memberId, cartItemId);
+        CartItem deleted = cartService.delete(memberId, memberId, cartItemId);
         assertThat(deleted, is(notNullValue()));
         log.info("Deleted CartItem: {}", deleted);
     }

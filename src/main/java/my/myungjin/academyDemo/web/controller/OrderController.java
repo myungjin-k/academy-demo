@@ -7,6 +7,7 @@ import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.order.CartItem;
+import my.myungjin.academyDemo.security.User;
 import my.myungjin.academyDemo.service.order.CartService;
 import my.myungjin.academyDemo.web.Response;
 import org.springframework.security.core.Authentication;
@@ -33,7 +34,7 @@ public class OrderController {
         return OK(
                 cartService.add(
                         Id.of(Member.class, id),
-                        Id.of(Member.class, String.valueOf(authentication.getPrincipal())),
+                        Id.of(Member.class, ((User) authentication.getDetails()).getId()),
                         Id.of(ItemDisplay.ItemDisplayOption.class, itemId),
                         count
                 )
@@ -47,7 +48,7 @@ public class OrderController {
             @AuthenticationPrincipal Authentication authentication
     ){
       return OK(
-              cartService.findByMember(Id.of(Member.class, id), Id.of(Member.class, String.valueOf(authentication.getPrincipal())))
+              cartService.findByMember(Id.of(Member.class, id), Id.of(Member.class,  ((User) authentication.getDetails()).getId()))
       );
     }
 
@@ -60,7 +61,7 @@ public class OrderController {
         return OK(
                 cartService.modify(
                         Id.of(Member.class, id),
-                        Id.of(Member.class, String.valueOf(authentication.getPrincipal())),
+                        Id.of(Member.class, ((User) authentication.getDetails()).getId()),
                         Id.of(CartItem.class, itemId),
                         count
                 )
@@ -68,18 +69,18 @@ public class OrderController {
     }
 
     @DeleteMapping("/member/{id}/cart/{itemId}")
-    @ApiOperation(value = "장바구니 아이템 수량 수정")
-    public Response<Id<CartItem, String>> deleteCartItem(
+    @ApiOperation(value = "장바구니 아이템 삭제")
+    public Response<CartItem> deleteCartItem(
             @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String id,
             @PathVariable @ApiParam(value = "대상 장바구니 상품 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String itemId,
             @AuthenticationPrincipal Authentication authentication){
         return OK(
                 cartService.delete(
                         Id.of(Member.class, id),
-                        Id.of(Member.class, String.valueOf(authentication.getPrincipal())),
+                        Id.of(Member.class, ((User) authentication.getDetails()).getId()),
                         Id.of(CartItem.class, itemId)
                 )
         );
     }
-    
+
 }

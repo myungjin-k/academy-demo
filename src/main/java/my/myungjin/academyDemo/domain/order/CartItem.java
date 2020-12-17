@@ -6,7 +6,6 @@ import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.member.Member;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -44,10 +43,10 @@ public class CartItem {
     private Member member;
 
     @Setter @Getter
-    @JsonBackReference
+    //@JsonBackReference
     @OneToOne
     @JoinColumn(name = "item_id", nullable = false)
-    private ItemDisplay.ItemDisplayOption item;
+    private ItemDisplay.ItemDisplayOption itemOption;
 
     public CartItem(String id, int count) {
         this.id = id;

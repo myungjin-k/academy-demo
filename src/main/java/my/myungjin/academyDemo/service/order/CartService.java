@@ -42,7 +42,7 @@ public class CartService {
             throw new IllegalArgumentException("member id must be equal to login user id(member="+ memberId+", loginUser=" +loginUserId +")");
         CartItem cartItem = new CartItem(Util.getUUID(), count);
         cartItem.setMember(findMember(memberId));
-        cartItem.setItem(findItem(itemId));
+        cartItem.setItemOption(findItem(itemId));
         return save(cartItem);
     }
 
@@ -60,12 +60,15 @@ public class CartService {
     }
 
     @Transactional
-    public Id<CartItem, String> delete(@Valid Id<Member, String> memberId,  @Valid Id<Member, String> loginUserId,
+    public CartItem delete(@Valid Id<Member, String> memberId,  @Valid Id<Member, String> loginUserId,
                            @Valid Id<CartItem, String> cartItemId){
         if(!loginUserId.value().equals(memberId.value()))
             throw new IllegalArgumentException("member id must be equal to login user id(member="+ memberId+", loginUser=" +loginUserId +")");
-        cartRepository.deleteById(cartItemId.value());
-        return cartItemId;
+       return cartRepository.findById(cartItemId.value())
+                .map(cartItem -> {
+                    cartRepository.delete(cartItem);
+                    return cartItem;
+                }).orElseThrow(() -> new NotFoundException(CartItem.class, cartItemId));
     }
 
     @Transactional

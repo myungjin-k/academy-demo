@@ -1,5 +1,6 @@
 package my.myungjin.academyDemo.security;
 
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.domain.member.Role;
 import my.myungjin.academyDemo.error.UnauthorizedException;
@@ -23,6 +24,7 @@ public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
 
     @PostMapping
+    @ApiOperation(value = "회원 인증(api key 필요 없음)")
     public Response<Authentication> auth(@RequestBody AuthenticationRequest request) {
         try {
             MyAuthenticationToken token = new MyAuthenticationToken(request.getPrincipal(), request.getCredentials(), Role.of(request.getRole()));
