@@ -55,7 +55,7 @@ public class CartServiceTest {
     @Test
     @Order(2)
     void 장바구니_조회하기() {
-        List<CartItem> cart = cartService.findByMember(memberId);
+        List<CartItem> cart = cartService.findByMember(memberId, memberId);
         assertThat(cart.size(), is(1));
         log.info("Cart: {}", cart);
     }
