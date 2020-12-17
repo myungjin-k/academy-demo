@@ -29,7 +29,9 @@ public class CartService {
     private final CartRepository cartRepository;
 
     @Transactional(readOnly = true)
-    public List<CartItem> findByMember(@Valid Id<Member, String> memberId){
+    public List<CartItem> findByMember(@Valid Id<Member, String> memberId, @Valid Id<Member, String> loginUserId){
+        if(!loginUserId.value().equals(memberId.value()))
+            throw new IllegalArgumentException("member id must be equal to login user id(member="+ memberId+", loginUser=" +loginUserId +")");
         return cartRepository.findAllByMember(findMember(memberId));
     }
 
