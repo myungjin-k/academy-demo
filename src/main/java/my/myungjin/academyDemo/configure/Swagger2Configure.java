@@ -1,7 +1,9 @@
 package my.myungjin.academyDemo.configure;
 
+import io.swagger.annotations.ApiOperation;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -16,6 +18,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import java.time.LocalDate;
 
 import static java.util.Collections.singletonList;
+import static springfox.documentation.builders.RequestHandlerSelectors.withMethodAnnotation;
 
 @Configuration
 @EnableSwagger2
@@ -25,12 +28,11 @@ public class Swagger2Configure implements WebMvcConfigurer {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .groupName("example")
-                .securitySchemes(singletonList(apiKey()))
                 .directModelSubstitute(LocalDate.class, String.class)
+                .ignoredParameterTypes(AuthenticationPrincipal.class)
+                .securitySchemes(singletonList(apiKey()))
                 .select()
-                .apis(RequestHandlerSelectors
-                        .basePackage("my.myungjin.academyDemo.web.controller"))
-                .paths(PathSelectors.ant("/api/**"))
+                    .apis(withMethodAnnotation(ApiOperation.class))
                 .build()
                 .apiInfo(this.apiInfo())
                 .enable(true);
