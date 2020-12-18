@@ -3,7 +3,9 @@ package my.myungjin.academyDemo.aws;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
 import lombok.RequiredArgsConstructor;
+import my.myungjin.academyDemo.util.Util;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.util.Map;
@@ -27,12 +29,11 @@ public final class S3Client {
     PutObjectRequest request = new PutObjectRequest(bucketName, file.getName(), file);
     return executePut(request);
   }
-/*
+
   public String upload(byte[] bytes, String basePath, Map<String, String> metadata) {
     String name = isEmpty(basePath) ? Util.getUUID() : basePath + "/" + Util.getUUID();
     return upload(new ByteArrayInputStream(bytes), bytes.length, name + ".jpeg", "image/jpeg", metadata);
-  }*/
-
+  }
   public String upload(InputStream in, long length, String key, String contentType, Map<String, String> metadata) {
     ObjectMetadata objectMetadata = new ObjectMetadata();
     objectMetadata.setContentLength(length);
