@@ -40,7 +40,14 @@ public class CartService {
                         @Valid Id<ItemDisplay.ItemDisplayOption, String> itemId, @Positive int count){
         if(!loginUserId.value().equals(memberId.value()))
             throw new IllegalArgumentException("member id must be equal to login user id(member="+ memberId+", loginUser=" +loginUserId +")");
-        CartItem cartItem = new CartItem(Util.getUUID(), count);
+
+        CartItem cartItem = cartRepository.getByItemOption_id(itemId.value());
+        if(cartItem != null){
+            cartItem.modify(cartItem.getCount() + count);
+            return save(cartItem);
+        }
+
+        cartItem = new CartItem(Util.getUUID(), count);
         cartItem.setMember(findMember(memberId));
         cartItem.setItemOption(findItem(itemId));
         return save(cartItem);

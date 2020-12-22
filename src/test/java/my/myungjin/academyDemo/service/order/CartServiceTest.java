@@ -53,7 +53,7 @@ public class CartServiceTest {
     @Order(2)
     void 장바구니_조회하기() {
         List<CartItem> cart = cartService.findByMember(memberId, memberId);
-        assertThat(cart.size(), is(1));
+        //assertThat(cart.size(), is(1));
         log.info("Cart: {}", cart);
     }
 
@@ -65,8 +65,20 @@ public class CartServiceTest {
         log.info("Updated CartItem: {}", updated);
     }
 
+
+
     @Test
     @Order(4)
+    void 장바구니_추가하기_아이템_중복() {
+        CartItem added = cartService.add(memberId, memberId, itemId, 2);
+        cartItemId = Id.of(CartItem.class, added.getId());
+        assertThat(added, is(notNullValue()));
+        assertThat(added.getCount(), is(12));
+        log.info("Added Item: {}", added);
+    }
+
+    @Test
+    @Order(5)
     void 장바구니_상품_삭제하기() {
         CartItem deleted = cartService.delete(memberId, memberId, cartItemId);
         assertThat(deleted, is(notNullValue()));
