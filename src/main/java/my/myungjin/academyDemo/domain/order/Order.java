@@ -2,6 +2,7 @@ package my.myungjin.academyDemo.domain.order;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import my.myungjin.academyDemo.domain.member.Member;
 
@@ -72,8 +73,8 @@ public class Order {
     private List<OrderItem> items = new ArrayList<>();
 
     @Getter @Setter
-    @JsonIgnore
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JsonManagedReference
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Delivery> deliveries = new ArrayList<>();
 
     @Builder

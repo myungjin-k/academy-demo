@@ -17,6 +17,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.time.LocalDate;
 
+import static java.util.Collections.singleton;
 import static java.util.Collections.singletonList;
 import static springfox.documentation.builders.RequestHandlerSelectors.withMethodAnnotation;
 
@@ -31,6 +32,8 @@ public class Swagger2Configure implements WebMvcConfigurer {
                 .directModelSubstitute(LocalDate.class, String.class)
                 .ignoredParameterTypes(AuthenticationPrincipal.class)
                 .securitySchemes(singletonList(apiKey()))
+                .produces(singleton("application/json"))
+                .consumes(singleton("application/json"))
                 .select()
                     .apis(withMethodAnnotation(ApiOperation.class))
                 .build()

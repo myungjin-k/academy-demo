@@ -7,9 +7,12 @@ import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.order.CartItem;
+import my.myungjin.academyDemo.domain.order.Order;
 import my.myungjin.academyDemo.security.User;
 import my.myungjin.academyDemo.service.order.CartService;
+import my.myungjin.academyDemo.service.order.OrderService;
 import my.myungjin.academyDemo.web.Response;
+import my.myungjin.academyDemo.web.request.OrderRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +28,7 @@ public class OrderController {
 
     private final CartService cartService;
 
+    private final OrderService orderService;
 
     @PostMapping("/member/{id}/cart")
     @ApiOperation(value = "장바구니 추가")
@@ -79,6 +83,21 @@ public class OrderController {
                         Id.of(Member.class, id),
                         Id.of(Member.class, ((User) authentication.getDetails()).getId()),
                         Id.of(CartItem.class, itemId)
+                )
+        );
+    }
+
+    @PostMapping("/member/{memberId}/order")
+    @ApiOperation(value = "주문 생성")
+    public Response<Order> order(
+            @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String memberId,
+            @RequestBody OrderRequest orderRequest){
+        return OK(
+                orderService.ordering(
+                        Id.of(Member.class, memberId),
+                        orderRequest.newOrder(),
+                        orderRequest.newDelivery(),
+                        orderRequest.collectItems()
                 )
         );
     }

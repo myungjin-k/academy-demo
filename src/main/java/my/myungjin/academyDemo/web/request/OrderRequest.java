@@ -1,0 +1,74 @@
+package my.myungjin.academyDemo.web.request;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
+import my.myungjin.academyDemo.commons.Id;
+import my.myungjin.academyDemo.domain.order.CartItem;
+import my.myungjin.academyDemo.domain.order.Delivery;
+import my.myungjin.academyDemo.domain.order.DeliveryStatus;
+import my.myungjin.academyDemo.domain.order.Order;
+import my.myungjin.academyDemo.util.Util;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
+
+@AllArgsConstructor
+@ToString
+@Getter
+public class OrderRequest {
+
+    private String name;
+
+    private String tel;
+
+    private String addr1;
+
+    private String addr2;
+
+    private String receiverName;
+
+    private String receiverTel;
+
+    private String receiverAddr1;
+
+    private String receiverAddr2;
+
+    private String message;
+
+    private List<String> cartItemIds;
+
+    public Order newOrder(){
+        return Order.builder()
+                .id(LocalDateTime.now()
+                                .format(DateTimeFormatter.ofPattern("yyyyMMddHH24mmss")) +
+                        randomAlphabetic(4).toUpperCase(Locale.ROOT))
+                .orderName(name)
+                .orderTel(tel)
+                .orderAddr1(addr1)
+                .orderAddr2(addr2)
+                .build();
+    }
+
+    public Delivery newDelivery(){
+        return Delivery.builder()
+                .id(Util.getUUID())
+                .receiverName(receiverName)
+                .receiverTel(receiverTel)
+                .receiverAddr1(receiverAddr1)
+                .receiverAddr2(receiverAddr2)
+                .status(DeliveryStatus.PROCESSING)
+                .build();
+    }
+
+    public List<Id<CartItem, String>> collectItems(){
+        return cartItemIds.stream()
+                .map(s -> Id.of(CartItem.class, s))
+                .collect(Collectors.toList());
+    }
+}
