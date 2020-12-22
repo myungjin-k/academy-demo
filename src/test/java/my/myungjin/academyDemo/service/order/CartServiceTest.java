@@ -4,8 +4,6 @@ import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.order.CartItem;
-import my.myungjin.academyDemo.service.member.MemberService;
-import my.myungjin.academyDemo.util.Util;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +21,6 @@ import static org.hamcrest.Matchers.notNullValue;
 @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-
 public class CartServiceTest {
 
     private final Logger log = LoggerFactory.getLogger(getClass());

@@ -50,3 +50,6 @@ INSERT INTO item_display_option (id, color, display_id) VALUES ('c9402883dbe540e
 
 INSERT INTO item_option (id, color, master_id) VALUES ('fb32787a91614b978cb94b0d47d7c676', '콘베이지', '8c1cbb792b8d447e9128d53920cf9366');
 INSERT INTO item_option (id, color, master_id) VALUES ('af412e9968dc4f11a83f9352a251f0aa', '크림아이보리', '8c1cbb792b8d447e9128d53920cf9366');
+
+INSERT INTO cart (id, member_id, item_id) VALUES ('f4597dfc1ae649a58edcb7921002aca5', '3a18e633a5db4dbd8aaee218fe447fa4', 'c9402883dbe540e898a417e4884845bf');
+INSERT INTO cart (id, member_id, item_id) VALUES ('0a25d9eea6d94a3897e06b33e4bf5b69', '3a18e633a5db4dbd8aaee218fe447fa4', '91cc1c18f11e4d018566524b51d8419a');

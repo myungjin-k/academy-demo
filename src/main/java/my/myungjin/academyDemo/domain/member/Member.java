@@ -3,6 +3,7 @@ package my.myungjin.academyDemo.domain.member;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import my.myungjin.academyDemo.domain.order.CartItem;
+import my.myungjin.academyDemo.domain.order.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
@@ -11,6 +12,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import static java.time.LocalDateTime.now;
@@ -18,7 +20,7 @@ import static java.util.Optional.ofNullable;
 
 @Entity
 @Table(name = "member")
-@ToString(exclude = "cartItems")
+@ToString(exclude = {"cartItems", "orders"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
 public class Member{
@@ -79,7 +81,12 @@ public class Member{
     @Getter
     @JsonIgnore
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private Collection<CartItem> cartItems;
+    private List<CartItem> cartItems;
+
+    @Getter
+    @JsonIgnore
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private Collection<Order> orders;
 
     @Builder
     public Member(String id, String userId, String password, String name, String email, String tel, String addr1, String addr2,

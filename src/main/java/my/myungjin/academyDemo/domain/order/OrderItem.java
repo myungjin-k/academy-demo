@@ -23,9 +23,6 @@ public class OrderItem {
     private String id;
 
     @Getter
-    private int totalAmount;
-
-    @Getter
     @Column(name = "create_at", insertable = false, updatable = false,
             columnDefinition = "datetime default current_timestamp")
     private LocalDateTime createAt;
@@ -37,7 +34,7 @@ public class OrderItem {
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "order_id")
-    private Member member;
+    private Order order;
 
     @Setter @Getter
     //@JsonBackReference
@@ -45,9 +42,8 @@ public class OrderItem {
     @JoinColumn(name = "item_id", nullable = false)
     private ItemDisplay.ItemDisplayOption itemOption;
 
-    public OrderItem(String id, int totalAmount) {
+    public OrderItem(String id) {
         this.id = id;
-        this.totalAmount = totalAmount;
     }
 
     public Optional<LocalDateTime> getUpdateAt(){

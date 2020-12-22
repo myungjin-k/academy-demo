@@ -127,8 +127,8 @@ CREATE TABLE cart (
                              CONSTRAINT fk_cart_to_item_display_option FOREIGN KEY (item_id) REFERENCES item_display_option (id) ON DELETE CASCADE ON UPDATE RESTRICT
 );
 
-DROP TABLE IF EXISTS "order" CASCADE;
-CREATE TABLE "order" (
+DROP TABLE IF EXISTS order_master CASCADE;
+CREATE TABLE order_master (
                       id                   varchar(50) NOT NULL,
                       member_id            varchar(50),
                       total_amount         number not null,
@@ -150,7 +150,7 @@ CREATE TABLE order_item (
                          create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
                          update_at            datetime DEFAULT null,
                          PRIMARY KEY (id),
-                         CONSTRAINT fk_order_item_to_order FOREIGN KEY (order_id) REFERENCES "order" (id) ON DELETE CASCADE ON UPDATE RESTRICT,
+                         CONSTRAINT fk_order_item_to_order FOREIGN KEY (order_id) REFERENCES order_master (id) ON DELETE CASCADE ON UPDATE RESTRICT,
                          CONSTRAINT fk_order_item_to_item_display_option FOREIGN KEY (item_id) REFERENCES item_display_option (id) ON DELETE CASCADE ON UPDATE RESTRICT
 );
 
@@ -168,5 +168,5 @@ CREATE TABLE delivery (
                          create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
                          update_at            datetime DEFAULT null,
                          PRIMARY KEY (id),
-                         CONSTRAINT fk_delivery_to_order FOREIGN KEY (order_id) REFERENCES "order" (id) ON DELETE CASCADE ON UPDATE RESTRICT
+                         CONSTRAINT fk_delivery_to_order FOREIGN KEY (order_id) REFERENCES order_master (id) ON DELETE CASCADE ON UPDATE RESTRICT
 );

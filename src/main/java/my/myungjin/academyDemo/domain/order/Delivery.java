@@ -1,12 +1,7 @@
-package my.myungjin.academyDemo.domain.receiver;
+package my.myungjin.academyDemo.domain.order;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
-import my.myungjin.academyDemo.domain.item.ItemStatusConverter;
-import my.myungjin.academyDemo.domain.member.Member;
-import my.myungjin.academyDemo.domain.order.DeliveryStatus;
-import my.myungjin.academyDemo.domain.order.DeliveryStatusConverter;
-import my.myungjin.academyDemo.domain.order.Order;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
@@ -47,7 +42,7 @@ public class Delivery {
     private String receiverAddr2;
 
     @Getter
-    @Column(name = "status", nullable = false)
+    @Column(name = "status", nullable = false, columnDefinition = "number default 1")
     @Convert(converter = DeliveryStatusConverter.class)
     private DeliveryStatus status;
 

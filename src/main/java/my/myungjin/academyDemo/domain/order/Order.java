@@ -1,6 +1,7 @@
 package my.myungjin.academyDemo.domain.order;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import my.myungjin.academyDemo.domain.member.Member;
 
@@ -8,14 +9,16 @@ import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static java.time.LocalDateTime.now;
 import static java.util.Optional.ofNullable;
 
 @Entity
-@Table(name = "order")
-@ToString
+@Table(name = "order_master")
+@ToString(exclude = {"items", "deliveries"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
 public class Order {
@@ -24,7 +27,10 @@ public class Order {
     @Getter
     private String id;
 
-    @Getter
+    @Getter @Setter
+    private String abbrOrderItems;
+
+    @Getter @Setter
     @Column(name = "total_amount" , nullable = false)
     private int totalAmount;
 
@@ -60,6 +66,16 @@ public class Order {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @Getter @Setter
+    @JsonIgnore
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<OrderItem> items = new ArrayList<>();
+
+    @Getter @Setter
+    @JsonIgnore
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Delivery> deliveries = new ArrayList<>();
+
     @Builder
     public Order(String id, int totalAmount, @Size(min = 1, max = 10) String orderName, @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$", message = "전화번호는 010-0000-0000 형태여야 합니다.") String orderTel, String orderAddr1, String orderAddr2) {
         this.id = id;
@@ -74,6 +90,16 @@ public class Order {
         return ofNullable(updateAt);
     }
 
+    public void addItem(OrderItem item){
+        items.add(item);
+        item.setOrder(this);
+    }
+
+    public void addDelivery(Delivery delivery){
+        deliveries.add(delivery);
+        delivery.setOrder(this);
+    }
+
     public void modify(String orderName, String orderTel, String orderAddr1, String orderAddr2){
         this.orderName = orderName;
         this.orderTel = orderTel;
@@ -81,4 +107,6 @@ public class Order {
         this.orderAddr2 = orderAddr2;
         this.updateAt = now();
     }
+
+
 }
