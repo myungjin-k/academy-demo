@@ -130,6 +130,7 @@ CREATE TABLE cart (
 DROP TABLE IF EXISTS order_master CASCADE;
 CREATE TABLE order_master (
                       id                   varchar(50) NOT NULL,
+                      abbr_items_name      varchar(255),
                       member_id            varchar(50),
                       total_amount         number not null,
                       order_name           varchar(50) NOT NULL,

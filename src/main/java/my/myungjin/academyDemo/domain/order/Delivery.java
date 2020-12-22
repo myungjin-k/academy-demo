@@ -51,6 +51,11 @@ public class Delivery {
     private String invoiceNum;
 
     @Getter
+    @Size(max = 100)
+    @Column(name = "message", nullable = false)
+    private String message;
+
+    @Getter
     @Column(name = "create_at", insertable = false, updatable = false,
             columnDefinition = "datetime default current_timestamp")
     private LocalDateTime createAt;
@@ -65,25 +70,31 @@ public class Delivery {
     private Order order;
 
     @Builder
-    public Delivery(String id, @Size(min = 1, max = 10) String receiverName, @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$", message = "전화번호는 010-0000-0000 형태여야 합니다.") String receiverTel, String receiverAddr1, String receiverAddr2, DeliveryStatus status, String invoiceNum) {
+    public Delivery(String id, @Size(min = 1, max = 10) String receiverName, @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$", message = "전화번호는 010-0000-0000 형태여야 합니다.") String receiverTel, String receiverAddr1, String receiverAddr2, DeliveryStatus status, String invoiceNum, @Size(max = 100) String message) {
         this.id = id;
         this.receiverName = receiverName;
         this.receiverTel = receiverTel;
         this.receiverAddr1 = receiverAddr1;
-        this.receiverAddr2 = receiverAddr1;
+        this.receiverAddr2 = receiverAddr2;
         this.status = status;
         this.invoiceNum = invoiceNum;
+        this.message = message;
     }
 
     public Optional<LocalDateTime> getUpdateAt(){
         return ofNullable(updateAt);
     }
 
-    public void modify(String receiverName, String receiverTel, String receiverAddr1, String receiverAddr2){
+    public void modify(String receiverName, String receiverTel, String receiverAddr1, String receiverAddr2, String message){
         this.receiverName = receiverName;
         this.receiverTel = receiverTel;
         this.receiverAddr1 = receiverAddr1;
         this.receiverAddr2 = receiverAddr2;
+        this.message = message;
         this.updateAt = now();
+    }
+
+    public void updateStatus(DeliveryStatus status){
+        this.status = status;
     }
 }

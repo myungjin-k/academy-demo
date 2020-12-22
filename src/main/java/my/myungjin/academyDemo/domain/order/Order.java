@@ -29,6 +29,7 @@ public class Order {
     private String id;
 
     @Getter @Setter
+    @Column(name = "abbr_items_name", nullable = false)
     private String abbrOrderItems;
 
     @Getter @Setter

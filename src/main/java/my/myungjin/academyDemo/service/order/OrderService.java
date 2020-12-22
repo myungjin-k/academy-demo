@@ -2,12 +2,14 @@ package my.myungjin.academyDemo.service.order;
 
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
-import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.member.MemberRepository;
 import my.myungjin.academyDemo.domain.order.*;
 import my.myungjin.academyDemo.error.NotFoundException;
+import my.myungjin.academyDemo.error.ServiceRuntimeException;
 import my.myungjin.academyDemo.util.Util;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +31,20 @@ public class OrderService {
 
     private final MemberRepository memberRepository;
 
+    @Transactional(readOnly = true)
+    public Page<Order> findAllMyMemberWithPage(@Valid Id<Member, String> memberId, Pageable pageable){
+        return orderRepository.findAllByMember_id(memberId.value(), pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Order findById(@Valid Id<Member, String> memberId, @Valid Id<Order, String> orderId){
+        return orderRepository.findByMember_idAndId(memberId.value(), orderId.value())
+                .map(order -> {
+                    order.setItems(orderItemRepository.findAllByOrder(order));
+                    order.setDeliveries(deliveryRepository.findByOrder(order));
+                    return order;
+                }).orElseThrow(() -> new NotFoundException(Order.class, memberId, orderId));
+    }
 
     @Transactional
     public Order ordering(@Valid Id<Member, String> memberId, @Valid Order newOrder,
@@ -43,6 +59,41 @@ public class OrderService {
                 .orElseThrow(() ->  new NotFoundException(Member.class, memberId));
     }
 
+    @Transactional
+    public Order modify(@Valid Id<Member, String> memberId, @Valid Id<Order, String> orderId, @Valid Order order){
+        Order o = findById(memberId, orderId);
+        Delivery d = deliveryRepository.findByOrder_Member_idAndOrder_id(memberId.value(), orderId.value()).get(0);
+        if(d.getStatus().getValue() > 1){
+            throw new ServiceRuntimeException("error.already.shipped", "error.already.shipped.details",
+                    new Object[]{Order.class, o.getId(), o.getDeliveries().get(0).getStatus()});
+        }
+        o.modify(order.getOrderName(), order.getOrderTel(), order.getOrderAddr1(), order.getOrderAddr2());
+        return save(o);
+    }
+
+    @Transactional
+    public Delivery modify(@Valid Id<Member, String> memberId, @Valid Id<Order, String> orderId,
+                           @Valid Id<Delivery, String> deliveryId, @Valid Delivery delivery){
+        Delivery d = deliveryRepository.findByOrder_Member_idAndOrder_idAndId(memberId.value(), orderId.value(), deliveryId.value())
+                .orElseThrow(() -> new NotFoundException(Delivery.class, memberId, orderId, deliveryId));
+        if(d.getStatus().getValue() > 1){
+            throw new ServiceRuntimeException("error.already.shipped", "error.already.shipped.details",
+                    new Object[]{Delivery.class, d.getId(), d.getStatus()});
+        }
+        d.modify(delivery.getReceiverName(), delivery.getReceiverTel(),
+                delivery.getReceiverAddr1(), delivery.getReceiverAddr2(), delivery.getMessage());
+        return save(d);
+    }
+
+    @Transactional
+    public Delivery modifyStatus(@Valid Id<Delivery, String> deliveryId, DeliveryStatus status){
+        return deliveryRepository.findById(deliveryId.value())
+                .map(delivery -> {
+                    delivery.updateStatus(status);
+                    return save(delivery);
+                }).orElseThrow(() -> new NotFoundException(Delivery.class, deliveryId));
+    }
+
     private Order saveOrderItems(List<Id<CartItem, String>> itemIds, Order order){
         List<CartItem> items = itemIds.stream()
                 .map(itemId ->
@@ -54,8 +105,8 @@ public class OrderService {
         for(CartItem item : items){
             OrderItem oItem = new OrderItem(Util.getUUID());
             oItem.setItemOption(item.getItemOption());
-            save(oItem);
             order.addItem(oItem);
+            save(oItem);
             totalAmount += oItem.getItemOption().getItemDisplay().getSalePrice() * item.getCount();
         }
         order.setTotalAmount(totalAmount);
@@ -65,26 +116,27 @@ public class OrderService {
             abbrOrderItems.append("外 ").append(items.size() - 1).append("건");
         order.setAbbrOrderItems(abbrOrderItems.toString());
         deleteCartItems(items);
-        return order;
+        return save(order);
     }
 
     private Order saveDelivery(Delivery delivery, Order order){
-        deliveryRepository.save(delivery);
         order.addDelivery(delivery);
+        save(delivery);
         return order;
     }
-    private void save(OrderItem orderItem){
-        orderItemRepository.save(orderItem);
+
+    private Delivery save(Delivery delivery){
+        return deliveryRepository.save(delivery);
     }
 
-    private Order findById(Id<Order, String> orderId){
-        return orderRepository.findById(orderId.value())
-                .orElseThrow(() -> new NotFoundException(Order.class, orderId));
+    private void save(OrderItem orderItem){
+        orderItemRepository.save(orderItem);
     }
 
     private Order save(Order order){
         return orderRepository.save(order);
     }
+
     private void deleteCartItems(List<CartItem> items){
         cartRepository.deleteAll(items);
     }

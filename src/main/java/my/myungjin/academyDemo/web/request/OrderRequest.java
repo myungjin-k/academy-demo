@@ -39,6 +39,8 @@ public class OrderRequest {
 
     private String receiverAddr2;
 
+    private int status;
+
     private String message;
 
     private List<String> cartItemIds;
@@ -66,6 +68,26 @@ public class OrderRequest {
                 .build();
     }
 
+    public Order toOrder(Id<Order, String> orderId){
+        return Order.builder()
+                .id(orderId.value())
+                .orderName(name)
+                .orderTel(tel)
+                .orderAddr1(addr1)
+                .orderAddr2(addr2)
+                .build();
+    }
+
+    public Delivery toDelivery(Id<Delivery, String> deliveryId){
+        return Delivery.builder()
+                .id(deliveryId.value())
+                .receiverName(receiverName)
+                .receiverTel(receiverTel)
+                .receiverAddr1(receiverAddr1)
+                .receiverAddr2(receiverAddr2)
+                .status(DeliveryStatus.of(status))
+                .build();
+    }
     public List<Id<CartItem, String>> collectItems(){
         return cartItemIds.stream()
                 .map(s -> Id.of(CartItem.class, s))

@@ -1,5 +1,7 @@
 package my.myungjin.academyDemo.web.controller;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
@@ -7,12 +9,16 @@ import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.order.CartItem;
+import my.myungjin.academyDemo.domain.order.Delivery;
 import my.myungjin.academyDemo.domain.order.Order;
 import my.myungjin.academyDemo.security.User;
+import my.myungjin.academyDemo.service.member.MemberService;
 import my.myungjin.academyDemo.service.order.CartService;
 import my.myungjin.academyDemo.service.order.OrderService;
 import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.OrderRequest;
+import my.myungjin.academyDemo.web.request.PageRequest;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +35,8 @@ public class OrderController {
     private final CartService cartService;
 
     private final OrderService orderService;
+
+    private final MemberService memberService;
 
     @PostMapping("/member/{id}/cart")
     @ApiOperation(value = "장바구니 추가")
@@ -102,4 +110,56 @@ public class OrderController {
         );
     }
 
+    @GetMapping("/member/{memberId}/order/{orderId}")
+    @ApiOperation(value = "회원별 주문 단건 조회")
+    public Response<Order> findOrderById(
+            @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String memberId,
+            @PathVariable @ApiParam(value = "조회 대상 주문 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String orderId){
+        return OK(
+                orderService.findById(Id.of(Member.class, memberId), Id.of(Order.class, orderId))
+        );
+    }
+
+    @GetMapping("/member/{memberId}/order/list")
+    @ApiOperation(value = "회원별 전체 주문 조회")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "direction", dataType = "string", paramType = "query", defaultValue = "ASC", value = "정렬 방향"),
+            @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query", defaultValue = "0", value = "페이징 offset"),
+            @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query", defaultValue = "5", value = "조회 갯수")
+    })
+    public Response<Page<Order>> findAllOrdersByMember(
+            @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String memberId,
+            PageRequest pageRequest
+    ){
+        return OK(
+                orderService.findAllMyMemberWithPage(Id.of(Member.class, memberId), pageRequest.of())
+        );
+    }
+
+    @PutMapping("/member/{memberId}/order/{orderId}")
+    @ApiOperation(value = "회원별 단건 주문 수정")
+    public Response<Order> modify(
+            @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String memberId,
+            @PathVariable @ApiParam(value = "조회 대상 주문 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String orderId,
+            @RequestBody OrderRequest request
+    ){
+        return OK(
+                orderService.modify(Id.of(Member.class, memberId), Id.of(Order.class, orderId), request.toOrder(Id.of(Order.class, orderId)))
+        );
+    }
+
+
+    @PutMapping("/member/{memberId}/order/{orderId}/delivery/{deliveryId}")
+    @ApiOperation(value = "회원별 단건 배송정보 수정")
+    public Response<Delivery> modify(
+            @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String memberId,
+            @PathVariable @ApiParam(value = "조회 대상 주문 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String orderId,
+            @PathVariable @ApiParam(value = "조회 대상 배송정보 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String deliveryId,
+            @RequestBody OrderRequest request
+    ){
+        return OK(
+                orderService.modify(Id.of(Member.class, memberId), Id.of(Order.class, orderId), Id.of(Delivery.class, deliveryId),
+                        request.toDelivery(Id.of(Delivery.class, deliveryId)))
+        );
+    }
 }
