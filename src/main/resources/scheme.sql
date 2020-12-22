@@ -126,3 +126,47 @@ CREATE TABLE cart (
                              CONSTRAINT fk_cart_to_member FOREIGN KEY (member_id) REFERENCES member (id) ON DELETE CASCADE ON UPDATE RESTRICT,
                              CONSTRAINT fk_cart_to_item_display_option FOREIGN KEY (item_id) REFERENCES item_display_option (id) ON DELETE CASCADE ON UPDATE RESTRICT
 );
+
+DROP TABLE IF EXISTS "order" CASCADE;
+CREATE TABLE "order" (
+                      id                   varchar(50) NOT NULL,
+                      member_id            varchar(50),
+                      total_amount         number not null,
+                      order_name           varchar(50) NOT NULL,
+                      order_tel            varchar(50) NOT NULL,
+                      order_addr1          varchar(255),
+                      order_addr2          varchar(255),
+                      create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
+                      update_at            datetime DEFAULT null,
+                      PRIMARY KEY (id),
+                      CONSTRAINT fk_order_to_member FOREIGN KEY (member_id) REFERENCES member (id) ON DELETE CASCADE ON UPDATE RESTRICT
+);
+
+DROP TABLE IF EXISTS order_item CASCADE;
+CREATE TABLE order_item (
+                         id                   varchar(50) NOT NULL,
+                         order_id             varchar(50) NOT NULL,
+                         item_id              varchar(50) NOT NULL,
+                         create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
+                         update_at            datetime DEFAULT null,
+                         PRIMARY KEY (id),
+                         CONSTRAINT fk_order_item_to_order FOREIGN KEY (order_id) REFERENCES "order" (id) ON DELETE CASCADE ON UPDATE RESTRICT,
+                         CONSTRAINT fk_order_item_to_item_display_option FOREIGN KEY (item_id) REFERENCES item_display_option (id) ON DELETE CASCADE ON UPDATE RESTRICT
+);
+
+DROP TABLE IF EXISTS delivery CASCADE;
+CREATE TABLE delivery (
+                         id                   varchar(50) NOT NULL,
+                         order_id             varchar(50),
+                         receiver_name        varchar(50) NOT NULL,
+                         receiver_tel         varchar(50) NOT NULL,
+                         receiver_addr1       varchar(255),
+                         receiver_addr2       varchar(255),
+                         message              varchar(255),
+                         status               number NOT NULL,
+                         invoice_num          number,
+                         create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
+                         update_at            datetime DEFAULT null,
+                         PRIMARY KEY (id),
+                         CONSTRAINT fk_delivery_to_order FOREIGN KEY (order_id) REFERENCES "order" (id) ON DELETE CASCADE ON UPDATE RESTRICT
+);
