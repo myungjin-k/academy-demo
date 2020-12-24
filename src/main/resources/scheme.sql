@@ -171,3 +171,18 @@ CREATE TABLE delivery (
                          PRIMARY KEY (id),
                          CONSTRAINT fk_delivery_to_order FOREIGN KEY (order_id) REFERENCES order_master (id) ON DELETE CASCADE ON UPDATE RESTRICT
 );
+
+DROP TABLE IF EXISTS review CASCADE;
+CREATE TABLE review (
+                          id                   varchar(50) NOT NULL,
+                          member_id            varchar(50) NOT NULL,
+                          item_id              varchar(50) NOT NULL,
+                          score                number default 5,
+                          content              varchar(2000) NOT NULL,
+                          status               number default 1,
+                          create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
+                          update_at            datetime DEFAULT null,
+                          PRIMARY KEY (id),
+                          CONSTRAINT fk_review_to_member FOREIGN KEY (member_id) REFERENCES member (id) ON DELETE CASCADE ON UPDATE RESTRICT,
+                          CONSTRAINT fk_review_to_item_display FOREIGN KEY (item_id) REFERENCES item_display (id) ON DELETE CASCADE ON UPDATE RESTRICT
+);
