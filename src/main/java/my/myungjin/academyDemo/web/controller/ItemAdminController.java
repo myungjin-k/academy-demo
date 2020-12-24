@@ -18,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -105,7 +104,7 @@ public class ItemAdminController {
 
     @GetMapping("/itemMaster")
     @ApiOperation(value = "상품 마스터 검색(상품명, 등록일(from), 등록일(to)")
-    public Response<List<ItemMaster>> searchMaster(ItemMasterSearchRequest request){
+    public Response<List<ItemMaster>> searchMaster(ItemSearchRequest request){
         return  OK(
                 (List<ItemMaster>) itemMasterService.search(request.getItemName(), request.getStart(), request.getEnd())
         );
@@ -197,6 +196,19 @@ public class ItemAdminController {
             @PathVariable @ApiParam(value = "대상 전시상품 PK", defaultValue = "f23ba30a47194a2c8a3fd2ccadd952a4") String displayId){
         return OK(
                 itemDisplayService.deleteItemById(Id.of(ItemDisplay.class, displayId))
+        );
+    }
+
+    @GetMapping("/itemDisplay")
+    @ApiOperation(value = "전시상품 검색(상품명, 등록일(from), 등록일(to)")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "direction", dataType = "string", paramType = "query", defaultValue = "DESC", value = "정렬 방향"),
+            @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query", defaultValue = "0", value = "페이징 offset"),
+            @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query", defaultValue = "5", value = "조회 갯수")
+    })
+    public Response<Page<ItemDisplay>> searchMaster(ItemSearchRequest request, PageRequest pageRequest){
+        return  OK(
+                itemDisplayService.searchByNameAndCreateAt(request.getItemName(), request.getStart(), request.getEnd(), false, pageRequest.of())
         );
     }
 

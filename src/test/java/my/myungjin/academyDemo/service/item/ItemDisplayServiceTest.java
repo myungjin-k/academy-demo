@@ -178,7 +178,7 @@ public class ItemDisplayServiceTest {
         request.setPage(0);
         request.setSize(5);
         request.setDirection(Sort.Direction.DESC);
-        Page<ItemDisplay> results = itemDisplayService.searchByNameAndCreateAt("니트", LocalDate.now(), null,  request.of());
+        Page<ItemDisplay> results = itemDisplayService.searchByNameAndCreateAt("니트", LocalDate.now(), null,  false, request.of());
 
         assertThat(results.getTotalElements(), is(1L));
         log.info("Result item: {}", results.getContent());

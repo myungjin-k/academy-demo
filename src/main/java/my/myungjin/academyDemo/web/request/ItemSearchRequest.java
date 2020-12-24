@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @ToString
 @Getter
 @AllArgsConstructor
-public class ItemMasterSearchRequest {
+public class ItemSearchRequest {
 
     private String itemName;
 

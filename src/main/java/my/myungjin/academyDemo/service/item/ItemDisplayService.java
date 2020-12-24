@@ -136,8 +136,8 @@ public class ItemDisplayService {
     }
 
     @Transactional
-    public Page<ItemDisplay> searchByNameAndCreateAt(String displayName, LocalDate start, LocalDate end, Pageable pageable){
-        return itemDisplayRepository.findAll(ItemDisplayPredicate.searchByNameAndDate(displayName, start, end), pageable);
+    public Page<ItemDisplay> searchByNameAndCreateAt(String displayName, LocalDate start, LocalDate end, boolean isFromMall, Pageable pageable){
+        return itemDisplayRepository.findAll(ItemDisplayPredicate.searchByNameAndDate(displayName, start, end, isFromMall), pageable);
     }
 
     private ItemDisplay getOne(String id){
