@@ -6,7 +6,7 @@ import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.member.MemberRepository;
 import my.myungjin.academyDemo.domain.order.*;
 import my.myungjin.academyDemo.error.NotFoundException;
-import my.myungjin.academyDemo.error.ServiceRuntimeException;
+import my.myungjin.academyDemo.error.StatusNotSatisfiedException;
 import my.myungjin.academyDemo.util.Util;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -60,12 +60,11 @@ public class OrderService {
     }
 
     @Transactional
-    public Order modify(@Valid Id<Member, String> memberId, @Valid Id<Order, String> orderId, @Valid Order order){
+    public Order modify(@Valid Id<Member, String> memberId, @Valid Id<Order, String> orderId, @Valid Order order) {
         Order o = findById(memberId, orderId);
         Delivery d = deliveryRepository.findByOrder_Member_idAndOrder_id(memberId.value(), orderId.value()).get(0);
         if(d.getStatus().getValue() > 1){
-            throw new ServiceRuntimeException("error.already.shipped", "error.already.shipped.details",
-                    new Object[]{Order.class, o.getId(), o.getDeliveries().get(0).getStatus()});
+            throw new StatusNotSatisfiedException(Order.class, orderId, d.getStatus());
         }
         o.modify(order.getOrderName(), order.getOrderTel(), order.getOrderAddr1(), order.getOrderAddr2());
         return save(o);
@@ -73,12 +72,11 @@ public class OrderService {
 
     @Transactional
     public Delivery modify(@Valid Id<Member, String> memberId, @Valid Id<Order, String> orderId,
-                           @Valid Id<Delivery, String> deliveryId, @Valid Delivery delivery){
+                           @Valid Id<Delivery, String> deliveryId, @Valid Delivery delivery) {
         Delivery d = deliveryRepository.findByOrder_Member_idAndOrder_idAndId(memberId.value(), orderId.value(), deliveryId.value())
                 .orElseThrow(() -> new NotFoundException(Delivery.class, memberId, orderId, deliveryId));
         if(d.getStatus().getValue() > 1){
-            throw new ServiceRuntimeException("error.already.shipped", "error.already.shipped.details",
-                    new Object[]{Delivery.class, d.getId(), d.getStatus()});
+            throw new StatusNotSatisfiedException(Delivery.class, deliveryId, d.getStatus());
         }
         d.modify(delivery.getReceiverName(), delivery.getReceiverTel(),
                 delivery.getReceiverAddr1(), delivery.getReceiverAddr2(), delivery.getMessage());
