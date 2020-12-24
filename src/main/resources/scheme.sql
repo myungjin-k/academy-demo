@@ -179,6 +179,7 @@ CREATE TABLE review (
                           item_id              varchar(50) NOT NULL,
                           score                number default 5,
                           content              varchar(2000) NOT NULL,
+                          review_img           varchar(255),
                           status               number default 1,
                           create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
                           update_at            datetime DEFAULT null,

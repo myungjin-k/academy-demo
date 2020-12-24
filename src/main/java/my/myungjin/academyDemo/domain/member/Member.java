@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import my.myungjin.academyDemo.domain.order.CartItem;
 import my.myungjin.academyDemo.domain.order.Order;
+import my.myungjin.academyDemo.domain.review.Review;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
@@ -88,6 +89,11 @@ public class Member{
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Collection<Order> orders;
 
+    @Getter
+    @JsonIgnore
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Review> reviews;
+
     @Builder
     public Member(String id, String userId, String password, String name, String email, String tel, String addr1, String addr2,
                   Rating rating, int reserves, LocalDateTime updateAt) {
@@ -130,10 +136,5 @@ public class Member{
         if(!encoder.matches(credentials, password)){
             throw new IllegalArgumentException("Bad Credential");
         }
-    }
-
-    public void addCartItem(CartItem item){
-        cartItems.add(item);
-        item.setMember(this);
     }
 }

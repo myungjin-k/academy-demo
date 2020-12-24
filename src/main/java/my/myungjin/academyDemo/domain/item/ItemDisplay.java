@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import my.myungjin.academyDemo.domain.review.Review;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -92,6 +93,10 @@ public class ItemDisplay {
     @OneToMany(mappedBy = "itemDisplay", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Collection<ItemDisplayOption> options;
 
+    @Getter @Setter
+    @JsonIgnore
+    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private Collection<Review> reviews;
 
     @Builder
     public ItemDisplay(String id,
