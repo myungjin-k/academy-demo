@@ -31,6 +31,8 @@ public class OrderService {
 
     private final DeliveryRepository deliveryRepository;
 
+    private final DeliveryItemRepository deliveryItemRepository;
+
     private final CartRepository cartRepository;
 
     private final MemberRepository memberRepository;
@@ -138,9 +140,29 @@ public class OrderService {
     }
 
     private Order saveDelivery(Delivery delivery, Order order){
-        order.addDelivery(delivery);
         save(delivery);
+        saveDeliveryItems(order.getItems(), delivery);
+        order.addDelivery(delivery);
         return order;
+    }
+
+
+    private void saveDeliveryItems(List<OrderItem> orderItems, Delivery delivery){
+        List<ItemDisplay.ItemDisplayOption> items = orderItems.stream()
+                .map(OrderItem::getItemOption)
+                .collect(Collectors.toList());
+
+        for(ItemDisplay.ItemDisplayOption item : items){
+            DeliveryItem dItem = new DeliveryItem(Util.getUUID());
+            dItem.setItemOption(item);
+            delivery.addItem(dItem);
+            save(dItem);
+        }
+        save(delivery);
+    }
+
+    private void save(DeliveryItem deliveryItem){
+        deliveryItemRepository.save(deliveryItem);
     }
 
     private Delivery save(Delivery delivery){

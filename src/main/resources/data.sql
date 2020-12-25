@@ -48,11 +48,58 @@ M(28-29) 허리 35 엉덩이 50.5 허벅지 32.5 밑위 29.5 밑단 21 총길이
 INSERT INTO item_display_option (id, color, display_id) VALUES ('91cc1c18f11e4d018566524b51d8419a', '콘베이지', 'f23ba30a47194a2c8a3fd2ccadd952a4');
 INSERT INTO item_display_option (id, color, display_id) VALUES ('c9402883dbe540e898a417e4884845bf', '크림아이보리', 'f23ba30a47194a2c8a3fd2ccadd952a4');
 
-INSERT INTO item_option (id, color, master_id) VALUES ('fb32787a91614b978cb94b0d47d7c676', '콘베이지', '8c1cbb792b8d447e9128d53920cf9366');
-INSERT INTO item_option (id, color, master_id) VALUES ('af412e9968dc4f11a83f9352a251f0aa', '크림아이보리', '8c1cbb792b8d447e9128d53920cf9366');
+INSERT INTO item_option (id, size, master_id) VALUES ('fb32787a91614b978cb94b0d47d7c676', 'S', '8c1cbb792b8d447e9128d53920cf9366');
+INSERT INTO item_option (id, size, master_id) VALUES ('af412e9968dc4f11a83f9352a251f0aa', 'M', '8c1cbb792b8d447e9128d53920cf9366');
+
+INSERT INTO item_master (id, item_name, category_id, price, thumbnail)
+VALUES ('6b5cd6e21ffa4bb08a75e270c18e8e05', '[N택] 시티 하이넥 코트 (2color)', '36f651a982274a5b95dac3e9d85b0d1a', 190000, 'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/itemMaster/cb0b8f3a76e06326d54e2f5231b1c317.jpg');
+
+INSERT INTO item_option (id, color, master_id) VALUES ('fb030782683f454391e693e66400d8e6', '딥브라운', '6b5cd6e21ffa4bb08a75e270c18e8e05');
+INSERT INTO item_option (id, color, master_id) VALUES ('f7d04434a33b4a0f8092fc9bacf77470', '차콜그레이', '6b5cd6e21ffa4bb08a75e270c18e8e05');
+
+
+INSERT INTO item_display (id, item_id, item_display_name, sale_price, material, size, description, status, detail_image) VALUES
+('6bdbf6eea40b425caae4410895ca4809', '6b5cd6e21ffa4bb08a75e270c18e8e05', '시티 하이넥 코트 (2color)', 190000, '울30 나일론70',
+ 'one size
+어깨 - 가슴 60 암홀 38.5 팔통 21 소매단 18.5 팔길이 72 총길이(넥제외) 114.5 넥길이 7.5',
+ '코트 하나만으로 멋스러운 코디가 완성되는 하이넥 코트입니다.
+ 깔끔하면서도 포인트 되는 디테일이 매력적입니다.
+
+ 오픈클로징 디테일이 생략된 형태로
+ 코트깃을 여며 자연스럽게 흘러내리듯 착용하거나
+ 넥라인의 미니멀한 단추를 채워 하이넥으로 연출하시면 좋습니다.
+
+ 벨트를 이용해 로브 형식으로 묶어 착용해도 한층 멋스럽게 즐기실 수 있습니다.
+
+ 159 모델키 기준 종아리를 반정도 덮는 여유로운 기장감으로
+ 내추럴하게 흐르듯 착용되는 아웃핏이 멋스럽습니다.
+
+ 비교적 여유로운 품과 암홀라인으로
+ 이너로 도톰한 두께감의 니트와 함께 착용했을 때도
+ 끼임없이 편안하게 착용 가능합니다.
+
+ 데일리하게 활용하기 좋은 차분하고 은은한 색감의 진한 차콜그레이와
+ 고급스러운 색감의 진한 브라운 두가지 색상 준비했습니다.
+
+ *소재 특성상 잡실/냄새/털빠짐/까끌거림이 있을 수 있습니다.
+
+ COLOR
+ 딥브라운- 고급스러운 색감의 진한 브라운
+ 차콜그레이-차분하고 은은한 색감의 진한 그레이
+
+ INFO
+ 신축성-없음｜두께감-적당함｜안감-있음｜무게감-약간 있음',
+ 1,
+ 'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/itemDisplay/921574572f8f440caaa4d55e8c98a4ef.jpeg'
+);
+
+INSERT INTO item_display_option (id, color, display_id) VALUES ('8130cede06c04fa2bbd8bc09a29787c8', '딥브라운', '6bdbf6eea40b425caae4410895ca4809');
+INSERT INTO item_display_option (id, color, display_id) VALUES ('fd778631e13944f393a73abf9e5dc5cf', '차콜그레이', '6bdbf6eea40b425caae4410895ca4809');
 
 INSERT INTO cart (id, member_id, item_id) VALUES ('f4597dfc1ae649a58edcb7921002aca5', '3a18e633a5db4dbd8aaee218fe447fa4', 'c9402883dbe540e898a417e4884845bf');
 INSERT INTO cart (id, member_id, item_id) VALUES ('0a25d9eea6d94a3897e06b33e4bf5b69', '3a18e633a5db4dbd8aaee218fe447fa4', '91cc1c18f11e4d018566524b51d8419a');
 
-INSERT INTO order_master (id, abbr_items_name, member_id, total_amount, order_name, order_tel, order_addr1, order_addr2) VALUES ('03039b4535404247bfee52cfd934c779', '그랜드 핀턱 팬츠 (2color)', '3a18e633a5db4dbd8aaee218fe447fa4', 43000 * 2, '명진', '010-1234-5678','XX시 XX구 XX로', '1-1111');
+INSERT INTO order_master (id, abbr_items_name, member_id, total_amount, order_name, order_tel, order_addr1, order_addr2) VALUES ('03039b4535404247bfee52cfd934c779', '그랜드 핀턱 팬츠 (2color) 外 1건', '3a18e633a5db4dbd8aaee218fe447fa4', 43000 * 2 + 190000, '명진', '010-1234-5678','XX시 XX구 XX로', '1-1111');
 INSERT INTO order_item (id, ORDER_ID, item_id, count) VALUES ('973ee36b953a4a0c9ca5d9f5868b015c', '03039b4535404247bfee52cfd934c779', 'c9402883dbe540e898a417e4884845bf', 2);
+INSERT INTO order_item (id, ORDER_ID, item_id, count) VALUES ('be9089f9bf1f4e59b712e3187b38a0d7', '03039b4535404247bfee52cfd934c779', '8130cede06c04fa2bbd8bc09a29787c8', 1);
+

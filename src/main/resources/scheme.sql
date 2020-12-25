@@ -159,7 +159,7 @@ CREATE TABLE order_item (
 DROP TABLE IF EXISTS delivery CASCADE;
 CREATE TABLE delivery (
                          id                   varchar(50) NOT NULL,
-                         order_id             varchar(50),
+                         order_id             varchar(50) NOT NULL,
                          receiver_name        varchar(50) NOT NULL,
                          receiver_tel         varchar(50) NOT NULL,
                          receiver_addr1       varchar(255),
@@ -171,6 +171,19 @@ CREATE TABLE delivery (
                          update_at            datetime DEFAULT null,
                          PRIMARY KEY (id),
                          CONSTRAINT fk_delivery_to_order FOREIGN KEY (order_id) REFERENCES order_master (id) ON DELETE CASCADE ON UPDATE RESTRICT
+);
+
+
+DROP TABLE IF EXISTS delivery_item CASCADE;
+CREATE TABLE delivery_item (
+                            id                   varchar(50) NOT NULL,
+                            delivery_id          varchar(50) NOT NULL,
+                            item_id              varchar(50) NOT NULL,
+                            create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
+                            update_at            datetime DEFAULT null,
+                            PRIMARY KEY (id),
+                            CONSTRAINT fk_delivery_item_to_delivery FOREIGN KEY (delivery_id) REFERENCES delivery (id) ON DELETE CASCADE ON UPDATE RESTRICT,
+                            CONSTRAINT fk_delivery_item_to_item_display_option FOREIGN KEY (item_id) REFERENCES item_display_option (id) ON DELETE CASCADE ON UPDATE RESTRICT
 );
 
 DROP TABLE IF EXISTS review CASCADE;

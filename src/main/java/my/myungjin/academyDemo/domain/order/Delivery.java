@@ -1,12 +1,14 @@
 package my.myungjin.academyDemo.domain.order;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static java.time.LocalDateTime.now;
@@ -14,7 +16,7 @@ import static java.util.Optional.ofNullable;
 
 @Entity
 @Table(name = "delivery")
-@ToString
+@ToString(exclude = "items")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
 public class Delivery {
@@ -69,6 +71,11 @@ public class Delivery {
     @JoinColumn(name = "order_id")
     private Order order;
 
+    @Getter @Setter
+    @JsonIgnore
+    @OneToMany(mappedBy = "delivery", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<DeliveryItem> items;
+
     @Builder
     public Delivery(String id, @Size(min = 1, max = 10) String receiverName, @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$", message = "전화번호는 010-0000-0000 형태여야 합니다.") String receiverTel, String receiverAddr1, String receiverAddr2, DeliveryStatus status, String invoiceNum, @Size(max = 100) String message) {
         this.id = id;
@@ -83,6 +90,11 @@ public class Delivery {
 
     public Optional<LocalDateTime> getUpdateAt(){
         return ofNullable(updateAt);
+    }
+
+    public void addItem(DeliveryItem item){
+        items.add(item);
+        item.setDelivery(this);
     }
 
     public void modify(String receiverName, String receiverTel, String receiverAddr1, String receiverAddr2, String message){
