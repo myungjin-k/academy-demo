@@ -28,6 +28,9 @@ public class OrderItem {
     @Getter @Setter
     private String reviewId;
 
+    @Getter @Setter
+    private boolean isDelivered;
+
     @Getter
     @Column(name = "create_at", insertable = false, updatable = false,
             columnDefinition = "datetime default current_timestamp")

@@ -3,11 +3,13 @@ package my.myungjin.academyDemo.domain.order;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,14 +69,14 @@ public class Delivery {
 
     @Getter @Setter
     @JsonBackReference
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "order_id")
     private Order order;
 
     @Getter @Setter
     @JsonIgnore
     @OneToMany(mappedBy = "delivery", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<DeliveryItem> items;
+    private List<DeliveryItem> items = new ArrayList<>();
 
     @Builder
     public Delivery(String id, @Size(min = 1, max = 10) String receiverName, @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$", message = "전화번호는 010-0000-0000 형태여야 합니다.") String receiverTel, String receiverAddr1, String receiverAddr2, DeliveryStatus status, String invoiceNum, @Size(max = 100) String message) {
@@ -108,5 +110,9 @@ public class Delivery {
 
     public void updateStatus(DeliveryStatus status){
         this.status = status;
+    }
+
+    public void updateInvoice(String invoiceNum){
+        this.invoiceNum = StringUtils.join( ",", this.invoiceNum, invoiceNum);
     }
 }

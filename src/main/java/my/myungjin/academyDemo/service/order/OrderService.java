@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -49,25 +48,22 @@ public class OrderService {
         Order o = orderRepository.findByMember_idAndId(memberId.value(), orderId.value())
                 .map(order -> {
                     order.setItems(orderItemRepository.findAllByOrder(order));
-                    order.setDeliveries(deliveryRepository.findByOrder(order));
+                    order.setDelivery(deliveryRepository.getByOrder(order));
                     return order;
                 }).orElseThrow(() -> new NotFoundException(Order.class, memberId, orderId));
+
         for(OrderItem item : o.getItems()){
-            String reviewId = findReviewByItemAndMember(
-                        Id.of(ItemDisplay.class, item.getItemOption().getItemDisplay().getId()),
-                        memberId
-                    ).map(Review::getId)
+            if(!o.getDelivery().getStatus().equals(DeliveryStatus.DELIVERED))
+                continue;
+            String reviewId = reviewRepository
+                    .findByItem_idAndMember_id(item.getItemOption().getItemDisplay().getId(), memberId.value())
+                    .map(Review::getId)
                     .orElse("");
             item.setReviewId(reviewId);
         }
         return o;
     }
 
-
-    private Optional<Review> findReviewByItemAndMember(Id<ItemDisplay, String> itemId, Id<Member, String> memberId){
-
-        return reviewRepository.findByItem_idAndMember_id(itemId.value(), memberId.value());
-    }
     @Transactional
     public Order ordering(@Valid Id<Member, String> memberId, @Valid Order newOrder,
                           @Valid Delivery delivery, List<Id<CartItem, String>> itemIds){
@@ -77,14 +73,22 @@ public class OrderService {
                     return save(newOrder);
                 })
                 .map(order -> saveOrderItems(itemIds, newOrder))
-                .map(order -> saveDelivery(delivery, order))
+                .map(order -> {
+                    delivery.setOrder(order);
+                    order.setDelivery(save(delivery));
+                    return order;
+                })
+                .map(order -> {
+                    saveDeliveryItems(order.getItems(), order.getDelivery());
+                    return order;
+                })
                 .orElseThrow(() ->  new NotFoundException(Member.class, memberId));
     }
 
     @Transactional
     public Order modify(@Valid Id<Member, String> memberId, @Valid Id<Order, String> orderId, @Valid Order order) {
         Order o = findById(memberId, orderId);
-        Delivery d = deliveryRepository.findByOrder_Member_idAndOrder_id(memberId.value(), orderId.value()).get(0);
+        Delivery d = deliveryRepository.getByOrder_Member_idAndOrder_id(memberId.value(), orderId.value());
         if(d.getStatus().getValue() > 1){
             throw new StatusNotSatisfiedException(Order.class, orderId, d.getStatus());
         }
@@ -103,15 +107,6 @@ public class OrderService {
         d.modify(delivery.getReceiverName(), delivery.getReceiverTel(),
                 delivery.getReceiverAddr1(), delivery.getReceiverAddr2(), delivery.getMessage());
         return save(d);
-    }
-
-    @Transactional
-    public Delivery modifyStatus(@Valid Id<Delivery, String> deliveryId, DeliveryStatus status){
-        return deliveryRepository.findById(deliveryId.value())
-                .map(delivery -> {
-                    delivery.updateStatus(status);
-                    return save(delivery);
-                }).orElseThrow(() -> new NotFoundException(Delivery.class, deliveryId));
     }
 
     private Order saveOrderItems(List<Id<CartItem, String>> itemIds, Order order){
@@ -139,12 +134,6 @@ public class OrderService {
         return save(order);
     }
 
-    private Order saveDelivery(Delivery delivery, Order order){
-        save(delivery);
-        saveDeliveryItems(order.getItems(), delivery);
-        order.addDelivery(delivery);
-        return order;
-    }
 
 
     private void saveDeliveryItems(List<OrderItem> orderItems, Delivery delivery){
@@ -158,7 +147,6 @@ public class OrderService {
             delivery.addItem(dItem);
             save(dItem);
         }
-        save(delivery);
     }
 
     private void save(DeliveryItem deliveryItem){
