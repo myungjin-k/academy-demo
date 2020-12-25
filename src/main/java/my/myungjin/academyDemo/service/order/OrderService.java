@@ -2,9 +2,12 @@ package my.myungjin.academyDemo.service.order;
 
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
+import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.member.MemberRepository;
 import my.myungjin.academyDemo.domain.order.*;
+import my.myungjin.academyDemo.domain.review.Review;
+import my.myungjin.academyDemo.domain.review.ReviewRepository;
 import my.myungjin.academyDemo.error.NotFoundException;
 import my.myungjin.academyDemo.error.StatusNotSatisfiedException;
 import my.myungjin.academyDemo.util.Util;
@@ -15,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -31,6 +35,8 @@ public class OrderService {
 
     private final MemberRepository memberRepository;
 
+    private final ReviewRepository reviewRepository;
+
     @Transactional(readOnly = true)
     public Page<Order> findAllMyMemberWithPage(@Valid Id<Member, String> memberId, Pageable pageable){
         return orderRepository.findAllByMember_id(memberId.value(), pageable);
@@ -38,14 +44,28 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public Order findById(@Valid Id<Member, String> memberId, @Valid Id<Order, String> orderId){
-        return orderRepository.findByMember_idAndId(memberId.value(), orderId.value())
+        Order o = orderRepository.findByMember_idAndId(memberId.value(), orderId.value())
                 .map(order -> {
                     order.setItems(orderItemRepository.findAllByOrder(order));
                     order.setDeliveries(deliveryRepository.findByOrder(order));
                     return order;
                 }).orElseThrow(() -> new NotFoundException(Order.class, memberId, orderId));
+        for(OrderItem item : o.getItems()){
+            String reviewId = findReviewByItemAndMember(
+                        Id.of(ItemDisplay.class, item.getItemOption().getItemDisplay().getId()),
+                        memberId
+                    ).map(Review::getId)
+                    .orElse("");
+            item.setReviewId(reviewId);
+        }
+        return o;
     }
 
+
+    private Optional<Review> findReviewByItemAndMember(Id<ItemDisplay, String> itemId, Id<Member, String> memberId){
+
+        return reviewRepository.findByItem_idAndMember_id(itemId.value(), memberId.value());
+    }
     @Transactional
     public Order ordering(@Valid Id<Member, String> memberId, @Valid Order newOrder,
                           @Valid Delivery delivery, List<Id<CartItem, String>> itemIds){
@@ -101,7 +121,7 @@ public class OrderService {
 
         int totalAmount = 0;
         for(CartItem item : items){
-            OrderItem oItem = new OrderItem(Util.getUUID());
+            OrderItem oItem = new OrderItem(Util.getUUID(), item.getCount());
             oItem.setItemOption(item.getItemOption());
             order.addItem(oItem);
             save(oItem);

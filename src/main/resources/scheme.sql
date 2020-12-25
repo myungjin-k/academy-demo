@@ -148,6 +148,7 @@ CREATE TABLE order_item (
                          id                   varchar(50) NOT NULL,
                          order_id             varchar(50) NOT NULL,
                          item_id              varchar(50) NOT NULL,
+                         count                number not null,
                          create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
                          update_at            datetime DEFAULT null,
                          PRIMARY KEY (id),

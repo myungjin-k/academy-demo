@@ -53,3 +53,6 @@ INSERT INTO item_option (id, color, master_id) VALUES ('af412e9968dc4f11a83f9352
 
 INSERT INTO cart (id, member_id, item_id) VALUES ('f4597dfc1ae649a58edcb7921002aca5', '3a18e633a5db4dbd8aaee218fe447fa4', 'c9402883dbe540e898a417e4884845bf');
 INSERT INTO cart (id, member_id, item_id) VALUES ('0a25d9eea6d94a3897e06b33e4bf5b69', '3a18e633a5db4dbd8aaee218fe447fa4', '91cc1c18f11e4d018566524b51d8419a');
+
+INSERT INTO order_master (id, abbr_items_name, member_id, total_amount, order_name, order_tel, order_addr1, order_addr2) VALUES ('03039b4535404247bfee52cfd934c779', '그랜드 핀턱 팬츠 (2color)', '3a18e633a5db4dbd8aaee218fe447fa4', 43000 * 2, '명진', '010-1234-5678','XX시 XX구 XX로', '1-1111');
+INSERT INTO order_item (id, ORDER_ID, item_id, count) VALUES ('973ee36b953a4a0c9ca5d9f5868b015c', '03039b4535404247bfee52cfd934c779', 'c9402883dbe540e898a417e4884845bf', 2);

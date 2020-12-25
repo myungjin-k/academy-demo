@@ -21,7 +21,7 @@ import static java.util.Optional.ofNullable;
 
 @Entity
 @Table(name = "member")
-@ToString(exclude = {"cartItems", "orders"})
+@ToString(exclude = {"cartItems", "orders", "reviews"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
 public class Member{

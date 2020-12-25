@@ -18,7 +18,7 @@ import static java.util.Optional.ofNullable;
 
 @Entity
 @Table(name = "item_display")
-@ToString(exclude = "options")
+@ToString(exclude = {"options", "reviews"})
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")

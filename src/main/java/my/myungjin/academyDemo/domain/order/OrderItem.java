@@ -3,7 +3,6 @@ package my.myungjin.academyDemo.domain.order;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
-import my.myungjin.academyDemo.domain.member.Member;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -21,6 +20,13 @@ public class OrderItem {
     @Id
     @Getter
     private String id;
+
+    @Getter
+    @Column(name = "count", nullable = false)
+    private int count;
+
+    @Getter @Setter
+    private String reviewId;
 
     @Getter
     @Column(name = "create_at", insertable = false, updatable = false,
@@ -42,8 +48,9 @@ public class OrderItem {
     @JoinColumn(name = "item_id", nullable = false)
     private ItemDisplay.ItemDisplayOption itemOption;
 
-    public OrderItem(String id) {
+    public OrderItem(String id, int count) {
         this.id = id;
+        this.count = count;
     }
 
     public Optional<LocalDateTime> getUpdateAt(){
