@@ -104,4 +104,4 @@ INSERT INTO order_item (id, ORDER_ID, item_id, count) VALUES ('973ee36b953a4a0c9
 INSERT INTO order_item (id, ORDER_ID, item_id, count) VALUES ('be9089f9bf1f4e59b712e3187b38a0d7', '03039b4535404247bfee52cfd934c779', '8130cede06c04fa2bbd8bc09a29787c8', 1);
 
 INSERT INTO delivery (id, order_id, STATUS, RECEIVER_NAME, RECEIVER_TEL, RECEIVER_ADDR1, RECEIVER_ADDR2) VALUES ('cd2940ee2dfc418384eedc450be832a2', '03039b4535404247bfee52cfd934c779', 1, '명진', '010-1234-5678','XX시 XX구 XX로', '1-1111');
-INSERT INTO delivery_item (id, delivery_id, item_id) VALUES ('d14b36612cd047a0b1e4e71d993dc9b2', 'cd2940ee2dfc418384eedc450be832a2', 'c9402883dbe540e898a417e4884845bf');
+INSERT INTO delivery_item (id, delivery_id, item_id, count) VALUES ('d14b36612cd047a0b1e4e71d993dc9b2', 'cd2940ee2dfc418384eedc450be832a2', 'c9402883dbe540e898a417e4884845bf', 2);
