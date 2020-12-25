@@ -5,12 +5,17 @@ import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.order.Delivery;
 import my.myungjin.academyDemo.domain.order.DeliveryItem;
 import my.myungjin.academyDemo.domain.order.DeliveryStatus;
+import my.myungjin.academyDemo.domain.order.OrderItem;
+import my.myungjin.academyDemo.util.Util;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -33,11 +38,16 @@ public class DeliveryServiceTest {
 
     private Id<ItemDisplay.ItemDisplayOption, String> newItemId;
 
+    private Id<my.myungjin.academyDemo.domain.order.Order, String> orderId;
+
+    private Id<Delivery, String> newDeliveryId;
+
     @BeforeAll
     void setup(){
         deliveryId = Id.of(Delivery.class, "cd2940ee2dfc418384eedc450be832a2");
         itemId = Id.of(ItemDisplay.ItemDisplayOption.class, "c9402883dbe540e898a417e4884845bf");
         newItemId = Id.of(ItemDisplay.ItemDisplayOption.class, "8130cede06c04fa2bbd8bc09a29787c8");
+        orderId = Id.of(my.myungjin.academyDemo.domain.order.Order.class, "03039b4535404247bfee52cfd934c779");
     }
 
     @Test
@@ -60,14 +70,21 @@ public class DeliveryServiceTest {
     @Test
     @Order(3)
     void 배송상품_추가하기(){
-        DeliveryItem delivery = deliveryService.addDeliveryItem(deliveryId, newItemId).orElse(null);
+        DeliveryItem delivery = deliveryService.addDeliveryItem(deliveryId, newItemId, 1).orElse(null);
         assertThat(delivery, is(notNullValue()));
         log.info("Added Item: {}", delivery);
     }
 
-
     @Test
     @Order(4)
+    void 배송상품_수량_수정하기(){
+        DeliveryItem modified = deliveryService.modifyDeliveryItemCount(deliveryId, itemId, 1);
+        assertThat(modified, is(notNullValue()));
+        log.info("Modified Item: {}", modified);
+    }
+
+    @Test
+    @Order(5)
     void 배송상품_삭제하기(){
         DeliveryItem deleted = deliveryService.deleteDeliveryItem(deliveryId, newItemId);
         assertThat(deleted, is(notNullValue()));
@@ -75,7 +92,7 @@ public class DeliveryServiceTest {
     }
 
     @Test
-    @Order(5)
+    @Order(6)
     void 송장_업데이트하기(){
         Delivery updated = deliveryService.updateInvoice(deliveryId, "012345678");
         assertThat(updated, is(notNullValue()));
@@ -83,10 +100,46 @@ public class DeliveryServiceTest {
     }
 
     @Test
-    @Order(6)
+    @Order(7)
     void 배송상태_업데이트하기(){
         Delivery updated = deliveryService.modifyStatus(deliveryId, DeliveryStatus.SHIPPED);
         assertThat(updated, is(notNullValue()));
         log.info("Updated Delivery: {}", updated);
     }
+
+    @Test
+    @Order(8)
+    void 배송정보_추가하기(){
+        newDeliveryId = Id.of(Delivery.class, Util.getUUID());
+        Delivery newDelivery = Delivery.builder()
+                .id(newDeliveryId.value())
+                .receiverName("명진")
+                .receiverTel("010-1234-5678")
+                .receiverAddr1("XX시 XX구 XX로")
+                .receiverAddr2("1-1111")
+                .status(DeliveryStatus.PROCESSING)
+                .build();
+
+        List<OrderItem> items = new ArrayList<>();
+        OrderItem item = new OrderItem(Util.getUUID(), 1);
+        // 테스트 용으로 배송아이템 정보 사용. 원래는 주문아이템 정보로 가져와야 함.
+        DeliveryItem temp = deliveryService.findItemByDeliveryAndItem(deliveryId, itemId).get();
+        item.setOrder(temp.getDelivery().getOrder());
+        item.setItemOption(temp.getItemOption());
+        items.add(item);
+
+        Delivery d = deliveryService.addDelivery(orderId, newDelivery, items);
+        assertThat(d, is(notNullValue()));
+        log.info("Added Delivery: {}", d);
+        log.info("Added Delivery Item: {}", d.getItems());
+    }
+
+    @Test
+    @Order(9)
+    void 배송_취소하기(){
+        Delivery deleted = deliveryService.deleteDelivery(newDeliveryId);
+        assertThat(deleted, is(notNullValue()));
+        log.info("Deleted Delivery: {}", deleted);
+    }
+
 }

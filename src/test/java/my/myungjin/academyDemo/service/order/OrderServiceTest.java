@@ -80,7 +80,7 @@ public class OrderServiceTest {
         assertThat(saved, is(notNullValue()));
         log.info("Saved Order: {}", saved);
         log.info("Saved Order Item: {}", saved.getItems());
-        log.info("Saved Delivery: {}", saved.getDelivery());
+        log.info("Saved Delivery: {}", saved.getDeliveries());
     }
 
     @Test
@@ -103,7 +103,7 @@ public class OrderServiceTest {
         assertThat(order, is(notNullValue()));
         log.info("Found Order: {}", order);
         log.info("Found Order Item: {}", order.getItems());
-        log.info("Found Delivery: {}", order.getDelivery());
+        log.info("Found Delivery: {}", order.getDeliveries());
     }
 
     @Test

@@ -11,7 +11,9 @@ public enum DeliveryStatus {
     PROCESSING(1, "배송준비중"),
     SHIPPED(2, "발송완료"),
     DELIVERING(3, "배송중"),
-    DELIVERED(4, "배송완료");
+    DELIVERED(4, "배송완료"),
+    DELETED(9, "배송취소")
+    ;
 
     private final int value;
     private final String description;

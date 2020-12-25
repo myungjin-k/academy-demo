@@ -18,7 +18,7 @@ import static java.util.Optional.ofNullable;
 
 @Entity
 @Table(name = "order_master")
-@ToString(exclude = {"items", "delivery"})
+@ToString(exclude = {"items", "deliveries"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
 public class Order {
@@ -74,8 +74,8 @@ public class Order {
 
     @Getter @Setter
     @JsonIgnore
-    @OneToOne(mappedBy = "order", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    private Delivery delivery;
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private List<Delivery> deliveries = new ArrayList<>();
 
     @Builder
     public Order(String id, int totalAmount, @Size(min = 1, max = 10) String orderName, @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$", message = "전화번호는 010-0000-0000 형태여야 합니다.") String orderTel, String orderAddr1, String orderAddr2) {
@@ -94,6 +94,11 @@ public class Order {
     public void addItem(OrderItem item){
         items.add(item);
         item.setOrder(this);
+    }
+
+    public void addDelivery(Delivery delivery){
+        deliveries.add(delivery);
+        delivery.setOrder(this);
     }
 
     public void modify(String orderName, String orderTel, String orderAddr1, String orderAddr2){

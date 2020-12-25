@@ -69,8 +69,8 @@ public class Delivery {
 
     @Getter @Setter
     @JsonBackReference
-    @OneToOne
-    @JoinColumn(name = "order_id")
+    @ManyToOne
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
     @Getter @Setter

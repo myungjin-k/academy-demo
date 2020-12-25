@@ -22,6 +22,10 @@ public class DeliveryItem {
     private String id;
 
     @Getter
+    @Column(name = "count", nullable = false)
+    private int count;
+
+    @Getter
     @Column(name = "create_at", insertable = false, updatable = false,
             columnDefinition = "datetime default current_timestamp")
     private LocalDateTime createAt;
@@ -41,12 +45,16 @@ public class DeliveryItem {
     @JoinColumn(name = "item_id", nullable = false)
     private ItemDisplay.ItemDisplayOption itemOption;
 
-    public DeliveryItem(String id) {
+    public DeliveryItem(String id, int count) {
         this.id = id;
+        this.count = count;
     }
 
     public Optional<LocalDateTime> getUpdateAt(){
         return ofNullable(updateAt);
     }
 
+    public void modifyCount(int count){
+        this.count = count;
+    }
 }

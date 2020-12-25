@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -48,13 +49,21 @@ public class OrderService {
         Order o = orderRepository.findByMember_idAndId(memberId.value(), orderId.value())
                 .map(order -> {
                     order.setItems(orderItemRepository.findAllByOrder(order));
-                    order.setDelivery(deliveryRepository.getByOrder(order));
+                    order.addDelivery(deliveryRepository.getByOrder(order));
                     return order;
                 }).orElseThrow(() -> new NotFoundException(Order.class, memberId, orderId));
 
         for(OrderItem item : o.getItems()){
-            if(!o.getDelivery().getStatus().equals(DeliveryStatus.DELIVERED))
+            DeliveryStatus deliveryStatus = findDeliveryItemByOrderAndItem(
+                        orderId,
+                        Id.of(ItemDisplay.ItemDisplayOption.class, item.getItemOption().getId())
+                    )
+                    .map(DeliveryItem::getDelivery)
+                    .map(Delivery::getStatus)
+                    .orElse(null);
+            if(deliveryStatus == null || !deliveryStatus.equals(DeliveryStatus.DELIVERED))
                 continue;
+
             String reviewId = reviewRepository
                     .findByItem_idAndMember_id(item.getItemOption().getItemDisplay().getId(), memberId.value())
                     .map(Review::getId)
@@ -64,25 +73,24 @@ public class OrderService {
         return o;
     }
 
+    private Optional<DeliveryItem> findDeliveryItemByOrderAndItem(Id<Order, String> orderId, Id<ItemDisplay.ItemDisplayOption, String> itemId){
+        return deliveryItemRepository.findByDelivery_Order_idAndItemOption_id(orderId.value(), itemId.value());
+    }
+
     @Transactional
     public Order ordering(@Valid Id<Member, String> memberId, @Valid Order newOrder,
                           @Valid Delivery delivery, List<Id<CartItem, String>> itemIds){
-        return memberRepository.findById(memberId.value())
+        Order o = memberRepository.findById(memberId.value())
                 .map(member -> {
                     newOrder.setMember(member);
                     return save(newOrder);
-                })
-                .map(order -> saveOrderItems(itemIds, newOrder))
-                .map(order -> {
-                    delivery.setOrder(order);
-                    order.setDelivery(save(delivery));
-                    return order;
-                })
-                .map(order -> {
-                    saveDeliveryItems(order.getItems(), order.getDelivery());
-                    return order;
-                })
-                .orElseThrow(() ->  new NotFoundException(Member.class, memberId));
+                }).orElseThrow(() ->  new NotFoundException(Member.class, memberId));
+        saveOrderItems(itemIds, o);
+        delivery.setOrder(o);
+        Delivery d = save(delivery);
+        saveDeliveryItems(o.getItems(), d);
+        o.addDelivery(d);
+        return o;
     }
 
     @Transactional
@@ -109,7 +117,7 @@ public class OrderService {
         return save(d);
     }
 
-    private Order saveOrderItems(List<Id<CartItem, String>> itemIds, Order order){
+    private void saveOrderItems(List<Id<CartItem, String>> itemIds, Order order){
         List<CartItem> items = itemIds.stream()
                 .map(itemId ->
                         cartRepository.findById(itemId.value())
@@ -131,19 +139,13 @@ public class OrderService {
             abbrOrderItems.append("外 ").append(items.size() - 1).append("건");
         order.setAbbrOrderItems(abbrOrderItems.toString());
         deleteCartItems(items);
-        return save(order);
+        save(order);
     }
 
-
-
     private void saveDeliveryItems(List<OrderItem> orderItems, Delivery delivery){
-        List<ItemDisplay.ItemDisplayOption> items = orderItems.stream()
-                .map(OrderItem::getItemOption)
-                .collect(Collectors.toList());
-
-        for(ItemDisplay.ItemDisplayOption item : items){
-            DeliveryItem dItem = new DeliveryItem(Util.getUUID());
-            dItem.setItemOption(item);
+        for(OrderItem item : orderItems){
+            DeliveryItem dItem = new DeliveryItem(Util.getUUID(), item.getCount());
+            dItem.setItemOption(item.getItemOption());
             delivery.addItem(dItem);
             save(dItem);
         }
