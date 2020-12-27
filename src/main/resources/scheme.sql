@@ -192,6 +192,7 @@ CREATE TABLE review (
                           id                   varchar(50) NOT NULL,
                           member_id            varchar(50) NOT NULL,
                           item_id              varchar(50) NOT NULL,
+                          order_item_id        varchar(50) NOT NULL,
                           score                number default 5,
                           content              varchar(2000) NOT NULL,
                           review_img           varchar(255),
@@ -200,5 +201,6 @@ CREATE TABLE review (
                           update_at            datetime DEFAULT null,
                           PRIMARY KEY (id),
                           CONSTRAINT fk_review_to_member FOREIGN KEY (member_id) REFERENCES member (id) ON DELETE CASCADE ON UPDATE RESTRICT,
-                          CONSTRAINT fk_review_to_item_display FOREIGN KEY (item_id) REFERENCES item_display (id) ON DELETE CASCADE ON UPDATE RESTRICT
+                          CONSTRAINT fk_review_to_item_display FOREIGN KEY (item_id) REFERENCES item_display (id) ON DELETE CASCADE ON UPDATE RESTRICT,
+                          CONSTRAINT fk_review_to_order_item FOREIGN KEY (order_item_id) REFERENCES order_item (id) ON DELETE CASCADE ON UPDATE RESTRICT
 );

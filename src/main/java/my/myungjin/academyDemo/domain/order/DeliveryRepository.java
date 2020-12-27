@@ -11,4 +11,6 @@ public interface DeliveryRepository extends JpaRepository<Delivery, String> {
     Delivery getByOrder_Member_idAndOrder_id(String orderMemberId, String orderId);
 
     Delivery getByOrder(Order order);
+
+    Optional<Delivery> findByOrder(Order order);
 }

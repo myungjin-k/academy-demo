@@ -65,7 +65,7 @@ public class OrderService {
                 continue;
 
             String reviewId = reviewRepository
-                    .findByItem_idAndMember_id(item.getItemOption().getItemDisplay().getId(), memberId.value())
+                    .findByOrderItem_idAndMember_id(item.getId(), memberId.value())
                     .map(Review::getId)
                     .orElse("");
             item.setReviewId(reviewId);

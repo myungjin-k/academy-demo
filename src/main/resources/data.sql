@@ -105,3 +105,10 @@ INSERT INTO order_item (id, ORDER_ID, item_id, count) VALUES ('be9089f9bf1f4e59b
 
 INSERT INTO delivery (id, order_id, STATUS, RECEIVER_NAME, RECEIVER_TEL, RECEIVER_ADDR1, RECEIVER_ADDR2) VALUES ('cd2940ee2dfc418384eedc450be832a2', '03039b4535404247bfee52cfd934c779', 1, '명진', '010-1234-5678','XX시 XX구 XX로', '1-1111');
 INSERT INTO delivery_item (id, delivery_id, item_id, count) VALUES ('d14b36612cd047a0b1e4e71d993dc9b2', 'cd2940ee2dfc418384eedc450be832a2', 'c9402883dbe540e898a417e4884845bf', 2);
+
+
+INSERT INTO order_master (id, abbr_items_name, member_id, total_amount, order_name, order_tel, order_addr1, order_addr2) VALUES ('f6f50475354d49f68916eaf30ea5b266', '그랜드 핀턱 팬츠 (2color)', '3a18e633a5db4dbd8aaee218fe447fa4', 43000, '명진', '010-1234-5678','XX시 XX구 XX로', '1-1111');
+INSERT INTO order_item (id, ORDER_ID, item_id, count) VALUES ('c7bb4cb6efcd4f4bb388eafb6fa52fac', 'f6f50475354d49f68916eaf30ea5b266', 'c9402883dbe540e898a417e4884845bf', 1);
+
+INSERT INTO delivery (id, order_id, STATUS, RECEIVER_NAME, RECEIVER_TEL, RECEIVER_ADDR1, RECEIVER_ADDR2) VALUES ('7cc837baca9d4510b7b9542c6a9213e2', 'f6f50475354d49f68916eaf30ea5b266', 4, '명진', '010-1234-5678','XX시 XX구 XX로', '1-1111');
+INSERT INTO delivery_item (id, delivery_id, item_id, count) VALUES ('7007fe7a1168469f969c036fcba06695', '7cc837baca9d4510b7b9542c6a9213e2', 'c9402883dbe540e898a417e4884845bf', 1);

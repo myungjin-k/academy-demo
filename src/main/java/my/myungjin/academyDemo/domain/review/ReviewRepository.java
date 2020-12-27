@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface ReviewRepository extends JpaRepository<Review, String> {
 
-    Optional<Review> findByItem_idAndMember_id(String itemId, String memberId);
+    Optional<Review> findByOrderItem_idAndMember_id(String itemId, String memberId);
 
     Page<Review> findByItem_id(String itemId, Pageable pageable);
 

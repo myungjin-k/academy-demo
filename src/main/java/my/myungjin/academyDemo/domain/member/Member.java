@@ -137,4 +137,14 @@ public class Member{
             throw new IllegalArgumentException("Bad Credential");
         }
     }
+
+    public void addReserves(int amount){
+        this.reserves += amount;
+        this.updateAt = now();
+    }
+
+    public void flushReserves(int amount){
+        this.reserves -= amount;
+        this.updateAt = now();
+    }
 }
