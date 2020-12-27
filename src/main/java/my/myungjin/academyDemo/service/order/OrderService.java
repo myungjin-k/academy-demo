@@ -54,14 +54,8 @@ public class OrderService {
                 }).orElseThrow(() -> new NotFoundException(Order.class, memberId, orderId));
 
         for(OrderItem item : o.getItems()){
-            DeliveryStatus deliveryStatus = findDeliveryItemByOrderAndItem(
-                        orderId,
-                        Id.of(ItemDisplay.ItemDisplayOption.class, item.getItemOption().getId())
-                    )
-                    .map(DeliveryItem::getDelivery)
-                    .map(Delivery::getStatus)
-                    .orElse(null);
-            if(deliveryStatus == null || !deliveryStatus.equals(DeliveryStatus.DELIVERED))
+            Delivery d = deliveryRepository.getByOrder(item.getOrder());
+            if(!d.getStatus().equals(DeliveryStatus.DELIVERED))
                 continue;
 
             String reviewId = reviewRepository
@@ -71,10 +65,6 @@ public class OrderService {
             item.setReviewId(reviewId);
         }
         return o;
-    }
-
-    private Optional<DeliveryItem> findDeliveryItemByOrderAndItem(Id<Order, String> orderId, Id<ItemDisplay.ItemDisplayOption, String> itemId){
-        return deliveryItemRepository.findByDelivery_Order_idAndItemOption_id(orderId.value(), itemId.value());
     }
 
     @Transactional
