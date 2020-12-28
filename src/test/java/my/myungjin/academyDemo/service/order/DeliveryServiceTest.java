@@ -34,18 +34,20 @@ public class DeliveryServiceTest {
 
     private Id<Delivery, String> deliveryId;
 
-    private Id<ItemDisplay.ItemDisplayOption, String> itemId;
-
     private Id<ItemDisplay.ItemDisplayOption, String> newItemId;
 
     private Id<my.myungjin.academyDemo.domain.order.Order, String> orderId;
 
     private Id<Delivery, String> newDeliveryId;
 
+    private Id<DeliveryItem, String> deliveryItemId;
+
+    private Id<DeliveryItem, String> newDeliveryItemId;
+
     @BeforeAll
     void setup(){
         deliveryId = Id.of(Delivery.class, "cd2940ee2dfc418384eedc450be832a2");
-        itemId = Id.of(ItemDisplay.ItemDisplayOption.class, "c9402883dbe540e898a417e4884845bf");
+        deliveryItemId = Id.of(DeliveryItem.class, "d14b36612cd047a0b1e4e71d993dc9b2");
         newItemId = Id.of(ItemDisplay.ItemDisplayOption.class, "8130cede06c04fa2bbd8bc09a29787c8");
         orderId = Id.of(my.myungjin.academyDemo.domain.order.Order.class, "03039b4535404247bfee52cfd934c779");
     }
@@ -61,7 +63,7 @@ public class DeliveryServiceTest {
     @Test
     @Order(2)
     void 배송상품_조회하기(){
-        DeliveryItem deliveryItem = deliveryService.findItemByDeliveryAndItem(deliveryId, itemId).orElse(null);
+        DeliveryItem deliveryItem = deliveryService.findItem(deliveryId, deliveryItemId).orElse(null);
         assertThat(deliveryItem, is(notNullValue()));
         log.info("Found Delivery Item: {}", deliveryItem);
     }
@@ -70,15 +72,16 @@ public class DeliveryServiceTest {
     @Test
     @Order(3)
     void 배송상품_추가하기(){
-        DeliveryItem delivery = deliveryService.addDeliveryItem(deliveryId, newItemId, 1).orElse(null);
-        assertThat(delivery, is(notNullValue()));
-        log.info("Added Item: {}", delivery);
+        DeliveryItem deliveryItem = deliveryService.addDeliveryItem(deliveryId, newItemId, 1).orElse(null);
+        assertThat(deliveryItem, is(notNullValue()));
+        newDeliveryItemId = Id.of(DeliveryItem.class, deliveryItem.getId());
+        log.info("Added Item: {}", deliveryItem);
     }
 
     @Test
     @Order(4)
     void 배송상품_수량_수정하기(){
-        DeliveryItem modified = deliveryService.modifyDeliveryItemCount(deliveryId, itemId, 1);
+        DeliveryItem modified = deliveryService.modifyDeliveryItemCount(deliveryId, deliveryItemId, 1);
         assertThat(modified, is(notNullValue()));
         log.info("Modified Item: {}", modified);
     }
@@ -86,7 +89,7 @@ public class DeliveryServiceTest {
     @Test
     @Order(5)
     void 배송상품_삭제하기(){
-        DeliveryItem deleted = deliveryService.deleteDeliveryItem(deliveryId, newItemId);
+        DeliveryItem deleted = deliveryService.deleteDeliveryItem(deliveryId, newDeliveryItemId);
         assertThat(deleted, is(notNullValue()));
         log.info("Deleted Item: {}", deleted);
     }
@@ -123,7 +126,7 @@ public class DeliveryServiceTest {
         List<OrderItem> items = new ArrayList<>();
         OrderItem item = new OrderItem(Util.getUUID(), 1);
         // 테스트 용으로 배송아이템 정보 사용. 원래는 주문아이템 정보로 가져와야 함.
-        DeliveryItem temp = deliveryService.findItemByDeliveryAndItem(deliveryId, itemId).get();
+        DeliveryItem temp = deliveryService.findItem(deliveryId, deliveryItemId).get();
         item.setOrder(temp.getDelivery().getOrder());
         item.setItemOption(temp.getItemOption());
         items.add(item);

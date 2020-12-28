@@ -38,8 +38,8 @@ public class DeliveryService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<DeliveryItem> findItemByDeliveryAndItem(@Valid Id<Delivery, String> deliveryId, @Valid Id<ItemDisplay.ItemDisplayOption, String> itemId){
-        return deliveryItemRepository.findByDelivery_idAndItemOption_id(deliveryId.value(), itemId.value());
+    public Optional<DeliveryItem> findItem(@Valid Id<Delivery, String> deliveryId, @Valid Id<DeliveryItem, String> itemId){
+        return deliveryItemRepository.findByDelivery_idAndId(deliveryId.value(), itemId.value());
     }
 
     @Transactional
@@ -79,8 +79,8 @@ public class DeliveryService {
     }
 
     @Transactional
-    public DeliveryItem deleteDeliveryItem(@Valid Id<Delivery, String> deliveryId, @Valid Id<ItemDisplay.ItemDisplayOption, String> itemId){
-        return findItemByDeliveryAndItem(deliveryId, itemId)
+    public DeliveryItem deleteDeliveryItem(@Valid Id<Delivery, String> deliveryId, @Valid Id<DeliveryItem, String> itemId){
+        return findItem(deliveryId, itemId)
                 .map(deliveryItem -> {
                     if(!deliveryItem.getDelivery().getStatus().equals(DeliveryStatus.PROCESSING)){
                         throw new StatusNotSatisfiedException(DeliveryItem.class, Id.of(DeliveryItem.class, deliveryItem.getId()), deliveryId, itemId);
@@ -92,8 +92,8 @@ public class DeliveryService {
 
     @Transactional
     public DeliveryItem modifyDeliveryItemCount(@Valid Id<Delivery, String> deliveryId,
-                                                @Valid Id<ItemDisplay.ItemDisplayOption, String> itemId, int count){
-        return findItemByDeliveryAndItem(deliveryId, itemId)
+                                                @Valid Id<DeliveryItem, String> itemId, int count){
+        return findItem(deliveryId, itemId)
                 .map(deliveryItem -> {
                     if(!deliveryItem.getDelivery().getStatus().equals(DeliveryStatus.PROCESSING)){
                         throw new StatusNotSatisfiedException(DeliveryItem.class, Id.of(DeliveryItem.class, deliveryItem.getId()), deliveryId, itemId);

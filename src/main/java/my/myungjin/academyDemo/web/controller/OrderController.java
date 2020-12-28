@@ -36,8 +36,6 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    private final MemberService memberService;
-
     @PostMapping("/member/{id}/cart")
     @ApiOperation(value = "장바구니 추가")
     public Response<CartItem> addCart(

@@ -9,7 +9,7 @@ public interface DeliveryItemRepository extends JpaRepository<DeliveryItem, Stri
 
     List<DeliveryItem> findAllByDelivery (Delivery delivery);
 
-    Optional<DeliveryItem> findByDelivery_idAndItemOption_id (String deliveryId, String itemId);
+    Optional<DeliveryItem> findByDelivery_idAndId (String deliveryId, String deliveryItemId);
 
     boolean existsByDelivery_idAndItemOption_id (String deliveryId, String itemId);
 
