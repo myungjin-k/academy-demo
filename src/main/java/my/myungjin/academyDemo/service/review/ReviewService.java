@@ -35,8 +35,6 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
 
-    //private final DeliveryItemRepository deliveryItemRepository;
-
     private final OrderItemRepository orderItemRepository;
 
     private final DeliveryRepository deliveryRepository;
@@ -84,7 +82,11 @@ public class ReviewService {
     }
 
     @Transactional
-    public Review write(@Valid Id<Member, String> memberId, @Valid Id<OrderItem, String> orderItemId, @Valid Review review, AttachedFile reviewImgFile){
+    public Review write(@Valid Id<Member, String> memberId, @Valid Id<Member, String> loginUserId,
+                        @Valid Id<OrderItem, String> orderItemId, @Valid Review review, AttachedFile reviewImgFile){
+        if(!loginUserId.value().equals(memberId.value()))
+            throw new IllegalArgumentException("member id must be equal to login user id(member="+ memberId+", loginUser=" +loginUserId +")");
+
         OrderItem orderItem = orderItemRepository.findById(orderItemId.value())
                 .orElseThrow(() -> new NotFoundException(OrderItem.class, orderItemId));
 
@@ -107,10 +109,14 @@ public class ReviewService {
     }
 
     @Transactional
-    public Review modify(@Valid Id<Review, String> reviewId,
-                         @NotBlank String content, @Positive int score, AttachedFile reviewImgFile){
-        Review review = reviewRepository.findById(reviewId.value())
-                .orElseThrow(() -> new NotFoundException(Review.class, reviewId));
+    public Review modify(@Valid Id<Member, String> memberId, @Valid Id<Member, String> loginUserId,
+                         @Valid Id<Review, String> reviewId, @NotBlank String content, @Positive int score, AttachedFile reviewImgFile){
+        // TODO 로그인 유저 확인 ?
+        if(!loginUserId.value().equals(memberId.value()))
+            throw new IllegalArgumentException("member id must be equal to login user id(member="+ memberId+", loginUser=" +loginUserId +")");
+
+        Review review = reviewRepository.findByMember_idAndId(memberId.value(), reviewId.value())
+                .orElseThrow(() -> new NotFoundException(Review.class, memberId, reviewId));
         String updatedImg = uploadReviewImage(reviewImgFile).orElse(null);
         if(updatedImg != null){
             if(review.getReviewImg() != null){

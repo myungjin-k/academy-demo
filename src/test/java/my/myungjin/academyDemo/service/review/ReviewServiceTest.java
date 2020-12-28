@@ -72,7 +72,7 @@ public class ReviewServiceTest {
         FileInputStream fileInputStream = new FileInputStream(file);
         MultipartFile multipartFile =
                 new MockMultipartFile("file", file.getName(), "image/jpeg", toByteArray(fileInputStream));
-        Review saved = reviewService.write(memberId, orderItemId, review, toAttachedFile(multipartFile));
+        Review saved = reviewService.write(memberId, memberId, orderItemId, review, toAttachedFile(multipartFile));
         assertThat(saved, is(notNullValue()));
         log.info("Saved Review: {}", saved);
     }
@@ -114,7 +114,10 @@ public class ReviewServiceTest {
         FileInputStream fileInputStream = new FileInputStream(file);
         MultipartFile multipartFile =
                 new MockMultipartFile("file", file.getName(), "image/jpeg", toByteArray(fileInputStream));
-        Review updated = reviewService.modify(reviewId,
+        Review updated = reviewService.modify(
+                memberId,
+                memberId,
+                reviewId,
                 randomAlphabetic(100),
                 5,
                 toAttachedFile(multipartFile));
