@@ -28,6 +28,18 @@ public class DeliveryService {
 
     private final OrderRepository orderRepository;
 
+    private final OrderItemRepository orderItemRepository;
+
+    @Transactional(readOnly = true)
+    public Order findOrder(@Valid Id<Delivery, String> deliveryId){
+        return deliveryRepository.findById(deliveryId.value())
+                .map(delivery -> {
+                    Order order = delivery.getOrder();
+                    order.setItems(orderItemRepository.findAllByOrder(order));
+                    return order;
+                }).orElseThrow(() -> new NotFoundException(Delivery.class, deliveryId));
+    }
+
     @Transactional(readOnly = true)
     public Delivery findById(@Valid Id<Delivery, String> deliveryId){
         return deliveryRepository.findById(deliveryId.value())

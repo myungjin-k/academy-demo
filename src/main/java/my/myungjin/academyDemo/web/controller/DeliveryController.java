@@ -8,11 +8,14 @@ import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.order.Delivery;
 import my.myungjin.academyDemo.domain.order.DeliveryItem;
 import my.myungjin.academyDemo.domain.order.Order;
+import my.myungjin.academyDemo.domain.order.OrderItem;
 import my.myungjin.academyDemo.error.NotFoundException;
 import my.myungjin.academyDemo.service.order.DeliveryService;
 import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.DeliveryRequest;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static my.myungjin.academyDemo.web.Response.OK;
 
@@ -22,6 +25,15 @@ import static my.myungjin.academyDemo.web.Response.OK;
 public class DeliveryController {
 
     private final DeliveryService deliveryService;
+
+    @GetMapping("/delivery/{id}/order")
+    @ApiOperation(value = "배송정보 연계주문 상품 조회")
+    public Response<List<OrderItem>> findOrderItems(
+            @PathVariable @ApiParam(value = "조회 대상 배송정보 PK", example = "cd2940ee2dfc418384eedc450be832a2") String id){
+        return OK(
+                deliveryService.findOrder(Id.of(Delivery.class, id)).getItems()
+        );
+    }
 
     @GetMapping("/delivery/{id}")
     @ApiOperation(value = "배송정보 단건 조회")

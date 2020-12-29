@@ -55,7 +55,7 @@ public class ReviewController {
             @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String memberId,
             @PathVariable @ApiParam(value = "조회 대상 주문상품 PK", example = "c7bb4cb6efcd4f4bb388eafb6fa52fac") String itemId,
             @ModelAttribute ReviewRequest reviewRequest,
-            @RequestPart MultipartFile reviewImgFile,
+            @RequestPart(required = false) MultipartFile reviewImgFile,
             @AuthenticationPrincipal Authentication authentication) throws IOException {
         return OK(
                 reviewService.write(
@@ -74,7 +74,7 @@ public class ReviewController {
             @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String memberId,
             @PathVariable @ApiParam(value = "조회 대상 리뷰 PK", example = "c7bb4cb6efcd4f4bb388eafb6fa52fac") String reviewId,
             @ModelAttribute ReviewRequest reviewRequest,
-            @RequestPart MultipartFile reviewImgFile,
+            @RequestPart(required = false) MultipartFile reviewImgFile,
             @AuthenticationPrincipal Authentication authentication) throws IOException {
         return OK(
                 reviewService.modify(

@@ -47,11 +47,11 @@ public class OrderService {
     @Transactional(readOnly = true)
     public Order findById(@Valid Id<Member, String> memberId, @Valid Id<Order, String> orderId){
         Order o = orderRepository.findByMember_idAndId(memberId.value(), orderId.value())
-                .map(order -> {
+                /*.map(order -> {
                     order.setItems(orderItemRepository.findAllByOrder(order));
                     order.addDelivery(deliveryRepository.getByOrder(order));
                     return order;
-                }).orElseThrow(() -> new NotFoundException(Order.class, memberId, orderId));
+                })*/.orElseThrow(() -> new NotFoundException(Order.class, memberId, orderId));
 
         for(OrderItem item : o.getItems()){
             Delivery d = deliveryRepository.getByOrder(item.getOrder());
