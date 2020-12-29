@@ -123,13 +123,10 @@ public class DeliveryServiceTest {
                 .status(DeliveryStatus.PROCESSING)
                 .build();
 
-        List<OrderItem> items = new ArrayList<>();
-        OrderItem item = new OrderItem(Util.getUUID(), 1);
-        // 테스트 용으로 배송아이템 정보 사용. 원래는 주문아이템 정보로 가져와야 함.
-        DeliveryItem temp = deliveryService.findItem(deliveryId, deliveryItemId).get();
-        item.setOrder(temp.getDelivery().getOrder());
-        item.setItemOption(temp.getItemOption());
-        items.add(item);
+        List<Id<OrderItem, String>> items = new ArrayList<>();
+        // 테스트 용
+        List<OrderItem> orderItems = deliveryService.findAllOrderItems(deliveryId);
+        items.add(Id.of(OrderItem.class, orderItems.get(0).getId()));
 
         Delivery d = deliveryService.addDelivery(orderId, newDelivery, items);
         assertThat(d, is(notNullValue()));

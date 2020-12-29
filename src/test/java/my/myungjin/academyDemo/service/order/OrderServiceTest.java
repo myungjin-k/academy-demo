@@ -79,7 +79,7 @@ public class OrderServiceTest {
         my.myungjin.academyDemo.domain.order.Order saved = orderService.ordering(memberId, order, delivery, itemIds);
         assertThat(saved, is(notNullValue()));
         log.info("Saved Order: {}", saved);
-        log.info("Saved Order Item: {}", saved.getItems());
+        log.info("Saved Order Item: {}", orderService.findAllItemsByOrder(memberId, orderId));
         log.info("Saved Delivery: {}", saved.getDeliveries());
     }
 
@@ -102,7 +102,7 @@ public class OrderServiceTest {
         my.myungjin.academyDemo.domain.order.Order order = orderService.findById(memberId, orderId);
         assertThat(order, is(notNullValue()));
         log.info("Found Order: {}", order);
-        log.info("Found Order Item: {}", order.getItems());
+        log.info("Found Order Item: {}", orderService.findAllItemsByOrder(memberId, orderId));
         log.info("Found Delivery: {}", order.getDeliveries());
     }
 

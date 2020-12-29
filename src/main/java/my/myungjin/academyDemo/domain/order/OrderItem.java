@@ -42,14 +42,14 @@ public class OrderItem {
     private LocalDateTime updateAt;
 
     @Getter @Setter
-    @JsonBackReference
+    //@JsonBackReference
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
 
     @Setter @Getter
     //@JsonBackReference
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "item_id", nullable = false)
     private ItemDisplay.ItemDisplayOption itemOption;
 

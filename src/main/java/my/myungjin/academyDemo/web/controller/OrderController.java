@@ -11,6 +11,7 @@ import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.order.CartItem;
 import my.myungjin.academyDemo.domain.order.Delivery;
 import my.myungjin.academyDemo.domain.order.Order;
+import my.myungjin.academyDemo.domain.order.OrderItem;
 import my.myungjin.academyDemo.security.User;
 import my.myungjin.academyDemo.service.order.CartService;
 import my.myungjin.academyDemo.service.order.OrderService;
@@ -114,6 +115,16 @@ public class OrderController {
             @PathVariable @ApiParam(value = "조회 대상 주문 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String orderId){
         return OK(
                 orderService.findById(Id.of(Member.class, memberId), Id.of(Order.class, orderId))
+        );
+    }
+
+    @GetMapping("/member/{memberId}/order/{orderId}/item/list")
+    @ApiOperation(value = "주문별 주문 상품 조회")
+    public Response<List<OrderItem>> findItemsByOrder(
+            @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String memberId,
+            @PathVariable @ApiParam(value = "조회 대상 주문 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String orderId){
+        return OK(
+                orderService.findAllItemsByOrder(Id.of(Member.class, memberId), Id.of(Order.class, orderId))
         );
     }
 

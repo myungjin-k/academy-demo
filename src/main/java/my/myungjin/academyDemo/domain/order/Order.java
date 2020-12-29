@@ -68,15 +68,14 @@ public class Order {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    //@Getter @Setter
+    //@JsonIgnore
+    //@OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    //private List<OrderItem> items = new ArrayList<>();
+
     @Getter @Setter
     @JsonIgnore
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<OrderItem> items = new ArrayList<>();
-
-    @Getter @Setter
-//    @JsonIgnore
-    @JsonManagedReference
-    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Delivery> deliveries = new ArrayList<>();
 
     @Builder
@@ -93,10 +92,10 @@ public class Order {
         return ofNullable(updateAt);
     }
 
-    public void addItem(OrderItem item){
-        items.add(item);
-        item.setOrder(this);
-    }
+    //public void addItem(OrderItem item){
+    //    items.add(item);
+    //    item.setOrder(this);
+    //}
 
     public void addDelivery(Delivery delivery){
         deliveries.add(delivery);

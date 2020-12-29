@@ -2,6 +2,7 @@ package my.myungjin.academyDemo.domain.order;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface DeliveryRepository extends JpaRepository<Delivery, String> {
@@ -10,7 +11,9 @@ public interface DeliveryRepository extends JpaRepository<Delivery, String> {
 
     Delivery getByOrder_Member_idAndOrder_id(String orderMemberId, String orderId);
 
-    Delivery getByOrder(Order order);
+    List<Delivery> getByOrderOrderByCreateAtDesc(Order order);
+
+    List<Delivery> findAllByOrder_AndStatusIsNot(Order order, DeliveryStatus status);
 
     Optional<Delivery> findByOrder(Order order);
 }

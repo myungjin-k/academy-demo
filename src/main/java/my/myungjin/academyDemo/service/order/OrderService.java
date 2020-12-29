@@ -2,7 +2,6 @@ package my.myungjin.academyDemo.service.order;
 
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
-import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.member.MemberRepository;
 import my.myungjin.academyDemo.domain.order.*;
@@ -17,8 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -47,14 +46,13 @@ public class OrderService {
     @Transactional(readOnly = true)
     public Order findById(@Valid Id<Member, String> memberId, @Valid Id<Order, String> orderId){
         Order o = orderRepository.findByMember_idAndId(memberId.value(), orderId.value())
-                /*.map(order -> {
-                    order.setItems(orderItemRepository.findAllByOrder(order));
-                    order.addDelivery(deliveryRepository.getByOrder(order));
+                .map(order -> {
+                    order.setDeliveries(deliveryRepository.findAllByOrder_AndStatusIsNot(order, DeliveryStatus.DELETED));
                     return order;
-                })*/.orElseThrow(() -> new NotFoundException(Order.class, memberId, orderId));
+                }).orElseThrow(() -> new NotFoundException(Order.class, memberId, orderId));
 
-        for(OrderItem item : o.getItems()){
-            Delivery d = deliveryRepository.getByOrder(item.getOrder());
+        for(OrderItem item : orderItemRepository.findAllByOrder(o)){
+            Delivery d = deliveryRepository.getByOrderOrderByCreateAtDesc(item.getOrder()).get(0);
             if(!d.getStatus().equals(DeliveryStatus.DELIVERED))
                 continue;
 
@@ -67,6 +65,14 @@ public class OrderService {
         return o;
     }
 
+
+    @Transactional(readOnly = true)
+    public List<OrderItem> findAllItemsByOrder(@Valid Id<Member, String> memberId, @Valid Id<Order, String> orderId){
+        return orderRepository.findByMember_idAndId(memberId.value(), orderId.value())
+                .map(orderItemRepository::findAllByOrder)
+                .orElseThrow(() -> new NotFoundException(Order.class, memberId, orderId));
+    }
+
     @Transactional
     public Order ordering(@Valid Id<Member, String> memberId, @Valid Order newOrder,
                           @Valid Delivery delivery, List<Id<CartItem, String>> itemIds){
@@ -75,10 +81,10 @@ public class OrderService {
                     newOrder.setMember(member);
                     return save(newOrder);
                 }).orElseThrow(() ->  new NotFoundException(Member.class, memberId));
-        saveOrderItems(itemIds, o);
+        List<OrderItem> orderItems = saveOrderItems(itemIds, o);
         delivery.setOrder(o);
         Delivery d = save(delivery);
-        saveDeliveryItems(o.getItems(), d);
+        saveDeliveryItems(orderItems, d);
         o.addDelivery(d);
         return o;
     }
@@ -107,19 +113,20 @@ public class OrderService {
         return save(d);
     }
 
-    private void saveOrderItems(List<Id<CartItem, String>> itemIds, Order order){
+    private List<OrderItem> saveOrderItems(List<Id<CartItem, String>> itemIds, Order order){
+        List<OrderItem> savedOrderItems = new ArrayList<>();
         List<CartItem> items = itemIds.stream()
-                .map(itemId ->
-                        cartRepository.findById(itemId.value())
+                .map(itemId -> cartRepository.findById(itemId.value())
                                 .orElseThrow(() -> new NotFoundException(CartItem.class, itemId)))
                 .collect(Collectors.toList());
 
         int totalAmount = 0;
         for(CartItem item : items){
             OrderItem oItem = new OrderItem(Util.getUUID(), item.getCount());
+            oItem.setOrder(order);
             oItem.setItemOption(item.getItemOption());
-            order.addItem(oItem);
-            save(oItem);
+            OrderItem saved = orderItemRepository.save(oItem);
+            savedOrderItems.add(saved);
             totalAmount += oItem.getItemOption().getItemDisplay().getSalePrice() * item.getCount();
         }
         order.setTotalAmount(totalAmount);
@@ -130,6 +137,7 @@ public class OrderService {
         order.setAbbrOrderItems(abbrOrderItems.toString());
         deleteCartItems(items);
         save(order);
+        return savedOrderItems;
     }
 
     private void saveDeliveryItems(List<OrderItem> orderItems, Delivery delivery){
@@ -149,8 +157,8 @@ public class OrderService {
         return deliveryRepository.save(delivery);
     }
 
-    private void save(OrderItem orderItem){
-        orderItemRepository.save(orderItem);
+    private OrderItem save(OrderItem orderItem){
+       return orderItemRepository.save(orderItem);
     }
 
     private Order save(Order order){

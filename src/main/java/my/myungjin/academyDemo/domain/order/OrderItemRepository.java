@@ -8,6 +8,4 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, String> {
 
     List<OrderItem> findAllByOrder(Order order);
 
-    List<OrderItem> findAllByOrder_Member_id(String memberId);
-
 }

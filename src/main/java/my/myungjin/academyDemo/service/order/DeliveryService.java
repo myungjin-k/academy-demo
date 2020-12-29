@@ -31,12 +31,11 @@ public class DeliveryService {
     private final OrderItemRepository orderItemRepository;
 
     @Transactional(readOnly = true)
-    public Order findOrder(@Valid Id<Delivery, String> deliveryId){
+    public List<OrderItem> findAllOrderItems(@Valid Id<Delivery, String> deliveryId){
         return deliveryRepository.findById(deliveryId.value())
                 .map(delivery -> {
                     Order order = delivery.getOrder();
-                    order.setItems(orderItemRepository.findAllByOrder(order));
-                    return order;
+                    return orderItemRepository.findAllByOrder(order);
                 }).orElseThrow(() -> new NotFoundException(Delivery.class, deliveryId));
     }
 
@@ -55,15 +54,17 @@ public class DeliveryService {
     }
 
     @Transactional
-    public Delivery addDelivery(@Valid Id<Order, String> orderId, @Valid Delivery delivery, List<OrderItem> items){
+    public Delivery addDelivery(@Valid Id<Order, String> orderId, @Valid Delivery delivery, List<Id<OrderItem, String>> itemIds){
         Order order = orderRepository.findById(orderId.value())
                 .orElseThrow(() -> new NotFoundException(Order.class, orderId));
         delivery.setOrder(order);
         Delivery d = save(delivery);
 
-        for(OrderItem item : items){
-            if(!item.getOrder().getId().equals(orderId.value()))
-                throw new IllegalArgumentException("bad order id");
+        for(Id<OrderItem, String> id : itemIds){
+            OrderItem item = orderItemRepository.getOne(id.value());
+            String oId = item.getOrder().getId();
+            if(!oId.equals(orderId.value()))
+                throw new IllegalArgumentException("bad order id (item order id=" + oId + ", order id=" + orderId.value() + ")");
             DeliveryItem deliveryItem = new DeliveryItem(Util.getUUID(), item.getCount());
             d.addItem(deliveryItem);
             deliveryItem.setItemOption(item.getItemOption());

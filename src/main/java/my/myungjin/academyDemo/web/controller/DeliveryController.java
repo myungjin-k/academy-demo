@@ -31,7 +31,7 @@ public class DeliveryController {
     public Response<List<OrderItem>> findOrderItems(
             @PathVariable @ApiParam(value = "조회 대상 배송정보 PK", example = "cd2940ee2dfc418384eedc450be832a2") String id){
         return OK(
-                deliveryService.findOrder(Id.of(Delivery.class, id)).getItems()
+                deliveryService.findAllOrderItems(Id.of(Delivery.class, id))
         );
     }
 
@@ -50,7 +50,7 @@ public class DeliveryController {
             @PathVariable @ApiParam(value = "조회 대상 주문 PK", example = "f6f50475354d49f68916eaf30ea5b266") String orderId,
             @RequestBody DeliveryRequest deliveryRequest){
         return OK(
-                deliveryService.addDelivery(Id.of(Order.class, orderId), deliveryRequest.newDelivery(), deliveryRequest.getOrderItems())
+                deliveryService.addDelivery(Id.of(Order.class, orderId), deliveryRequest.newDelivery(), deliveryRequest.idList())
         );
     }
 

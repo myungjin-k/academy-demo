@@ -40,7 +40,7 @@ public class DeliveryItem {
     private Delivery delivery;
 
     @Getter @Setter
-    @JsonBackReference
+    //@JsonBackReference
     @ManyToOne
     @JoinColumn(name = "item_id", nullable = false)
     private ItemDisplay.ItemDisplayOption itemOption;

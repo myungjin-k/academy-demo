@@ -44,7 +44,7 @@ public class CartItem {
 
     @Setter @Getter
     //@JsonBackReference
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "item_id", nullable = false)
     private ItemDisplay.ItemDisplayOption itemOption;
 

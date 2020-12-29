@@ -3,12 +3,14 @@ package my.myungjin.academyDemo.web.request;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
+import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.order.Delivery;
 import my.myungjin.academyDemo.domain.order.DeliveryStatus;
 import my.myungjin.academyDemo.domain.order.OrderItem;
 import my.myungjin.academyDemo.util.Util;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @ToString
@@ -27,7 +29,7 @@ public class DeliveryRequest {
 
     private String message;
 
-    private List<OrderItem> orderItems;
+    private List<String> orderItemIds;
 
     public Delivery newDelivery(){
         return Delivery.builder()
@@ -38,5 +40,11 @@ public class DeliveryRequest {
                 .receiverAddr2(receiverAddr2)
                 .status(DeliveryStatus.of(status))
                 .build();
+    }
+
+    public List<Id<OrderItem, String>> idList(){
+        return orderItemIds.stream()
+                .map(s -> Id.of(OrderItem.class, s))
+                .collect(Collectors.toList());
     }
 }
