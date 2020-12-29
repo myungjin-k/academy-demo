@@ -62,7 +62,7 @@ public class DeliveryController {
                 deliveryService.deleteDelivery(Id.of(Delivery.class, id))
         );
     }
-
+/*
     @GetMapping("/delivery/{deliveryId}/item/{itemId}")
     @ApiOperation(value = "배송상품 단건 조회")
     public Response<DeliveryItem> findDeliveryItem(
@@ -74,7 +74,7 @@ public class DeliveryController {
                         Id.of(DeliveryItem.class, itemId))
                         .orElseThrow(() -> new NotFoundException(DeliveryItem.class, deliveryId, itemId))
         );
-    }
+    }*/
 
     @PostMapping("/delivery/{deliveryId}/item")
     @ApiOperation(value = "배송상품 추가")

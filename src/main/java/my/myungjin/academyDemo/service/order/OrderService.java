@@ -69,6 +69,10 @@ public class OrderService {
     @Transactional(readOnly = true)
     public List<OrderItem> findAllItemsByOrder(@Valid Id<Member, String> memberId, @Valid Id<Order, String> orderId){
         return orderRepository.findByMember_idAndId(memberId.value(), orderId.value())
+                .map(order -> {
+                    order.setDeliveries(deliveryRepository.findAllByOrder_AndStatusIsNot(order, DeliveryStatus.DELETED));
+                    return order;
+                })
                 .map(orderItemRepository::findAllByOrder)
                 .orElseThrow(() -> new NotFoundException(Order.class, memberId, orderId));
     }

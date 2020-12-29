@@ -1,7 +1,6 @@
 package my.myungjin.academyDemo.domain.order;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import my.myungjin.academyDemo.domain.member.Member;
@@ -19,7 +18,7 @@ import static java.util.Optional.ofNullable;
 
 @Entity
 @Table(name = "order_master")
-@ToString(exclude = {"items", "deliveries"})
+@ToString(exclude = {"deliveries"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
 public class Order {
@@ -68,13 +67,8 @@ public class Order {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    //@Getter @Setter
-    //@JsonIgnore
-    //@OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    //private List<OrderItem> items = new ArrayList<>();
-
     @Getter @Setter
-    @JsonIgnore
+    @JsonManagedReference
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Delivery> deliveries = new ArrayList<>();
 
@@ -91,11 +85,6 @@ public class Order {
     public Optional<LocalDateTime> getUpdateAt(){
         return ofNullable(updateAt);
     }
-
-    //public void addItem(OrderItem item){
-    //    items.add(item);
-    //    item.setOrder(this);
-    //}
 
     public void addDelivery(Delivery delivery){
         deliveries.add(delivery);

@@ -35,6 +35,7 @@ public class DeliveryService {
         return deliveryRepository.findById(deliveryId.value())
                 .map(delivery -> {
                     Order order = delivery.getOrder();
+                    order.setDeliveries(deliveryRepository.findAllByOrder_AndStatusIsNot(order, null));
                     return orderItemRepository.findAllByOrder(order);
                 }).orElseThrow(() -> new NotFoundException(Delivery.class, deliveryId));
     }
@@ -48,7 +49,6 @@ public class DeliveryService {
                 }).orElseThrow(() -> new NotFoundException(Delivery.class, deliveryId));
     }
 
-    @Transactional(readOnly = true)
     public Optional<DeliveryItem> findItem(@Valid Id<Delivery, String> deliveryId, @Valid Id<DeliveryItem, String> itemId){
         return deliveryItemRepository.findByDelivery_idAndId(deliveryId.value(), itemId.value());
     }

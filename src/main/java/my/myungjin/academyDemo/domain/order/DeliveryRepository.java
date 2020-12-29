@@ -15,5 +15,4 @@ public interface DeliveryRepository extends JpaRepository<Delivery, String> {
 
     List<Delivery> findAllByOrder_AndStatusIsNot(Order order, DeliveryStatus status);
 
-    Optional<Delivery> findByOrder(Order order);
 }
