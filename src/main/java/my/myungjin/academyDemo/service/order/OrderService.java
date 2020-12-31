@@ -18,7 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static java.util.Optional.ofNullable;
 
 @RequiredArgsConstructor
 @Service
@@ -52,8 +55,9 @@ public class OrderService {
                 }).orElseThrow(() -> new NotFoundException(Order.class, memberId, orderId));
 
         for(OrderItem item : orderItemRepository.findAllByOrder(o)){
-            Delivery d = deliveryRepository.getByOrderOrderByCreateAtDesc(item.getOrder()).get(0);
-            if(!d.getStatus().equals(DeliveryStatus.DELIVERED))
+            Optional<Delivery> d = ofNullable(deliveryRepository.getAllByOrderOrderByCreateAtDesc(item.getOrder()).get(0));
+            DeliveryStatus deliveryStatus = d.map(Delivery::getStatus).orElseThrow(() -> new NotFoundException(Delivery.class, item.getOrder()));
+            if(!deliveryStatus.equals(DeliveryStatus.DELIVERED))
                 continue;
 
             String reviewId = reviewRepository

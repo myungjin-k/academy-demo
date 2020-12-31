@@ -90,10 +90,10 @@ public class ReviewService {
         OrderItem orderItem = orderItemRepository.findById(orderItemId.value())
                 .orElseThrow(() -> new NotFoundException(OrderItem.class, orderItemId));
 
-        Delivery d = deliveryRepository.findByOrder(orderItem.getOrder())
-                .orElseThrow(() -> new NotFoundException(Delivery.class, orderItemId));
-        if(!d.getStatus().equals(DeliveryStatus.DELIVERED))
-            throw new StatusNotSatisfiedException(Review.class, orderItemId, d.getStatus());
+        Optional<Delivery> d = ofNullable(deliveryRepository.getAllByOrderOrderByCreateAtDesc(orderItem.getOrder()).get(0));
+        DeliveryStatus deliveryStatus = d.map(Delivery::getStatus).orElseThrow(() -> new NotFoundException(Delivery.class, orderItem.getOrder()));
+        if(!deliveryStatus.equals(DeliveryStatus.DELIVERED))
+            throw new StatusNotSatisfiedException(Review.class, orderItemId, deliveryStatus);
 
         Review found = reviewRepository.findByOrderItem_idAndMember_id(orderItemId.value(), memberId.value()).orElse(null);
         if(found != null){

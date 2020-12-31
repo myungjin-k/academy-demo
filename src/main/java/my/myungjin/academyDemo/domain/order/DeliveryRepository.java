@@ -11,7 +11,7 @@ public interface DeliveryRepository extends JpaRepository<Delivery, String> {
 
     Delivery getByOrder_Member_idAndOrder_id(String orderMemberId, String orderId);
 
-    List<Delivery> getByOrderOrderByCreateAtDesc(Order order);
+    List<Delivery> getAllByOrderOrderByCreateAtDesc(Order order);
 
     List<Delivery> findAllByOrder_AndStatusIsNot(Order order, DeliveryStatus status);
 
