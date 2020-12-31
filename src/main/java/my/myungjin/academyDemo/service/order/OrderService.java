@@ -43,7 +43,11 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public Page<Order> findAllMyMemberWithPage(@Valid Id<Member, String> memberId, Pageable pageable){
-        return orderRepository.findAllByMember_id(memberId.value(), pageable);
+        return orderRepository.findAllByMember_id(memberId.value(), pageable)
+                .map(order -> {
+                    order.setDeliveries(deliveryRepository.getAllByOrderOrderByCreateAtDesc(order));
+                    return order;
+                });
     }
 
     @Transactional(readOnly = true)

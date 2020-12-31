@@ -112,7 +112,7 @@ public class OrderController {
     @ApiOperation(value = "회원별 주문 단건 조회")
     public Response<Order> findOrderById(
             @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String memberId,
-            @PathVariable @ApiParam(value = "조회 대상 주문 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String orderId){
+            @PathVariable @ApiParam(value = "조회 대상 주문 PK", example = "03039b4535404247bfee52cfd934c779") String orderId){
         return OK(
                 orderService.findById(Id.of(Member.class, memberId), Id.of(Order.class, orderId))
         );
@@ -122,7 +122,7 @@ public class OrderController {
     @ApiOperation(value = "주문별 주문 상품 조회")
     public Response<List<OrderItem>> findItemsByOrder(
             @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String memberId,
-            @PathVariable @ApiParam(value = "조회 대상 주문 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String orderId){
+            @PathVariable @ApiParam(value = "조회 대상 주문 PK", example = "03039b4535404247bfee52cfd934c779") String orderId){
         return OK(
                 orderService.findAllItemsByOrder(Id.of(Member.class, memberId), Id.of(Order.class, orderId))
         );
@@ -148,7 +148,7 @@ public class OrderController {
     @ApiOperation(value = "회원별 단건 주문 수정")
     public Response<Order> modify(
             @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String memberId,
-            @PathVariable @ApiParam(value = "조회 대상 주문 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String orderId,
+            @PathVariable @ApiParam(value = "조회 대상 주문 PK", example = "03039b4535404247bfee52cfd934c779") String orderId,
             @RequestBody OrderRequest request
     ){
         return OK(
@@ -161,7 +161,7 @@ public class OrderController {
     @ApiOperation(value = "회원별 단건 배송정보 수정")
     public Response<Delivery> modify(
             @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String memberId,
-            @PathVariable @ApiParam(value = "조회 대상 주문 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String orderId,
+            @PathVariable @ApiParam(value = "조회 대상 주문 PK", example = "03039b4535404247bfee52cfd934c779") String orderId,
             @PathVariable @ApiParam(value = "조회 대상 배송정보 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String deliveryId,
             @RequestBody OrderRequest request
     ){
