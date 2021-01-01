@@ -13,4 +13,6 @@ public interface DeliveryItemRepository extends JpaRepository<DeliveryItem, Stri
 
     boolean existsByDelivery_idAndItemOption_id (String deliveryId, String itemId);
 
+    List<DeliveryItem> findAllByDelivery_OrderAndItemOption_idOrderByCreateAtDesc(Order order, String itemId);
+
 }

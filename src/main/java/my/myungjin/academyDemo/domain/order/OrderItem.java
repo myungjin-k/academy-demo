@@ -27,12 +27,6 @@ public class OrderItem {
     @Column(name = "count", nullable = false)
     private int count;
 
-    @Getter @Setter
-    private String reviewId;
-
-    @Getter @Setter
-    private boolean isDelivered;
-
     @Getter
     @Column(name = "create_at", insertable = false, updatable = false,
             columnDefinition = "datetime default current_timestamp")
@@ -42,7 +36,7 @@ public class OrderItem {
     private LocalDateTime updateAt;
 
     @Getter @Setter
-    //@JsonBackReference
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
@@ -57,6 +51,12 @@ public class OrderItem {
     @JsonIgnore
     @OneToOne(mappedBy = "orderItem", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Review review;
+
+    @Setter @Getter
+    private DeliveryStatus deliveryStatus;
+
+    @Setter @Getter
+    private String invoiceNum;
 
     public OrderItem(String id, int count) {
         this.id = id;

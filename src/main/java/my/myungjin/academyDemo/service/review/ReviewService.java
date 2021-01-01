@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
+import java.util.List;
 import java.util.Optional;
 
 import static java.util.Optional.ofNullable;
@@ -37,9 +38,7 @@ public class ReviewService {
 
     private final OrderItemRepository orderItemRepository;
 
-    private final DeliveryRepository deliveryRepository;
-
-    private final MemberRepository memberRepository;
+    private final DeliveryItemRepository deliveryItemRepository;
 
     private final S3Client s3Client;
 
@@ -89,9 +88,11 @@ public class ReviewService {
 
         OrderItem orderItem = orderItemRepository.findById(orderItemId.value())
                 .orElseThrow(() -> new NotFoundException(OrderItem.class, orderItemId));
-
-        Optional<Delivery> d = ofNullable(deliveryRepository.getAllByOrderOrderByCreateAtDesc(orderItem.getOrder()).get(0));
-        DeliveryStatus deliveryStatus = d.map(Delivery::getStatus).orElseThrow(() -> new NotFoundException(Delivery.class, orderItem.getOrder()));
+        List<DeliveryItem> deliveryItems = deliveryItemRepository
+                .findAllByDelivery_OrderAndItemOption_idOrderByCreateAtDesc(orderItem.getOrder(), orderItem.getItemOption().getId());
+        if(deliveryItems.isEmpty())
+            throw new NotFoundException(DeliveryItem.class, orderItem);
+        DeliveryStatus deliveryStatus = deliveryItems.get(0).getDelivery().getStatus();
         if(!deliveryStatus.equals(DeliveryStatus.DELIVERED))
             throw new StatusNotSatisfiedException(Review.class, orderItemId, deliveryStatus);
 
@@ -126,10 +127,6 @@ public class ReviewService {
         }
         review.modify(content, score);
         return save(review);
-    }
-
-    private Member save(Member member){
-        return memberRepository.save(member);
     }
 
     private Review save(Review review){

@@ -19,7 +19,7 @@ import static java.util.Optional.ofNullable;
 
 @Entity
 @Table(name = "order_master")
-@ToString(exclude = {"deliveries"})
+@ToString(exclude = {"items", "deliveries"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
 public class Order {
@@ -76,6 +76,11 @@ public class Order {
     @Getter @Setter
     @JsonManagedReference
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<OrderItem> items = new ArrayList<>();
+
+    @Getter @Setter
+    @JsonManagedReference
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Delivery> deliveries = new ArrayList<>();
 
     @Builder
@@ -91,6 +96,11 @@ public class Order {
 
     public Optional<LocalDateTime> getUpdateAt(){
         return ofNullable(updateAt);
+    }
+
+    public void addItem(OrderItem item){
+        items.add(item);
+        item.setOrder(this);
     }
 
     public void addDelivery(Delivery delivery){

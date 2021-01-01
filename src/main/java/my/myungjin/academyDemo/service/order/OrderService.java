@@ -5,7 +5,6 @@ import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.member.MemberRepository;
 import my.myungjin.academyDemo.domain.order.*;
-import my.myungjin.academyDemo.domain.review.Review;
 import my.myungjin.academyDemo.domain.review.ReviewRepository;
 import my.myungjin.academyDemo.error.NotFoundException;
 import my.myungjin.academyDemo.error.StatusNotSatisfiedException;
@@ -16,14 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static java.util.Optional.ofNullable;
 
 @RequiredArgsConstructor
 @Service
@@ -48,71 +41,62 @@ public class OrderService {
         return orderRepository.findAllByMember_id(memberId.value(), pageable)
                 .map(order -> {
                     order.setDeliveries(deliveryRepository.getAllByOrderOrderByCreateAtDesc(order));
-                    return order;
+                    return getItems(memberId, order);
                 });
     }
 
-    @Transactional(readOnly = true)
-    public Order findById(@Valid Id<Member, String> memberId, @Valid Id<Order, String> orderId){
-        Order o = orderRepository.findByMember_idAndId(memberId.value(), orderId.value())
-                .map(order -> {
-                    order.setDeliveries(deliveryRepository.findAllByOrder_AndStatusIsNot(order, DeliveryStatus.DELETED));
-                    return order;
-                }).orElseThrow(() -> new NotFoundException(Order.class, memberId, orderId));
-
-        for(OrderItem item : orderItemRepository.findAllByOrder(o)){
-            Optional<Delivery> d = ofNullable(deliveryRepository.getAllByOrderOrderByCreateAtDesc(item.getOrder()).get(0));
-            DeliveryStatus deliveryStatus = d.map(Delivery::getStatus).orElseThrow(() -> new NotFoundException(Delivery.class, item.getOrder()));
-            if(!deliveryStatus.equals(DeliveryStatus.DELIVERED))
-                continue;
-
-            String reviewId = reviewRepository
-                    .findByOrderItem_idAndMember_id(item.getId(), memberId.value())
-                    .map(Review::getId)
-                    .orElse("");
-            item.setReviewId(reviewId);
-        }
-        return o;
-    }
-
-    @Transactional(readOnly = true)
-    public List<OrderItem> findAllItemsByOrder(@Valid Id<Member, String> memberId, @Valid Id<Order, String> orderId){
+    private Order findById(@Valid Id<Member, String> memberId, @Valid Id<Order, String> orderId){
         return orderRepository.findByMember_idAndId(memberId.value(), orderId.value())
                 .map(order -> {
-                    order.setDeliveries(deliveryRepository.findAllByOrder_AndStatusIsNot(order, DeliveryStatus.DELETED));
-                    return order;
-                })
-                .map(orderItemRepository::findAllByOrder)
-                .orElseThrow(() -> new NotFoundException(Order.class, memberId, orderId));
+                    order.setDeliveries(deliveryRepository.getAllByOrderOrderByCreateAtDesc(order));
+                    return getItems(memberId, order);
+                }).orElseThrow(() -> new NotFoundException(Order.class, memberId, orderId));
+    }
+
+    private Order getItems(@Valid Id<Member, String> memberId, @Valid Order o){
+        for(OrderItem item : o.getItems()){
+            List<DeliveryItem> deliveryItems = deliveryItemRepository
+                    .findAllByDelivery_OrderAndItemOption_idOrderByCreateAtDesc(item.getOrder(), item.getItemOption().getId());
+            if(deliveryItems.isEmpty())
+                continue;
+
+            Delivery delivery = deliveryItems.get(0).getDelivery();
+            item.setDeliveryStatus(delivery.getStatus());
+            item.setInvoiceNum(delivery.getInvoiceNum());
+            if(!delivery.getStatus().equals(DeliveryStatus.DELIVERED))
+                continue;
+            item.setReview(reviewRepository.findByOrderItem_idAndMember_id(item.getId(), memberId.value()).orElse(null));
+        }
+        return o;
     }
 
     @Transactional
     public Order ordering(@Valid Id<Member, String> memberId, @Valid Order newOrder,
                           @Valid Delivery delivery, List<Id<CartItem, String>> itemIds){
         // 주문
-        Order o = memberRepository.findById(memberId.value())
+        Order saved = memberRepository.findById(memberId.value())
                 .map(member -> {
                     newOrder.setMember(member);
                     return save(newOrder);
                 }).orElseThrow(() ->  new NotFoundException(Member.class, memberId));
         // 주문상품
-        List<OrderItem> orderItems = saveOrderItems(itemIds, o);
+        Order updated = saveOrderItems(itemIds, saved);
         // 적립금 업데이트 + 등급 업데이트
-        Member m = o.getMember();
-        m.flushReserves(o.getUsedPoints());
-        if(o.getUsedPoints() == 0){
-            int reserve = (int) (o.getTotalAmount() * m.getRating().getReserveRatio());
+        Member m = updated.getMember();
+        m.flushReserves(updated.getUsedPoints());
+        if(updated.getUsedPoints() == 0){
+            int reserve = (int) (updated.getTotalAmount() * m.getRating().getReserveRatio());
             m.addReserves(reserve);
         }
-        m.addOrderAmountAndUpdateRating(o.getTotalAmount() - o.getUsedPoints());
-        save(o);
+        m.addOrderAmountAndUpdateRating(updated.getTotalAmount() - updated.getUsedPoints());
+
         // 배송정보
-        delivery.setOrder(o);
+        delivery.setOrder(updated);
         Delivery d = save(delivery);
         // 배송상품
-        saveDeliveryItems(orderItems, d);
-        o.addDelivery(d);
-        return o;
+        saveDeliveryItems(updated.getItems(), d);
+        updated.addDelivery(d);
+        return save(updated);
     }
 
     @Transactional
@@ -139,8 +123,7 @@ public class OrderService {
         return save(d);
     }
 
-    private List<OrderItem> saveOrderItems(List<Id<CartItem, String>> itemIds, Order order){
-        List<OrderItem> savedOrderItems = new ArrayList<>();
+    private Order saveOrderItems(List<Id<CartItem, String>> itemIds, Order order){
         List<CartItem> items = itemIds.stream()
                 .map(itemId -> cartRepository.findById(itemId.value())
                                 .orElseThrow(() -> new NotFoundException(CartItem.class, itemId)))
@@ -149,10 +132,8 @@ public class OrderService {
         int totalAmount = 0;
         for(CartItem item : items){
             OrderItem oItem = new OrderItem(Util.getUUID(), item.getCount());
-            oItem.setOrder(order);
             oItem.setItemOption(item.getItemOption());
-            OrderItem saved = orderItemRepository.save(oItem);
-            savedOrderItems.add(saved);
+            order.addItem(save(oItem));
             totalAmount += oItem.getItemOption().getItemDisplay().getSalePrice() * item.getCount();
         }
         order.setTotalAmount(totalAmount);
@@ -162,8 +143,7 @@ public class OrderService {
             abbrOrderItems.append("外 ").append(items.size() - 1).append("건");
         order.setAbbrOrderItems(abbrOrderItems.toString());
         deleteCartItems(items);
-        save(order);
-        return savedOrderItems;
+        return save(order);
     }
 
     private void saveDeliveryItems(List<OrderItem> orderItems, Delivery delivery){

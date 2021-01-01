@@ -80,12 +80,12 @@ public class OrderServiceTest {
         my.myungjin.academyDemo.domain.order.Order saved = orderService.ordering(memberId, order, delivery, itemIds);
         assertThat(saved, is(notNullValue()));
         log.info("Saved Order: {}", saved);
-        log.info("Saved Order Item: {}", orderService.findAllItemsByOrder(memberId, orderId));
+        log.info("Saved Order Item: {}", saved.getItems());
         log.info("Saved Delivery: {}", saved.getDeliveries());
     }
 
     @Test
-    @Order(2)
+    @Order(3)
     void 주문_조회하기_회원별_전체(){
         PageRequest pageRequest = new PageRequest();
         pageRequest.setPage(0);
@@ -95,20 +95,24 @@ public class OrderServiceTest {
         Page<my.myungjin.academyDemo.domain.order.Order> orders = orderService.findAllMyMemberWithPage(memberId, pageRequest.of());
         assertThat(orders, is(notNullValue()));
         log.info("Found Order: {}", orders.getContent());
+        for(my.myungjin.academyDemo.domain.order.Order o : orders.getContent()){
+            log.info("Found Order Item: {}", o.getItems());
+        }
     }
-
+/*
     @Test
-    @Order(3)
+    @Order(4)
     void 주문_조회하기_회원별_단건(){
         my.myungjin.academyDemo.domain.order.Order order = orderService.findById(memberId, orderId);
         assertThat(order, is(notNullValue()));
         log.info("Found Order: {}", order);
-        log.info("Found Order Item: {}", orderService.findAllItemsByOrder(memberId, orderId));
-        log.info("Found Delivery: {}", order.getDeliveries());
-    }
+        //log.info("Found Delivery: {}", order.getDeliveries());
+        log.info("Found Order Item: {}", order.getItems());
+        log.info("Found Order Item Delivery: {}", order.getItems().stream().map(OrderItem::getDeliveryId));
+    }*/
 
     @Test
-    @Order(3)
+    @Order(5)
     void 주문_수정하기_회원별_단건(){
         my.myungjin.academyDemo.domain.order.Order o = my.myungjin.academyDemo.domain.order.Order.builder()
                 .id(orderId.value())
@@ -135,7 +139,7 @@ public class OrderServiceTest {
 
 
     @Test
-    @Order(5)
+    @Order(6)
     void 배송정보_수정하기_회원별_단건(){
 
         Delivery d = Delivery.builder()
