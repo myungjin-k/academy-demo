@@ -11,6 +11,7 @@ import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.order.OrderItem;
 import my.myungjin.academyDemo.domain.review.Review;
 import my.myungjin.academyDemo.security.User;
+import my.myungjin.academyDemo.service.member.MemberService;
 import my.myungjin.academyDemo.service.review.ReviewService;
 import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.PageRequest;
@@ -33,6 +34,7 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
+    private final MemberService memberService;
 
     @GetMapping("/mall/item/{itemId}/review/list")
     @ApiOperation(value = "상품별 리뷰 목록 조회")
@@ -94,7 +96,8 @@ public class ReviewController {
             @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String memberId,
             @RequestParam int plus, @RequestParam int minus) {
         return OK(
-                reviewService.updateReserves(Id.of(Member.class, memberId), minus, plus)
+                memberService.updateReserves(Id.of(Member.class, memberId), minus, plus)
+
         );
     }
 }

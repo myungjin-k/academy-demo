@@ -149,4 +149,12 @@ public class MemberServiceTest {
         assertThat(modified, is(notNullValue()));
         log.info("Modified Member: {}", modified);
     }
+
+    @Test
+    @Order(9)
+    void 리뷰_적립금_업데이트() {
+        Member member = memberService.updateReserves(id, 0, 1000);
+        assertThat(member, notNullValue());
+        log.info("Member: {}", member);
+    }
 }

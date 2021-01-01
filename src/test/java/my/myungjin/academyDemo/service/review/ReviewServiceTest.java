@@ -125,12 +125,4 @@ public class ReviewServiceTest {
         log.info("Updated CartItem: {}", updated);
     }
 
-    @Test
-    @Order(5)
-    void 리뷰_적립금_업데이트() {
-        Member member = reviewService.updateReserves(memberId, 0, 1000);
-        assertThat(member, notNullValue());
-        log.info("Member: {}", member);
-    }
-
 }

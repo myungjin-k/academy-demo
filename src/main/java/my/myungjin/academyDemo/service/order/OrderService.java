@@ -73,7 +73,6 @@ public class OrderService {
         return o;
     }
 
-
     @Transactional(readOnly = true)
     public List<OrderItem> findAllItemsByOrder(@Valid Id<Member, String> memberId, @Valid Id<Order, String> orderId){
         return orderRepository.findByMember_idAndId(memberId.value(), orderId.value())
@@ -88,14 +87,22 @@ public class OrderService {
     @Transactional
     public Order ordering(@Valid Id<Member, String> memberId, @Valid Order newOrder,
                           @Valid Delivery delivery, List<Id<CartItem, String>> itemIds){
+        // 주문
         Order o = memberRepository.findById(memberId.value())
                 .map(member -> {
                     newOrder.setMember(member);
                     return save(newOrder);
                 }).orElseThrow(() ->  new NotFoundException(Member.class, memberId));
+        // 주문상품
         List<OrderItem> orderItems = saveOrderItems(itemIds, o);
+        // 적립금 업데이트
+        Member m = o.getMember();
+        int reserve = (int) (o.getTotalAmount() * m.getRating().getReserveRatio());
+        m.addReserves(reserve);
+        // 배송정보
         delivery.setOrder(o);
         Delivery d = save(delivery);
+        // 배송상품
         saveDeliveryItems(orderItems, d);
         o.addDelivery(d);
         return o;

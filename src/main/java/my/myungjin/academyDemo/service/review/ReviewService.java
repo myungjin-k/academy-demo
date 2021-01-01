@@ -128,17 +128,6 @@ public class ReviewService {
         return save(review);
     }
 
-    //TODO 적립금 히스토리
-    @Transactional
-    public Member updateReserves(@Valid Id<Member, String> memberId, int minus, int plus){
-        return memberRepository.findById(memberId.value())
-                .map(member -> {
-                    member.flushReserves(minus);
-                    member.addReserves(plus);
-                    return save(member);
-                }).orElseThrow(() -> new NotFoundException(Member.class, memberId));
-    }
-
     private Member save(Member member){
         return memberRepository.save(member);
     }
