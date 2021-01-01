@@ -7,6 +7,7 @@ import my.myungjin.academyDemo.domain.member.Member;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -34,6 +35,11 @@ public class Order {
     @Getter @Setter
     @Column(name = "total_amount" , nullable = false)
     private int totalAmount;
+
+    @Getter @Setter
+    @PositiveOrZero
+    @Column(name = "point_used" , nullable = false)
+    private int usedPoints;
 
     @Getter
     @Size(min = 1, max = 10)
@@ -73,13 +79,14 @@ public class Order {
     private List<Delivery> deliveries = new ArrayList<>();
 
     @Builder
-    public Order(String id, int totalAmount, @Size(min = 1, max = 10) String orderName, @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$", message = "전화번호는 010-0000-0000 형태여야 합니다.") String orderTel, String orderAddr1, String orderAddr2) {
+    public Order(String id, int totalAmount, @Size(min = 1, max = 10) String orderName, @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$", message = "전화번호는 010-0000-0000 형태여야 합니다.") String orderTel, String orderAddr1, String orderAddr2, int usedPoints) {
         this.id = id;
         this.totalAmount = totalAmount;
         this.orderName = orderName;
         this.orderTel = orderTel;
         this.orderAddr1 = orderAddr1;
         this.orderAddr2 = orderAddr2;
+        this.usedPoints = usedPoints;
     }
 
     public Optional<LocalDateTime> getUpdateAt(){

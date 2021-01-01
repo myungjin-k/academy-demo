@@ -31,6 +31,8 @@ public class OrderRequest {
 
     private String addr2;
 
+    private int usedPoints;
+
     private String receiverName;
 
     private String receiverTel;
@@ -54,6 +56,7 @@ public class OrderRequest {
                 .orderTel(tel)
                 .orderAddr1(addr1)
                 .orderAddr2(addr2)
+                .usedPoints(usedPoints)
                 .build();
     }
 

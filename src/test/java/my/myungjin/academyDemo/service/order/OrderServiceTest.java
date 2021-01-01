@@ -61,6 +61,7 @@ public class OrderServiceTest {
                 .orderTel("010-1234-5678")
                 .orderAddr1("서울시 노원구 공릉로59길 28")
                 .orderAddr2("1-1111")
+                .usedPoints(0)
                 .build();
         deliveryId = Id.of(Delivery.class, Util.getUUID());
         Delivery delivery = Delivery.builder()

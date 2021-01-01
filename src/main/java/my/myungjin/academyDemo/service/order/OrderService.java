@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -97,8 +99,12 @@ public class OrderService {
         List<OrderItem> orderItems = saveOrderItems(itemIds, o);
         // 적립금 업데이트
         Member m = o.getMember();
-        int reserve = (int) (o.getTotalAmount() * m.getRating().getReserveRatio());
-        m.addReserves(reserve);
+        m.flushReserves(o.getUsedPoints());
+        if(o.getUsedPoints() == 0){
+            int reserve = (int) (o.getTotalAmount() * m.getRating().getReserveRatio());
+            m.addReserves(reserve);
+        }
+        save(o);
         // 배송정보
         delivery.setOrder(o);
         Delivery d = save(delivery);

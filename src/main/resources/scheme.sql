@@ -133,6 +133,7 @@ CREATE TABLE order_master (
                       abbr_items_name      varchar(255),
                       member_id            varchar(50),
                       total_amount         number not null,
+                      point_used           number default 0,
                       order_name           varchar(50) NOT NULL,
                       order_tel            varchar(50) NOT NULL,
                       order_addr1          varchar(255),
