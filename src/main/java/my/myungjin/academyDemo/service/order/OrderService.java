@@ -97,13 +97,14 @@ public class OrderService {
                 }).orElseThrow(() ->  new NotFoundException(Member.class, memberId));
         // 주문상품
         List<OrderItem> orderItems = saveOrderItems(itemIds, o);
-        // 적립금 업데이트
+        // 적립금 업데이트 + 등급 업데이트
         Member m = o.getMember();
         m.flushReserves(o.getUsedPoints());
         if(o.getUsedPoints() == 0){
             int reserve = (int) (o.getTotalAmount() * m.getRating().getReserveRatio());
             m.addReserves(reserve);
         }
+        m.addOrderAmountAndUpdateRating(o.getTotalAmount() - o.getUsedPoints());
         save(o);
         // 배송정보
         delivery.setOrder(o);

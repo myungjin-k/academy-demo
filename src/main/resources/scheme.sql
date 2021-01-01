@@ -35,6 +35,7 @@ CREATE TABLE member (
                              addr1           varchar(255),
                              addr2           varchar(255),
                              rating          char DEFAULT 'B',
+                             order_amount    number default 0,
                              reserves        number DEFAULT 0,
                              create_at       datetime DEFAULT CURRENT_TIMESTAMP(),
                              update_at       datetime DEFAULT null,

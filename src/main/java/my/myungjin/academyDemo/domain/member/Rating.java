@@ -7,11 +7,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum Rating {
 
-    BRONZE("B", "BRONZE", 0, 0.01),
-    SILVER("S", "SILVER", 100000, 0.02),
-    GOLD("G", "GOLD", 500000, 0.03),
-    VIP("V", "VIP", 1000000, 0.05);
+    BRONZE(1, "B", "BRONZE", 0, 0.01),
+    SILVER(2, "S", "SILVER", 100000, 0.02),
+    GOLD(3, "G", "GOLD", 500000, 0.03),
+    VIP(4, "V", "VIP", 1000000, 0.05);
 
+    private final int seq;
     private final String code;
     private final String value;
     private final int amount;
@@ -25,4 +26,14 @@ public enum Rating {
         }
         return null;
     }
+
+    public static Rating of(int seq){
+        for(Rating rating : Rating.values()){
+            if(rating.getSeq() == seq){
+                return rating;
+            }
+        }
+        return null;
+    }
+
 }

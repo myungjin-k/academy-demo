@@ -72,6 +72,10 @@ public class Member{
     private int reserves;
 
     @Getter
+    @Column(name = "order_amount", columnDefinition = "number default 0")
+    private int orderAmount;
+
+    @Getter
     @Column(name = "create_at", insertable = false, updatable = false,
             columnDefinition = "datetime default current_timestamp")
     private LocalDateTime createAt;
@@ -96,7 +100,7 @@ public class Member{
 
     @Builder
     public Member(String id, String userId, String password, String name, String email, String tel, String addr1, String addr2,
-                  Rating rating, int reserves, LocalDateTime updateAt) {
+                  Rating rating, int reserves, int orderAmount, LocalDateTime updateAt) {
         this.id = id;
         this.userId = userId;
         this.password = password;
@@ -107,6 +111,7 @@ public class Member{
         this.addr2 = addr2;
         this.rating = rating;
         this.reserves = reserves;
+        this.orderAmount = orderAmount;
         this.updateAt = updateAt;
     }
 
@@ -146,5 +151,13 @@ public class Member{
     public void flushReserves(int amount){
         this.reserves -= amount;
         this.updateAt = now();
+    }
+
+    public void addOrderAmountAndUpdateRating(int amount){
+        this.orderAmount += amount;
+        Rating next = Rating.of(this.rating.getSeq() + 1);
+        if(next != null && this.orderAmount > this.rating.getAmount()){
+            this.rating = next;
+        }
     }
 }
