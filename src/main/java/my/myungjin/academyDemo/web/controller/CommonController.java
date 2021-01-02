@@ -61,17 +61,6 @@ public class CommonController {
         sampleService.removeGroup(Id.of(CodeGroup.class, id));
     }
 
-/*    @GetMapping("/{code}/commonCode/list")
-    public Response<CodeGroup> commonCodesByGroupCode(@PathVariable String code){
-        return OK(sampleService.findAllCommonCodesByGroupCode(code));
-    }*/
-
-/*    @GetMapping("/{id}/commonCode/list")
-    public Response<List<CommonCode>> commonCodesByGroupId(@PathVariable String id){
-        return OK(sampleService.findAllCommonCodesByGroupId(Id.of(CodeGroup.class, id)));
-    }*/
-
-
     @GetMapping("/codeGroup/{id}/commonCode/list")
     @ApiOperation(value = "공통 코드 목록 조회")
     @ApiImplicitParams({

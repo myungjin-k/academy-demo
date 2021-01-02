@@ -9,7 +9,6 @@ import my.myungjin.academyDemo.domain.order.Delivery;
 import my.myungjin.academyDemo.domain.order.DeliveryItem;
 import my.myungjin.academyDemo.domain.order.Order;
 import my.myungjin.academyDemo.domain.order.OrderItem;
-import my.myungjin.academyDemo.error.NotFoundException;
 import my.myungjin.academyDemo.service.order.DeliveryService;
 import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.DeliveryRequest;
@@ -62,19 +61,6 @@ public class DeliveryController {
                 deliveryService.deleteDelivery(Id.of(Delivery.class, id))
         );
     }
-/*
-    @GetMapping("/delivery/{deliveryId}/item/{itemId}")
-    @ApiOperation(value = "배송상품 단건 조회")
-    public Response<DeliveryItem> findDeliveryItem(
-            @PathVariable @ApiParam(value = "조회 대상 배송정보 PK", example = "cd2940ee2dfc418384eedc450be832a2") String deliveryId,
-            @PathVariable @ApiParam(value = "조회 대상 배송상품 PK", example = "d14b36612cd047a0b1e4e71d993dc9b2") String itemId){
-        return OK(
-                deliveryService.findItem(
-                        Id.of(Delivery.class, deliveryId),
-                        Id.of(DeliveryItem.class, itemId))
-                        .orElseThrow(() -> new NotFoundException(DeliveryItem.class, deliveryId, itemId))
-        );
-    }*/
 
     @PostMapping("/delivery/{deliveryId}/item")
     @ApiOperation(value = "배송상품 추가")
