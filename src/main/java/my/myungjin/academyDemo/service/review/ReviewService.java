@@ -46,12 +46,13 @@ public class ReviewService {
 
     @Transactional(readOnly = true)
     public Page<Review> findAllByItem(@Valid Id<ItemDisplay, String> itemId, Pageable pageable){
-        return reviewRepository.findByItem_id(itemId.value(), pageable);
+        return reviewRepository.findByItemId(itemId.value(), pageable);
     }
 
     @Transactional(readOnly = true)
     public Review findByMemberAndItem(@Valid Id<Member, String> memberId, @Valid Id<OrderItem, String> itemId){
-        return reviewRepository.findByOrderItem_idAndMember_id(itemId.value(), memberId.value())
+        //  TODO Review 엔티티 중복 조인(?) 문제
+        return reviewRepository.findByOrderItemIdAndMemberId(itemId.value(), memberId.value())
                 .orElseThrow(() -> new NotFoundException(Review.class, memberId, itemId));
     }
 
@@ -89,14 +90,14 @@ public class ReviewService {
         OrderItem orderItem = orderItemRepository.findById(orderItemId.value())
                 .orElseThrow(() -> new NotFoundException(OrderItem.class, orderItemId));
         List<DeliveryItem> deliveryItems = deliveryItemRepository
-                .findAllByDelivery_OrderAndItemOption_idOrderByCreateAtDesc(orderItem.getOrder(), orderItem.getItemOption().getId());
+                .findAllByDeliveryOrderAndItemOptionIdOrderByCreateAtDesc(orderItem.getOrder(), orderItem.getItemOption().getId());
         if(deliveryItems.isEmpty())
             throw new NotFoundException(DeliveryItem.class, orderItem);
         DeliveryStatus deliveryStatus = deliveryItems.get(0).getDelivery().getStatus();
         if(!deliveryStatus.equals(DeliveryStatus.DELIVERED))
             throw new StatusNotSatisfiedException(Review.class, orderItemId, deliveryStatus);
 
-        Review found = reviewRepository.findByOrderItem_idAndMember_id(orderItemId.value(), memberId.value()).orElse(null);
+        Review found = reviewRepository.findByOrderItemIdAndMemberId(orderItemId.value(), memberId.value()).orElse(null);
         if(found != null){
             log.warn("Review Already Exists: {}", found);
             return found;
@@ -116,7 +117,7 @@ public class ReviewService {
         if(!loginUserId.value().equals(memberId.value()))
             throw new IllegalArgumentException("member id must be equal to login user id(member="+ memberId+", loginUser=" +loginUserId +")");
 
-        Review review = reviewRepository.findByMember_idAndId(memberId.value(), reviewId.value())
+        Review review = reviewRepository.findByMemberIdAndId(memberId.value(), reviewId.value())
                 .orElseThrow(() -> new NotFoundException(Review.class, memberId, reviewId));
         String updatedImg = uploadReviewImage(reviewImgFile).orElse(null);
         if(updatedImg != null){

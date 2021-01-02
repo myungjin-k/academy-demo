@@ -38,7 +38,7 @@ public class OrderService {
 
     @Transactional(readOnly = true)
     public Page<Order> findAllMyMemberWithPage(@Valid Id<Member, String> memberId, Pageable pageable){
-        return orderRepository.findAllByMember_id(memberId.value(), pageable)
+        return orderRepository.findAllByMemberId(memberId.value(), pageable)
                 .map(order -> {
                     order.setDeliveries(deliveryRepository.getAllByOrderOrderByCreateAtDesc(order));
                     return getItems(memberId, order);
@@ -46,7 +46,7 @@ public class OrderService {
     }
 
     private Order findById(@Valid Id<Member, String> memberId, @Valid Id<Order, String> orderId){
-        return orderRepository.findByMember_idAndId(memberId.value(), orderId.value())
+        return orderRepository.findByMemberIdAndId(memberId.value(), orderId.value())
                 .map(order -> {
                     order.setDeliveries(deliveryRepository.getAllByOrderOrderByCreateAtDesc(order));
                     return getItems(memberId, order);
@@ -56,7 +56,7 @@ public class OrderService {
     private Order getItems(@Valid Id<Member, String> memberId, @Valid Order o){
         for(OrderItem item : o.getItems()){
             List<DeliveryItem> deliveryItems = deliveryItemRepository
-                    .findAllByDelivery_OrderAndItemOption_idOrderByCreateAtDesc(item.getOrder(), item.getItemOption().getId());
+                    .findAllByDeliveryOrderAndItemOptionIdOrderByCreateAtDesc(item.getOrder(), item.getItemOption().getId());
             if(deliveryItems.isEmpty())
                 continue;
 
@@ -65,7 +65,7 @@ public class OrderService {
             item.setInvoiceNum(delivery.getInvoiceNum());
             if(!delivery.getStatus().equals(DeliveryStatus.DELIVERED))
                 continue;
-            item.setReview(reviewRepository.findByOrderItem_idAndMember_id(item.getId(), memberId.value()).orElse(null));
+            item.setReview(reviewRepository.findByOrderItemIdAndMemberId(item.getId(), memberId.value()).orElse(null));
         }
         return o;
     }
@@ -102,7 +102,7 @@ public class OrderService {
     @Transactional
     public Order modify(@Valid Id<Member, String> memberId, @Valid Id<Order, String> orderId, @Valid Order order) {
         Order o = findById(memberId, orderId);
-        Delivery d = deliveryRepository.getByOrder_Member_idAndOrder_id(memberId.value(), orderId.value());
+        Delivery d = deliveryRepository.getByOrderMemberIdAndOrderId(memberId.value(), orderId.value());
         if(d.getStatus().getValue() > 1){
             throw new StatusNotSatisfiedException(Order.class, orderId, d.getStatus());
         }
@@ -113,7 +113,7 @@ public class OrderService {
     @Transactional
     public Delivery modify(@Valid Id<Member, String> memberId, @Valid Id<Order, String> orderId,
                            @Valid Id<Delivery, String> deliveryId, @Valid Delivery delivery) {
-        Delivery d = deliveryRepository.findByOrder_Member_idAndOrder_idAndId(memberId.value(), orderId.value(), deliveryId.value())
+        Delivery d = deliveryRepository.findByOrderMemberIdAndOrderIdAndId(memberId.value(), orderId.value(), deliveryId.value())
                 .orElseThrow(() -> new NotFoundException(Delivery.class, memberId, orderId, deliveryId));
         if(d.getStatus().getValue() > 1){
             throw new StatusNotSatisfiedException(Delivery.class, deliveryId, d.getStatus());

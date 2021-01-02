@@ -9,8 +9,10 @@ import java.util.List;
 
 public interface ItemMasterRepository extends JpaRepository<ItemMaster, String>, QuerydslPredicateExecutor<ItemMaster> {
 
+    // 전체 검색
     Page<ItemMaster> findAll(Pageable pageable);
 
+    // 카테고리 PK로 검색
     List<ItemMaster> findAllByCategoryId(String categoryId);
 
 }

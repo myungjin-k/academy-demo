@@ -29,8 +29,6 @@ import java.util.Optional;
 @Service
 public class ItemMasterService {
 
-    private final CodeGroupRepository codeGroupRepository;
-
     private final CommonCodeRepository commonCodeRepository;
 
     private final ItemMasterRepository itemMasterRepository;
@@ -42,8 +40,6 @@ public class ItemMasterService {
     private final String S3_BASE_PATH = "itemMaster";
 
     private Logger log = LoggerFactory.getLogger(ItemMasterService.class);
-
-
 
     @Transactional(readOnly = true)
     public Page<ItemMaster> findAllItems(Pageable pageable){
@@ -72,18 +68,6 @@ public class ItemMasterService {
             }
         }
         return thumbnailUrl;
-    }
-
-    @Transactional
-    public ItemMaster saveItem(@Valid Id<CommonCode, String> categoryId, @Valid ItemMaster newItem,
-                               @NotNull AttachedFile thumbnailFile, @NotNull List<ItemMaster.ItemOption> itemOptions){
-        ItemMaster master = saveItemMaster(categoryId, newItem, thumbnailFile);
-        for(ItemMaster.ItemOption itemOption : itemOptions){
-            itemOption.setItemMaster(master);
-            ItemMaster.ItemOption saved = save(itemOption);
-            master.addOption(saved);
-        }
-        return master;
     }
 
     public ItemMaster saveItemMaster(@Valid Id<CommonCode, String> categoryId, @Valid ItemMaster newItem, @NotNull AttachedFile thumbnailFile) {

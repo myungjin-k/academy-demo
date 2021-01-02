@@ -41,7 +41,7 @@ public class CartService {
         if(!loginUserId.value().equals(memberId.value()))
             throw new IllegalArgumentException("member id must be equal to login user id(member="+ memberId+", loginUser=" +loginUserId +")");
 
-        CartItem cartItem = cartRepository.getByItemOption_id(itemId.value());
+        CartItem cartItem = cartRepository.getByItemOptionId(itemId.value());
         if(cartItem != null){
             cartItem.modify(cartItem.getCount() + count);
             return save(cartItem);

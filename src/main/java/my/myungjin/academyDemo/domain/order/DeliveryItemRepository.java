@@ -7,12 +7,16 @@ import java.util.Optional;
 
 public interface DeliveryItemRepository extends JpaRepository<DeliveryItem, String> {
 
+    // 배송정보 엔티티로 검색
     List<DeliveryItem> findAllByDelivery (Delivery delivery);
 
-    Optional<DeliveryItem> findByDelivery_idAndId (String deliveryId, String deliveryItemId);
+    // 배송정보 PK와 배송상품 PK로 검색
+    Optional<DeliveryItem> findByDeliveryIdAndId (String deliveryId, String deliveryItemId);
 
-    boolean existsByDelivery_idAndItemOption_id (String deliveryId, String itemId);
+    // 배송정보 PK와 상품옵션 PK로 검색
+    boolean existsByDeliveryIdAndItemOptionId (String deliveryId, String itemId);
 
-    List<DeliveryItem> findAllByDelivery_OrderAndItemOption_idOrderByCreateAtDesc(Order order, String itemId);
+    // 주문 엔티티와 상품옵션 PK로 검색, 생성일 오름차순
+    List<DeliveryItem> findAllByDeliveryOrderAndItemOptionIdOrderByCreateAtDesc(Order order, String itemId);
 
 }

@@ -51,7 +51,6 @@ public class CommonCodeServiceTest {
     @Test
     @Order(1)
     void 코드그룹_작성하기(){
-        LocalDateTime now = LocalDateTime.now();
         CodeGroup codeGroup = CodeGroup.builder()
                 .id(groupId.value())
                 .code(groupCode)

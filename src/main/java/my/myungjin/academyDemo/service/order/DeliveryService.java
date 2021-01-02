@@ -50,7 +50,7 @@ public class DeliveryService {
     }
 
     public Optional<DeliveryItem> findItem(@Valid Id<Delivery, String> deliveryId, @Valid Id<DeliveryItem, String> itemId){
-        return deliveryItemRepository.findByDelivery_idAndId(deliveryId.value(), itemId.value());
+        return deliveryItemRepository.findByDeliveryIdAndId(deliveryId.value(), itemId.value());
     }
 
     @Transactional
@@ -83,7 +83,7 @@ public class DeliveryService {
                                                   @Valid Id<ItemDisplay.ItemDisplayOption, String> itemId, int count){
         Delivery delivery = deliveryRepository.findById(deliveryId.value())
                 .orElseThrow(() -> new NotFoundException(Delivery.class, deliveryId));
-        if(deliveryItemRepository.existsByDelivery_idAndItemOption_id(deliveryId.value(), itemId.value()))
+        if(deliveryItemRepository.existsByDeliveryIdAndItemOptionId(deliveryId.value(), itemId.value()))
             return Optional.empty();
         DeliveryItem item = new DeliveryItem(Util.getUUID(), count);
         delivery.addItem(item);

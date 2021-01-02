@@ -8,8 +8,10 @@ import java.util.Optional;
 
 public interface OrderRepository extends JpaRepository<Order, String> {
 
-    Optional<Order> findByMember_idAndId(String memberId, String id);
+    // 회원 PK와 주문 PK로 검색
+    Optional<Order> findByMemberIdAndId(String memberId, String id);
 
-    Page<Order> findAllByMember_id(String memberId, Pageable pageable);
+    // 회원 PK로 검색
+    Page<Order> findAllByMemberId(String memberId, Pageable pageable);
 
 }

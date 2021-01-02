@@ -8,10 +8,13 @@ import java.util.Optional;
 
 public interface ReviewRepository extends JpaRepository<Review, String> {
 
-    Optional<Review> findByMember_idAndId(String memberId, String id);
+    // 회원 PK와 리뷰 PK로 검색
+    Optional<Review> findByMemberIdAndId(String memberId, String id);
 
-    Optional<Review> findByOrderItem_idAndMember_id(String itemId, String memberId);
+    // 주문상품 PK와 회원 PK로 검색
+    Optional<Review> findByOrderItemIdAndMemberId(String itemId, String memberId);
 
-    Page<Review> findByItem_id(String itemId, Pageable pageable);
+    // 전시상품 PK로 검색
+    Page<Review> findByItemId(String itemId, Pageable pageable);
 
 }

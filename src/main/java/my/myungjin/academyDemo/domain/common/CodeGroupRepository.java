@@ -12,8 +12,10 @@ import java.util.Optional;
 
 public interface CodeGroupRepository extends JpaRepository<CodeGroup, String>, QuerydslPredicateExecutor<CodeGroup> {
 
+    // 전체 검색
     Page<CodeGroup> findAll(Pageable pageable);
 
+    // 코드로 검색
     Optional<CodeGroup> findByCode(String code);
 
 }
