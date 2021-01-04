@@ -96,7 +96,7 @@ public class OrderService {
         // 배송상품
         saveDeliveryItems(updated.getItems(), d);
         updated.addDelivery(d);
-        return save(updated);
+        return updated;
     }
 
     @Transactional
@@ -143,7 +143,7 @@ public class OrderService {
             abbrOrderItems.append("外 ").append(items.size() - 1).append("건");
         order.setAbbrOrderItems(abbrOrderItems.toString());
         deleteCartItems(items);
-        return save(order);
+        return order;
     }
 
     private void saveDeliveryItems(List<OrderItem> orderItems, Delivery delivery){

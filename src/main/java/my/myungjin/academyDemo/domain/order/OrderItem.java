@@ -49,7 +49,7 @@ public class OrderItem {
 
     @Setter @Getter
     @JsonIgnore
-    @OneToOne(mappedBy = "orderItem", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "orderItem", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Review review;
 
     @Setter @Getter

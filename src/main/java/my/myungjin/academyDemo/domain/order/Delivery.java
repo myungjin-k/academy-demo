@@ -76,7 +76,7 @@ public class Delivery {
 
     @Getter @Setter
     @JsonManagedReference
-    @OneToMany(mappedBy = "delivery", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "delivery", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<DeliveryItem> items = new ArrayList<>();
 
     @Builder

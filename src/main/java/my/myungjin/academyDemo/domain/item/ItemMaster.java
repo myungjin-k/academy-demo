@@ -52,7 +52,7 @@ public class ItemMaster {
 
     @Getter
     @JsonIgnore
-    @OneToMany(mappedBy = "itemMaster", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) //JOIN
+    @OneToMany(mappedBy = "itemMaster", fetch = FetchType.LAZY, cascade = CascadeType.ALL) //JOIN
     private Collection<ItemOption> options;
 
     @Setter @Getter

@@ -83,19 +83,20 @@ public class Member{
     @Column(name = "update_at")
     private LocalDateTime updateAt;
 
+    // TODO 마이페이지
     @Getter
     @JsonIgnore
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<CartItem> cartItems;
 
     @Getter
     @JsonIgnore
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Collection<Order> orders;
 
     @Getter
     @JsonIgnore
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Review> reviews;
 
     @Builder

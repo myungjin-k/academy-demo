@@ -75,12 +75,12 @@ public class Order {
 
     @Getter @Setter
     @JsonManagedReference
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<OrderItem> items = new ArrayList<>();
 
     @Getter @Setter
     @JsonManagedReference
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Delivery> deliveries = new ArrayList<>();
 
     @Builder
