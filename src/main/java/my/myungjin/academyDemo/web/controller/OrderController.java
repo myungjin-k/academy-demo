@@ -12,11 +12,13 @@ import my.myungjin.academyDemo.domain.order.CartItem;
 import my.myungjin.academyDemo.domain.order.Delivery;
 import my.myungjin.academyDemo.domain.order.Order;
 import my.myungjin.academyDemo.security.User;
+import my.myungjin.academyDemo.service.member.MemberService;
 import my.myungjin.academyDemo.service.order.CartService;
 import my.myungjin.academyDemo.service.order.OrderService;
 import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.OrderRequest;
 import my.myungjin.academyDemo.web.request.PageRequest;
+import my.myungjin.academyDemo.web.response.MemberInformRatingResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -34,6 +36,8 @@ public class OrderController {
     private final CartService cartService;
 
     private final OrderService orderService;
+
+    private final MemberService memberService;
 
     @PostMapping("/member/{id}/cart")
     @ApiOperation(value = "장바구니 추가")
@@ -91,6 +95,16 @@ public class OrderController {
                 )
         );
     }
+
+    @GetMapping("/member/{memberId}/ratingInfo")
+    @ApiOperation(value = "회원등급 정보(주문내역 페이지)")
+    public Response<MemberInformRatingResponse> order(
+            @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String memberId){
+        return OK(
+                new MemberInformRatingResponse().of(memberService.findMyInfo(Id.of(Member.class, memberId)))
+        );
+    }
+
 
     @PostMapping("/member/{memberId}/order")
     @ApiOperation(value = "주문 생성")
