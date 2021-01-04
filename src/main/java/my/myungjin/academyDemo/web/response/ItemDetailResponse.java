@@ -3,7 +3,6 @@ package my.myungjin.academyDemo.web.response;
 import lombok.Getter;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.item.ItemMaster;
-import my.myungjin.academyDemo.domain.order.CartItem;
 
 import java.util.ArrayList;
 import java.util.List;
