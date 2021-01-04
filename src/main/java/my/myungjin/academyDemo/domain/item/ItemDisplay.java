@@ -1,8 +1,6 @@
 package my.myungjin.academyDemo.domain.item;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import lombok.*;
 import my.myungjin.academyDemo.domain.review.Review;
 
@@ -89,7 +87,7 @@ public class ItemDisplay {
     private ItemMaster itemMaster;
 
     @Getter @Setter
-    @JsonIgnore
+    @JsonManagedReference
     @OneToMany(mappedBy = "itemDisplay", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Collection<ItemDisplayOption> options;
 
@@ -166,7 +164,7 @@ public class ItemDisplay {
         private LocalDateTime updateAt;
 
         @Getter @Setter
-        //@JsonBackReference
+        @JsonBackReference
         @ManyToOne
         @JoinColumn(name = "display_id", nullable = false)
         private ItemDisplay itemDisplay;
