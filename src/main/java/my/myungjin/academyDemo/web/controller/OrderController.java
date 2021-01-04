@@ -17,7 +17,7 @@ import my.myungjin.academyDemo.service.order.OrderService;
 import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.OrderRequest;
 import my.myungjin.academyDemo.web.request.PageRequest;
-import my.myungjin.academyDemo.web.response.CartItemResponse;
+import my.myungjin.academyDemo.web.response.ItemDetailResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -54,15 +54,12 @@ public class OrderController {
 
     @GetMapping("/member/{id}/cart/list")
     @ApiOperation(value = "장바구니 리스트 조회")
-    public Response<List<CartItemResponse>> cart(
+    public Response<List<CartItem>> cart(
             @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String id,
             @AuthenticationPrincipal Authentication authentication
     ){
       return OK(
               cartService.findByMember(Id.of(Member.class, id), Id.of(Member.class,  ((User) authentication.getDetails()).getId()))
-              .stream()
-              .map(cartItem -> new CartItemResponse().of(cartItem))
-              .collect(Collectors.toList())
       );
     }
 

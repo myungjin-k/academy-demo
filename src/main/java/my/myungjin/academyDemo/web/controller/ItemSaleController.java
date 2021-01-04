@@ -11,6 +11,7 @@ import my.myungjin.academyDemo.service.item.ItemDisplayService;
 import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.ItemSearchRequest;
 import my.myungjin.academyDemo.web.request.PageRequest;
+import my.myungjin.academyDemo.web.response.ItemDetailResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -38,9 +39,9 @@ public class ItemSaleController {
 
     @GetMapping(path = "/{id}")
     @ApiOperation(value = "전시상품 상세 조회")
-    public Response<ItemDisplay> itemDetail(@PathVariable @ApiParam(value = "대상 전시상품 PK", defaultValue = "f23ba30a47194a2c8a3fd2ccadd952a4") String id){
+    public Response<ItemDetailResponse> itemDetail(@PathVariable @ApiParam(value = "대상 전시상품 PK", defaultValue = "f23ba30a47194a2c8a3fd2ccadd952a4") String id){
         return OK(
-                itemDisplayService.findByIdWithOptions(Id.of(ItemDisplay.class, id))
+                new ItemDetailResponse().of(itemDisplayService.findByIdWithOptions(Id.of(ItemDisplay.class, id)))
         );
     }
 
