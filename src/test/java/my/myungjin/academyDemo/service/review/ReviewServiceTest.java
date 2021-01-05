@@ -59,7 +59,6 @@ public class ReviewServiceTest {
 
 
     @Test
-//    @Sql("/db/order-data-setup.sql")
     @Order(1)
     void 리뷰_작성하기() throws IOException {
         Review review = Review.builder()

@@ -49,7 +49,6 @@ public class ItemMasterServiceTest {
     }
 
     @Test
- //   @Sql("/db/item-data-setup.sql")
     @Order(1)
     void 상품_가져오기_메인카테고리(){
         List<ItemMaster> itemList = itemMasterService.findByCategory(categoryId);
@@ -129,7 +128,7 @@ public class ItemMasterServiceTest {
     @Order(7)
     void 상품_카테고리_검색하기(){
 
-        List<CommonCode> results = itemMasterService.searchCategoryByNameKor("니트");
-        MatcherAssert.assertThat(results.size(), Is.is(2));
+        List<CommonCode> results = itemMasterService.searchCategoryByNameKor("바지");
+        MatcherAssert.assertThat(results.size(), Is.is(1));
     }
 }

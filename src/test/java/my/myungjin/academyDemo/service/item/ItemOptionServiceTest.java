@@ -37,7 +37,6 @@ public class ItemOptionServiceTest {
     }
 
     @Test
- //   @Sql("/db/item-option-data-setup.sql")
     @Order(1)
     void 상품_옵션_등록하기() {
         ItemMaster.ItemOption newOption = ItemMaster.ItemOption.builder()
@@ -55,7 +54,7 @@ public class ItemOptionServiceTest {
     @Order(2)
     void 상품_옵션_마스터별로_조회하기() {
         List<ItemMaster.ItemOption> options = itemOptionService.findAllByMasterId(itemMasterId);
-        assertThat(options.size(), is(3));
+        assertThat(options.size(), is(5));
         log.info("Found Options: {}", options);
     }
 
@@ -75,6 +74,6 @@ public class ItemOptionServiceTest {
         log.info("Deleted Option: {}", deleted);
 
         List<ItemMaster.ItemOption> options = itemOptionService.findAllByMasterId(itemMasterId);
-        assertThat(options.size(), is(2));
+        assertThat(options.size(), is(4));
     }
 }

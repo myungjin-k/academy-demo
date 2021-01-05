@@ -46,7 +46,6 @@ public class CommonCodeServiceTest {
     }
 
     @Test
- //   @Sql("/db/commoncode-data-setup.sql")
     @Order(1)
     void 코드그룹_작성하기(){
         CodeGroup codeGroup = CodeGroup.builder()
