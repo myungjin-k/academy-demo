@@ -37,7 +37,7 @@ public class ItemOptionServiceTest {
     }
 
     @Test
-    @Sql("/db/item-option-data-setup.sql")
+ //   @Sql("/db/item-option-data-setup.sql")
     @Order(1)
     void 상품_옵션_등록하기() {
         ItemMaster.ItemOption newOption = ItemMaster.ItemOption.builder()

@@ -51,7 +51,7 @@ public class ItemDisplayServiceTest {
     }
 
     @Test
-    @Sql("/db/item-data-setup.sql")
+//    @Sql("/db/item-data-setup.sql")
     @Order(1)
     void 전체_전시_상품_가져오기() {
         PageRequest request = new PageRequest();

@@ -53,7 +53,7 @@ public class DeliveryServiceTest {
     }
 
     @Test
-    @Sql("/db/order-data-setup.sql")
+//    @Sql("/db/order-data-setup.sql")
     @Order(1)
     void 배송정보_조회하기_배송아이디로(){
         Delivery d = deliveryService.findById(deliveryId);

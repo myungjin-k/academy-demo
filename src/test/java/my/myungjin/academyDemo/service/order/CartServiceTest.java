@@ -42,7 +42,7 @@ public class CartServiceTest {
     }
 
     @Test
-    @Sql("/db/order-data-setup.sql")
+//    @Sql("/db/order-data-setup.sql")
     @Order(1)
     void 장바구니_추가하기() {
         CartItem added = cartService.add(memberId, memberId, itemId, 2);

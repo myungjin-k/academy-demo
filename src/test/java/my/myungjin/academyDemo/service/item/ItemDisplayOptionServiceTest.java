@@ -38,7 +38,7 @@ public class ItemDisplayOptionServiceTest {
     }
 
     @Test
-    @Sql("/db/item-option-data-setup.sql")
+//    @Sql("/db/item-option-data-setup.sql")
     @Order(1)
     void 상품_옵션_등록하기() {
         ItemDisplay.ItemDisplayOption newOption = ItemDisplay.ItemDisplayOption.builder()
@@ -57,7 +57,7 @@ public class ItemDisplayOptionServiceTest {
     @Order(2)
     void 상품_옵션_마스터별로_조회하기() {
         List<ItemDisplay.ItemDisplayOption> options = itemDisplayOptionService.findAllByMasterId(itemDisplayId);
-        assertThat(options.size(), is(5));
+        assertThat(options.size(), is(3));
         log.info("Found Options: {}", options);
     }
 
@@ -77,6 +77,6 @@ public class ItemDisplayOptionServiceTest {
         log.info("Deleted Option: {}", deleted);
 
         List<ItemDisplay.ItemDisplayOption> options = itemDisplayOptionService.findAllByMasterId(itemDisplayId);
-        assertThat(options.size(), is(4));
+        assertThat(options.size(), is(2));
     }
 }

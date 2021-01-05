@@ -1,0 +1,88 @@
+
+        </div>
+        <!-- Content End -->
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="py-5">
+    <div class="container">
+        <p class="m-0 text-center">Copyright &copy; Your Website 2020</p>
+    </div>
+    <!-- /.container -->
+</footer>
+
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="categorySearchModal" tabindex="-1" aria-labelledby="categorySearchModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="categorySearchModalLabel">상품 카테고리 검색</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row mb-3">
+                                <div class="col-sm">
+                                    <input type="text" class="form-control w-100" id="categorySearchParam" name="searchParam"/>
+                                </div>
+                                <div class="col-sm-3">
+                                    <button type="button" class="btn btn-primary" id="btn-category-search" >검색</button>
+                                </div>
+                            </div>
+                            <p class="text-danger d-block">※ 최하위 카테고리를 선택해 주세요.</p>
+                            <div class="row p-3 ">
+                                <div  id="categorySearchResult"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            $(document).click("#categorySearchModal .categorySearchResult", function () {
+                var id = this.find("input[name='categoryId']").val();
+                var name = this.find("input[name='categoryName']").val();
+                $("#form-save-item-master #categoryId").val(id);
+                $("#form-save-item-master #categoryName").val(name);
+                $('#categorySearchModal').modal('hide');
+            });
+            $("#btn-category-search").click(function(){
+                var searchParam = $("#categorySearchParam").val();
+                $.ajax({
+                    type: 'GET',
+                    url: '/admin/item/category?searchParam='+ searchParam,
+                    dataType: 'json',
+                    contentType:'application/json; charset=utf-8'
+                }).done(function(response) {
+                    var resultData = response.response;
+                    console.log(resultData);
+                    if(resultData.length > 0){
+
+                        $.each(resultData, function(){
+                            //console.log(this);
+                            const cate = this;
+                            const row = '<a class="btn btn-sm btn-outline-dark categorySearchResult ">' + cate.nameKor +
+                                    '<input type="hidden" name="categoryId" value="' + cate.id +'"/>' +
+                                    '<input type="hidden" name="categoryName" value="' + cate.nameKor +'"/>' +
+                                    '</a>';
+                            $('#categorySearchResult').append(row);
+                        });
+                    }
+
+                }).fail(function (error) {
+                    alert(JSON.stringify(error));
+                });
+            });
+        </script>
+</body>
+
+</html>

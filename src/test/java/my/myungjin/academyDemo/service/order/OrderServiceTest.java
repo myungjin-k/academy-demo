@@ -47,7 +47,7 @@ public class OrderServiceTest {
     }
 
     @Test
-    @Sql("/db/order-data-setup.sql")
+//    @Sql("/db/order-data-setup.sql")
     @Order(1)
     void 주문_생성하기(){
         my.myungjin.academyDemo.domain.order.Order order = my.myungjin.academyDemo.domain.order.Order.builder()

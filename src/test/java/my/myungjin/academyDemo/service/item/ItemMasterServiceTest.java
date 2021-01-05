@@ -49,7 +49,7 @@ public class ItemMasterServiceTest {
     }
 
     @Test
-    @Sql("/db/item-data-setup.sql")
+ //   @Sql("/db/item-data-setup.sql")
     @Order(1)
     void 상품_가져오기_메인카테고리(){
         List<ItemMaster> itemList = itemMasterService.findByCategory(categoryId);
