@@ -24,6 +24,10 @@ INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reser
 
 INSERT INTO admin (id, admin_id, password) VALUES ('3a18e633a5db4dbd8aaee218fe447fa4', 'mjkim', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq');
 
+INSERT INTO item_master (id, item_name, category_id, price, thumbnail) VALUES ('8c1cbb792b8d447e9128d53920cf9366', '[R택] 보더 알파카 니트', '44e94265588b428e8e01bbc23dfc0f7e', 72000, 'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/itemMaster/e58bfe723dbb7e2c927887606aaf8ec7.jpg');
+
+INSERT INTO item_option (id, color, master_id) VALUES ('b870e35c135e4782b531299753643fba', '콘베이지', '8c1cbb792b8d447e9128d53920cf9366');
+INSERT INTO item_option (id, color, master_id) VALUES ('bed5b40336c844f1a78c431f111370fa', '크림아이보리', '8c1cbb792b8d447e9128d53920cf9366');
 
 INSERT INTO item_master (id, item_name, category_id, price, thumbnail) VALUES ('c62bb955f4f94203b31f157fa72deef2', '[R택] 그랜트 핀턱 팬츠 (2color)', '8afe84e9d3f948cf83bb1faed0175c63', 43000, 'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/itemMaster/5bd7201aab3b952aeae3d0f38305ad45.jpg');
 
@@ -96,8 +100,8 @@ INSERT INTO item_display (id, item_id, item_display_name, sale_price, material, 
 INSERT INTO item_display_option (id, color, display_id) VALUES ('8130cede06c04fa2bbd8bc09a29787c8', '딥브라운', '6bdbf6eea40b425caae4410895ca4809');
 INSERT INTO item_display_option (id, color, display_id) VALUES ('fd778631e13944f393a73abf9e5dc5cf', '차콜그레이', '6bdbf6eea40b425caae4410895ca4809');
 
-INSERT INTO cart (id, member_id, item_id) VALUES ('f4597dfc1ae649a58edcb7921002aca5', '3a18e633a5db4dbd8aaee218fe447fa4', 'c9402883dbe540e898a417e4884845bf');
-INSERT INTO cart (id, member_id, item_id) VALUES ('0a25d9eea6d94a3897e06b33e4bf5b69', '3a18e633a5db4dbd8aaee218fe447fa4', '91cc1c18f11e4d018566524b51d8419a');
+INSERT INTO cart (id, member_id, item_id, count) VALUES ('f4597dfc1ae649a58edcb7921002aca5', '3a18e633a5db4dbd8aaee218fe447fa4', 'c9402883dbe540e898a417e4884845bf', 1);
+INSERT INTO cart (id, member_id, item_id, count) VALUES ('0a25d9eea6d94a3897e06b33e4bf5b69', '3a18e633a5db4dbd8aaee218fe447fa4', '91cc1c18f11e4d018566524b51d8419a', 1);
 
 INSERT INTO order_master (id, abbr_items_name, member_id, total_amount, order_name, order_tel, order_addr1, order_addr2) VALUES ('03039b4535404247bfee52cfd934c779', '그랜드 핀턱 팬츠 (2color) 外 1건', '3a18e633a5db4dbd8aaee218fe447fa4', 43000 * 2 + 190000, '명진', '010-1234-5678','XX시 XX구 XX로', '1-1111');
 INSERT INTO order_item (id, ORDER_ID, item_id, count) VALUES ('973ee36b953a4a0c9ca5d9f5868b015c', '03039b4535404247bfee52cfd934c779', 'c9402883dbe540e898a417e4884845bf', 2);

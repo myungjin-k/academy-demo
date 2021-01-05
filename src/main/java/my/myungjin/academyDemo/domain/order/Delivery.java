@@ -116,6 +116,6 @@ public class Delivery {
     }
 
     public void updateInvoice(String invoiceNum){
-        this.invoiceNum = StringUtils.join( ",", this.invoiceNum, invoiceNum);
+        this.invoiceNum = invoiceNum;
     }
 }
