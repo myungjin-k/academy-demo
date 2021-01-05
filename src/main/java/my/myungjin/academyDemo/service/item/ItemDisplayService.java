@@ -74,7 +74,8 @@ public class ItemDisplayService {
                     List<ItemDisplay.ItemDisplayOption> options = itemDisplayOptionRepository.findAllByItemDisplay(itemDisplay);
                     if(!options.isEmpty())
                         itemDisplay.setOptions(options);
-                    itemDisplay.setOriginalPrice(itemDisplay.getItemMaster().getPrice());
+                    // TODO Response 만들기
+                    //itemDisplay.setOriginalPrice(itemDisplay.getItemMaster().getPrice());
                     return itemDisplay;
                 }).orElseThrow(() -> new NotFoundException(ItemDisplay.class, itemDisplayId));
     }

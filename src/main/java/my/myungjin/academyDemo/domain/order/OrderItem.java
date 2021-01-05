@@ -54,12 +54,6 @@ public class OrderItem {
     @OneToOne(mappedBy = "orderItem", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Review review;
 
-    @Setter @Getter
-    private DeliveryStatus deliveryStatus;
-
-    @Setter @Getter
-    private String invoiceNum;
-
     public OrderItem(String id, int count) {
         this.id = id;
         this.count = count;

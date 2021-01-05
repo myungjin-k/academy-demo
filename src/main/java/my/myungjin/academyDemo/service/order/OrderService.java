@@ -68,8 +68,9 @@ public class OrderService {
                 continue;
 
             Delivery delivery = deliveryItems.get(0).getDelivery();
-            item.setDeliveryStatus(delivery.getStatus());
-            item.setInvoiceNum(delivery.getInvoiceNum());
+            // TODO Response 만들기
+            //item.setDeliveryStatus(delivery.getStatus());
+            //item.setInvoiceNum(delivery.getInvoiceNum());
             if(!delivery.getStatus().equals(DeliveryStatus.DELIVERED))
                 continue;
             item.setReview(reviewRepository.findByOrderItemIdAndMemberId(item.getId(), memberId.value()).orElse(null));
@@ -140,6 +141,7 @@ public class OrderService {
         for(CartItem item : items){
             OrderItem oItem = new OrderItem(Util.getUUID(), item.getCount());
             oItem.setItemOption(item.getItemOption());
+            oItem.setOrder(order);
             order.addItem(save(oItem));
             totalAmount += oItem.getItemOption().getItemDisplay().getSalePrice() * item.getCount();
         }

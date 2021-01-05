@@ -32,9 +32,6 @@ public class ItemDisplay {
     @Column(name = "item_display_name", nullable = false)
     private String itemDisplayName;
 
-    @Getter @Setter
-    private int originalPrice;
-
     @Getter
     @Column(name = "sale_price", nullable = false)
     private int salePrice;
