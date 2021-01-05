@@ -35,7 +35,7 @@ public class DeliveryService {
         return deliveryRepository.findById(deliveryId.value())
                 .map(delivery -> {
                     Order order = delivery.getOrder();
-                    order.setDeliveries(deliveryRepository.findAllByOrder_AndStatusIsNot(order, null));
+                    order.setDeliveries(deliveryRepository.findAllByOrderAndStatusIsNot(order, null));
                     return orderItemRepository.findAllByOrder(order);
                 }).orElseThrow(() -> new NotFoundException(Delivery.class, deliveryId));
     }

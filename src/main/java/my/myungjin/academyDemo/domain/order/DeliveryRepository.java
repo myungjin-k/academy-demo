@@ -17,6 +17,6 @@ public interface DeliveryRepository extends JpaRepository<Delivery, String> {
     List<Delivery> getAllByOrderOrderByCreateAtDesc(Order order);
 
     // 주문 엔티티, 특정 배송상태 제외하여 검색
-    List<Delivery> findAllByOrder_AndStatusIsNot(Order order, DeliveryStatus status);
+    List<Delivery> findAllByOrderAndStatusIsNot(Order order, DeliveryStatus status);
 
 }

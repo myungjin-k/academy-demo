@@ -37,6 +37,13 @@ public class OrderService {
     private final ReviewRepository reviewRepository;
 
     @Transactional(readOnly = true)
+    public Order getOrderDetail(@Valid Id<Member, String> memberId, @Valid Id<Order, String> orderId) {
+        Order o = findById(memberId, orderId);
+        o.setDeliveries(deliveryRepository.getAllByOrderOrderByCreateAtDesc(o));
+        return o;
+    }
+
+    @Transactional(readOnly = true)
     public Page<Order> findAllMyMemberWithPage(@Valid Id<Member, String> memberId, Pageable pageable){
         return orderRepository.findAllByMemberId(memberId.value(), pageable)
                 .map(order -> {

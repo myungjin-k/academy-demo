@@ -19,6 +19,7 @@ import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.OrderRequest;
 import my.myungjin.academyDemo.web.request.PageRequest;
 import my.myungjin.academyDemo.web.response.MemberInformRatingResponse;
+import my.myungjin.academyDemo.web.response.OrderDetailResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -134,6 +135,16 @@ public class OrderController {
     ){
         return OK(
                 orderService.findAllMyMemberWithPage(Id.of(Member.class, memberId), pageRequest.of())
+        );
+    }
+
+    @GetMapping("/member/{memberId}/order/{orderId}")
+    @ApiOperation(value = "회원별 단건 주문 조회")
+    public Response<OrderDetailResponse> getOrderDetail(
+            @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String memberId,
+            @PathVariable @ApiParam(value = "조회 대상 주문 PK", example = "03039b4535404247bfee52cfd934c779") String orderId){
+        return OK(
+                new OrderDetailResponse().of(orderService.getOrderDetail(Id.of(Member.class, memberId), Id.of(Order.class, orderId)))
         );
     }
 
