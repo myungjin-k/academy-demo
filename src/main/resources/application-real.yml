@@ -1,11 +1,17 @@
+server:
+  port: 7092
 spring:
   application:
-    name: academy_demo
+    name: academy_demo_real
   messages:
     basename: i18n/messages
     encoding: UTF-8
     cache-duration: PT1H
   profiles:
     include: mail, cloud, real-db
-server:
-  port: 7090
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+  session:
+    store-type: jdbc
