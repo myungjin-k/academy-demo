@@ -3,13 +3,13 @@ package my.myungjin.academyDemo.service.item;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.item.ItemStatus;
-import my.myungjin.academyDemo.util.Util;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 
@@ -38,11 +38,12 @@ public class ItemDisplayOptionServiceTest {
     }
 
     @Test
+    @Sql("/db/item-option-data-setup.sql")
     @Order(1)
     void 상품_옵션_등록하기() {
         ItemDisplay.ItemDisplayOption newOption = ItemDisplay.ItemDisplayOption.builder()
-                .color("멜란지그레이")
-                .size("ONE SIZE")
+                .color("마론핑크")
+                .size("S")
                 .status(ItemStatus.ON_SALE)
                 .build();
         ItemDisplay.ItemDisplayOption saved = itemDisplayOptionService.add(itemDisplayId, newOption);
@@ -56,7 +57,7 @@ public class ItemDisplayOptionServiceTest {
     @Order(2)
     void 상품_옵션_마스터별로_조회하기() {
         List<ItemDisplay.ItemDisplayOption> options = itemDisplayOptionService.findAllByMasterId(itemDisplayId);
-        assertThat(options.size(), is(3));
+        assertThat(options.size(), is(5));
         log.info("Found Options: {}", options);
     }
 
@@ -76,6 +77,6 @@ public class ItemDisplayOptionServiceTest {
         log.info("Deleted Option: {}", deleted);
 
         List<ItemDisplay.ItemDisplayOption> options = itemDisplayOptionService.findAllByMasterId(itemDisplayId);
-        assertThat(options.size(), is(2));
+        assertThat(options.size(), is(4));
     }
 }

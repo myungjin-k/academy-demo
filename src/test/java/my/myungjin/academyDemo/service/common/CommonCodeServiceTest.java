@@ -4,7 +4,6 @@ import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.common.CodeGroup;
 import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.service.admin.CommonCodeService;
-import my.myungjin.academyDemo.util.Util;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
@@ -14,8 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +28,6 @@ import static org.hamcrest.core.Is.is;
 public class CommonCodeServiceTest {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
-
 
     @Autowired
     private CommonCodeService commonService;
@@ -45,9 +43,10 @@ public class CommonCodeServiceTest {
         groupCode = "999";
         groupNameEng = "TEST";
         groupNameKor = "테스트";
-        codeId = Id.of(CommonCode.class, Util.getUUID());
     }
+
     @Test
+    @Sql("/db/commoncode-data-setup.sql")
     @Order(1)
     void 코드그룹_작성하기(){
         CodeGroup codeGroup = CodeGroup.builder()

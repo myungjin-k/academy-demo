@@ -5,7 +5,6 @@ import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.item.ItemMaster;
 import my.myungjin.academyDemo.domain.item.ItemStatus;
-import my.myungjin.academyDemo.util.Util;
 import my.myungjin.academyDemo.web.request.PageRequest;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
@@ -16,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -51,6 +51,7 @@ public class ItemDisplayServiceTest {
     }
 
     @Test
+    @Sql("/db/item-data-setup.sql")
     @Order(1)
     void 전체_전시_상품_가져오기() {
         PageRequest request = new PageRequest();

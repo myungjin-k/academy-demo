@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 
@@ -41,6 +42,7 @@ public class CartServiceTest {
     }
 
     @Test
+    @Sql("/db/order-data-setup.sql")
     @Order(1)
     void 장바구니_추가하기() {
         CartItem added = cartService.add(memberId, memberId, itemId, 2);

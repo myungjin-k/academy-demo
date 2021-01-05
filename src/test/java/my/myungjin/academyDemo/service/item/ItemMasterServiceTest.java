@@ -3,7 +3,6 @@ package my.myungjin.academyDemo.service.item;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.domain.item.ItemMaster;
-import my.myungjin.academyDemo.util.Util;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.*;
@@ -13,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -49,11 +49,12 @@ public class ItemMasterServiceTest {
     }
 
     @Test
+    @Sql("/db/item-data-setup.sql")
     @Order(1)
     void 상품_가져오기_메인카테고리(){
         List<ItemMaster> itemList = itemMasterService.findByCategory(categoryId);
         assertThat(itemList, is(notNullValue()));
-        //log.info("Saved Member: {}", saved);
+        log.info("Found itemList: {}", itemList);
 
     }
 
@@ -61,7 +62,7 @@ public class ItemMasterServiceTest {
     @Order(2)
     void 상품_등록하기() throws IOException {
         ItemMaster newItem = ItemMaster.builder()
-                .itemName("데어 워머 터틀넥 티셔츠 (3color)")
+                .itemName("데어 워머 터틀넥 니트 (3color)")
                 .price(19000)
                 .build();
         URL testThumbnail = getClass().getResource("/logo.png");
@@ -128,7 +129,7 @@ public class ItemMasterServiceTest {
     @Order(7)
     void 상품_카테고리_검색하기(){
 
-        List<CommonCode> results = itemMasterService.searchCategoryByNameKor("바지");
-        MatcherAssert.assertThat(results.size(), Is.is(1));
+        List<CommonCode> results = itemMasterService.searchCategoryByNameKor("니트");
+        MatcherAssert.assertThat(results.size(), Is.is(2));
     }
 }

@@ -2,13 +2,13 @@ package my.myungjin.academyDemo.service.item;
 
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.item.ItemMaster;
-import my.myungjin.academyDemo.util.Util;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 
@@ -33,15 +33,16 @@ public class ItemOptionServiceTest {
 
     @BeforeAll
     void setup(){
-        itemMasterId = Id.of(ItemMaster.class, "8c1cbb792b8d447e9128d53920cf9366");
+        itemMasterId = Id.of(ItemMaster.class, "c62bb955f4f94203b31f157fa72deef2");
     }
 
     @Test
+    @Sql("/db/item-option-data-setup.sql")
     @Order(1)
     void 상품_옵션_등록하기() {
         ItemMaster.ItemOption newOption = ItemMaster.ItemOption.builder()
-                .color("멜란지그레이")
-                .size("ONE SIZE")
+                .color("마론핑크")
+                .size("S")
                 .build();
         ItemMaster.ItemOption saved = itemOptionService.add(itemMasterId, newOption);
         this.itemOptionId = Id.of(ItemMaster.ItemOption.class, saved.getId());

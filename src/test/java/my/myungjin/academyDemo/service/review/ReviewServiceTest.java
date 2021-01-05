@@ -5,7 +5,6 @@ import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.order.OrderItem;
 import my.myungjin.academyDemo.domain.review.Review;
-import my.myungjin.academyDemo.util.Util;
 import my.myungjin.academyDemo.web.request.PageRequest;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
@@ -16,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -59,6 +59,7 @@ public class ReviewServiceTest {
 
 
     @Test
+    @Sql("/db/order-data-setup.sql")
     @Order(1)
     void 리뷰_작성하기() throws IOException {
         Review review = Review.builder()

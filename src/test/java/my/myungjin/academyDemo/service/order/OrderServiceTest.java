@@ -5,7 +5,6 @@ import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.order.CartItem;
 import my.myungjin.academyDemo.domain.order.Delivery;
 import my.myungjin.academyDemo.domain.order.DeliveryStatus;
-import my.myungjin.academyDemo.util.Util;
 import my.myungjin.academyDemo.web.request.PageRequest;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
@@ -15,12 +14,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -50,6 +47,7 @@ public class OrderServiceTest {
     }
 
     @Test
+    @Sql("/db/order-data-setup.sql")
     @Order(1)
     void 주문_생성하기(){
         my.myungjin.academyDemo.domain.order.Order order = my.myungjin.academyDemo.domain.order.Order.builder()

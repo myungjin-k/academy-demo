@@ -6,13 +6,13 @@ import my.myungjin.academyDemo.domain.order.Delivery;
 import my.myungjin.academyDemo.domain.order.DeliveryItem;
 import my.myungjin.academyDemo.domain.order.DeliveryStatus;
 import my.myungjin.academyDemo.domain.order.OrderItem;
-import my.myungjin.academyDemo.util.Util;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +53,7 @@ public class DeliveryServiceTest {
     }
 
     @Test
+    @Sql("/db/order-data-setup.sql")
     @Order(1)
     void 배송정보_조회하기_배송아이디로(){
         Delivery d = deliveryService.findById(deliveryId);
