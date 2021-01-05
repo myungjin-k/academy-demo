@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.member.Member;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -19,8 +20,9 @@ import static java.util.Optional.ofNullable;
 @EqualsAndHashCode(of = "id")
 public class CartItem {
 
-    @Id
-    @Getter
+    @Id @Getter
+    @GeneratedValue(generator = "cartItemId")
+    @GenericGenerator(name = "cartItemId", strategy = "my.myungjin.academyDemo.commons.IdGenerator")
     private String id;
 
     @Getter
@@ -48,8 +50,7 @@ public class CartItem {
     @JoinColumn(name = "item_id", nullable = false)
     private ItemDisplay.ItemDisplayOption itemOption;
 
-    public CartItem(String id, int count) {
-        this.id = id;
+    public CartItem(int count) {
         this.count = count;
     }
 

@@ -3,6 +3,7 @@ package my.myungjin.academyDemo.domain.order;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -19,6 +20,8 @@ public class DeliveryItem {
 
     @Id
     @Getter
+    @GeneratedValue(generator = "deliveryItemId")
+    @GenericGenerator(name = "deliveryItemId", strategy = "my.myungjin.academyDemo.commons.IdGenerator")
     private String id;
 
     @Getter
@@ -45,8 +48,7 @@ public class DeliveryItem {
     @JoinColumn(name = "item_id", nullable = false)
     private ItemDisplay.ItemDisplayOption itemOption;
 
-    public DeliveryItem(String id, int count) {
-        this.id = id;
+    public DeliveryItem(int count) {
         this.count = count;
     }
 

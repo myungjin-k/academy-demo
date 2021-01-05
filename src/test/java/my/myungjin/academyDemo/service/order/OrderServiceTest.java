@@ -52,20 +52,14 @@ public class OrderServiceTest {
     @Test
     @Order(1)
     void 주문_생성하기(){
-        String id = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHH24mmss")) + randomAlphabetic(4).toUpperCase(Locale.ROOT);
-        orderId = Id.of(my.myungjin.academyDemo.domain.order.Order.class, id);
-        log.info("order id: {}", id);
         my.myungjin.academyDemo.domain.order.Order order = my.myungjin.academyDemo.domain.order.Order.builder()
-                .id(id)
                 .orderName("김명진")
                 .orderTel("010-1234-5678")
                 .orderAddr1("서울시 노원구 공릉로59길 28")
                 .orderAddr2("1-1111")
                 .usedPoints(0)
                 .build();
-        deliveryId = Id.of(Delivery.class, Util.getUUID());
         Delivery delivery = Delivery.builder()
-                .id(deliveryId.value())
                 .receiverName("김명진")
                 .receiverTel("010-1234-5678")
                 .receiverAddr1("서울시 노원구 공릉로59길 28")
@@ -74,10 +68,12 @@ public class OrderServiceTest {
                 .build();
 
         List<Id<CartItem, String>> itemIds = Arrays.asList(
-                Id.of(CartItem.class, "f4597dfc1ae649a58edcb7921002aca5"),
-                Id.of(CartItem.class, "0a25d9eea6d94a3897e06b33e4bf5b69")
+                Id.of(CartItem.class, "f4597dfc1ae649a58edcb7921002aca5")
+                //Id.of(CartItem.class, "0a25d9eea6d94a3897e06b33e4bf5b69")
         );
         my.myungjin.academyDemo.domain.order.Order saved = orderService.ordering(memberId, order, delivery, itemIds);
+        orderId = Id.of(my.myungjin.academyDemo.domain.order.Order.class, saved.getId());
+        deliveryId = Id.of(Delivery.class, saved.getDeliveries().get(0).getId());
         assertThat(saved, is(notNullValue()));
         log.info("Saved Order: {}", saved);
         log.info("Saved Order Item: {}", saved.getItems());

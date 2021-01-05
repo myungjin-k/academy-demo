@@ -22,10 +22,7 @@ spring:
     encoding: UTF-8
     cache-duration: PT1H
   profiles:
-    include:
-      mail,
-      cloud
-
+    include: mail, cloud
 server:
   port: 7090
 logging:

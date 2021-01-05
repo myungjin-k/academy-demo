@@ -155,7 +155,7 @@ public class OrderService {
 
     private void saveDeliveryItems(List<OrderItem> orderItems, Delivery delivery){
         for(OrderItem item : orderItems){
-            DeliveryItem dItem = new DeliveryItem(Util.getUUID(), item.getCount());
+            DeliveryItem dItem = new DeliveryItem(item.getCount());
             dItem.setItemOption(item.getItemOption());
             delivery.addItem(dItem);
             save(dItem);

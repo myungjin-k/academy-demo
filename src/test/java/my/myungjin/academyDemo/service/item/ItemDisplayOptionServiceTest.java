@@ -40,14 +40,13 @@ public class ItemDisplayOptionServiceTest {
     @Test
     @Order(1)
     void 상품_옵션_등록하기() {
-        this.itemDisplayOptionId = Id.of(ItemDisplay.ItemDisplayOption.class, Util.getUUID());
         ItemDisplay.ItemDisplayOption newOption = ItemDisplay.ItemDisplayOption.builder()
-                .id(itemDisplayOptionId.value())
                 .color("멜란지그레이")
                 .size("ONE SIZE")
                 .status(ItemStatus.ON_SALE)
                 .build();
         ItemDisplay.ItemDisplayOption saved = itemDisplayOptionService.add(itemDisplayId, newOption);
+        this.itemDisplayOptionId = Id.of(ItemDisplay.ItemDisplayOption.class, saved.getId());
         assertThat(saved, is(notNullValue()));
         log.info("Saved Option: {}", saved);
 

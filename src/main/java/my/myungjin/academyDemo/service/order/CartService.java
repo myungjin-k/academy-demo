@@ -47,7 +47,7 @@ public class CartService {
             return save(cartItem);
         }
 
-        cartItem = new CartItem(Util.getUUID(), count);
+        cartItem = new CartItem(count);
         cartItem.setMember(findMember(memberId));
         cartItem.setItemOption(findItem(itemId));
         return save(cartItem);

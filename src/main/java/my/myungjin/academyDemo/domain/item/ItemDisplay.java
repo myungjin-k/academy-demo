@@ -3,6 +3,7 @@ package my.myungjin.academyDemo.domain.item;
 import com.fasterxml.jackson.annotation.*;
 import lombok.*;
 import my.myungjin.academyDemo.domain.review.Review;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -21,13 +22,10 @@ import static java.util.Optional.ofNullable;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
 public class ItemDisplay {
-    @Id
-    @Getter
+    @Id @Getter
+    @GeneratedValue(generator = "itemDisplayId")
+    @GenericGenerator(name = "itemDisplayId", strategy = "my.myungjin.academyDemo.commons.IdGenerator")
     private String id;
-/*
-    @Size(min = 1, max = 50)
-    @Column(name = "item_id", nullable = false)
-    private String itemId;*/
 
     @Getter
     @Size(min = 1, max = 50)
@@ -138,6 +136,8 @@ public class ItemDisplay {
     @EqualsAndHashCode(of = "id")
     public static class ItemDisplayOption {
         @Id @Getter
+        @GeneratedValue(generator = "itemDisplayOptionId")
+        @GenericGenerator(name = "itemDisplayOptionId", strategy = "my.myungjin.academyDemo.commons.IdGenerator")
         private String id;
 
         @Getter

@@ -19,7 +19,6 @@ public class ReviewRequest {
 
     public Review newReview(){
         return Review.builder()
-                .id(Util.getUUID())
                 .score(score)
                 .content(content)
                 .build();

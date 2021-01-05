@@ -17,7 +17,6 @@ public class ItemOptionRequest {
 
     public ItemMaster.ItemOption newItemOption(){
         return ItemMaster.ItemOption.builder()
-                .id(Util.getUUID())
                 .size(size)
                 .color(color)
                 .build();

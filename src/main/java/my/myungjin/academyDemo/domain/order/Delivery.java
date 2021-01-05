@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
@@ -24,8 +25,9 @@ import static java.util.Optional.ofNullable;
 @EqualsAndHashCode(of = "id")
 public class Delivery {
 
-    @Id
-    @Getter
+    @Id @Getter
+    @GeneratedValue(generator = "deliveryId")
+    @GenericGenerator(name = "deliveryId", strategy = "my.myungjin.academyDemo.commons.IdGenerator")
     private String id;
 
     @Getter

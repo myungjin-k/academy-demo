@@ -28,7 +28,6 @@ public class MemberRequest {
 
     public Member newMember(){
         return Member.builder()
-                .id(Util.getUUID())
                 .userId(userId)
                 .password(password)
                 .name(name)

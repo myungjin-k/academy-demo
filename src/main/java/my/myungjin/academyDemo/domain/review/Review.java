@@ -5,6 +5,7 @@ import lombok.*;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.order.OrderItem;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -20,8 +21,9 @@ import static java.util.Optional.ofNullable;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Review {
 
-    @Getter
-    @Id
+    @Getter @Id
+    @GeneratedValue(generator = "reviewId")
+    @GenericGenerator(name = "reviewId", strategy = "my.myungjin.academyDemo.commons.IdGenerator")
     private String id;
 
     @Getter

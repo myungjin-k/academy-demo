@@ -19,7 +19,6 @@ public class CodeGroupRequest {
 
     public CodeGroup newCodeGroup(){
         return CodeGroup.builder()
-                .id(Util.getUUID())
                 .code(code)
                 .nameEng(nameEng)
                 .nameKor(nameKor)

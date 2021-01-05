@@ -1,12 +1,10 @@
 package my.myungjin.academyDemo.domain.member;
 
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -21,6 +19,8 @@ import static java.util.Optional.ofNullable;
 public class Admin{
 
     @Id @Getter
+    @GeneratedValue(generator = "adminId")
+    @GenericGenerator(name = "adminId", strategy = "my.myungjin.academyDemo.commons.IdGenerator")
     private String id;
 
     @Getter

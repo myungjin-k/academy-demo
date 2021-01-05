@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.review.Review;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -19,8 +20,9 @@ import static java.util.Optional.ofNullable;
 @EqualsAndHashCode(of = "id")
 public class OrderItem {
 
-    @Id
-    @Getter
+    @Id @Getter
+    @GeneratedValue(generator = "orderItemId")
+    @GenericGenerator(name = "orderItemId", strategy = "my.myungjin.academyDemo.commons.IdGenerator")
     private String id;
 
     @Getter

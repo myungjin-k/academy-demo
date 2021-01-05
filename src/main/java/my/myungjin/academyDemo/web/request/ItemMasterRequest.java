@@ -21,7 +21,6 @@ public class ItemMasterRequest {
 
     public ItemMaster newItemMaster(){
         return ItemMaster.builder()
-                .id(Util.getUUID())
                 .itemName(itemName)
                 .price(price)
                 .build();

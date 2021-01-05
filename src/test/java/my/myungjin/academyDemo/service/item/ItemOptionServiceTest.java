@@ -39,13 +39,12 @@ public class ItemOptionServiceTest {
     @Test
     @Order(1)
     void 상품_옵션_등록하기() {
-        this.itemOptionId = Id.of(ItemMaster.ItemOption.class, Util.getUUID());
         ItemMaster.ItemOption newOption = ItemMaster.ItemOption.builder()
-                .id(itemOptionId.value())
                 .color("멜란지그레이")
                 .size("ONE SIZE")
                 .build();
         ItemMaster.ItemOption saved = itemOptionService.add(itemMasterId, newOption);
+        this.itemOptionId = Id.of(ItemMaster.ItemOption.class, saved.getId());
         assertThat(saved, is(notNullValue()));
         log.info("Saved Option: {}", saved);
 

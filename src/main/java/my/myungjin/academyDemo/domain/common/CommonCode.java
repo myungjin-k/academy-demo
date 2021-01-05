@@ -3,6 +3,7 @@ package my.myungjin.academyDemo.domain.common;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -20,6 +21,8 @@ import static java.util.Optional.ofNullable;
 public class CommonCode {
 
     @Id @Getter
+    @GeneratedValue(generator = "commonCodeId")
+    @GenericGenerator(name = "commonCodeId", strategy = "my.myungjin.academyDemo.commons.IdGenerator")
     private String id;
 
     @Getter

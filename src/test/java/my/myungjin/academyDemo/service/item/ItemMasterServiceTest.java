@@ -60,9 +60,7 @@ public class ItemMasterServiceTest {
     @Test
     @Order(2)
     void 상품_등록하기() throws IOException {
-        itemMasterId = Id.of(ItemMaster.class, Util.getUUID());
         ItemMaster newItem = ItemMaster.builder()
-                .id(itemMasterId.value())
                 .itemName("데어 워머 터틀넥 티셔츠 (3color)")
                 .price(19000)
                 .build();
@@ -72,6 +70,7 @@ public class ItemMasterServiceTest {
         MultipartFile multipartFile =
                 new MockMultipartFile("file", file.getName(), "image/jpeg", toByteArray(input));
         ItemMaster saved = itemMasterService.saveItemMaster(categoryId, newItem, toAttachedFile(multipartFile));
+        itemMasterId = Id.of(ItemMaster.class, saved.getId());
         assertThat(saved, is(notNullValue()));
         log.info("Saved Item: {}", saved);
 

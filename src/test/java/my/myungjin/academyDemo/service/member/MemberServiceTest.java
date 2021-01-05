@@ -31,7 +31,6 @@ public class MemberServiceTest {
 
     @BeforeAll
     void setup(){
-        id = Id.of(Member.class, Util.getUUID());
         userId = "test";
         password = "mjkim_password";
 
@@ -47,7 +46,6 @@ public class MemberServiceTest {
         String addr2 = "1-1111";
 
         Member newMember = Member.builder()
-                .id(id.value())
                 .userId(userId)
                 .password(password)
                 .name(name)
@@ -57,6 +55,7 @@ public class MemberServiceTest {
                 .addr2(addr2)
                 .build();
         Member saved = memberService.join(newMember);
+        id = Id.of(Member.class, saved.getId());
         assertThat(saved, is(notNullValue()));
         log.info("Saved Member: {}", saved);
 

@@ -3,6 +3,7 @@ package my.myungjin.academyDemo.domain.common;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -21,6 +22,8 @@ import static java.util.Optional.ofNullable;
 public class CodeGroup {
 
     @Id @Getter
+    @GeneratedValue(generator = "codeGroupId")
+    @GenericGenerator(name = "codeGroupId", strategy = "my.myungjin.academyDemo.commons.IdGenerator")
     private String id;
 
     @Getter

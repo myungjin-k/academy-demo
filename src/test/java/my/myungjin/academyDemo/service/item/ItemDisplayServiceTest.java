@@ -66,9 +66,7 @@ public class ItemDisplayServiceTest {
     @Test
     @Order(2)
     void 전시_상품_등록하기() throws IOException {
-        itemDisplayId = Id.of(ItemDisplay.class, Util.getUUID());
         ItemDisplay newDisplay = ItemDisplay.builder()
-                .id(itemDisplayId.value())
                 .itemDisplayName("보더 알파카 니트")
                 .material("알파카86 나일론13 스판1")
                 .salePrice(72000)
@@ -108,6 +106,7 @@ public class ItemDisplayServiceTest {
         MultipartFile multipartFile =
                 new MockMultipartFile("file", file.getName(), "image/jpeg", toByteArray(input));
         ItemDisplay saved = itemDisplayService.save(itemMasterId, newDisplay, toAttachedFile(multipartFile));
+        itemDisplayId = Id.of(ItemDisplay.class, saved.getId());
         assertThat(saved, is(notNullValue()));
         log.info("Saved Display Item: {}", saved);
 

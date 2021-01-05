@@ -5,6 +5,7 @@ import lombok.*;
 import my.myungjin.academyDemo.domain.order.CartItem;
 import my.myungjin.academyDemo.domain.order.Order;
 import my.myungjin.academyDemo.domain.review.Review;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
@@ -27,6 +28,8 @@ import static java.util.Optional.ofNullable;
 public class Member{
 
     @Id @Getter
+    @GeneratedValue(generator = "memberId")
+    @GenericGenerator(name = "memberId", strategy = "my.myungjin.academyDemo.commons.IdGenerator")
     private String id;
 
     @Getter

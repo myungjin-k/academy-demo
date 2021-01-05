@@ -61,9 +61,7 @@ public class ReviewServiceTest {
     @Test
     @Order(1)
     void 리뷰_작성하기() throws IOException {
-        reviewId = Id.of(Review.class, Util.getUUID());
         Review review = Review.builder()
-                .id(reviewId.value())
                 .score(4)
                 .content(randomAlphabetic(100))
                 .build();
@@ -73,6 +71,7 @@ public class ReviewServiceTest {
         MultipartFile multipartFile =
                 new MockMultipartFile("file", file.getName(), "image/jpeg", toByteArray(fileInputStream));
         Review saved = reviewService.write(memberId, memberId, orderItemId, review, toAttachedFile(multipartFile));
+        reviewId = Id.of(Review.class, saved.getId());
         assertThat(saved, is(notNullValue()));
         log.info("Saved Review: {}", saved);
     }

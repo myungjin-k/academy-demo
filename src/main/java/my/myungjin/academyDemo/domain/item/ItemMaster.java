@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import my.myungjin.academyDemo.domain.common.CommonCode;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -24,6 +25,8 @@ import static java.util.Optional.ofNullable;
 @EqualsAndHashCode(of = "id")
 public class ItemMaster {
     @Id @Getter
+    @GeneratedValue(generator = "itemMasterId")
+    @GenericGenerator(name = "itemMasterId", strategy = "my.myungjin.academyDemo.commons.IdGenerator")
     private String id;
 
     @Getter
@@ -100,6 +103,8 @@ public class ItemMaster {
     @EqualsAndHashCode(of = "id")
     public static class ItemOption {
         @Id @Getter
+        @GeneratedValue(generator = "itemOptionId")
+        @GenericGenerator(name = "itemOptionId", strategy = "my.myungjin.academyDemo.commons.IdGenerator")
         private String id;
 
         @Getter

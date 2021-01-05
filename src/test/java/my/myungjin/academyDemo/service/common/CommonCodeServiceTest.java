@@ -42,7 +42,6 @@ public class CommonCodeServiceTest {
 
     @BeforeAll
     void setUp() {
-        groupId = Id.of(CodeGroup.class, Util.getUUID());
         groupCode = "999";
         groupNameEng = "TEST";
         groupNameKor = "테스트";
@@ -52,14 +51,13 @@ public class CommonCodeServiceTest {
     @Order(1)
     void 코드그룹_작성하기(){
         CodeGroup codeGroup = CodeGroup.builder()
-                .id(groupId.value())
                 .code(groupCode)
                 .nameEng(groupNameEng)
                 .nameKor(groupNameKor)
                 .build();
 
         CodeGroup result = commonService.registGroup(codeGroup);
-
+        groupId = Id.of(CodeGroup.class, codeGroup.getId());
         //then
         MatcherAssert.assertThat(result, is(notNullValue()));
         log.info("Written codeGroup: {}", result);
@@ -103,13 +101,14 @@ public class CommonCodeServiceTest {
         MatcherAssert.assertThat(codeGroup, is(notNullValue()));
 
         CommonCode commonCode = CommonCode.builder()
-                .id(codeId.value())
                 .code("XXX100")
                 .nameEng("EMPTY_100")
                 .nameKor("빈값_100")
                 .codeGroup(codeGroup)
                 .build();
+
         CommonCode result = commonService.registCommonCode(groupId, commonCode);
+        codeId = Id.of(CommonCode.class, result.getId());
 
         //then
         MatcherAssert.assertThat(result, is(notNullValue()));

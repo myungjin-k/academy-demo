@@ -35,7 +35,7 @@ public class DeliveryService {
         return deliveryRepository.findById(deliveryId.value())
                 .map(delivery -> {
                     Order order = delivery.getOrder();
-                    order.setDeliveries(deliveryRepository.findAllByOrderAndStatusIsNot(order, null));
+                    order.setDeliveries(deliveryRepository.getAllByOrderOrderByCreateAtDesc(order));
                     return orderItemRepository.findAllByOrder(order);
                 }).orElseThrow(() -> new NotFoundException(Delivery.class, deliveryId));
     }
@@ -65,7 +65,7 @@ public class DeliveryService {
             String oId = item.getOrder().getId();
             if(!oId.equals(orderId.value()))
                 throw new IllegalArgumentException("bad order id (item order id=" + oId + ", order id=" + orderId.value() + ")");
-            DeliveryItem deliveryItem = new DeliveryItem(Util.getUUID(), item.getCount());
+            DeliveryItem deliveryItem = new DeliveryItem(item.getCount());
             d.addItem(deliveryItem);
             deliveryItem.setItemOption(item.getItemOption());
             save(deliveryItem);
@@ -85,7 +85,7 @@ public class DeliveryService {
                 .orElseThrow(() -> new NotFoundException(Delivery.class, deliveryId));
         if(deliveryItemRepository.existsByDeliveryIdAndItemOptionId(deliveryId.value(), itemId.value()))
             return Optional.empty();
-        DeliveryItem item = new DeliveryItem(Util.getUUID(), count);
+        DeliveryItem item = new DeliveryItem(count);
         delivery.addItem(item);
         saveItem(item, itemId);
         return Optional.of(item);

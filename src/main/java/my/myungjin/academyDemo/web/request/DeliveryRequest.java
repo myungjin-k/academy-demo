@@ -33,7 +33,6 @@ public class DeliveryRequest {
 
     public Delivery newDelivery(){
         return Delivery.builder()
-                .id(Util.getUUID())
                 .receiverName(receiverName)
                 .receiverTel(receiverTel)
                 .receiverAddr1(receiverAddr1)

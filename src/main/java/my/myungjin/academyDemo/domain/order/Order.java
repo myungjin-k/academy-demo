@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import my.myungjin.academyDemo.domain.member.Member;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
@@ -24,8 +25,9 @@ import static java.util.Optional.ofNullable;
 @EqualsAndHashCode(of = "id")
 public class Order {
 
-    @Id
-    @Getter
+    @Id @Getter
+    @GeneratedValue(generator = "orderId")
+    @GenericGenerator(name = "orderId", strategy = "my.myungjin.academyDemo.commons.IdGenerator")
     private String id;
 
     @Getter @Setter

@@ -113,9 +113,7 @@ public class DeliveryServiceTest {
     @Test
     @Order(8)
     void 배송정보_추가하기(){
-        newDeliveryId = Id.of(Delivery.class, Util.getUUID());
         Delivery newDelivery = Delivery.builder()
-                .id(newDeliveryId.value())
                 .receiverName("명진")
                 .receiverTel("010-1234-5678")
                 .receiverAddr1("XX시 XX구 XX로")
@@ -129,6 +127,7 @@ public class DeliveryServiceTest {
         items.add(Id.of(OrderItem.class, orderItems.get(0).getId()));
 
         Delivery d = deliveryService.addDelivery(orderId, newDelivery, items);
+        newDeliveryId = Id.of(Delivery.class, d.getId());
         assertThat(d, is(notNullValue()));
         log.info("Added Delivery: {}", d);
         log.info("Added Delivery Item: {}", d.getItems());

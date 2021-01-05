@@ -25,7 +25,6 @@ public class CommonCodeRequest {
 
     public CommonCode newCommonCode(Id<CodeGroup, String> groupId){
         return CommonCode.builder()
-                .id(Util.getUUID())
                 .code(code)
                 .nameEng(nameEng)
                 .nameKor(nameKor)

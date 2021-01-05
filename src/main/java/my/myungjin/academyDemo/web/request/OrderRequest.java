@@ -49,9 +49,6 @@ public class OrderRequest {
 
     public Order newOrder(){
         return Order.builder()
-                .id(LocalDateTime.now()
-                                .format(DateTimeFormatter.ofPattern("yyyyMMddHH24mmss")) +
-                        randomAlphabetic(4).toUpperCase(Locale.ROOT))
                 .orderName(name)
                 .orderTel(tel)
                 .orderAddr1(addr1)
@@ -62,7 +59,6 @@ public class OrderRequest {
 
     public Delivery newDelivery(){
         return Delivery.builder()
-                .id(Util.getUUID())
                 .receiverName(receiverName)
                 .receiverTel(receiverTel)
                 .receiverAddr1(receiverAddr1)
