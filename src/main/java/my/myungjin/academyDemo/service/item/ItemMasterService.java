@@ -5,10 +5,13 @@ import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.aws.S3Client;
 import my.myungjin.academyDemo.commons.AttachedFile;
 import my.myungjin.academyDemo.commons.Id;
-import my.myungjin.academyDemo.domain.common.CodeGroupRepository;
 import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.domain.common.CommonCodeRepository;
-import my.myungjin.academyDemo.domain.item.*;
+import my.myungjin.academyDemo.domain.item.ItemMaster;
+import my.myungjin.academyDemo.domain.item.ItemMasterPredicate;
+import my.myungjin.academyDemo.domain.item.ItemMasterRepository;
+import my.myungjin.academyDemo.domain.item.ItemOptionRepository;
+import my.myungjin.academyDemo.error.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -70,9 +73,12 @@ public class ItemMasterService {
         return thumbnailUrl;
     }
 
+    @Transactional
     public ItemMaster saveItemMaster(@Valid Id<CommonCode, String> categoryId, @Valid ItemMaster newItem, @NotNull AttachedFile thumbnailFile) {
+        CommonCode category = commonCodeRepository.findById(categoryId.value())
+                .orElseThrow(() -> new NotFoundException(CommonCode.class, categoryId));
         newItem.setThumbnail(uploadThumbnail(thumbnailFile));
-        newItem.setCategory(commonCodeRepository.getOne(categoryId.value()));
+        newItem.setCategory(category);
         return save(newItem);
     }
 

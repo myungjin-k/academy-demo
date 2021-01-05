@@ -1,7 +1,6 @@
 package my.myungjin.academyDemo.domain.common;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -50,7 +49,7 @@ public class CodeGroup {
     private LocalDateTime updateAt;
 
     @Getter
-    @JsonIgnore
+    @JsonBackReference
     @OneToMany(mappedBy = "codeGroup", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE) //JOIN
     private Collection<CommonCode> commonCodes;
 

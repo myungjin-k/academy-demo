@@ -1,6 +1,5 @@
 package my.myungjin.academyDemo.domain.common;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -49,7 +48,7 @@ public class CommonCode {
 
     @Setter
     @Getter
-    @JsonBackReference
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "group_id", nullable = false)
     private CodeGroup codeGroup;

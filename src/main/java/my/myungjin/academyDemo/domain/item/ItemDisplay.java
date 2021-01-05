@@ -78,7 +78,7 @@ public class ItemDisplay {
     private LocalDateTime updateAt;
 
     @Getter @Setter
-    @JsonBackReference
+    @JsonManagedReference
     @OneToOne
     // TODO History 저장
     @JoinColumn(name = "item_id", nullable = false)

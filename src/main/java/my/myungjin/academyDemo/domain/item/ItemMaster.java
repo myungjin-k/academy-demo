@@ -1,7 +1,6 @@
 package my.myungjin.academyDemo.domain.item;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import my.myungjin.academyDemo.domain.common.CommonCode;
@@ -54,18 +53,17 @@ public class ItemMaster {
     private LocalDateTime updateAt;
 
     @Getter
-    @JsonIgnore
+    @JsonBackReference
     @OneToMany(mappedBy = "itemMaster", fetch = FetchType.LAZY, cascade = CascadeType.ALL) //JOIN
     private Collection<ItemOption> options;
 
     @Setter @Getter
-    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private CommonCode category;
 
     @Getter
-    @JsonManagedReference
+    @JsonBackReference
     @OneToOne(mappedBy = "itemMaster", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private ItemDisplay display;
 
@@ -126,7 +124,7 @@ public class ItemMaster {
         private LocalDateTime updateAt;
 
         @Setter @Getter
-        @JsonBackReference
+        @JsonManagedReference
         @ManyToOne
         @JoinColumn(name = "master_id", nullable = false)
         private ItemMaster itemMaster;
