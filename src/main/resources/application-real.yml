@@ -12,12 +12,3 @@ spring:
     include: mail, cloud, real-db
 server:
   port: 7090
-logging:
-  level:
-    org:
-      hibernate:
-        sql: DEBUG
-        type:
-          descriptor:
-            sql:
-              BasicBinder: TRACE
