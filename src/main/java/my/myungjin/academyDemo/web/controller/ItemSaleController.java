@@ -12,9 +12,12 @@ import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.ItemSearchRequest;
 import my.myungjin.academyDemo.web.request.PageRequest;
 import my.myungjin.academyDemo.web.response.ItemDetailResponse;
+import my.myungjin.academyDemo.web.response.ItemDisplayResponse;
 import org.springframework.data.domain.Page;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import static my.myungjin.academyDemo.web.Response.OK;
 
@@ -31,9 +34,10 @@ public class ItemSaleController {
             @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query", defaultValue = "0", value = "페이징 offset"),
             @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query", defaultValue = "5", value = "조회 갯수")
     })
-    public Response<Page<ItemDisplay>> allItems(PageRequest pageRequest){
+    public Response<Page<ItemDisplayResponse>> allItems(PageRequest pageRequest){
         return OK(
                 itemDisplayService.findAll(pageRequest.of())
+                .map(itemDisplay -> new ItemDisplayResponse().of(itemDisplay))
         );
     }
 

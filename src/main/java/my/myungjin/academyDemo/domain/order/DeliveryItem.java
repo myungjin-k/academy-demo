@@ -13,7 +13,7 @@ import static java.util.Optional.ofNullable;
 
 @Entity
 @Table(name = "delivery_item")
-@ToString
+@ToString(exclude = "orderItem")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
 public class DeliveryItem {
@@ -47,6 +47,11 @@ public class DeliveryItem {
     @ManyToOne
     @JoinColumn(name = "item_id", nullable = false)
     private ItemDisplay.ItemDisplayOption itemOption;
+
+    @Getter @Setter
+    @JsonBackReference
+    @OneToOne(mappedBy = "deliveryItem", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private OrderItem orderItem;
 
     public DeliveryItem(int count) {
         this.count = count;

@@ -2,6 +2,7 @@ package my.myungjin.academyDemo.domain.order;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.review.Review;
@@ -48,6 +49,13 @@ public class OrderItem {
     @ManyToOne
     @JoinColumn(name = "item_id", nullable = false)
     private ItemDisplay.ItemDisplayOption itemOption;
+
+
+    @Setter @Getter
+    @JsonManagedReference
+    @OneToOne
+    @JoinColumn(name = "delivery_item_id")
+    private DeliveryItem deliveryItem;
 
     @Setter @Getter
     @JsonIgnore

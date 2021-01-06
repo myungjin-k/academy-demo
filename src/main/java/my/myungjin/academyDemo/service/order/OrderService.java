@@ -67,11 +67,9 @@ public class OrderService {
             if(deliveryItems.isEmpty())
                 continue;
 
-            Delivery delivery = deliveryItems.get(0).getDelivery();
-            // TODO Response 만들기
-            //item.setDeliveryStatus(delivery.getStatus());
-            //item.setInvoiceNum(delivery.getInvoiceNum());
-            if(!delivery.getStatus().equals(DeliveryStatus.DELIVERED))
+            DeliveryItem dItem = deliveryItems.get(0);
+            item.setDeliveryItem(dItem);
+            if(!dItem.getDelivery().getStatus().equals(DeliveryStatus.DELIVERED))
                 continue;
             item.setReview(reviewRepository.findByOrderItemIdAndMemberId(item.getId(), memberId.value()).orElse(null));
         }
@@ -159,13 +157,14 @@ public class OrderService {
         for(OrderItem item : orderItems){
             DeliveryItem dItem = new DeliveryItem(item.getCount());
             dItem.setItemOption(item.getItemOption());
+            dItem.setOrderItem(item);
             delivery.addItem(dItem);
-            save(dItem);
+            item.setDeliveryItem(save(dItem));
         }
     }
 
-    private void save(DeliveryItem deliveryItem){
-        deliveryItemRepository.save(deliveryItem);
+    private DeliveryItem save(DeliveryItem deliveryItem){
+        return deliveryItemRepository.save(deliveryItem);
     }
 
     private Delivery save(Delivery delivery){

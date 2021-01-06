@@ -20,6 +20,7 @@ import my.myungjin.academyDemo.web.request.OrderRequest;
 import my.myungjin.academyDemo.web.request.PageRequest;
 import my.myungjin.academyDemo.web.response.MemberInformRatingResponse;
 import my.myungjin.academyDemo.web.response.OrderDetailResponse;
+import my.myungjin.academyDemo.web.response.OrderResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -129,12 +130,13 @@ public class OrderController {
             @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query", defaultValue = "0", value = "페이징 offset"),
             @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query", defaultValue = "5", value = "조회 갯수")
     })
-    public Response<Page<Order>> findAllOrdersByMember(
+    public Response<Page<OrderResponse>> findAllOrdersByMember(
             @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String memberId,
             PageRequest pageRequest
     ){
         return OK(
                 orderService.findAllMyMemberWithPage(Id.of(Member.class, memberId), pageRequest.of())
+                        .map(order -> new OrderResponse().of(order))
         );
     }
 
