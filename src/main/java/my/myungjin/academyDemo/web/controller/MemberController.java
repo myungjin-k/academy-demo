@@ -10,6 +10,7 @@ import my.myungjin.academyDemo.service.member.MemberService;
 import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.MemberRequest;
 import my.myungjin.academyDemo.web.request.PwChangeRequest;
+import my.myungjin.academyDemo.web.response.MemberInformRatingResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -77,4 +78,12 @@ public class MemberController {
         );
     }
 
+    @GetMapping("/member/{memberId}/ratingInfo")
+    @ApiOperation(value = "회원등급 정보(주문내역 페이지)")
+    public Response<MemberInformRatingResponse> ratingInfo(
+            @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String memberId){
+        return OK(
+                new MemberInformRatingResponse().of(memberService.findMyInfo(Id.of(Member.class, memberId)))
+        );
+    }
 }
