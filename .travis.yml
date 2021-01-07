@@ -12,6 +12,20 @@ cache:
 
 before_install:
   - chmod +x mvnw
+  - zip -r academy-aws-webservice *
+  - mkdir -p deploy
+  - mv academy-aws-webservice.zip deploy/academy-aws-webservice.zip
+
+deploy:
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
+    bucket: myungjin-mall-build
+    region: ap-northeast-2
+    skip_cleanup: true
+    acl: private
+    local_dir: deploy
+    wait-until-deployed: true
 
 script: "./mvnw clean package -DskipTests"
 
