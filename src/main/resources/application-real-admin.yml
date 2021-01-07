@@ -1,3 +1,5 @@
+server:
+  port: 7091
 spring:
   application:
     name: academy_demo
@@ -15,8 +17,6 @@ spring:
     schema: classpath*:/db/maria/schema.sql
     data: classpath*:/db/maria/data.sql
     initialization-mode: always
-server:
-  port: 7091
 logging:
   level:
     org:

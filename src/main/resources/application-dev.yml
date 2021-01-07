@@ -1,3 +1,5 @@
+server:
+  port: 7060
 spring:
   application:
     name: academy_demo
