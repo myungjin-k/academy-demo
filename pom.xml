@@ -19,7 +19,7 @@
 	</repositories>
 	<groupId>my.myungjin</groupId>
 	<artifactId>academyDemo</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<name>academyDemo</name>
 	<description>Demo project for KH Final application</description>
 
