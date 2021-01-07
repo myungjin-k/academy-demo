@@ -13,10 +13,6 @@ spring:
     cache-duration: PT1H
   profiles:
     include: mail, cloud, real-db
-  datasource:
-    schema: classpath*:/db/maria/schema.sql
-    data: classpath*:/db/maria/data.sql
-    initialization-mode: always
 logging:
   level:
     org:
