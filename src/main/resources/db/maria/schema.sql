@@ -1,3 +1,4 @@
+SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS code_group CASCADE;
 CREATE TABLE code_group (
                             id           varchar(50) NOT NULL,
@@ -209,3 +210,4 @@ CREATE TABLE review (
                         CONSTRAINT fk_review_to_item_display FOREIGN KEY (item_id) REFERENCES item_display (id) ON DELETE CASCADE ON UPDATE RESTRICT,
                         CONSTRAINT fk_review_to_order_item FOREIGN KEY (order_item_id) REFERENCES order_item (id) ON DELETE CASCADE ON UPDATE RESTRICT
 );
+SET FOREIGN_KEY_CHECKS=1;
