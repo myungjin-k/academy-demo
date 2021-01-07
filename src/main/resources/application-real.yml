@@ -5,7 +5,7 @@ spring:
     name: academy_demo
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     open-in-view: false
   messages:
     basename: i18n/messages
