@@ -13,7 +13,7 @@ cache:
 before_install:
   - chmod +x mvnw
 
-script: "./mvnw package"
+script: "./mvnw clean package -DskipTests"
 
 notifications:
   email:
