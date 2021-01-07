@@ -33,6 +33,7 @@ deploy:
     key: academy-aws-webservice.zip
     bundle-type: zip
     application: academy-aws-webservice
+    deployment-group: academy-aws-webservice-group
     region: ap-northeast-2
     wait-until-deployed: true
 
