@@ -62,28 +62,19 @@ public class MemberController {
 
     @GetMapping("/me")
     @ApiOperation(value = "회원 정보 조회")
-    public Response<Member> getMyInfo(@AuthenticationPrincipal Authentication authentication){
+    public Response<Member> getMyInfo(@AuthenticationPrincipal User authentication){
         return OK(
-                memberService.findMyInfo(Id.of(Member.class, ((User) authentication.getDetails()).getId()))
+                memberService.findMyInfo(Id.of(Member.class, authentication.getId()))
         );
     }
 
     @PutMapping("/me")
     @ApiOperation(value = "회원 정보 수정")
-    public Response<Member> modifyMyInfo(@AuthenticationPrincipal Authentication authentication,
+    public Response<Member> modifyMyInfo(@AuthenticationPrincipal User authentication,
                                            @RequestBody MemberRequest request){
-        Id<Member, String> id = Id.of(Member.class, ((User) authentication.getDetails()).getId());
+        Id<Member, String> id = Id.of(Member.class, authentication.getId());
         return OK(
                 memberService.modify(id, request.toMember(id))
-        );
-    }
-
-    @GetMapping("/member/{memberId}/ratingInfo")
-    @ApiOperation(value = "회원등급 정보(주문내역 페이지)")
-    public Response<MemberInformRatingResponse> ratingInfo(
-            @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String memberId){
-        return OK(
-                new MemberInformRatingResponse().of(memberService.findMyInfo(Id.of(Member.class, memberId)))
         );
     }
 }

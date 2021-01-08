@@ -39,6 +39,8 @@ public class OrderController {
 
     private final OrderService orderService;
 
+    private final MemberService memberService;
+
     @PostMapping("/member/{id}/cart")
     @ApiOperation(value = "장바구니 추가")
     public Response<CartItem> addCart(
@@ -58,10 +60,10 @@ public class OrderController {
     @ApiOperation(value = "장바구니 리스트 조회")
     public Response<List<CartItem>> cart(
             @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String id,
-            @AuthenticationPrincipal Authentication authentication
+            @AuthenticationPrincipal User authentication
     ){
       return OK(
-              cartService.findByMember(Id.of(Member.class, id), Id.of(Member.class,  ((User) authentication.getDetails()).getId()))
+              cartService.findByMember(Id.of(Member.class, id), Id.of(Member.class, authentication.getId()))
       );
     }
 
@@ -70,11 +72,11 @@ public class OrderController {
     public Response<CartItem> modifyCartItemCount(
             @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String id,
             @PathVariable @ApiParam(value = "대상 장바구니 상품 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String itemId,
-            @RequestParam int count, @AuthenticationPrincipal Authentication authentication){
+            @RequestParam int count, @AuthenticationPrincipal User authentication){
         return OK(
                 cartService.modify(
                         Id.of(Member.class, id),
-                        Id.of(Member.class, ((User) authentication.getDetails()).getId()),
+                        Id.of(Member.class, authentication.getId()),
                         Id.of(CartItem.class, itemId),
                         count
                 )
@@ -86,11 +88,11 @@ public class OrderController {
     public Response<CartItem> deleteCartItem(
             @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String id,
             @PathVariable @ApiParam(value = "대상 장바구니 상품 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String itemId,
-            @AuthenticationPrincipal Authentication authentication){
+            @AuthenticationPrincipal User authentication){
         return OK(
                 cartService.delete(
                         Id.of(Member.class, id),
-                        Id.of(Member.class, ((User) authentication.getDetails()).getId()),
+                        Id.of(Member.class, authentication.getId()),
                         Id.of(CartItem.class, itemId)
                 )
         );
@@ -108,6 +110,15 @@ public class OrderController {
                         orderRequest.newDelivery(),
                         orderRequest.collectItems()
                 )
+        );
+    }
+
+    @GetMapping("/member/{memberId}/ratingInfo")
+    @ApiOperation(value = "회원등급 정보(주문내역 페이지)")
+    public Response<MemberInformRatingResponse> ratingInfo(
+            @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String memberId){
+        return OK(
+                new MemberInformRatingResponse().of(memberService.findMyInfo(Id.of(Member.class, memberId)))
         );
     }
 

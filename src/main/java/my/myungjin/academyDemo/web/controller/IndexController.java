@@ -24,15 +24,14 @@ public class IndexController {
     private List<CommonCode> itemCategories ;
 
     @GetMapping("/mall/index")
-    public String main(Model model, @AuthenticationPrincipal Authentication authentication){
+    public String main(Model model, @AuthenticationPrincipal User authentication){
         itemCategories = commonCodeService.findAllCommonCodesByGroupId
                 (Id.of(CodeGroup.class, "246fa96f9b634a56aaac5884de186ebc"));
         model.addAttribute("items", itemCategories);
 
-        if(authentication != null && authentication.isAuthenticated()){
-            User loginUser = (User) authentication.getDetails();
-            model.addAttribute("loginUser", loginUser);
-            if(loginUser.getRole().name().equalsIgnoreCase("ADMIN"))
+        if(authentication != null){
+            model.addAttribute("loginUser", authentication);
+            if(authentication.getRole().name().equalsIgnoreCase("ADMIN"))
                 model.addAttribute("isAdmin", true);
         }
         return "index";
@@ -55,15 +54,14 @@ public class IndexController {
     }
 
     @GetMapping("/mall/myPage")
-    public String myPageIndex(Model model, @AuthenticationPrincipal Authentication authentication){
+    public String myPageIndex(Model model, @AuthenticationPrincipal User authentication){
         itemCategories = commonCodeService.findAllCommonCodesByGroupId
                 (Id.of(CodeGroup.class, "246fa96f9b634a56aaac5884de186ebc"));
         model.addAttribute("items", itemCategories);
 
-        if(authentication != null && authentication.isAuthenticated()){
-            User loginUser = (User) authentication.getDetails();
-            model.addAttribute("loginUser", loginUser);
-            if(loginUser.getRole().name().equalsIgnoreCase("ADMIN"))
+        if(authentication != null){
+            model.addAttribute("loginUser", authentication);
+            if(authentication.getRole().name().equalsIgnoreCase("ADMIN"))
                 model.addAttribute("isAdmin", true);
         }
         return "mypage";
@@ -76,27 +74,25 @@ public class IndexController {
     }
 
     @GetMapping("/admin/codeIndex")
-    public String adminCodeIndex(Model model, @AuthenticationPrincipal Authentication authentication){
+    public String adminCodeIndex(Model model, @AuthenticationPrincipal User authentication){
 
-        if(authentication != null && authentication.isAuthenticated()){
-            User loginUser = (User) authentication.getDetails();
-            model.addAttribute("loginUser", loginUser);
-            if(loginUser.getRole().name().equalsIgnoreCase("ADMIN"))
+        if(authentication != null){
+            model.addAttribute("loginUser", authentication);
+            if(authentication.getRole().name().equalsIgnoreCase("ADMIN"))
                 model.addAttribute("isAdmin", true);
         }
         return "admin/code";
     }
 
     @GetMapping("/admin/itemIndex")
-    public String adminItemIndex(Model model, @AuthenticationPrincipal Authentication authentication){
+    public String adminItemIndex(Model model, @AuthenticationPrincipal User authentication){
 
         itemCategories = commonCodeService.findAllCommonCodesByGroupId
                 (Id.of(CodeGroup.class, "246fa96f9b634a56aaac5884de186ebc"));
         model.addAttribute("items", itemCategories);
-        if(authentication != null && authentication.isAuthenticated()){
-            User loginUser = (User) authentication.getDetails();
-            model.addAttribute("loginUser", loginUser);
-            if(loginUser.getRole().name().equalsIgnoreCase("ADMIN"))
+        if(authentication != null){
+            model.addAttribute("loginUser", authentication);
+            if(authentication.getRole().name().equalsIgnoreCase("ADMIN"))
                 model.addAttribute("isAdmin", true);
         }
         return "admin/item";

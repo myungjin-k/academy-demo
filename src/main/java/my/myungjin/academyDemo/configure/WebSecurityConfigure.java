@@ -44,6 +44,7 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
     public MyAuthenticationProvider authenticationProvider(MemberService memberService, AdminService adminService) {
         return new MyAuthenticationProvider(memberService, adminService);
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -54,8 +55,8 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-    // TODO 인가
 
+    // TODO 인가
 /*    @Bean
     public AccessDecisionManager accessDecisionManager() {
         List<AccessDecisionVoter<?>> decisionVoters = new ArrayList<>();
