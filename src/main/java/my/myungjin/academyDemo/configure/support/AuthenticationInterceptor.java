@@ -17,32 +17,30 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String uri = request.getRequestURI();
         String ip = request.getRemoteAddr();
-        log.info("Request IP Address: {}", ip);
 
         boolean isAdminPage = false;
-        if(uri.startsWith("/mall") || uri.startsWith("/api/mall")){
-            return true;
-        }
         if(uri.startsWith("/admin") || uri.startsWith("/api/admin")){
             isAdminPage = true;
-            if(!("127.0.0.1".equals(ip) || "14.38.17.145".equals(ip)))
+            if(!("127.0.0.1".equals(ip) || "14.38.17.145".equals(ip))){
+                response.sendRedirect("/mall/index");
                 return false;
+            }
         }
 
         HttpSession session = request.getSession();
         SecurityContextImpl securityContext = (SecurityContextImpl) (session.getAttribute("SPRING_SECURITY_CONTEXT"));
         if(securityContext == null || !securityContext.getAuthentication().isAuthenticated()) {
-            if(isAdminPage)
-                response.sendRedirect("/admin/login");
-            else if(uri.equals("/mall/index"))
+            if(uri.equals("/mall/login") || uri.equals("/admin/login"))
                 return true;
+            else if(isAdminPage)
+                response.sendRedirect("/admin/login");
             else
                 response.sendRedirect("/mall/login");
         } else {
             session.setMaxInactiveInterval(30 * 60);
-            if(uri.equals("/"))
-                response.sendRedirect("/mall/index");
         }
+        if(uri.equals("/"))
+            response.sendRedirect("/mall/index");
         return true;
     }
 }
