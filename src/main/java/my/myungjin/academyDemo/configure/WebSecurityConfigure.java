@@ -17,6 +17,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.net.http.HttpRequest;
+
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
@@ -100,8 +104,16 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
                 .logout().logoutSuccessUrl("/")
                 .and()
                 .sessionManagement()
-                .maximumSessions(2) /* session 허용 갯수 */
-                .expiredUrl("/login") /* session 만료시 이동 페이지*/
+                .maximumSessions(1) /* session 허용 갯수 */
+                .expiredSessionStrategy(sessionInformationExpiredEvent -> {
+                    String requestUri = sessionInformationExpiredEvent.getRequest().getRequestURI();
+                    HttpServletResponse response = sessionInformationExpiredEvent.getResponse();
+                    if(requestUri.startsWith("/mall") || requestUri.startsWith("/api/mall")){
+                        response.sendRedirect("/mall/login");
+                    } else if(requestUri.startsWith("/admin") || requestUri.startsWith("/api/admin")){
+                        response.sendRedirect("/admin/login");
+                    }
+                })
                 .maxSessionsPreventsLogin(true)
         ;
     }

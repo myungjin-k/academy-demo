@@ -12,51 +12,32 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String uri = request.getRequestURI();
-        int port = request.getServerPort();
+        String ip = request.getRemoteAddr();
 
+        boolean isAdminPage = false;
         if(uri.startsWith("/mall") || uri.startsWith("/api/mall")){
-            if(port == 7090)
-                return true;
-            if(port == 7091){
-                response.sendRedirect("/");
-            }
-            return false;
-        }
-
-        if(uri.startsWith("/admin") || uri.startsWith("/api/admin")){
-            if(port == 7091)
-                return true;
-            if(port == 7090)
-                response.sendRedirect("/");
-            return false;
-        }
-        HttpSession session = request.getSession();
-        /*if(session.getLastAccessedTime() + session.getMaxInactiveInterval() <= System.currentTimeMillis()){
-            if(port == 7090)
-                response.sendRedirect("/index");
-            else if(port == 7091)
-                response.sendRedirect("/codeIndex");
             return true;
-        }*/
+        }
+        if(uri.startsWith("/admin") || uri.startsWith("/api/admin")){
+            isAdminPage = true;
+            if(!("127.0.0.1".equals(ip) || "14.38.17.145".equals(ip)))
+                return false;
+        }
 
+        HttpSession session = request.getSession();
         SecurityContextImpl securityContext = (SecurityContextImpl) (session.getAttribute("SPRING_SECURITY_CONTEXT"));
         if(securityContext == null || !securityContext.getAuthentication().isAuthenticated()) {
-            if(port == 7090)
-                response.sendRedirect("/mall/login");
-            else if(port == 7091)
+            if(isAdminPage)
                 response.sendRedirect("/admin/login");
-            return false;
+            else if(uri.equals("/mall/index"))
+                return true;
+            else
+                response.sendRedirect("/mall/login");
         } else {
-
-            if(uri.equals("/")){
-                if(port == 7090)
-                    response.sendRedirect("/mall/index");
-                else if(port == 7091)
-                    response.sendRedirect("/admin/codeIndex");
-            }
             session.setMaxInactiveInterval(30 * 60);
-
-            return true;
+            if(uri.equals("/"))
+                response.sendRedirect("/mall/index");
         }
+        return true;
     }
 }
