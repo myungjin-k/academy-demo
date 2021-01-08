@@ -37,7 +37,7 @@ public class ReviewController {
     private final MemberService memberService;
 
     @GetMapping("/mall/item/{itemId}/review/list")
-    @ApiOperation(value = "상품별 리뷰 목록 조회")
+    @ApiOperation(value = "상품별 리뷰 목록 조회(api key 필요없음)")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "direction", dataType = "string", paramType = "query", defaultValue = "DESC", value = "정렬 방향"),
             @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query", defaultValue = "0", value = "페이징 offset"),

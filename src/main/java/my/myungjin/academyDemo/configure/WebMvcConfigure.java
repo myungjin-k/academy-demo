@@ -51,7 +51,6 @@ public class WebMvcConfigure implements WebMvcConfigurer {
                 .addPathPatterns("/")
                 .addPathPatterns("/mall/**")
                 .addPathPatterns("/admin/**")
-                .addPathPatterns("/api/**")
         ;
     }
 

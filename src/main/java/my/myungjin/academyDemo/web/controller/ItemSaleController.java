@@ -42,7 +42,7 @@ public class ItemSaleController {
     }
 
     @GetMapping(path = "/{id}")
-    @ApiOperation(value = "전시상품 상세 조회")
+    @ApiOperation(value = "전시상품 상세 조회(API 키 필요없음)")
     public Response<ItemDetailResponse> itemDetail(@PathVariable @ApiParam(value = "대상 전시상품 PK", defaultValue = "f23ba30a47194a2c8a3fd2ccadd952a4") String id){
         return OK(
                 new ItemDetailResponse().of(itemDisplayService.findByIdWithOptions(Id.of(ItemDisplay.class, id)))

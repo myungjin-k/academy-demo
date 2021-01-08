@@ -19,6 +19,8 @@ import org.springframework.validation.annotation.Validated;
 import javax.mail.MessagingException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Optional;
 
 @Validated
@@ -60,14 +62,14 @@ public class MemberService {
     public Optional<String> findPassword(@NotBlank String email){
         return memberRepository.findByEmail(email).map(member -> {
             String id = member.getId();
+            String address = getHostAddress();
             Mail mail = Mail.builder()
                     .to(email)
                     .title("[demo] 비밀번호 찾기/변경 안내")
                     .content(
-                                    "<p> 아래 링크에서 비밀번호 변경 가능합니다.</p> " +
-                                    "<a href='http://localhost:7090/changePassword/"+ id + "'>비밀번호 변경하기</a>"
-                    )
-                    .build();
+                            "<p> 아래 링크에서 비밀번호 변경 가능합니다.</p> " +
+                                    "<a href='"+ address +":7090/mall/changePassword/"+ id + "'>비밀번호 변경하기</a>"
+                    ).build();
             try {
                 mailService.sendMail(mail);
             } catch (MessagingException e){
@@ -77,6 +79,15 @@ public class MemberService {
             }
             return member.getEmail();
         });
+    }
+
+    private String getHostAddress(){
+        try {
+            return InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException e) {
+            log.warn("Host Address Error : {}", e.getMessage(), e);
+        }
+        return "";
     }
 
     @Transactional

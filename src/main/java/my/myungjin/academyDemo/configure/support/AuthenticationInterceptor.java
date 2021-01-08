@@ -13,11 +13,13 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String uri = request.getRequestURI();
         String ip = request.getRemoteAddr();
-        boolean isAdminPage = uri.startsWith("/admin") || uri.startsWith("/api/admin"),
-                isMallPage = uri.startsWith("/mall") || uri.startsWith("/api/mall"),
-                isHome = uri.equals("/mall/index");
+        boolean isAdminPage = uri.startsWith("/admin"),
+                isMallPage = uri.startsWith("/mall"),
+                isHome = uri.equals("/mall/index"),
+                isPwdChangePage = uri.startsWith("/mall/changePassword")
+        ;
 
-        if(isHome)
+        if(isHome || isPwdChangePage)
             return true;
 
         if(isAdminPage && !("127.0.0.1".equals(ip) || "14.38.17.145".equals(ip))){

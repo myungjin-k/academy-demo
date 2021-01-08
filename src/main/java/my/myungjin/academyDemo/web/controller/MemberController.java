@@ -10,23 +10,19 @@ import my.myungjin.academyDemo.service.member.MemberService;
 import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.MemberRequest;
 import my.myungjin.academyDemo.web.request.PwChangeRequest;
-import my.myungjin.academyDemo.web.response.MemberInformRatingResponse;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 import static my.myungjin.academyDemo.web.Response.OK;
 
-@RequestMapping("/api/mall/member")
+@RequestMapping("/api/mall")
 @RequiredArgsConstructor
 @RestController
 public class MemberController {
 
     private final MemberService memberService;
 
-    @PostMapping
+    @PostMapping("/join")
     @ApiOperation(value = "회원 가입(api 키 필요 없음)")
     public Response<Member> join(@RequestBody MemberRequest request){
         return OK(
@@ -34,7 +30,7 @@ public class MemberController {
         );
     }
 
-    @GetMapping("/id")
+    @GetMapping("/find/id")
     @ApiOperation(value = "회원 아이디 찾기(api 키 필요 없음)")
     public Response<String> forgotUserId(@RequestParam @ApiParam(value = "조회 대상 회원 정보(전화번호)", defaultValue = "010-1234-5678") String tel){
         return OK(
@@ -43,7 +39,7 @@ public class MemberController {
         );
     }
 
-    @GetMapping("/password")
+    @GetMapping("/find/password")
     @ApiOperation(value = "회원 비밀번호 찾기(api 키 필요 없음)")
     public Response<String> forgotUserPwd(@RequestParam @ApiParam(value = "조회 대상 회원 정보(이메일)", defaultValue = "open7894.v2@gmail.com") String email){
         return OK(
@@ -52,7 +48,7 @@ public class MemberController {
         );
     }
 
-    @PatchMapping("/password")
+    @PatchMapping("/member/password")
     @ApiOperation(value = "회원 비밀번호 변경")
     public Response<Member> changePassword(@RequestBody PwChangeRequest request){
         return OK(
@@ -60,7 +56,7 @@ public class MemberController {
         );
     }
 
-    @GetMapping("/me")
+    @GetMapping("/member/me")
     @ApiOperation(value = "회원 정보 조회")
     public Response<Member> getMyInfo(@AuthenticationPrincipal User authentication){
         return OK(
@@ -68,7 +64,7 @@ public class MemberController {
         );
     }
 
-    @PutMapping("/me")
+    @PutMapping("/member/me")
     @ApiOperation(value = "회원 정보 수정")
     public Response<Member> modifyMyInfo(@AuthenticationPrincipal User authentication,
                                            @RequestBody MemberRequest request){
