@@ -1,5 +1,7 @@
 package my.myungjin.academyDemo.configure.support;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -9,10 +11,13 @@ import javax.servlet.http.HttpSession;
 
 public class AuthenticationInterceptor implements HandlerInterceptor {
 
+    private Logger log = LoggerFactory.getLogger(getClass());
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String uri = request.getRequestURI();
         String ip = request.getRemoteAddr();
+        log.info("Request IP Address: {}", ip);
 
         boolean isAdminPage = false;
         if(uri.startsWith("/mall") || uri.startsWith("/api/mall")){
