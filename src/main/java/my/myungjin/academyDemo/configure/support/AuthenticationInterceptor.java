@@ -38,6 +38,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             session.setMaxInactiveInterval(30 * 60);
             return true;
         }
+
         if(uri.equals("/"))
             response.sendRedirect("/mall/index");
         return false;
