@@ -82,7 +82,7 @@ public class MemberServiceTest {
 
     }
     // TODO Unexpected Rollback : rollback-only 예외
-    /*@Test
+    @Test
     @Order(4)
     void 사용자_비밀번호_찾기(){
         String email = "rla_mj@naver.com";
@@ -91,7 +91,7 @@ public class MemberServiceTest {
         assertThat(found, is(notNullValue()));
         assertThat(found, is(email));
 
-    }*/
+    }
     @Test
     @Order(5)
     void 사용자_비밀번호_찾기_사용자_없음(){
