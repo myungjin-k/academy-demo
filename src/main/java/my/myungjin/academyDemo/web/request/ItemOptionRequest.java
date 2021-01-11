@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 import my.myungjin.academyDemo.domain.item.ItemMaster;
-import my.myungjin.academyDemo.util.Util;
 
 @ToString
 @Getter

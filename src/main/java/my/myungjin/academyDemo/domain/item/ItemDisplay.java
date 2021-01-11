@@ -1,6 +1,8 @@
 package my.myungjin.academyDemo.domain.item;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import my.myungjin.academyDemo.domain.review.Review;
 import org.hibernate.annotations.GenericGenerator;

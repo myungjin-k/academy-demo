@@ -16,8 +16,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         boolean isAdminPage = uri.startsWith("/admin"),
                 isMallPage = uri.startsWith("/mall"),
                 isHome = uri.equals("/mall/index"),
-                isPwdChangePage = uri.startsWith("/mall/changePassword")
-        ;
+                isPwdChangePage = uri.startsWith("/mall/changePassword");
 
         if(isHome || isPwdChangePage)
             return true;

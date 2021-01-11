@@ -7,7 +7,6 @@ import my.myungjin.academyDemo.domain.item.ItemDisplayOptionRepository;
 import my.myungjin.academyDemo.domain.order.*;
 import my.myungjin.academyDemo.error.NotFoundException;
 import my.myungjin.academyDemo.error.StatusNotSatisfiedException;
-import my.myungjin.academyDemo.util.Util;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

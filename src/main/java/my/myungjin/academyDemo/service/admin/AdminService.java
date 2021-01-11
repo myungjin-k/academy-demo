@@ -3,7 +3,6 @@ package my.myungjin.academyDemo.service.admin;
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.domain.member.Admin;
 import my.myungjin.academyDemo.domain.member.AdminRepository;
-import my.myungjin.academyDemo.domain.member.Role;
 import my.myungjin.academyDemo.error.NotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

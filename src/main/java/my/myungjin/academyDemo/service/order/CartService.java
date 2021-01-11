@@ -9,14 +9,12 @@ import my.myungjin.academyDemo.domain.member.MemberRepository;
 import my.myungjin.academyDemo.domain.order.CartItem;
 import my.myungjin.academyDemo.domain.order.CartRepository;
 import my.myungjin.academyDemo.error.NotFoundException;
-import my.myungjin.academyDemo.util.Util;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service

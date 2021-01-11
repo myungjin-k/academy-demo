@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import my.myungjin.academyDemo.domain.review.Review;
-import my.myungjin.academyDemo.util.Util;
 
 @AllArgsConstructor
 @ToString

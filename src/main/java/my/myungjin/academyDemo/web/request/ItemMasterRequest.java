@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import my.myungjin.academyDemo.domain.item.ItemMaster;
-import my.myungjin.academyDemo.util.Util;
 
 @ToString
 @Setter

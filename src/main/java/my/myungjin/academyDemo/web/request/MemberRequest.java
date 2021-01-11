@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.ToString;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.member.Member;
-import my.myungjin.academyDemo.util.Util;
 
 @AllArgsConstructor
 @ToString

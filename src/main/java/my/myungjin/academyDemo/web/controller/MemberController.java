@@ -52,7 +52,7 @@ public class MemberController {
     @ApiOperation(value = "회원 비밀번호 변경")
     public Response<Member> changePassword(@RequestBody PwChangeRequest request){
         return OK(
-          memberService.modifyPassword(request.getId(), request.getNewPassword())
+          memberService.modifyPassword(Id.of(Member.class, request.getId()), request.getNewPassword())
         );
     }
 

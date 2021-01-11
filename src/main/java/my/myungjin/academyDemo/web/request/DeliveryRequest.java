@@ -7,7 +7,6 @@ import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.order.Delivery;
 import my.myungjin.academyDemo.domain.order.DeliveryStatus;
 import my.myungjin.academyDemo.domain.order.OrderItem;
-import my.myungjin.academyDemo.util.Util;
 
 import java.util.List;
 import java.util.stream.Collectors;

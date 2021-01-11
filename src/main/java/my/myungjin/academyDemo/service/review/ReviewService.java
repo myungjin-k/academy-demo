@@ -7,7 +7,6 @@ import my.myungjin.academyDemo.commons.AttachedFile;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.member.Member;
-import my.myungjin.academyDemo.domain.member.MemberRepository;
 import my.myungjin.academyDemo.domain.order.*;
 import my.myungjin.academyDemo.domain.review.Review;
 import my.myungjin.academyDemo.domain.review.ReviewRepository;

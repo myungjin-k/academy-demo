@@ -8,6 +8,7 @@ import lombok.ToString;
 @Getter
 @RequiredArgsConstructor
 public enum ItemStatus {
+
     READY_TO_SALE(0, "판매대기중"),
     ON_SALE(1, "판매중"),
     SOLD_OUT(2, "품절"),

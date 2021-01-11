@@ -17,22 +17,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.net.http.HttpRequest;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
-/*
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                // user와 password 정보를 h2와 같은 in memory에 저장
-                .inMemoryAuthentication()
-                .withUser("mjkim").password(passwordEncoder().encode("mjkim_password")).roles("ADMIN");
-    }
-*/
+
     @Override
     public void configure(WebSecurity web) {
         web.ignoring().antMatchers("/templates/**", "/h2/**",

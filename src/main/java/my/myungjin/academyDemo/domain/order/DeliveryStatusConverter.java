@@ -1,7 +1,5 @@
 package my.myungjin.academyDemo.domain.order;
 
-import my.myungjin.academyDemo.domain.item.ItemStatus;
-
 import javax.persistence.AttributeConverter;
 
 public class DeliveryStatusConverter implements AttributeConverter<DeliveryStatus, Integer> {
