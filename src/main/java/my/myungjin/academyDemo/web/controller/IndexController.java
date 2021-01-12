@@ -24,25 +24,16 @@ public class IndexController {
     private List<CommonCode> itemCategories ;
 
     @GetMapping("/mall/index")
-    public String main(Model model, @AuthenticationPrincipal User authentication){
-        itemCategories = commonCodeService.findAllCommonCodesByGroupId
-                (Id.of(CodeGroup.class, "246fa96f9b634a56aaac5884de186ebc"));
-        model.addAttribute("items", itemCategories);
-
-        if(authentication != null){
-            model.addAttribute("loginUser", authentication);
-            if(authentication.getRole().name().equalsIgnoreCase("ADMIN"))
-                model.addAttribute("isAdmin", true);
-        }
+    public String main(Model model, @AuthenticationPrincipal Authentication authentication){
+        setItemCategories(model);
+        setLoginUser(model, authentication);
         return "index";
     }
 
     @GetMapping("/mall/login")
     public String loginIndex(Model model)
     {
-        itemCategories = commonCodeService.findAllCommonCodesByGroupId
-                (Id.of(CodeGroup.class, "246fa96f9b634a56aaac5884de186ebc"));
-        model.addAttribute("items", itemCategories);
+        setItemCategories(model);
         return "member";
     }
 
@@ -54,48 +45,46 @@ public class IndexController {
     }
 
     @GetMapping("/mall/myPage")
-    public String myPageIndex(Model model, @AuthenticationPrincipal User authentication){
-        itemCategories = commonCodeService.findAllCommonCodesByGroupId
-                (Id.of(CodeGroup.class, "246fa96f9b634a56aaac5884de186ebc"));
-        model.addAttribute("items", itemCategories);
-
+    public String myPageIndex(Model model, @AuthenticationPrincipal Authentication authentication){
+        setItemCategories(model);
         if(authentication != null){
-            model.addAttribute("loginUser", authentication);
-            if(authentication.getRole().name().equalsIgnoreCase("ADMIN"))
-                model.addAttribute("isAdmin", true);
+            User loginUser = (User) authentication.getDetails();
+            model.addAttribute("loginUser", loginUser);
         }
         return "mypage";
     }
 
     @GetMapping("/admin/login")
     public String adminLoginIndex(){
-
         return "admin/admin";
     }
 
     @GetMapping("/admin/codeIndex")
-    public String adminCodeIndex(Model model, @AuthenticationPrincipal User authentication){
-
-        if(authentication != null){
-            model.addAttribute("loginUser", authentication);
-            if(authentication.getRole().name().equalsIgnoreCase("ADMIN"))
-                model.addAttribute("isAdmin", true);
-        }
+    public String adminCodeIndex(Model model, @AuthenticationPrincipal Authentication authentication){
+        setLoginUser(model, authentication);
+        model.addAttribute("isAdmin", true);
         return "admin/code";
     }
 
     @GetMapping("/admin/itemIndex")
-    public String adminItemIndex(Model model, @AuthenticationPrincipal User authentication){
+    public String adminItemIndex(Model model, @AuthenticationPrincipal Authentication authentication){
+        setItemCategories(model);
+        setLoginUser(model, authentication);
+        model.addAttribute("isAdmin", true);
+        return "admin/item";
+    }
 
+    private void setItemCategories(Model model){
         itemCategories = commonCodeService.findAllCommonCodesByGroupId
                 (Id.of(CodeGroup.class, "246fa96f9b634a56aaac5884de186ebc"));
         model.addAttribute("items", itemCategories);
+    }
+
+    private void setLoginUser(Model model, @AuthenticationPrincipal Authentication authentication){
         if(authentication != null){
-            model.addAttribute("loginUser", authentication);
-            if(authentication.getRole().name().equalsIgnoreCase("ADMIN"))
-                model.addAttribute("isAdmin", true);
+            User loginUser = (User) authentication.getDetails();
+            model.addAttribute("loginUser", loginUser);
         }
-        return "admin/item";
     }
 }
 
