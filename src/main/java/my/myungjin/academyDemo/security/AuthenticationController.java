@@ -25,12 +25,12 @@ public class AuthenticationController {
 
     @PostMapping
     @ApiOperation(value = "회원 인증(api key 필요 없음)")
-    public Response<Authentication> auth(@RequestBody AuthenticationRequest request) {
+    public Response<User> auth(@RequestBody AuthenticationRequest request) throws UnauthorizedException {
         try {
             MyAuthenticationToken token = new MyAuthenticationToken(request.getPrincipal(), request.getCredentials(), Role.of(request.getRole()));
             Authentication authentication = authenticationManager.authenticate(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            return OK(authentication);
+            return OK((User) authentication.getDetails());
         } catch (AuthenticationException e){
             throw new UnauthorizedException(e.getMessage());
         }

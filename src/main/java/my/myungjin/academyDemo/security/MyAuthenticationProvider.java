@@ -45,7 +45,6 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
 
             MyAuthenticationToken authenticated = new MyAuthenticationToken(user.getUserId(), user.getPassword(), createAuthorityList(user.getRole().getValue()));
             authenticated.setDetails(user);
-
             return authenticated;
         } catch (NotFoundException e) {
             throw new UsernameNotFoundException(e.getMessage());

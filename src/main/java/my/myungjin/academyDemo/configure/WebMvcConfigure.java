@@ -2,7 +2,7 @@ package my.myungjin.academyDemo.configure;
 
 
 import lombok.RequiredArgsConstructor;
-import my.myungjin.academyDemo.configure.support.AuthenticationInterceptor;
+import my.myungjin.academyDemo.security.AuthenticationInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
