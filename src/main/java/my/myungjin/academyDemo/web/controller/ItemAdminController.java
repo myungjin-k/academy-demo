@@ -81,7 +81,7 @@ public class ItemAdminController {
     public Response<ItemMaster> updateMaster(
             @PathVariable @ApiParam(value = "대상 상품 마스터 PK", defaultValue = "8c1cbb792b8d447e9128d53920cf9366") String  id,
             @ModelAttribute ItemMasterRequest request,
-            @RequestPart MultipartFile thumbnail
+            @RequestPart(required = false) MultipartFile thumbnail
     ) throws IOException {
         return OK(
                 itemMasterService.modifyItemMaster(

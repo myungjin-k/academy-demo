@@ -22,7 +22,7 @@ CREATE TABLE common_code (
                              update_at       datetime DEFAULT null,
                              PRIMARY KEY (id),
                              CONSTRAINT unq_common_code UNIQUE (code),
-                             CONSTRAINT fk_common_code_to_code_group FOREIGN KEY (group_id) REFERENCES code_group (id) ON DELETE CASCADE ON UPDATE RESTRICT
+                             CONSTRAINT fk_common_code_to_code_group FOREIGN KEY (group_id) REFERENCES code_group (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS member CASCADE;
@@ -71,7 +71,7 @@ CREATE TABLE item_master (
                              update_at            datetime DEFAULT null,
                              PRIMARY KEY (id),
                              CONSTRAINT unq_item_name UNIQUE (item_name),
-                             CONSTRAINT fk_item_master_to_common_code FOREIGN KEY (category_id) REFERENCES COMMON_CODE (id) ON DELETE RESTRICT ON UPDATE RESTRICT
+                             CONSTRAINT fk_item_master_to_common_code FOREIGN KEY (category_id) REFERENCES COMMON_CODE (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS item_display CASCADE;
@@ -89,7 +89,7 @@ CREATE TABLE item_display (
                               create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
                               update_at            datetime DEFAULT null,
                               PRIMARY KEY (id),
-                              CONSTRAINT fk_item_display_to_item_master FOREIGN KEY (item_id) REFERENCES item_master (id) ON DELETE CASCADE ON UPDATE RESTRICT
+                              CONSTRAINT fk_item_display_to_item_master FOREIGN KEY (item_id) REFERENCES item_master (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS item_display_option CASCADE;
@@ -102,7 +102,7 @@ CREATE TABLE item_display_option (
                                      create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
                                      update_at            datetime DEFAULT null,
                                      PRIMARY KEY (id),
-                                     CONSTRAINT fk_item_display_option_to_item_display FOREIGN KEY (display_id) REFERENCES item_display (id) ON DELETE CASCADE ON UPDATE RESTRICT
+                                     CONSTRAINT fk_item_display_option_to_item_display FOREIGN KEY (display_id) REFERENCES item_display (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS item_option CASCADE;
@@ -114,7 +114,7 @@ CREATE TABLE item_option (
                              create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
                              update_at            datetime DEFAULT null,
                              PRIMARY KEY (id),
-                             CONSTRAINT fk_item_option_to_item_master FOREIGN KEY (master_id) REFERENCES item_master (id) ON DELETE CASCADE ON UPDATE RESTRICT
+                             CONSTRAINT fk_item_option_to_item_master FOREIGN KEY (master_id) REFERENCES item_master (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS cart CASCADE;
@@ -126,8 +126,8 @@ CREATE TABLE cart (
                       create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
                       update_at            datetime DEFAULT null,
                       PRIMARY KEY (id, member_id),
-                      CONSTRAINT fk_cart_to_member FOREIGN KEY (member_id) REFERENCES member (id) ON DELETE CASCADE ON UPDATE RESTRICT,
-                      CONSTRAINT fk_cart_to_item_display_option FOREIGN KEY (item_id) REFERENCES item_display_option (id) ON DELETE CASCADE ON UPDATE RESTRICT
+                      CONSTRAINT fk_cart_to_member FOREIGN KEY (member_id) REFERENCES member (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                      CONSTRAINT fk_cart_to_item_display_option FOREIGN KEY (item_id) REFERENCES item_display_option (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS order_master CASCADE;
@@ -144,7 +144,7 @@ CREATE TABLE order_master (
                               create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
                               update_at            datetime DEFAULT null,
                               PRIMARY KEY (id),
-                              CONSTRAINT fk_order_to_member FOREIGN KEY (member_id) REFERENCES member (id) ON DELETE CASCADE ON UPDATE RESTRICT
+                              CONSTRAINT fk_order_to_member FOREIGN KEY (member_id) REFERENCES member (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS delivery CASCADE;
@@ -161,7 +161,7 @@ CREATE TABLE delivery (
                           create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
                           update_at            datetime DEFAULT null,
                           PRIMARY KEY (id),
-                          CONSTRAINT fk_delivery_to_order FOREIGN KEY (order_id) REFERENCES order_master (id) ON DELETE CASCADE ON UPDATE RESTRICT
+                          CONSTRAINT fk_delivery_to_order FOREIGN KEY (order_id) REFERENCES order_master (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 
@@ -174,8 +174,8 @@ CREATE TABLE delivery_item (
                                create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
                                update_at            datetime DEFAULT null,
                                PRIMARY KEY (id),
-                               CONSTRAINT fk_delivery_item_to_delivery FOREIGN KEY (delivery_id) REFERENCES delivery (id) ON DELETE CASCADE ON UPDATE RESTRICT,
-                               CONSTRAINT fk_delivery_item_to_item_display_option FOREIGN KEY (item_id) REFERENCES item_display_option (id) ON DELETE CASCADE ON UPDATE RESTRICT
+                               CONSTRAINT fk_delivery_item_to_delivery FOREIGN KEY (delivery_id) REFERENCES delivery (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                               CONSTRAINT fk_delivery_item_to_item_display_option FOREIGN KEY (item_id) REFERENCES item_display_option (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS order_item CASCADE;
@@ -188,9 +188,9 @@ CREATE TABLE order_item (
                             create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
                             update_at            datetime DEFAULT null,
                             PRIMARY KEY (id),
-                            CONSTRAINT fk_order_item_to_order FOREIGN KEY (order_id) REFERENCES order_master (id) ON DELETE CASCADE ON UPDATE RESTRICT,
-                            CONSTRAINT fk_order_item_to_item_display_option FOREIGN KEY (item_id) REFERENCES item_display_option (id) ON DELETE CASCADE ON UPDATE RESTRICT,
-                            CONSTRAINT fk_order_item_to_delivery_item FOREIGN KEY (delivery_item_id) REFERENCES delivery_item (id) ON DELETE CASCADE ON UPDATE RESTRICT
+                            CONSTRAINT fk_order_item_to_order FOREIGN KEY (order_id) REFERENCES order_master (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                            CONSTRAINT fk_order_item_to_item_display_option FOREIGN KEY (item_id) REFERENCES item_display_option (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                            CONSTRAINT fk_order_item_to_delivery_item FOREIGN KEY (delivery_item_id) REFERENCES delivery_item (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS review CASCADE;
@@ -206,8 +206,8 @@ CREATE TABLE review (
                         create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
                         update_at            datetime DEFAULT null,
                         PRIMARY KEY (id),
-                        CONSTRAINT fk_review_to_member FOREIGN KEY (member_id) REFERENCES member (id) ON DELETE CASCADE ON UPDATE RESTRICT,
-                        CONSTRAINT fk_review_to_item_display FOREIGN KEY (item_id) REFERENCES item_display (id) ON DELETE CASCADE ON UPDATE RESTRICT,
-                        CONSTRAINT fk_review_to_order_item FOREIGN KEY (order_item_id) REFERENCES order_item (id) ON DELETE CASCADE ON UPDATE RESTRICT
+                        CONSTRAINT fk_review_to_member FOREIGN KEY (member_id) REFERENCES member (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                        CONSTRAINT fk_review_to_item_display FOREIGN KEY (item_id) REFERENCES item_display (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                        CONSTRAINT fk_review_to_order_item FOREIGN KEY (order_item_id) REFERENCES order_item (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 SET FOREIGN_KEY_CHECKS=1;

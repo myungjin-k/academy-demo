@@ -20,11 +20,9 @@
                     <thead class="thead-strong">
                     <tr>
                         <th>분류</th>
-                        <th>이름</th>
+                        <th width="50%">이름</th>
                         <th>가격</th>
                         <th>등록일시</th>
-                        <th></th>
-                        <th></th>
                         <th></th>
                     </tr>
                     </thead>
@@ -49,14 +47,16 @@
                         검색
                     </button>
                     <input type="hidden" class="form-control" name="categoryId" id="categoryId" />
-                    <input type="text" class="form-control" name="categoryName" id="categoryName" />
+                    <input type="text" class="form-control mt-1 mb-2" name="categoryName" id="categoryName" readonly/>
 
                     <label for="itemName">이름</label>
-                    <input type="text" class="form-control" name="itemName" id="itemName" />
+                    <input type="text" class="form-control mb-2" name="itemName" id="itemName" />
                     <label for="price">가격</label>
-                    <input type="text" class="form-control" name="price" id="price" />
+                    <input type="text" class="form-control mb-2" name="price" id="price" />
                     <label for="thumbnail">이미지</label>
-                    <input type="file" class="form-control" accept="image/png, image/jpeg" name="thumbnail" id="thumbnail"/>
+
+                    <p class="thumbnailInfo d-none"><img class="oriThumbnail" width="50px"/><span id="btn-delete-thumbnail" class="btn btn-sm btn-outline-dark ml-2">X</span></p>
+                    <input type="file" class="form-control mb-2" accept="image/png, image/jpeg" name="thumbnail" id="thumbnail"/>
                     <a class="btn btn-primary" id="btn-save-item-master">Submit</a>
                 </form>
             </div>

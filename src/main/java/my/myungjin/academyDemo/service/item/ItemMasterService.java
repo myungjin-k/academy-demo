@@ -27,6 +27,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Optional.ofNullable;
+
 @Validated
 @RequiredArgsConstructor
 @Service
@@ -56,7 +58,7 @@ public class ItemMasterService {
         return itemMasterRepository.findAllByCategoryId(categoryId.value());
     }
 
-    private String uploadThumbnail(AttachedFile thumbnailFile) {
+    private Optional<String> uploadThumbnail(AttachedFile thumbnailFile) {
         String thumbnailUrl = null;
         if (thumbnailFile != null) {
             String key = thumbnailFile.randomName(S3_BASE_PATH, "jpeg");
@@ -70,14 +72,14 @@ public class ItemMasterService {
                 log.warn("Amazon S3 error (key: {}): {}", key, e.getMessage(), e);
             }
         }
-        return thumbnailUrl;
+        return ofNullable(thumbnailUrl);
     }
 
     @Transactional
     public ItemMaster saveItemMaster(@Valid Id<CommonCode, String> categoryId, @Valid ItemMaster newItem, @NotNull AttachedFile thumbnailFile) {
         CommonCode category = commonCodeRepository.findById(categoryId.value())
                 .orElseThrow(() -> new NotFoundException(CommonCode.class, categoryId));
-        newItem.setThumbnail(uploadThumbnail(thumbnailFile));
+        newItem.setThumbnail(uploadThumbnail(thumbnailFile).orElseThrow(() -> new IllegalArgumentException("thumbnail should not be null!")));
         newItem.setCategory(category);
         return save(newItem);
     }
@@ -92,19 +94,24 @@ public class ItemMasterService {
 
     @Transactional
     public ItemMaster deleteItemMasterById(@Valid Id<ItemMaster, String> itemMasterId){
-        ItemMaster itemMaster = getOne(itemMasterId.value());
-        itemMasterRepository.delete(itemMaster);
+        ItemMaster itemMaster = findById(itemMasterId)
+                .map(master -> {
+                    itemMasterRepository.delete(master);
+                    return master;
+                }).orElseThrow(() -> new NotFoundException(ItemMaster.class, itemMasterId));
         deleteThumbnail(itemMaster.getThumbnail());
         return itemMaster;
     }
 
     @Transactional
     public ItemMaster modifyItemMaster(@Valid Id<ItemMaster, String> itemMasterId, @Valid Id<CommonCode, String> categoryId, @NotBlank String itemName,
-                                       @NotNull int price, @NotNull AttachedFile thumbnailFile) {
+                                       @NotNull int price, AttachedFile thumbnailFile) {
         ItemMaster itemMaster = getOne(itemMasterId.value());
         deleteThumbnail(itemMaster.getThumbnail());
         itemMaster.modify(itemName, price);
-        itemMaster.setThumbnail(uploadThumbnail(thumbnailFile));
+        String newThumbnail = uploadThumbnail(thumbnailFile).orElse(null);
+        if(newThumbnail != null)
+            itemMaster.setThumbnail(newThumbnail);
         itemMaster.setCategory(commonCodeRepository.getOne(categoryId.value()));
         return save(itemMaster);
     }

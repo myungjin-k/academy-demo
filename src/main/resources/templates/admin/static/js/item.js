@@ -29,19 +29,23 @@ var itemMaster = {
         $('#btn-save-item-master').click(function (){
             var id = $('#form-save-item-master').find('input[name="id"]').val();
             if(id !== ''){
-                _this.update();
+                _this.update(_this.firstPage);
             } else {
                 _this.save();
             }
+        });
+        $('#btn-delete-thumbnail').click(function(){
+           _this.deleteThumbnail();
         });
         $(document).on('click', '.btn-modify', function(){
             var tr = $(this).parents('tr');
             var data = {
                 "id" : tr.find('input[name="id"]').val(),
                 "itemName" : tr.find('.itemName').text(),
-                "categoryId" : tr.find('.categoryId').text(),
+                "categoryId" : tr.find('input[name="categoryId"]').val(),
+                "categoryName" : tr.find('.categoryId').text(),
                 "price" : tr.find('.price').text(),
-                "thumbnail" : tr.find('.thumbnail').text()
+                "thumbnail" : tr.find('.thumbnail').val()
             };
             _this.setData(data);
         });
@@ -71,18 +75,26 @@ var itemMaster = {
     clearForm : function(){
         var form = $('#form-save-item-master');
         form.find('input[name="id"]').val('');
-        form.find('input[name="categoryId"]').val('');
+        form.find('input[name="categoryName"]').val('');
+        form.find('input[name="category"]').val('');
         form.find('input[name="itemName"]').val('');
         form.find('input[name="price"]').val('');
-        form.find('input[name="thumbnail"]').val('');
+        form.find('.thumbnailInfo').addClass("d-none");
+        form.find('.oriThumbnail').prop("src", '');
     },
-
+    deleteThumbnail : function(){
+        if(confirm("이미지를 삭제하시겠습니까?")){
+            var form = $('#form-save-item-master');
+            form.find('.thumbnailInfo').addClass("d-none");
+            form.find('.oriThumbnail').prop("src", '');
+        }
+    },
     list : function (page){
         var _this = this;
         this.clearTable();
         $.ajax({
             type: 'GET',
-            url: '/api/admin/item/all?page=' + page +'&size=' + 5 + '&direction=ASC',
+            url: '/api/admin/itemMaster/list?page=' + page +'&size=' + 5 + '&direction=DESC',
             dataType: 'json',
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
@@ -104,12 +116,14 @@ var itemMaster = {
                         + '<td class="categoryId">' + item.category.nameKor
                         + '<input type="hidden" name="categoryId" value="' + item.category.id + '"/>'
                         +'</td>'
-                        + '<td class="itemName">' + item.itemName+'</td>'
+                        + '<td class="itemName">' + item.itemName
+                        + '<input class="thumbnail" type="hidden" name="thumbnail" value="' + item.thumbnail + '"/>'
+                        +'</td>'
                         + '<td class="price">' + item.price +'</td>'
                         + '<td>' + item.createAt +'</td>'
-                        + '<td><a class="btn-modify">수정</a></td>'
-                        + '<td><a class="btn-delete">삭제</a></td>'
-                        + '<td><a class="btn-search-codes">옵션</a></td>'
+                        + '<td><a class="btn btn-sm btn-outline-dark btn-modify">수정</a>'
+                        + '<a class="btn btn-sm btn-outline-dark btn-delete">삭제</a>'
+                        + '<a class="btn btn-sm btn-outline-dark btn-search-codes">옵션</a></td>'
                         + '</tr>';
                     $('#item-masters').append(row);
                 });
@@ -120,24 +134,27 @@ var itemMaster = {
         });
 
     },
-    save : function (){
-        var _this = this;
+    makeFormData : function(){
         var data = new FormData();
         var form = $('#form-save-item-master');
-
         data.append('id', form.find("input[name='id']").val());
         data.append('categoryId', form.find("input[name='categoryId']").val());
         data.append('itemName', form.find("input[name='itemName']").val());
         data.append('price', form.find("input[name='price']").val());
         data.append('thumbnail', form.find("input[name='thumbnail']")[0].files[0]);
-        console.log(data.getAll("id"));
+        return data;
+    },
+    save : function (){
+        var _this = this;
+        var data = _this.makeFormData();
+        /*console.log(data.getAll("id"));
         console.log(data.getAll("categoryId"));
         console.log(data.getAll("price"));
         console.log(data.getAll("itemName"));
-        console.log(data.getAll("thumbnail"));
+        console.log(data.getAll("thumbnail"));*/
         $.ajax({
             type: 'POST',
-            url: '/api/admin/item',
+            url: '/api/admin/itemMaster',
             processData: false,
             contentType: false,
             data: data
@@ -150,25 +167,28 @@ var itemMaster = {
 
     },
     setData : function(data){
+        //console.log(data);
         var form = $('#form-save-item-master');
         form.find('input[name="id"]').val(data.id);
         form.find('input[name="categoryId"]').val(data.categoryId);
+        form.find('input[name="categoryName"]').val(data.categoryName);
         form.find('input[name="itemName"]').val(data.itemName);
         form.find('input[name="price"]').val(data.price);
-        form.find('input[name="thumbnail"]').val(data.thumbnail);
+        form.find('.thumbnailInfo').removeClass("d-none");
+        form.find('.oriThumbnail').prop("src", data.thumbnail);
     },
-    update : function (){
+    update : function (page){
         var _this = this;
-        var data = $('#form-save-group').serializeObject();
+        var data = _this.makeFormData();
         $.ajax({
             type: 'PUT',
-            url: '/api/admin/item',
-            dataType: 'json',
-            contentType:'application/json; charset=utf-8',
-            data: JSON.stringify(data)
+            url: '/api/admin/itemMaster/' + data.getAll("id"),
+            processData: false,
+            contentType: false,
+            data: data
         }).done(function(response) {
             //console.log(response);
-            _this.list(1);
+            _this.list(page);
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
@@ -178,7 +198,7 @@ var itemMaster = {
         var _this = this;
         $.ajax({
             type: 'DELETE',
-            url: '/api/admin/item'
+            url: '/api/admin/itemMaster/' + id
         }).done(function(response) {
             //console.log(response);
             _this.list(1);
