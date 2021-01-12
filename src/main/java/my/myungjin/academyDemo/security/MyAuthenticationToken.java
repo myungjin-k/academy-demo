@@ -10,7 +10,7 @@ import java.util.Collection;
 @ToString
 public class MyAuthenticationToken extends AbstractAuthenticationToken {
 
-    private String principal;
+    private Object principal;
 
     private Object credentials;
 
@@ -25,7 +25,7 @@ public class MyAuthenticationToken extends AbstractAuthenticationToken {
         this.type = type;
     }
 
-    MyAuthenticationToken(String principal, Object credentials, Collection<? extends GrantedAuthority> authorities) {
+    MyAuthenticationToken(Object principal, Object credentials, Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         super.setAuthenticated(true);
 
@@ -40,7 +40,7 @@ public class MyAuthenticationToken extends AbstractAuthenticationToken {
 
     @Override
     public String getPrincipal() {
-        return principal;
+        return principal.toString();
     }
 
     public Role getType() {

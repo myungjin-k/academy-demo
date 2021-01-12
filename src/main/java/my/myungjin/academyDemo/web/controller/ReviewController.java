@@ -58,11 +58,11 @@ public class ReviewController {
             @PathVariable @ApiParam(value = "조회 대상 주문상품 PK", example = "c7bb4cb6efcd4f4bb388eafb6fa52fac") String itemId,
             @ModelAttribute ReviewRequest reviewRequest,
             @RequestPart(required = false) MultipartFile reviewImgFile,
-            @AuthenticationPrincipal User authentication) throws IOException {
+            @AuthenticationPrincipal Authentication authentication) throws IOException {
         return OK(
                 reviewService.write(
                         Id.of(Member.class, memberId),
-                        Id.of(Member.class,  authentication.getId()),
+                        Id.of(Member.class, ((User)authentication.getDetails()).getId()),
                         Id.of(OrderItem.class, itemId),
                         reviewRequest.newReview(),
                         toAttachedFile(reviewImgFile)
@@ -77,11 +77,11 @@ public class ReviewController {
             @PathVariable @ApiParam(value = "조회 대상 리뷰 PK", example = "c7bb4cb6efcd4f4bb388eafb6fa52fac") String reviewId,
             @ModelAttribute ReviewRequest reviewRequest,
             @RequestPart(required = false) MultipartFile reviewImgFile,
-            @AuthenticationPrincipal User authentication) throws IOException {
+            @AuthenticationPrincipal Authentication authentication) throws IOException {
         return OK(
                 reviewService.modify(
                         Id.of(Member.class, memberId),
-                        Id.of(Member.class, authentication.getId()),
+                        Id.of(Member.class, ((User)authentication.getDetails()).getId()),
                         Id.of(Review.class, reviewId),
                         reviewRequest.getContent(),
                         reviewRequest.getScore(),

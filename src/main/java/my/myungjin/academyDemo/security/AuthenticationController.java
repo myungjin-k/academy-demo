@@ -28,9 +28,8 @@ public class AuthenticationController {
     public Response<Authentication> auth(@RequestBody AuthenticationRequest request) {
         try {
             MyAuthenticationToken token = new MyAuthenticationToken(request.getPrincipal(), request.getCredentials(), Role.of(request.getRole()));
-
             Authentication authentication = authenticationManager.authenticate(token);
-            SecurityContextHolder.getContext().setAuthentication(token);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
             return OK(authentication);
         } catch (AuthenticationException e){
             throw new UnauthorizedException(e.getMessage());

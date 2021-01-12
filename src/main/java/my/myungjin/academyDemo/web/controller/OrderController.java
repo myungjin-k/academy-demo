@@ -60,10 +60,10 @@ public class OrderController {
     @ApiOperation(value = "장바구니 리스트 조회")
     public Response<List<CartItem>> cart(
             @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String id,
-            @AuthenticationPrincipal User authentication
+            @AuthenticationPrincipal Authentication authentication
     ){
       return OK(
-              cartService.findByMember(Id.of(Member.class, id), Id.of(Member.class, authentication.getId()))
+              cartService.findByMember(Id.of(Member.class, id), Id.of(Member.class, ((User)authentication.getDetails()).getId()))
       );
     }
 
@@ -72,11 +72,11 @@ public class OrderController {
     public Response<CartItem> modifyCartItemCount(
             @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String id,
             @PathVariable @ApiParam(value = "대상 장바구니 상품 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String itemId,
-            @RequestParam int count, @AuthenticationPrincipal User authentication){
+            @RequestParam int count, @AuthenticationPrincipal Authentication authentication){
         return OK(
                 cartService.modify(
                         Id.of(Member.class, id),
-                        Id.of(Member.class, authentication.getId()),
+                        Id.of(Member.class, ((User)authentication.getDetails()).getId()),
                         Id.of(CartItem.class, itemId),
                         count
                 )
@@ -88,11 +88,11 @@ public class OrderController {
     public Response<CartItem> deleteCartItem(
             @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String id,
             @PathVariable @ApiParam(value = "대상 장바구니 상품 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String itemId,
-            @AuthenticationPrincipal User authentication){
+            @AuthenticationPrincipal Authentication authentication){
         return OK(
                 cartService.delete(
                         Id.of(Member.class, id),
-                        Id.of(Member.class, authentication.getId()),
+                        Id.of(Member.class, ((User)authentication.getDetails()).getId()),
                         Id.of(CartItem.class, itemId)
                 )
         );

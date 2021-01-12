@@ -1,6 +1,6 @@
 package my.myungjin.academyDemo.configure.support;
 
-import org.springframework.security.core.context.SecurityContextImpl;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,8 +27,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         }
 
         HttpSession session = request.getSession();
-        SecurityContextImpl securityContext = (SecurityContextImpl) (session.getAttribute("SPRING_SECURITY_CONTEXT"));
-        if(securityContext == null || !securityContext.getAuthentication().isAuthenticated()) {
+        if(SecurityContextHolder.getContext().getAuthentication() == null) {
             if(uri.equals("/mall/login") || uri.equals("/admin/login"))
                 return true;
             else if(isAdminPage)

@@ -10,6 +10,7 @@ import my.myungjin.academyDemo.service.member.MemberService;
 import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.MemberRequest;
 import my.myungjin.academyDemo.web.request.PwChangeRequest;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,17 +59,17 @@ public class MemberController {
 
     @GetMapping("/member/me")
     @ApiOperation(value = "회원 정보 조회")
-    public Response<Member> getMyInfo(@AuthenticationPrincipal User authentication){
+    public Response<Member> getMyInfo(@AuthenticationPrincipal Authentication authentication){
         return OK(
-                memberService.findMyInfo(Id.of(Member.class, authentication.getId()))
+                memberService.findMyInfo(Id.of(Member.class, ((User)authentication.getDetails()).getId()))
         );
     }
 
     @PutMapping("/member/me")
     @ApiOperation(value = "회원 정보 수정")
-    public Response<Member> modifyMyInfo(@AuthenticationPrincipal User authentication,
+    public Response<Member> modifyMyInfo(@AuthenticationPrincipal Authentication authentication,
                                            @RequestBody MemberRequest request){
-        Id<Member, String> id = Id.of(Member.class, authentication.getId());
+        Id<Member, String> id = Id.of(Member.class, ((User)authentication.getDetails()).getId());
         return OK(
                 memberService.modify(id, request.toMember(id))
         );
