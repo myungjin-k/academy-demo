@@ -112,8 +112,10 @@ public class CommonCodeService {
     }
 
     @Transactional(readOnly = true)
-    public CodeGroup findAllCommonCodesByGroupCode(@NotBlank String code){
-        return findGroupByCode(code).orElseThrow(() -> new NotFoundException(CommonCode.class, code));
+    public List<CommonCode> findAllCommonCodesByGroupCode(@NotBlank String code){
+        return findGroupByCode(code)
+                .map(commonCodeRepository::findAllByCodeGroup)
+                .orElseThrow(() -> new NotFoundException(CodeGroup.class, code));
     }
 
     private CodeGroup saveGroup(CodeGroup codeGroup){

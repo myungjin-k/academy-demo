@@ -16,6 +16,8 @@ import my.myungjin.academyDemo.web.request.PageRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static my.myungjin.academyDemo.web.Response.OK;
 
 @RequestMapping("/api/admin")
@@ -108,4 +110,9 @@ public class CommonController {
         sampleService.removeCode(Id.of(CodeGroup.class, id), Id.of(CommonCode.class, codeId));
     }
 
+    @GetMapping("/commonCode/search")
+    @ApiOperation(value = "코드그룹으로 공통 코드 검색")
+    public List<CommonCode> searchCode(@RequestParam String codeGroup){
+        return sampleService.findAllCommonCodesByGroupCode(codeGroup);
+    }
 }
