@@ -68,7 +68,7 @@ public class ItemOptionServiceTest {
     @Test
     @Order(4)
     void 상품_옵션_삭제하기() {
-        Id<ItemMaster.ItemOption, String> deleted = itemOptionService.deleteById(itemOptionId);
+        ItemMaster.ItemOption deleted = itemOptionService.deleteById(itemOptionId);
         assertThat(deleted, is(notNullValue()));
         log.info("Deleted Option: {}", deleted);
 

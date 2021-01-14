@@ -8,13 +8,13 @@
             <a class="nav-link" id="tab-item-option" data-toggle="tab" href="#div-item-option" role="tab" aria-controls="div-item-option" aria-selected="false" style="display: none;">상품옵션</a>
         </li>
     </ul>
-    <div class="tab-content" id="myTabContent">
+    <!-- 상품 마스터 -->
+    <div class="tab-content" id="itemMasterTabContent">
         <div class="tab-pane fade show active" id="div-item-master" role="tabpanel" aria-labelledby="tab-item-master">
             <div class="div-crud-buttons">
                 <a class="btn btn-outline-primary" id="btn-load-item-masters">상품 불러오기</a>
                 <a class="btn btn-outline-primary" id="btn-add-item-master">상품 등록</a>
             </div>
-
             <div class="mb-3">
                 <table class="table table-horizontal table-bordered">
                     <thead class="thead-strong">
@@ -35,8 +35,6 @@
                     </ul>
                 </div>
             </div>
-
-
             <div class="mb-5">
                 <form id="form-save-item-master" enctype="multipart/form-data">
                     <input type="hidden" name="id" id="master-id" />
@@ -61,55 +59,42 @@
                 </form>
             </div>
         </div>
-        <div class="tab-pane fade" id="div-item-option" role="tabpanel" aria-labelledby="tab-item-option" >
+        <!-- 상품 옵션 -->
+        <div class="tab-pane fade" id="div-item-option" role="tabpanel" aria-labelledby="tab-item-option">
             <div class="div-crud-buttons">
-                <a class="btn btn-outline-primary" id="btn-add-item-option">공통코드 등록</a>
+                <a class="btn btn-outline-primary" id="btn-add-item-option">옵션 등록</a>
             </div>
+            <div class="mb-3">
+                <table class="table table-horizontal table-bordered">
+                    <thead class="thead-strong">
+                    <tr>
+                        <th>상품명</th>
+                        <th>옵션</th>
+                        <th>등록일시</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody id="item-options">
 
-            <div class="mb-3" >
-                <div class="tableArea h200">
-                    <table class="table table-horizontal table-bordered">
-                        <thead class="thead-strong">
-                        <tr>
-                            <th>코드</th>
-                            <th>코드이름(영문)</th>
-                            <th>코드이름(국문)</th>
-                            <th>작성일시</th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody id="item-options">
-
-                        </tbody>
-                    </table>
-                </div>
-
+                    </tbody>
+                </table>
                 <div>
-                    <ul class="pagination pagination-sm justify-content-center" id="pagination-item-option" style="margin:20px 0">
+                    <ul class="pagination pagination-sm justify-content-center" id="pagination-item-option" >
                     </ul>
                 </div>
             </div>
             <div class="mb-5">
-                <form id="form-save-item-option">
-                    <div class="form-group">
-                        <input type="hidden" name="id" id="id" />
-                        <label for="code">코드</label>
-                        <input type="text" class="form-control" name="code" id="common-code" />
-                    </div>
-                    <div class="form-group">
-                        <label for="code-nameEng">코드이름(영문)</label>
-                        <input type="text" class="form-control" name="nameEng" id="code-nameEng" />
-                        <label for="code-nameKor">코드이름(국문)</label>
-                        <input type="text" class="form-control" name="nameKor" id="code-nameKor" />
-                    </div>
-                    <div class="form-group">
-                        <input type="hidden" class="form-control" name="groupId" id="groupId" readonly/>
-                    </div>
+                <form id="form-save-item-option" enctype="multipart/form-data">
+                    <input type="hidden" name="id" id="optionId" />
+                    <label for="itemMasterName">상품명</label>
+                    <input type="text" class="form-control mb-2" name="itemMasterName" id="itemMasterName" readonly />
+                    <label for="color">색상</label>
+                    <input type="text" class="form-control mb-2" name="color" id="color" />
+                    <label for="size">사이즈</label>
+                    <input type="text" class="form-control mb-2" name="size" id="size" placeholder="ONE SIZE" />
                     <a class="btn btn-primary" id="btn-save-item-option">Submit</a>
                 </form>
             </div>
-
         </div>
     </div>
 </div>

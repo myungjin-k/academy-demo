@@ -1,16 +1,17 @@
 var main = {
     init : function() {
         itemMaster.init();
-        //itemOption.init();
 
         $(document).on('click', '.btn-search-item-options', function(){
             var id = $(this).parents('tr').find('input[name="id"]').val();
+            var name = $(this).parents('tr').find('.itemName').text();
             $('#div-item-master').removeClass('active');
             $('#div-item-option').addClass('active').addClass('show');
 
             $('#tab-item-master').removeClass('active').prop('aria-selected', false);
             $('#tab-item-option').show().addClass('active').prop('aria-selected', true);
-            itemOption.list(id, 1);
+            itemOption.init(id, name);
+            //itemOption.list(id, 1);
         });
     }
 }
@@ -37,7 +38,7 @@ var itemMaster = {
         $('#btn-delete-thumbnail').click(function(){
            _this.deleteThumbnail();
         });
-        $(document).on('click', '.btn-modify', function(){
+        $(document).on('click', '#div-item-master .btn-modify', function(){
             var tr = $(this).parents('tr');
             var data = {
                 "id" : tr.find('input[name="id"]').val(),
@@ -49,11 +50,11 @@ var itemMaster = {
             };
             _this.setData(data);
         });
-        $(document).on('click', '.btn-delete', function(){
+        $(document).on('click', '#div-item-master .btn-delete', function(){
             var id = $(this).parents('tr').find('input[name="id"]').val();
             _this.delete(id);
         });
-        $(document).on('click', '.page-link', function(){
+        $(document).on('click', '#div-item-master page-link', function(){
             var link = $(this).text();
             if(link === 'prev'){
                 _this.firstPage = _this.firstPage - 5;
@@ -123,7 +124,7 @@ var itemMaster = {
                         + '<td>' + item.createAt +'</td>'
                         + '<td><a class="btn btn-sm btn-outline-dark btn-modify">수정</a>'
                         + '<a class="btn btn-sm btn-outline-dark btn-delete">삭제</a>'
-                        + '<a class="btn btn-sm btn-outline-dark btn-search-codes">옵션</a></td>'
+                        + '<a class="btn btn-sm btn-outline-dark btn-search-item-options">옵션</a></td>'
                         + '</tr>';
                     $('#item-masters').append(row);
                 });
@@ -164,7 +165,6 @@ var itemMaster = {
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
-
     },
     setData : function(data){
         //console.log(data);
@@ -205,10 +205,158 @@ var itemMaster = {
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
-
     }
 };
 var itemOption = {
+    masterId: '',
+    firstPage: 1,
+    lastPage: 5,
+    currPage: 1,
+    init : function(masterId, masterName) {
+        var _this = this;
+        _this.masterId = masterId;
+        _this.list(_this.firstPage);
+        $('#form-save-item-option input[name="itemMasterName"]').val(masterName);
+        $(document).on('click', '#div-item-option .page-link', function(){
+            var link = $(this).text();
+            if(link === 'prev'){
+                _this.firstPage = _this.firstPage - 5;
+                _this.lastPage = _this.lastPage - 5;
+                _this.list(_this.groupId, _this.firstPage);
+            } else if(link === 'next'){
+                _this.firstPage = _this.firstPage + 5;
+                _this.lastPage = _this.lastPage + 5;
+                _this.list(_this.groupId, _this.firstPage);
+            } else {
+                _this.list(_this.groupId, link);
+            }
+        });
 
+        $('#btn-add-item-option').click(function () {
+            _this.clearForm();
+        });
+        $('#btn-save-item-option').click(function (){
+            var id = $('#form-save-item-option').find('input[name="id"]').val();
+            if(id !== ''){
+                _this.update();
+            } else {
+                _this.save();
+            }
+        });
+        $(document).on('click', '#div-item-option .btn-delete', function(){
+            var id = $(this).parents('tr').find('input[name="id"]').val();
+            _this.delete(id);
+        });
+        $(document).on('click', '#div-item-option .btn-modify', function(){
+            var tr = $(this).parents('tr');
+            var data = {
+                "id" : tr.find('input[name="id"]').val(),
+                "color" : tr.find('.color').text(),
+                "size" : tr.find('.size').text()
+            };
+            _this.setData(data);
+        });
+    },
+    clearTable : function(){
+        $('#item-options').empty();
+    },
+    clearForm : function(){
+        var form = $('#form-save-item-option');
+        form.find('input[name="id"]').val('');
+        form.find('input[name="color"]').val('');
+        form.find('input[name="size"]').val('');
+    },
+    setData : function(data){
+        var form = $('#form-save-item-option');
+        form.find('input[name="id"]').val(data.id);
+        form.find('input[name="color"]').val(data.color);
+        form.find('input[name="size"]').val(data.size);
+    },
+    list : function (page){
+        var _this = this;
+        _this.clearTable();
+        _this.currPage = page;
+        $.ajax({
+            type: 'GET',
+            url: '/api/admin/itemMaster/' + _this.masterId +'/itemOption/list?page=' + page +'&size=' + 5 + '&direction=DESC',
+            dataType: 'json',
+            contentType:'application/json; charset=utf-8'
+        }).done(function(response) {
+            var resultData = response.response;
+            //console.log(resultData);
+            if(resultData.totalElements > 0){
+                $('#pagination-item-master').setPagination(
+                    page,
+                    _this.firstPage,
+                    Math.min(resultData.totalPages, _this.lastPage),
+                    5,
+                    resultData.totalPages
+                );
+                $.each(resultData.content, function(){
+                    //console.log(this);
+                    const option = this;
+                    const row = '<tr>'
+                        + '<input type="hidden" name="id" value="' + option.id + '"/>'
+                        + '<td class="masterId">' + option.itemMaster.itemName
+                        + '<input type="hidden" name="masterId" value="' + option.itemMaster.id + '"/>'
+                        +'</td>'
+                        + '<td class="optionInfo"><span class="color">' + option.color +'</span>/<span class="size">'+ option.size +'</span></td>'
+                        + '<td>' + option.createAt +'</td>'
+                        + '<td><a class="btn btn-sm btn-outline-dark btn-modify">수정</a>'
+                        + '<a class="btn btn-sm btn-outline-dark btn-delete">삭제</a>'
+                        + '</tr>';
+                    $('#item-options').append(row);
+                });
+            }
+
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+    },
+    save : function(){
+        var _this = this;
+        var data = $('#form-save-item-option').serializeObject();
+        $.ajax({
+            type: 'POST',
+            url: '/api/admin/itemMaster/' + _this.masterId + '/itemOption',
+            dataType: 'json',
+            contentType:'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function(response) {
+            console.log(response);
+            _this.list(1);
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+    },
+    update : function (){
+        var _this = this;
+        var data = $("#form-save-item-option").serializeObject();
+        $.ajax({
+            type: 'PUT',
+            url: '/api/admin/itemOption/' + data.id,
+            dataType: 'json',
+            contentType:'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function(response) {
+            //console.log(response);
+            _this.list(_this.currPage);
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+
+    },
+    delete : function (id){
+        var _this = this;
+        $.ajax({
+            type: 'DELETE',
+            url: '/api/admin/itemOption/' + id
+        }).done(function(response) {
+            //console.log(response);
+            _this.list(1);
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+    }
 };
 main.init();

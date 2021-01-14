@@ -110,6 +110,21 @@ public class ItemAdminController {
         );
     }
 
+    @GetMapping( "/itemMaster/{id}/itemOption/list")
+    @ApiOperation(value = "마스터별 상품 옵션 목록 조회")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "direction", dataType = "string", paramType = "query", defaultValue = "ASC", value = "정렬 방향"),
+            @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query", defaultValue = "0", value = "페이징 offset"),
+            @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query", defaultValue = "5", value = "조회 갯수")
+    })
+    public Response<Page<ItemMaster.ItemOption>> options(
+            @PathVariable @ApiParam(value = "대상 상품 마스터 PK", defaultValue = "8c1cbb792b8d447e9128d53920cf9366") String id,
+             PageRequest pageRequest) {
+        return OK(
+                itemOptionService.findAllByMasterIdWithPage(Id.of(ItemMaster.class, id), pageRequest.of())
+        );
+    }
+
     @PostMapping( "/itemMaster/{id}/itemOption")
     @ApiOperation(value = "상품 옵션 등록")
     public Response<ItemMaster.ItemOption> saveOption(@PathVariable @ApiParam(value = "대상 상품 마스터 PK", defaultValue = "8c1cbb792b8d447e9128d53920cf9366") String id, @RequestBody ItemOptionRequest request) {
@@ -130,7 +145,7 @@ public class ItemAdminController {
 
     @DeleteMapping("/itemOption/{optionId}")
     @ApiOperation(value = "상품 옵션 삭제")
-    public Response<Id<ItemMaster.ItemOption, String>> deleteOption(
+    public Response<ItemMaster.ItemOption> deleteOption(
             @PathVariable @ApiParam(value = "대상 상품 옵션 PK", defaultValue = "fb32787a91614b978cb94b0d47d7c676")  String optionId){
         return OK(
                 itemOptionService.deleteById(Id.of(ItemMaster.ItemOption.class, optionId))

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 import my.myungjin.academyDemo.domain.item.ItemMaster;
+import org.apache.commons.lang3.StringUtils;
 
 @ToString
 @Getter
@@ -16,8 +17,8 @@ public class ItemOptionRequest {
 
     public ItemMaster.ItemOption newItemOption(){
         return ItemMaster.ItemOption.builder()
-                .size(size)
-                .color(color)
+                .size(StringUtils.trimToNull(size))
+                .color(StringUtils.trimToNull(color))
                 .build();
     }
 
