@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static my.myungjin.academyDemo.commons.AttachedFile.toAttachedFile;
 import static my.myungjin.academyDemo.web.Response.OK;
@@ -127,9 +128,28 @@ public class ItemAdminController {
 
     @PostMapping( "/itemMaster/{id}/itemOption")
     @ApiOperation(value = "상품 옵션 등록")
-    public Response<ItemMaster.ItemOption> saveOption(@PathVariable @ApiParam(value = "대상 상품 마스터 PK", defaultValue = "8c1cbb792b8d447e9128d53920cf9366") String id, @RequestBody ItemOptionRequest request) {
+    public Response<ItemMaster.ItemOption> saveOption(
+            @PathVariable @ApiParam(value = "대상 상품 마스터 PK", defaultValue = "8c1cbb792b8d447e9128d53920cf9366") String id,
+            @RequestBody ItemOptionRequest request) {
         return OK(
-                itemOptionService.add(Id.of(ItemMaster.class, id), request.newItemOption())
+                itemOptionService.add(
+                    Id.of(ItemMaster.class, id), request.newItemOption()
+                )
+        );
+    }
+
+    @PostMapping( "/itemMaster/{id}/itemOption/list")
+    @ApiOperation(value = "상품 옵션 등록 (리스트)")
+    public Response<List<ItemMaster.ItemOption>> saveOptionList(
+            @PathVariable @ApiParam(value = "대상 상품 마스터 PK", defaultValue = "8c1cbb792b8d447e9128d53920cf9366") String id,
+            @RequestBody List<ItemOptionRequest> request) {
+        return OK(
+                itemOptionService.addList(
+                        Id.of(ItemMaster.class, id),
+                        request.stream()
+                            .map(ItemOptionRequest::newItemOption)
+                            .collect(Collectors.toList())
+                )
         );
     }
 

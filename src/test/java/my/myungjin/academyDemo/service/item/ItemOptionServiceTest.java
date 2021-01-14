@@ -75,4 +75,21 @@ public class ItemOptionServiceTest {
         List<ItemMaster.ItemOption> options = itemOptionService.findAllByMasterId(itemMasterId);
         assertThat(options.size(), is(4));
     }
+    @Test
+    @Order(5)
+    void 상품_옵션_등록하기_여러개() {
+        ItemMaster.ItemOption newOption1 = ItemMaster.ItemOption.builder()
+                .color("블랙")
+                .size("S")
+                .build();
+        ItemMaster.ItemOption newOption2 = ItemMaster.ItemOption.builder()
+                .color("블랙")
+                .size("M")
+                .build();
+        List<ItemMaster.ItemOption> newOptions = List.of(newOption1, newOption2);
+        List<ItemMaster.ItemOption> saved = itemOptionService.addList(itemMasterId, newOptions);
+        assertThat(saved.size(), is(2));
+        log.info("Saved Options: {}", saved);
+
+    }
 }
