@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.common.CodeGroup;
 import my.myungjin.academyDemo.domain.common.CommonCode;
+import my.myungjin.academyDemo.domain.item.ItemStatus;
 import my.myungjin.academyDemo.security.User;
 import my.myungjin.academyDemo.service.admin.CommonCodeService;
 import org.springframework.security.core.Authentication;
@@ -71,6 +72,7 @@ public class IndexController {
         setItemCategories(model);
         setLoginUser(model, authentication);
         model.addAttribute("isAdmin", true);
+        model.addAttribute("itemStatus", ItemStatus.values());
         return "admin/item";
     }
 

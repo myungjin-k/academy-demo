@@ -49,16 +49,16 @@ public class ItemDisplayService {
     public Page<ItemDisplay> findAllByCategory(@Valid Id<CommonCode, String> categoryId, Pageable pageable){
         List<ItemDisplay> list = itemMasterRepository.findAllByCategoryId(categoryId.value())
                 .stream()
-                .map(itemMaster -> findByItemMaster(Id.of(ItemMaster.class, itemMaster.getId())))
+                .map(itemMaster -> findByItemMaster(Id.of(ItemMaster.class, itemMaster.getId()))
+                        .orElseThrow(() -> new NotFoundException(ItemMaster.class, itemMaster.getId())))
                 .filter(itemDisplay -> itemDisplay.getStatus().equals(ItemStatus.ON_SALE))
                 .collect(Collectors.toList());
         return new PageImpl<>(list, pageable, list.size());
     }
 
     @Transactional(readOnly = true)
-    public ItemDisplay findByItemMaster(@Valid Id<ItemMaster, String> itemMasterId){
-        return itemDisplayRepository.findByItemMaster(itemMasterRepository.getOne(itemMasterId.value()))
-                .orElseThrow(() -> new NotFoundException(ItemMaster.class, itemMasterId));
+    public Optional<ItemDisplay> findByItemMaster(@Valid Id<ItemMaster, String> itemMasterId){
+        return itemDisplayRepository.findByItemMasterId(itemMasterId.value());
     }
 
     @Transactional(readOnly = true)

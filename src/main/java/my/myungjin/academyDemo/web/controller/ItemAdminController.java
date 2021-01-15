@@ -186,12 +186,22 @@ public class ItemAdminController {
         );
     }
 
+
     @GetMapping("/itemDisplay/{displayId}")
     @ApiOperation(value = "전시상품 단건 조회")
     public Response<ItemDisplay> getDisplayItem(
             @PathVariable @ApiParam(value = "대상 전시상품 PK", defaultValue = "f23ba30a47194a2c8a3fd2ccadd952a4") String displayId){
         return OK(
                 itemDisplayService.findById(Id.of(ItemDisplay.class, displayId))
+        );
+    }
+    @GetMapping("/itemMaster/{masterId}/itemDisplay")
+    @ApiOperation(value = "마스터별 전시상품 조회")
+    public Response<ItemDisplay> saveDisplayItem(
+            @PathVariable @ApiParam(value = "대상 상품 마스터 PK", defaultValue = "8c1cbb792b8d447e9128d53920cf9366") String masterId
+    ) {
+        return OK(
+                itemDisplayService.findByItemMaster(Id.of(ItemMaster.class, masterId)).orElse(null)
         );
     }
 
@@ -207,7 +217,7 @@ public class ItemAdminController {
         );
     }
 
-    @PostMapping(value = "/itemMaster/{masterId}/itemDisplay/{displayId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(value = "/itemMaster/{masterId}/itemDisplay/{displayId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiOperation(value = "전시상품 수정")
     public Response<ItemDisplay> updateDisplayItem(
             @PathVariable @ApiParam(value = "대상 상품 마스터 PK", defaultValue = "8c1cbb792b8d447e9128d53920cf9366") String masterId,

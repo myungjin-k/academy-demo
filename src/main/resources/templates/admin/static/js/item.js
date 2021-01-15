@@ -13,6 +13,17 @@ var main = {
             itemOption.init(id, name);
             //itemOption.list(id, 1);
         });
+
+        $(document).on('click', '.btn-search-item-display', function(){
+            var id = $(this).parents('tr').find('input[name="id"]').val();
+            var name = $(this).parents('tr').find('.itemName').text();
+            $('#div-item-master').removeClass('active');
+            $('#div-item-display').addClass('active').addClass('show');
+
+            $('#tab-item-master').removeClass('active').prop('aria-selected', false);
+            $('#tab-item-display').show().addClass('active').prop('aria-selected', true);
+            itemDisplay.init(id, name);
+        });
     }
 }
 
@@ -124,7 +135,8 @@ var itemMaster = {
                         + '<td>' + item.createAt +'</td>'
                         + '<td><a class="btn btn-sm btn-outline-dark btn-modify">수정</a>'
                         + '<a class="btn btn-sm btn-outline-dark btn-delete">삭제</a>'
-                        + '<a class="btn btn-sm btn-outline-dark btn-search-item-options">옵션</a></td>'
+                        + '<a class="btn btn-sm btn-outline-dark btn-search-item-options">옵션</a>'
+                        + '<a class="btn btn-sm btn-outline-dark btn-search-item-display">전시</a></td>'
                         + '</tr>';
                     $('#item-masters').append(row);
                 });
@@ -378,6 +390,132 @@ var itemOption = {
             _this.list(1);
             $('#div-item-option .optionAddPreview').empty();
             $('#btn-save-option-list').addClass('d-none');
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+    }
+};
+var itemDisplay = {
+    masterId : '',
+    init : function (masterId, masterName){
+        this.masterId = masterId;
+        $('#form-save-item-display').find('input[name="itemMasterName"]').val(masterName);
+        var _this = this;
+        _this.load();
+        $('#btn-save-item-display').click(function (){
+            var id = $('#form-save-item-display').find('input[name="id"]').val();
+            if(id !== ''){
+                _this.update();
+            } else {
+                _this.save();
+            }
+        });
+        $('#btn-delete-item-display').click(function(){
+            var id = $('#form-save-item-display').find('input[name="id"]').val();
+            _this.delete(id);
+        });
+        $('#btn-delete-detail-image').click(function(){
+            _this.deleteDetailImage();
+        });
+    },
+    clearForm : function(){
+        var form = $('#form-save-item-display');
+        form.find('input[name="id"]').val('');
+        form.find('input[name="itemDisplayName"]').val('');
+        form.find('input[name="salePrice"]').val('');
+        form.find('textarea').text('');
+        form.find('select[name="status"').val('0');
+        form.find('.detailImageInfo').addClass("d-none");
+        form.find('.oriDetailImage').prop("src", '');
+    },
+    deleteDetailImage : function(){
+        if(confirm("이미지를 삭제하시겠습니까?")){
+            var form = $('#form-save-item-display');
+            form.find('.detailImageInfo').addClass("d-none");
+            form.find('.oriDetailImage').prop("src", '');
+        }
+    },
+    load : function (){
+        var _this = this;
+        _this.clearForm();
+        $.ajax({
+            type: 'GET',
+            url: '/api/admin/itemMaster/' + _this.masterId +'/itemDisplay',
+            contentType:'application/json; charset=utf-8'
+        }).done(function(response) {
+            var resultData = response.response;
+            //console.log(resultData);
+            var form = $('#form-save-item-display');
+            form.find('input[name="id"]').val(resultData.id);
+            form.find('input[name="salePrice"]').val(resultData.salePrice);
+            form.find('input[name="itemDisplayName"]').val(resultData.itemDisplayName);
+            form.find('textarea[name="size"]').text(resultData.size);
+            form.find('textarea[name="material"]').text(resultData.material);
+            form.find('textarea[name="description"]').text(resultData.description);
+            form.find('textarea[name="notice"]').text(resultData.notice);
+            form.find('select[name="status"').val(resultData.status);
+            form.find('.detailImageInfo').removeClass("d-none");
+            form.find('.oriDetailImage').prop("src", resultData.detailImage);
+
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+    },
+    makeFormData : function(){
+        var data = new FormData();
+        var form = $('#form-save-item-display');
+        data.append('id', form.find("input[name='id']").val());
+        data.append('itemDisplayName', form.find("input[name='itemDisplayName']").val());
+        data.append('salePrice', form.find("input[name='salePrice']").val());
+        data.append('detailImage', form.find("input[name='detailImage']")[0].files[0]);
+        data.append('size', form.find('textarea[name="size"]').text());
+        data.append('material', form.find('textarea[name="material"]').text());
+        data.append('description', form.find('textarea[name="description"]').text());
+        data.append('notice', form.find('textarea[name="notice"]').text());
+        data.append('status', form.find('select[name="status"]').val());
+        return data;
+    },
+    save : function(){
+        var _this = this;
+        var data = $('#form-save-item-display').serializeObject();
+        $.ajax({
+            type: 'POST',
+            url: '/api/admin/itemMaster/' + _this.masterId + '/itemDisplay',
+            processData: false,
+            contentType: false,
+            data: data
+        }).done(function(response) {
+            console.log(response);
+            _this.list(1);
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+    },
+    update : function (){
+        var _this = this;
+        var data = _this.makeFormData();
+        $.ajax({
+            type: 'PUT',
+            url: '/api/admin/itemMaster/'+ _this.masterId +'/itemDisplay/' + data.id,
+            processData: false,
+            contentType: false,
+            data: data
+        }).done(function(response) {
+            //console.log(response);
+            alert('저장되었습니다.')
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+
+    },
+    delete : function (id){
+        var _this = this;
+        $.ajax({
+            type: 'DELETE',
+            url: '/api/admin/itemDisplay/' + id
+        }).done(function(response) {
+            //console.log(response);
+            _this.load();
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
