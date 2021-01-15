@@ -1,0 +1,89 @@
+
+<!-- Modal -->
+<div class="modal fade" id="optionAddModal" tabindex="-1" aria-labelledby="optionAddModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="optionAddModalLabel">옵션 간편 등록</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row mb-3">
+                        <div class="col" id="div-size-chk">
+                        </div>
+                    </div>
+                    <p class="text-danger d-block">※ 색상명 다수 등록 시 <b>','(쉽표)</b>로 구분해 주세요. </p>
+                    <div class="row mb-3">
+                        <div class="col-sm" id="div-color-chk">
+                            <input type="text" name="color" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btn-append-option">입력</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var addOptionModal = {
+        init : function(){
+            var _this = this;
+            _this.loadSizeList();
+
+            $("#optionAddModal #btn-append-option").click(function(){
+                var sizes = $('#optionAddModal #div-size-chk .chkSize:checked');
+                var colors = $('#optionAddModal #div-color-chk input[name="color"]').val().split(",");
+                var preview = $('.optionAddPreview');
+                preview.empty();
+                for(var i = 0; i < colors.length; i++){
+                    for(var j = 0; j < sizes.length; j++){
+                        var val = $(sizes[j]).val();
+                        preview.append('<span class="mr-1 newOption">' + colors[i]  + '/' + val +'</span>');
+                    }
+                    preview.append('<br/>');
+                    $('#btn-save-option-list').removeClass('d-none');
+                    $('#div-color-chk').val('');
+                    $('#optionAddModal').modal('hide');
+                }
+            });
+        },
+        loadSizeList : function(){
+            $.ajax({
+                type: 'GET',
+                url: '/api/admin/commonCode/search?codeGroup=SIZE',
+                dataType: 'json',
+                contentType:'application/json; charset=utf-8'
+            }).done(function(response) {
+                $('#div-size-chk').empty();
+                $.each(response, function(){
+                   // console.log(this);
+                    const size = this;
+                    const row = '<input type="checkbox" class="chkSize mr-1" id="' + size.nameEng +'" value="' + size.nameEng +'" checked/>' +
+                            '<label class="mr-3" for="' + size.nameEng +'">' + size.nameEng +'</label>'
+                    $('#div-size-chk').append(row);
+                });
+            }).fail(function (error) {
+                alert(JSON.stringify(error));
+            });
+        },
+        appendResult : function(){
+            var sizes = $('#optionAddModal #div-size-chk .chkSize:checked').val();
+            var colors = $('#optionAddModal #div-color-chk').val().split(",");
+            var preview = $('.optionAddPreview');
+            for(var i = 0; i < colors.size; i++){
+                for(var j = 0; j < sizes.size; j++){
+                    this.newOptions.push({"color" : colors[i], "size" : sizes[j]});
+                    preview.append('<span>' + colors[i]  + '/' + size[i] +'</span>');
+                }
+                preview.append('<br/>');
+            }
+        }
+    };
+    addOptionModal.init();
+</script>

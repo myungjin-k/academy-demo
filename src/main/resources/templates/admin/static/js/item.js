@@ -222,13 +222,13 @@ var itemOption = {
             if(link === 'prev'){
                 _this.firstPage = _this.firstPage - 5;
                 _this.lastPage = _this.lastPage - 5;
-                _this.list(_this.groupId, _this.firstPage);
+                _this.list(_this.firstPage);
             } else if(link === 'next'){
                 _this.firstPage = _this.firstPage + 5;
                 _this.lastPage = _this.lastPage + 5;
-                _this.list(_this.groupId, _this.firstPage);
+                _this.list(_this.firstPage);
             } else {
-                _this.list(_this.groupId, link);
+                _this.list(link);
             }
         });
 
@@ -255,6 +255,14 @@ var itemOption = {
                 "size" : tr.find('.size').text()
             };
             _this.setData(data);
+        });
+        $('#btn-save-option-list').click(function(){
+            var newOptions = [];
+            $('.optionAddPreview .newOption').each(function () {
+                var optionStr = $(this).text().split('/');
+                newOptions.push({"color" : optionStr[0], "size" : optionStr[1]});
+            });
+           _this.saveList(newOptions);
         });
     },
     clearTable : function(){
@@ -284,14 +292,14 @@ var itemOption = {
         }).done(function(response) {
             var resultData = response.response;
             //console.log(resultData);
+            $('#pagination-item-option').setPagination(
+                page,
+                _this.firstPage,
+                Math.min(resultData.totalPages, _this.lastPage),
+                5,
+                resultData.totalPages
+            );
             if(resultData.totalElements > 0){
-                $('#pagination-item-master').setPagination(
-                    page,
-                    _this.firstPage,
-                    Math.min(resultData.totalPages, _this.lastPage),
-                    5,
-                    resultData.totalPages
-                );
                 $.each(resultData.content, function(){
                     //console.log(this);
                     const option = this;
@@ -354,6 +362,22 @@ var itemOption = {
         }).done(function(response) {
             //console.log(response);
             _this.list(1);
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+    },
+    saveList : function (newOptions) {
+        var _this = this;
+        $.ajax({
+            type: 'POST',
+            url: '/api/admin/itemMaster/' + _this.masterId + '/itemOption/list',
+            dataType: 'json',
+            contentType:'application/json; charset=utf-8',
+            data: JSON.stringify(newOptions)
+        }).done(function(response) {
+            _this.list(1);
+            $('#div-item-option .optionAddPreview').empty();
+            $('#btn-save-option-list').addClass('d-none');
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
