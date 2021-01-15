@@ -17,8 +17,8 @@ public class ItemOptionRequest {
 
     public ItemMaster.ItemOption newItemOption(){
         return ItemMaster.ItemOption.builder()
-                .size(StringUtils.trimToNull(size))
-                .color(StringUtils.trimToNull(color))
+                .size(size.isBlank() ? "ONE SIZE" : size)
+                .color(color.isBlank() ? "ONE COLOR" : color)
                 .build();
     }
 
