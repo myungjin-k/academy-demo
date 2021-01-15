@@ -14,6 +14,8 @@ public class ItemDisplayRequest {
 
     private int salePrice;
 
+    private String itemDisplayName;
+
     private String size;
 
     private String material;
@@ -30,6 +32,7 @@ public class ItemDisplayRequest {
 
     public ItemDisplay newItemDisplay(){
         return ItemDisplay.builder()
+                .itemDisplayName(itemDisplayName)
                 .salePrice(salePrice)
                 .size(size)
                 .material(material)
@@ -42,6 +45,7 @@ public class ItemDisplayRequest {
     public ItemDisplay toItemDisplay(Id<ItemDisplay, String> displayId){
         return ItemDisplay.builder()
                 .id(displayId.value())
+                .itemDisplayName(itemDisplayName)
                 .salePrice(salePrice)
                 .size(size)
                 .material(material)

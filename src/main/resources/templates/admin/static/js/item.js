@@ -414,7 +414,7 @@ var itemDisplay = {
         $('#form-save-item-display').find('input[name="itemMasterName"]').val(masterName);
         var _this = this;
         _this.load();
-        $('#btn-save-item-display').click(function (){
+        $('#div-item-display #btn-save-item-display').click(function (){
             var id = $('#form-save-item-display').find('input[name="id"]').val();
             if(id !== ''){
                 _this.update();
@@ -435,7 +435,7 @@ var itemDisplay = {
         form.find('input[name="id"]').val('');
         form.find('input[name="itemDisplayName"]').val('');
         form.find('input[name="salePrice"]').val('');
-        form.find('textarea').text('');
+        form.find('textarea').val('');
         form.find('select[name="status"').val('0');
         form.find('.detailImageInfo').addClass("d-none");
         form.find('.oriDetailImage').prop("src", '');
@@ -456,19 +456,19 @@ var itemDisplay = {
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
             var resultData = response.response;
-            console.log(resultData.status);
-            var form = $('#form-save-item-display');
-            form.find('input[name="id"]').val(resultData.id);
-            form.find('input[name="salePrice"]').val(resultData.salePrice);
-            form.find('input[name="itemDisplayName"]').val(resultData.itemDisplayName);
-            form.find('textarea[name="size"]').text(resultData.size);
-            form.find('textarea[name="material"]').text(resultData.material);
-            form.find('textarea[name="description"]').text(resultData.description);
-            form.find('textarea[name="notice"]').text(resultData.notice);
-            form.find('select[name="status"').val(resultData.status);
-            form.find('.detailImageInfo').removeClass("d-none");
-            form.find('.oriDetailImage').prop("src", resultData.detailImage);
-
+            if(resultData !== null){
+                var form = $('#form-save-item-display');
+                form.find('input[name="id"]').val(resultData.id);
+                form.find('input[name="salePrice"]').val(resultData.salePrice);
+                form.find('input[name="itemDisplayName"]').val(resultData.itemDisplayName);
+                form.find('textarea[name="size"]').val(resultData.size);
+                form.find('textarea[name="material"]').val(resultData.material);
+                form.find('textarea[name="description"]').val(resultData.description);
+                form.find('textarea[name="notice"]').val(resultData.notice);
+                form.find('select[name="status"').val(resultData.status);
+                form.find('.detailImageInfo').removeClass("d-none");
+                form.find('.oriDetailImage').prop("src", resultData.detailImage);
+            }
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
@@ -479,12 +479,13 @@ var itemDisplay = {
         data.append('id', form.find("input[name='id']").val());
         data.append('itemDisplayName', form.find("input[name='itemDisplayName']").val());
         data.append('salePrice', form.find("input[name='salePrice']").val());
-        data.append('detailImage', form.find("input[name='detailImage']")[0].files[0]);
-        data.append('size', form.find('textarea[name="size"]').text());
-        data.append('material', form.find('textarea[name="material"]').text());
-        data.append('description', form.find('textarea[name="description"]').text());
-        data.append('notice', form.find('textarea[name="notice"]').text());
+        data.append('detailImageFile', form.find("input[name='detailImage']")[0].files[0]);
+        data.append('size', form.find('textarea[name="size"]').val());
+        data.append('material', form.find('textarea[name="material"]').val());
+        data.append('description', form.find('textarea[name="description"]').val());
+        data.append('notice', form.find('textarea[name="notice"]').val());
         data.append('status', form.find('select[name="status"]').val());
+        console.log(data.getAll("size"));
         return data;
     },
     save : function(){
@@ -514,7 +515,8 @@ var itemDisplay = {
             data: data
         }).done(function(response) {
             //console.log(response);
-            alert('저장되었습니다.')
+            alert('저장되었습니다.');
+            _this.load();
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
