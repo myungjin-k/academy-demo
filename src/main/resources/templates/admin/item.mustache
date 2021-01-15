@@ -106,45 +106,89 @@
                 </form>
             </div>
         </div>
-    </div>
-    <!-- 상품 전시 -->
-    <div class="tab-pane fade p-1" id="div-item-display" role="tabpanel" aria-labelledby="tab-item-display" style="height: 600px; overflow-y: scroll;">
-        <div class="div-crud-buttons">
-            <a class="btn btn-outline-primary" id="btn-delete-item-display">전시상품 삭제</a>
-            <a class="btn btn-outline-primary" id="btn-load-item-display-options">전시상품 옵션</a>
+        <!-- 상품 전시 -->
+        <div class="tab-pane fade p-1" id="div-item-display" role="tabpanel" aria-labelledby="tab-item-display" style="height: 600px; overflow-y: scroll;">
+            <div class="div-crud-buttons">
+                <a class="btn btn-outline-primary" id="btn-delete-item-display">전시상품 삭제</a>
+                <a class="btn btn-outline-primary" id="btn-load-item-display-options">전시상품 옵션</a>
+            </div>
+            <div class="mb-5">
+                <form id="form-save-item-display" enctype="multipart/form-data">
+                    <input type="hidden" name="id" id="displayId" />
+                    <label for="itemParentMasterName">상품 마스터명</label>
+                    <input type="text" class="form-control mb-2" name="itemMasterName" id="itemParentMasterName" readonly />
+
+                    <label for="itemDisplayName">전시상품명</label>
+                    <input type="text" class="form-control mb-2" name="itemDisplayName" id="itemDisplayName" />
+
+                    <label for="status">전시상태</label>
+                    <select class="form-control mb-2" name="status" id="status">
+                        {{#itemStatus}}
+                            <option value="{{name}}">{{description}}</option>
+                        {{/itemStatus}}
+                    </select>
+
+                    <label for="salePrice">판매가</label>
+                    <input type="text" class="form-control mb-2" name="salePrice" id="salePrice" />
+                    <label for="detailImage">이미지</label>
+                    <p class="detailImageInfo d-none"><img class="oriDetailImage" width="50px"/><span id="btn-delete-detail-image" class="btn btn-sm btn-outline-dark ml-2">X</span></p>
+                    <input type="file" class="form-control mb-2" accept="image/png, image/jpeg" name="detailImage" id="detailImage"/>
+
+                    <label for="detailSize">사이즈상세</label>
+                    <textarea class="form-control mb-2" name="size" id="detailSize" ></textarea>
+                    <label for="material">소재</label>
+                    <textarea class="form-control mb-2" name="material" id="material" ></textarea>
+                    <label for="description">상세설명</label>
+                    <textarea class="form-control mb-2" name="description" id="description" ></textarea>
+                    <label for="notice">공지</label>
+                    <textarea class="form-control mb-2" name="notice" id="notice" ></textarea>
+                    <a class="btn btn-primary" id="btn-save-item-display">Submit</a>
+                </form>
+            </div>
         </div>
-        <div class="mb-5">
-            <form id="form-save-item-display" enctype="multipart/form-data">
-                <input type="hidden" name="id" id="displayId" />
-                <label for="itemMasterName">상품 마스터명</label>
-                <input type="text" class="form-control mb-2" name="itemMasterName" id="itemMasterName" readonly />
+        <!-- 상품 전시 옵션 -->
+        <div class="tab-pane fade p-1" id="div-item-display-option" role="tabpanel" aria-labelledby="tab-item-display-option" >
 
-                <label for="itemDisplayName">전시상품명</label>
-                <input type="text" class="form-control mb-2" name="itemDisplayName" id="itemDisplayName" />
+            <div class="div-crud-buttons">
+                <div class="optionAddPreview"></div>
+                <a class="btn btn-outline-primary d-none" id="btn-save-displa-option-list" >저장</a>
+                <a class="btn btn-outline-primary" data-toggle="modal" data-target="#optionAddModal">옵션 간편 등록</a>
+            </div>
 
-                <label for="status">전시상태</label>
-                <select class="form-control mb-2" name="status" id="status">
-                    {{#itemStatus}}
-                        <option value="{{name}}">{{description}}</option>
-                    {{/itemStatus}}
-                </select>
+            <div class="div-crud-buttons">
+                <a class="btn btn-outline-primary" id="btn-add-item-display-option">옵션 등록</a>
+            </div>
+            <div class="mb-3">
+                <table class="table table-horizontal table-bordered">
+                    <thead class="thead-strong">
+                    <tr>
+                        <th>상품명</th>
+                        <th>옵션</th>
+                        <th>등록일시</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody id="item-display-options">
 
-                <label for="salePrice">판매가</label>
-                <input type="text" class="form-control mb-2" name="salePrice" id="salePrice" />
-                <label for="detailImage">이미지</label>
-                <p class="detailImageInfo d-none"><img class="oriDetailImage" width="50px"/><span id="btn-delete-detail-image" class="btn btn-sm btn-outline-dark ml-2">X</span></p>
-                <input type="file" class="form-control mb-2" accept="image/png, image/jpeg" name="detailImage" id="detailImage"/>
-
-                <label for="detailSize">사이즈상세</label>
-                <textarea class="form-control mb-2" name="size" id="detailSize" ></textarea>
-                <label for="material">소재</label>
-                <textarea class="form-control mb-2" name="material" id="material" ></textarea>
-                <label for="description">상세설명</label>
-                <textarea class="form-control mb-2" name="description" id="description" ></textarea>
-                <label for="notice">공지</label>
-                <textarea class="form-control mb-2" name="notice" id="notice" ></textarea>
-                <a class="btn btn-primary" id="btn-save-item-display">Submit</a>
-            </form>
+                    </tbody>
+                </table>
+                <div>
+                    <ul class="pagination pagination-sm justify-content-center" id="pagination-item-display-option" >
+                    </ul>
+                </div>
+            </div>
+            <div class="mb-5">
+                <form id="form-save-item-display-option" >
+                    <input type="hidden" name="id" id="displayOptionId" />
+                    <label for="itemParentDisplayName">상품명</label>
+                    <input type="text" class="form-control mb-2" name="itemDisplayName" id="itemParentDisplayName" readonly />
+                    <label for="displayColor">색상</label>
+                    <input type="text" class="form-control mb-2" name="color" id="displayColor" />
+                    <label for="displaySize">사이즈</label>
+                    <input type="text" class="form-control mb-2" name="size" id="displaySize" placeholder="ONE SIZE" />
+                    <a class="btn btn-primary" id="btn-save-item-display-option">Submit</a>
+                </form>
+            </div>
         </div>
     </div>
 </div>

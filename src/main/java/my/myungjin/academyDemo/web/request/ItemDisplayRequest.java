@@ -22,10 +22,10 @@ public class ItemDisplayRequest {
 
     private String notice;
 
-    private int status;
+    private String status;
 
     public ItemStatus getStatus(){
-        return ItemStatus.of(status);
+        return ItemStatus.valueOf(status);
     }
 
     public ItemDisplay newItemDisplay(){
@@ -35,7 +35,7 @@ public class ItemDisplayRequest {
                 .material(material)
                 .description(description)
                 .notice(notice)
-                .status(ItemStatus.of(status))
+                .status(ItemStatus.valueOf(status))
                 .build();
     }
 
@@ -47,7 +47,7 @@ public class ItemDisplayRequest {
                 .material(material)
                 .description(description)
                 .notice(notice)
-                .status(ItemStatus.of(status))
+                .status(ItemStatus.valueOf(status))
                 .build();
     }
 }

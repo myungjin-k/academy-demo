@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static java.util.Optional.ofNullable;
+
 @RequiredArgsConstructor
 @Service
 public class ItemDisplayService {
@@ -78,7 +80,7 @@ public class ItemDisplayService {
                 }).orElseThrow(() -> new NotFoundException(ItemDisplay.class, itemDisplayId));
     }
 
-    private String uploadDetailImage(AttachedFile detailImageFile) {
+    private Optional<String> uploadDetailImage(AttachedFile detailImageFile) {
         String detailImageUrl = null;
         if (detailImageFile != null) {
             String key = detailImageFile.randomName(S3_BASE_PATH, "jpeg");
@@ -92,7 +94,7 @@ public class ItemDisplayService {
                 log.warn("Amazon S3 error (key: {}): {}", key, e.getMessage(), e);
             }
         }
-        return detailImageUrl;
+        return ofNullable(detailImageUrl);
     }
 
     @Transactional
@@ -100,7 +102,7 @@ public class ItemDisplayService {
                             @NotNull AttachedFile detailImgFile){
         return findMaster(itemMasterId)
                 .map(itemMaster -> {
-                    newDisplay.setDetailImage(uploadDetailImage(detailImgFile));
+                    newDisplay.setDetailImage(uploadDetailImage(detailImgFile).orElseThrow(() -> new IllegalArgumentException("detailImage should not be null")));
                     newDisplay.setItemMaster(itemMaster);
                     return save(newDisplay);
                 }).orElseThrow(() -> new NotFoundException(ItemMaster.class, itemMasterId));
@@ -116,7 +118,7 @@ public class ItemDisplayService {
 
     @Transactional
     public ItemDisplay deleteItemById(@Valid Id<ItemDisplay, String> itemDisplayId){
-        ItemDisplay itemDisplay = getOne(itemDisplayId.value());
+        ItemDisplay itemDisplay = findById(itemDisplayId);
         itemDisplayRepository.delete(itemDisplay);
         deleteDetailImage(itemDisplay.getDetailImage());
         return itemDisplay;
@@ -128,7 +130,9 @@ public class ItemDisplayService {
         ItemDisplay itemDisplay = getOne(itemDisplayId.value());
         deleteDetailImage(itemDisplay.getDetailImage());
         itemDisplay.modify(toBeUpdated);
-        itemDisplay.setDetailImage(uploadDetailImage(detailImgFile));
+        String newDetailImage = uploadDetailImage(detailImgFile).orElse(null);
+        if(newDetailImage != null)
+            itemDisplay.setDetailImage(newDetailImage);
         itemDisplay.setItemMaster(itemMasterRepository.getOne(itemMasterId.value()));
         return save(itemDisplay);
     }

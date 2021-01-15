@@ -223,7 +223,7 @@ public class ItemAdminController {
             @PathVariable @ApiParam(value = "대상 상품 마스터 PK", defaultValue = "8c1cbb792b8d447e9128d53920cf9366") String masterId,
             @PathVariable @ApiParam(value = "대상 전시상품 PK", defaultValue = "f23ba30a47194a2c8a3fd2ccadd952a4") String displayId,
             @ModelAttribute ItemDisplayRequest request,
-            @RequestPart MultipartFile detailImageFile
+            @RequestPart(required = false) MultipartFile detailImageFile
     ) throws IOException {
         return OK(
                 itemDisplayService.modify(

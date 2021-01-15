@@ -24,6 +24,18 @@ var main = {
             $('#tab-item-display').show().addClass('active').prop('aria-selected', true);
             itemDisplay.init(id, name);
         });
+
+        $(document).on('click', '.btn-search-item-display-option', function(){
+            var id = $('#form-save-item-display').find('input[name="id"]').val();
+            var name = $('#form-save-item-display').find('input[name="itemDisplayName"]').val();
+            $('#div-item-master').removeClass('active');
+            $('#div-item-display-option').addClass('active').addClass('show');
+
+            $('#tab-item-master').removeClass('active').prop('aria-selected', false);
+            $('#tab-item-display-option').show().addClass('active').prop('aria-selected', true);
+            //itemDisplay.init(id, name);
+        });
+
     }
 }
 
@@ -444,7 +456,7 @@ var itemDisplay = {
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
             var resultData = response.response;
-            //console.log(resultData);
+            console.log(resultData.status);
             var form = $('#form-save-item-display');
             form.find('input[name="id"]').val(resultData.id);
             form.find('input[name="salePrice"]').val(resultData.salePrice);
@@ -477,7 +489,7 @@ var itemDisplay = {
     },
     save : function(){
         var _this = this;
-        var data = $('#form-save-item-display').serializeObject();
+        var data = _this.makeFormData();
         $.ajax({
             type: 'POST',
             url: '/api/admin/itemMaster/' + _this.masterId + '/itemDisplay',
@@ -486,7 +498,7 @@ var itemDisplay = {
             data: data
         }).done(function(response) {
             console.log(response);
-            _this.list(1);
+            _this.load();
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
@@ -496,7 +508,7 @@ var itemDisplay = {
         var data = _this.makeFormData();
         $.ajax({
             type: 'PUT',
-            url: '/api/admin/itemMaster/'+ _this.masterId +'/itemDisplay/' + data.id,
+            url: '/api/admin/itemMaster/'+ _this.masterId +'/itemDisplay/' + data.getAll('id'),
             processData: false,
             contentType: false,
             data: data
@@ -506,7 +518,6 @@ var itemDisplay = {
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
-
     },
     delete : function (id){
         var _this = this;
