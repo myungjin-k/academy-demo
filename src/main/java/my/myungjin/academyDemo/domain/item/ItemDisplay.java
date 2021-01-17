@@ -54,7 +54,7 @@ public class ItemDisplay {
     private String description;
 
     @Getter
-    @Size(min = 1, max = 1000)
+    @Size(max = 1000)
     @Column(name = "notice")
     private String notice;
 

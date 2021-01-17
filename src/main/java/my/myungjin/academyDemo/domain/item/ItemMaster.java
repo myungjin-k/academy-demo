@@ -59,7 +59,7 @@ public class ItemMaster {
 
     @Setter @Getter
     @ManyToOne(targetEntity = CommonCode.class)
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = false)
     private CommonCode category;
 
     @Getter

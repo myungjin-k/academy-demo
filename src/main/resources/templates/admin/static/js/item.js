@@ -44,13 +44,13 @@ var itemMaster = {
     lastPage: 5,
     init : function() {
         var _this = this;
-        $('#btn-load-item-masters').click(function () {
+        $('#btn-load-item-masters').unbind().bind("click", function () {
             _this.list(1);
         });
-        $('#btn-add-item-master').click(function () {
+        $('#btn-add-item-master').unbind().bind("click", function () {
             _this.clearForm();
         });
-        $('#div-item-master #btn-save-item-master').click(function (){
+        $('#div-item-master #btn-save-item-master').unbind().bind("click", function (){
             var id = $('#form-save-item-master').find('input[name="id"]').val();
             if(id !== ''){
                 _this.update(_this.firstPage);
@@ -58,7 +58,7 @@ var itemMaster = {
                 _this.save();
             }
         });
-        $('#btn-delete-thumbnail').click(function(){
+        $('#btn-delete-thumbnail').unbind().bind("click", function(){
            _this.deleteThumbnail();
         });
         $(document).on('click', '#div-item-master .btn-modify', function(){
@@ -105,6 +105,7 @@ var itemMaster = {
         form.find('input[name="price"]').val('');
         form.find('.thumbnailInfo').addClass("d-none");
         form.find('.oriThumbnail').prop("src", '');
+        form.find('.input[name="thumbnail"]')[0].files[0] = null;
     },
     deleteThumbnail : function(){
         if(confirm("이미지를 삭제하시겠습니까?")){
@@ -259,7 +260,7 @@ var itemOption = {
         $('#btn-add-item-option').click(function () {
             _this.clearForm();
         });
-        $('#div-item-option #btn-save-item-option').click(function (){
+        $('#div-item-option #btn-save-item-option').unbind().bind("click", function (){
             var id = $('#form-save-item-option').find('input[name="id"]').val();
             if(id !== ''){
                 _this.update();
@@ -280,7 +281,7 @@ var itemOption = {
             };
             _this.setData(data);
         });
-        $('#btn-save-option-list').click(function(){
+        $('#btn-save-option-list').unbind().bind("click", function(){
             var newOptions = [];
             $('.optionAddPreview .newOption').each(function () {
                 var optionStr = $(this).text().split('/');
@@ -414,7 +415,7 @@ var itemDisplay = {
         $('#form-save-item-display').find('input[name="itemMasterName"]').val(masterName);
         var _this = this;
         _this.load();
-        $('#div-item-display #btn-save-item-display').click(function (){
+        $('#div-item-display #btn-save-item-display').unbind().bind("click", function (){
             var id = $('#form-save-item-display').find('input[name="id"]').val();
             if(id !== ''){
                 _this.update();
@@ -422,11 +423,11 @@ var itemDisplay = {
                 _this.save();
             }
         });
-        $('#btn-delete-item-display').click(function(){
+        $('#btn-delete-item-display').unbind().bind("click", function(){
             var id = $('#form-save-item-display').find('input[name="id"]').val();
             _this.delete(id);
         });
-        $('#btn-delete-detail-image').click(function(){
+        $('#btn-delete-detail-image').unbind().bind("click", function(){
             _this.deleteDetailImage();
         });
     },
@@ -439,6 +440,7 @@ var itemDisplay = {
         form.find('select[name="status"').val('0');
         form.find('.detailImageInfo').addClass("d-none");
         form.find('.oriDetailImage').prop("src", '');
+        form.find('input[name="detailImage"]')[0].files[0] = null;
     },
     deleteDetailImage : function(){
         if(confirm("이미지를 삭제하시겠습니까?")){
