@@ -60,7 +60,7 @@ public class ItemMaster {
     @Setter @Getter
     @JsonManagedReference
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "category_id")
     private CommonCode category;
 
     @Getter
