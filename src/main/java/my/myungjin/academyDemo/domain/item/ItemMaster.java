@@ -58,6 +58,7 @@ public class ItemMaster {
     private Collection<ItemOption> options;
 
     @Setter @Getter
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private CommonCode category;

@@ -64,7 +64,7 @@ DROP TABLE IF EXISTS item_master CASCADE;
 CREATE TABLE item_master (
                              id                   varchar(50) NOT NULL,
                              item_name            varchar(50) NOT NULL,
-                             category_id          varchar(255) NOT NULL,
+                             category_id          varchar(50) NOT NULL,
                              price                int DEFAULT 0,
                              thumbnail            varchar(255),
                              create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
