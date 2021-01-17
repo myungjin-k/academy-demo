@@ -50,7 +50,7 @@ var itemMaster = {
         $('#btn-add-item-master').click(function () {
             _this.clearForm();
         });
-        $('#btn-save-item-master').click(function (){
+        $('#div-item-master #btn-save-item-master').click(function (){
             var id = $('#form-save-item-master').find('input[name="id"]').val();
             if(id !== ''){
                 _this.update(_this.firstPage);
@@ -259,7 +259,7 @@ var itemOption = {
         $('#btn-add-item-option').click(function () {
             _this.clearForm();
         });
-        $('#btn-save-item-option').click(function (){
+        $('#div-item-option #btn-save-item-option').click(function (){
             var id = $('#form-save-item-option').find('input[name="id"]').val();
             if(id !== ''){
                 _this.update();
@@ -498,7 +498,7 @@ var itemDisplay = {
             contentType: false,
             data: data
         }).done(function(response) {
-            console.log(response);
+            //console.log(response);
             _this.load();
         }).fail(function (error) {
             alert(JSON.stringify(error));
