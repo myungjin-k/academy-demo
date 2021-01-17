@@ -104,6 +104,7 @@ public class ItemDisplayService {
                 .map(itemMaster -> {
                     newDisplay.setDetailImage(uploadDetailImage(detailImgFile).orElseThrow(() -> new IllegalArgumentException("detailImage should not be null")));
                     newDisplay.setItemMaster(itemMaster);
+                    log.info("New Item Display: {}", newDisplay);
                     return save(newDisplay);
                 }).orElseThrow(() -> new NotFoundException(ItemMaster.class, itemMasterId));
     }

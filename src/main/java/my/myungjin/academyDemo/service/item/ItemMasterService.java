@@ -81,6 +81,7 @@ public class ItemMasterService {
                 .orElseThrow(() -> new NotFoundException(CommonCode.class, categoryId));
         newItem.setThumbnail(uploadThumbnail(thumbnailFile).orElseThrow(() -> new IllegalArgumentException("thumbnail should not be null!")));
         newItem.setCategory(category);
+        log.info("New Item Master: {}", newItem);
         return save(newItem);
     }
 
