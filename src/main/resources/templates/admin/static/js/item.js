@@ -485,7 +485,7 @@ var itemDisplay = {
         data.append('description', form.find('textarea[name="description"]').val());
         data.append('notice', form.find('textarea[name="notice"]').val());
         data.append('status', form.find('select[name="status"]').val());
-        console.log(data.getAll("size"));
+        //console.log(data.getAll("size"));
         return data;
     },
     save : function(){
