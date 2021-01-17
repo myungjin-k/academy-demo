@@ -58,7 +58,7 @@ public class ItemMaster {
     private Collection<ItemOption> options;
 
     @Setter @Getter
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = CommonCode.class)
+    @ManyToOne(targetEntity = CommonCode.class)
     @JoinColumn(name = "category_id")
     private CommonCode category;
 
