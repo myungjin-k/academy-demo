@@ -77,12 +77,12 @@ public class ItemMasterService {
 
     @Transactional
     public ItemMaster saveItemMaster(@Valid Id<CommonCode, String> categoryId, @Valid ItemMaster newItem, @NotNull AttachedFile thumbnailFile) {
-        CommonCode category = commonCodeRepository.findById(categoryId.value())
-                .orElseThrow(() -> new NotFoundException(CommonCode.class, categoryId));
-        newItem.setThumbnail(uploadThumbnail(thumbnailFile).orElseThrow(() -> new IllegalArgumentException("thumbnail should not be null!")));
-        newItem.setCategory(category);
-        log.info("New Item Master: {}", newItem);
-        return save(newItem);
+        return commonCodeRepository.findById(categoryId.value())
+                .map(category -> {
+                    newItem.setThumbnail(uploadThumbnail(thumbnailFile).orElseThrow(() -> new IllegalArgumentException("thumbnail should not be null!")));
+                    newItem.setCategory(category);
+                    return save(newItem);
+                }).orElseThrow(() -> new NotFoundException(CommonCode.class, categoryId));
     }
 
     private void deleteThumbnail(String thumbnail){
@@ -137,6 +137,7 @@ public class ItemMasterService {
     }
 
     private ItemMaster save(ItemMaster itemMaster){
+        log.info("New Item Master: {}", itemMaster);
         return itemMasterRepository.save(itemMaster);
     }
 
