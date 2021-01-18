@@ -64,8 +64,8 @@ public class CommonCodeService {
     }
 
     @Transactional(readOnly = true)
-    public Iterable<CodeGroup> search(String code, String nameEng, String nameKor){
-        return  codeGroupRepository.findAll(CodeGroupPredicate.search(code, nameEng, nameKor));
+    public List<CodeGroup> search(String code, String nameEng, String nameKor){
+        return (List<CodeGroup>) codeGroupRepository.findAll(CodeGroupPredicate.search(code, nameEng, nameKor));
     }
 
     @Cacheable(value="commonCodeCache", key="#groupId.value()")

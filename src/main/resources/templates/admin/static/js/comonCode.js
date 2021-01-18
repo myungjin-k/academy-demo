@@ -79,6 +79,11 @@ var codeGroup = {
                 _this.list(_this.groupId, link);
             }
         });
+        $('#btn-search-code-group').click(function (){
+            _this.firstPage = 1;
+            _this.lastPage = 5;
+            _this.list(_this.firstPage);
+        });
     },
     clearTable : function(){
         $('#groups').empty();
@@ -93,9 +98,10 @@ var codeGroup = {
     list : function (page){
         var _this = this;
         this.clearTable();
+        var param = $('#input-search-code-group').val();
         $.ajax({
             type: 'GET',
-            url: '/api/admin/codeGroup/list?page=' + page +'&size=' + 5 + '&direction=ASC',
+            url: '/api/admin/codeGroup/search?code='+ param +'&page=' + page +'&size=' + 5 + '&direction=ASC',
             dataType: 'json',
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
