@@ -91,6 +91,11 @@ var itemMaster = {
             }
         });
 
+        $('#btn-search-item-master').click(function (){
+            _this.firstPage = 1;
+            _this.lastPage = 5;
+            _this.list(_this.firstPage);
+        });
     },
     clearTable : function(){
         $('#item-masters').empty();
@@ -116,9 +121,10 @@ var itemMaster = {
     list : function (page){
         var _this = this;
         this.clearTable();
+        var param = $('#input-search-item-master').val();
         $.ajax({
             type: 'GET',
-            url: '/api/admin/itemMaster/list?page=' + page +'&size=' + 5 + '&direction=DESC',
+            url: '/api/admin/itemMaster/search?itemName=' + param +'&page=' + page +'&size=' + 5 + '&direction=DESC',
             dataType: 'json',
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {

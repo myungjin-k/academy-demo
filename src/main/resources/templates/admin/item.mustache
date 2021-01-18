@@ -17,6 +17,11 @@
     <!-- 상품 마스터 -->
     <div class="tab-content" id="itemMasterTabContent">
         <div class="tab-pane fade show active" id="div-item-master" role="tabpanel" aria-labelledby="tab-item-master">
+            <div class="pl-5 pt-3 pb-3 mt-3 mb-3 bg-light">
+                <label class="mr-2" for="input-search-item-master">상품명</label>
+                <input class="mr-2" type="text" name="code" id="input-search-item-master" >
+                <a class="btn btn-sm btn-primary" id="btn-search-item-master">검색</a>
+            </div>
             <div class="div-crud-buttons">
                 <a class="btn btn-outline-primary" id="btn-load-item-masters">상품 불러오기</a>
                 <a class="btn btn-outline-primary" id="btn-add-item-master">상품 등록</a>
@@ -151,7 +156,6 @@
         </div>
         <!-- 상품 전시 옵션 -->
         <div class="tab-pane fade p-1" id="div-item-display-option" role="tabpanel" aria-labelledby="tab-item-display-option" >
-
             <div class="div-crud-buttons">
                 <div class="optionAddPreview"></div>
                 <a class="btn btn-outline-primary d-none" id="btn-save-display-option-list" >저장</a>

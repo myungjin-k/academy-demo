@@ -19,6 +19,8 @@ import my.myungjin.academyDemo.web.request.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -58,6 +60,19 @@ public class ItemAdminController {
         return OK(res);
     }
 
+    @GetMapping("/itemMaster/search")
+    @ApiOperation(value = "상품 마스터 검색(상품명)")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "direction", dataType = "string", paramType = "query", defaultValue = "ASC", value = "정렬 방향"),
+            @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query", defaultValue = "0", value = "페이징 offset"),
+            @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query", defaultValue = "5", value = "조회 갯수")
+    })
+    public Response<Page<ItemMaster>> search(@RequestParam String itemName, PageRequest pageRequest){
+        Pageable pageable = pageRequest.of();
+        List<ItemMaster> result = (List<ItemMaster>) itemMasterService.search(itemName, null, null);
+        Page<ItemMaster> page = new PageImpl<>(result, pageable, result.size());
+        return OK(page);
+    }
     @GetMapping("/commonCode/category/list")
     @ApiOperation(value = "상품 카테고리 검색")
     public Response<List<CommonCode>> searchCategory(@RequestParam @ApiParam(value = "상품 카테고리 검색어(카테고리 한글이름)", defaultValue = "니트") String searchParam){
