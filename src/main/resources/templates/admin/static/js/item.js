@@ -105,7 +105,7 @@ var itemMaster = {
         form.find('input[name="price"]').val('');
         form.find('.thumbnailInfo').addClass("d-none");
         form.find('.oriThumbnail').prop("src", '');
-        form.find('.input[name="thumbnail"]')[0].files[0] = null;
+        form.find('.input[name="thumbnail"]').val('');
     },
     deleteThumbnail : function(){
         if(confirm("이미지를 삭제하시겠습니까?")){
@@ -440,7 +440,7 @@ var itemDisplay = {
         form.find('select[name="status"').val('0');
         form.find('.detailImageInfo').addClass("d-none");
         form.find('.oriDetailImage').prop("src", '');
-        form.find('input[name="detailImage"]')[0].files[0] = null;
+        form.find('input[name="detailImage"]').val('');
     },
     deleteDetailImage : function(){
         if(confirm("이미지를 삭제하시겠습니까?")){
