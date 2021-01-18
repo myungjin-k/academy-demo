@@ -10,6 +10,9 @@
         <li class="nav-item" >
             <a class="nav-link" id="tab-item-display" data-toggle="tab" href="#div-item-display" role="tab" aria-controls="div-item-display" aria-selected="false" style="display: none;">상품전시</a>
         </li>
+        <li class="nav-item" >
+            <a class="nav-link" id="tab-item-display-option" data-toggle="tab" href="#div-item-display-option" role="tab" aria-controls="div-item-display-option" aria-selected="false" style="display: none;">상품전시 옵션</a>
+        </li>
     </ul>
     <!-- 상품 마스터 -->
     <div class="tab-content" id="itemMasterTabContent">
@@ -151,9 +154,9 @@
 
             <div class="div-crud-buttons">
                 <div class="optionAddPreview"></div>
-                <a class="btn btn-outline-primary d-none" id="btn-save-displa-option-list" >저장</a>
+                <a class="btn btn-outline-primary d-none" id="btn-save-display-option-list" >저장</a>
                 <a class="btn btn-outline-primary" data-toggle="modal" data-target="#optionAddModal">옵션 간편 등록</a>
-            </div>f
+            </div>
 
             <div class="div-crud-buttons">
                 <a class="btn btn-outline-primary" id="btn-add-item-display-option">옵션 등록</a>
@@ -164,6 +167,7 @@
                     <tr>
                         <th>상품명</th>
                         <th>옵션</th>
+                        <th>전시상태</th>
                         <th>등록일시</th>
                         <th></th>
                     </tr>
@@ -182,6 +186,12 @@
                     <input type="hidden" name="id" id="displayOptionId" />
                     <label for="itemParentDisplayName">상품명</label>
                     <input type="text" class="form-control mb-2" name="itemDisplayName" id="itemParentDisplayName" readonly />
+                    <label for="status">전시상태</label>
+                    <select class="form-control mb-2" name="status" id="optionStatus">
+                        {{#itemStatus}}
+                            <option value="{{name}}">{{description}}</option>
+                        {{/itemStatus}}
+                    </select>
                     <label for="displayColor">색상</label>
                     <input type="text" class="form-control mb-2" name="color" id="displayColor" />
                     <label for="displaySize">사이즈</label>

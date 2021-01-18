@@ -9,6 +9,8 @@ import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.item.ItemMaster;
+import my.myungjin.academyDemo.domain.item.ItemStatus;
+import my.myungjin.academyDemo.service.item.ItemDisplayOptionService;
 import my.myungjin.academyDemo.service.item.ItemDisplayService;
 import my.myungjin.academyDemo.service.item.ItemMasterService;
 import my.myungjin.academyDemo.service.item.ItemOptionService;
@@ -38,6 +40,8 @@ public class ItemAdminController {
     private final ItemOptionService itemOptionService;
 
     private final ItemDisplayService itemDisplayService;
+
+    private final ItemDisplayOptionService itemDisplayOptionService;
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -256,5 +260,41 @@ public class ItemAdminController {
                 itemDisplayService.searchByNameAndCreateAt(request.getItemName(), request.getStart(), request.getEnd(), false, pageRequest.of())
         );
     }
+
+    @GetMapping( "/itemDisplay/{id}/itemDisplayOption/list")
+    @ApiOperation(value = "전시상품별 상품 옵션 목록 조회")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "direction", dataType = "string", paramType = "query", defaultValue = "ASC", value = "정렬 방향"),
+            @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query", defaultValue = "0", value = "페이징 offset"),
+            @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query", defaultValue = "5", value = "조회 갯수")
+    })
+    public Response<Page<ItemDisplay.ItemDisplayOption>> displayOptions(
+            @PathVariable @ApiParam(value = "대상 상품 전시 PK", defaultValue = "8c1cbb792b8d447e9128d53920cf9366") String id,
+            PageRequest pageRequest) {
+        return OK(
+                itemDisplayOptionService.findAllByMasterId(Id.of(ItemDisplay.class, id), pageRequest.of())
+        );
+    }
+
+    @PutMapping( "/itemDisplayOption/{optionId}")
+    @ApiOperation(value = "전시 상품 옵션 수정")
+    public Response<ItemDisplay.ItemDisplayOption> updateDisplayOption(
+            @PathVariable @ApiParam(value = "대상 전시 상품 옵션 PK", defaultValue = "fb32787a91614b978cb94b0d47d7c676") String optionId,
+            @RequestBody ItemDisplayOptionRequest request) {
+        return OK(
+                itemDisplayOptionService.modify(Id.of(ItemDisplay.ItemDisplayOption.class, optionId), request.getColor(), request.getSize(), ItemStatus.valueOf(request.getStatus()))
+        );
+    }
+
+    @DeleteMapping("/itemDisplayOption/{optionId}")
+    @ApiOperation(value = "전시 상품 옵션 삭제")
+    public Response<ItemDisplay.ItemDisplayOption> deleteDisplayOption(
+            @PathVariable @ApiParam(value = "대상 전시 상품 옵션 PK", defaultValue = "fb32787a91614b978cb94b0d47d7c676")  String optionId){
+        return OK(
+                itemDisplayOptionService.deleteById(Id.of(ItemDisplay.ItemDisplayOption.class, optionId))
+        );
+    }
+
+
 
 }

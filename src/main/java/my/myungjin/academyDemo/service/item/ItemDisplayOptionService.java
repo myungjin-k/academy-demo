@@ -7,6 +7,8 @@ import my.myungjin.academyDemo.domain.item.ItemDisplayOptionRepository;
 import my.myungjin.academyDemo.domain.item.ItemDisplayRepository;
 import my.myungjin.academyDemo.domain.item.ItemStatus;
 import my.myungjin.academyDemo.error.NotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +28,14 @@ public class ItemDisplayOptionService {
 
     private final ItemDisplayRepository itemDisplayRepository;
 
+
+    @Transactional(readOnly = true)
+    public Page<ItemDisplay.ItemDisplayOption> findAllByMasterId(Id<ItemDisplay, String> itemDisplayId, Pageable pageable){
+        return findDisplay(itemDisplayId)
+                .map(itemDisplay -> itemDisplayOptionRepository.findAllByItemDisplay(itemDisplay, pageable))
+                .orElse(Page.empty());
+    }
+
     @Transactional(readOnly = true)
     public List<ItemDisplay.ItemDisplayOption> findAllByMasterId(Id<ItemDisplay, String> itemDisplayId){
         return findDisplay(itemDisplayId)
@@ -43,11 +53,11 @@ public class ItemDisplayOptionService {
     }
 
     @Transactional
-    public Id<ItemDisplay.ItemDisplayOption, String> deleteById(@Valid Id<ItemDisplay.ItemDisplayOption, String> itemDisplayOptionId){
+    public ItemDisplay.ItemDisplayOption deleteById(@Valid Id<ItemDisplay.ItemDisplayOption, String> itemDisplayOptionId){
         return findById(itemDisplayOptionId)
-                .map(ItemDisplayOption -> {
+                .map(itemDisplayOption -> {
                     itemDisplayOptionRepository.deleteById(itemDisplayOptionId.value());
-                    return itemDisplayOptionId;
+                    return itemDisplayOption;
                 }).orElseThrow(() -> new NotFoundException(ItemDisplay.ItemDisplayOption.class, itemDisplayOptionId));
     }
 

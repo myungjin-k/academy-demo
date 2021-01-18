@@ -104,9 +104,25 @@ public class ItemDisplayService {
                 .map(itemMaster -> {
                     newDisplay.setDetailImage(uploadDetailImage(detailImgFile).orElseThrow(() -> new IllegalArgumentException("detailImage should not be null")));
                     newDisplay.setItemMaster(itemMaster);
-                    log.info("New Item Display: {}", newDisplay);
-                    return save(newDisplay);
+                    ItemDisplay saved = save(newDisplay);
+
+                    log.info("Saved Item Display: {}", newDisplay);
+                    saved.setOptions(convertItemOption((List<ItemMaster.ItemOption>) itemMaster.getOptions(), newDisplay));
+                    return saved;
                 }).orElseThrow(() -> new NotFoundException(ItemMaster.class, itemMasterId));
+    }
+
+    private List<ItemDisplay.ItemDisplayOption> convertItemOption(List<ItemMaster.ItemOption> optionList, ItemDisplay itemDisplay){
+        return optionList.stream()
+                .map(itemOption -> {
+                    ItemDisplay.ItemDisplayOption displayOption = ItemDisplay.ItemDisplayOption.builder()
+                            .color(itemOption.getColor())
+                            .size(itemOption.getSize())
+                            .status(ItemStatus.ON_SALE)
+                            .build();
+                    displayOption.setItemDisplay(itemDisplay);
+                    return itemDisplayOptionRepository.save(displayOption);
+                }).collect(Collectors.toList());
     }
 
     private void deleteDetailImage(String detailImage){

@@ -25,17 +25,16 @@ var main = {
             itemDisplay.init(id, name);
         });
 
-        $(document).on('click', '.btn-search-item-display-option', function(){
-            var id = $('#form-save-item-display').find('input[name="id"]').val();
-            var name = $('#form-save-item-display').find('input[name="itemDisplayName"]').val();
-            $('#div-item-master').removeClass('active');
+        $(document).on('click', '#btn-load-item-display-options', function(){
+            var id = $('#div-item-display #form-save-item-display input[name="id"]').val();
+            var name = $('#div-item-display #form-save-item-display input[name="itemDisplayName"]').val();
+            $('#div-item-display').removeClass('active');
             $('#div-item-display-option').addClass('active').addClass('show');
 
-            $('#tab-item-master').removeClass('active').prop('aria-selected', false);
+            $('#tab-item-display').removeClass('active').prop('aria-selected', false);
             $('#tab-item-display-option').show().addClass('active').prop('aria-selected', true);
-            //itemDisplay.init(id, name);
+            itemDisplayOption.init(id, name);
         });
-
     }
 }
 
@@ -535,5 +534,172 @@ var itemDisplay = {
             alert(JSON.stringify(error));
         });
     }
+};
+var itemDisplayOption = {
+    displayId: '',
+    firstPage: 1,
+    lastPage: 5,
+    currPage: 1,
+    init: function(displayId, displayName){
+        var _this = this;
+        _this.displayId = displayId;
+        _this.list(_this.firstPage);
+        $('#form-save-item-display-option input[name="itemDisplayName"]').val(displayName);
+        $('#pagination-item-display-option').on('click', '.page-link', function(){
+            var link = $(this).text();
+            if(link === 'prev'){
+                _this.firstPage = _this.firstPage - 5;
+                _this.lastPage = _this.lastPage - 5;
+                _this.list(_this.firstPage);
+            } else if(link === 'next'){
+                _this.firstPage = _this.firstPage + 5;
+                _this.lastPage = _this.lastPage + 5;
+                _this.list(_this.firstPage);
+            } else {
+                _this.list(link);
+            }
+        });
+
+        $('#btn-add-item-display-option').click(function () {
+            _this.clearForm();
+        });
+        $('#div-item-display-option #btn-save-item-display-option').unbind().bind("click", function (){
+            var id = $('#form-save-item-display-option').find('input[name="id"]').val();
+            if(id !== ''){
+                _this.update();
+            } else {
+                _this.save();
+            }
+        });
+        $(document).on('click', '#div-item-display-option .btn-delete', function(){
+            var id = $(this).parents('tr').find('input[name="id"]').val();
+            _this.delete(id);
+        });
+        $(document).on('click', '#div-item-display-option .btn-modify', function(){
+            var tr = $(this).parents('tr');
+            var data = {
+                "id" : tr.find('input[name="id"]').val(),
+                "color" : tr.find('.color').text(),
+                "size" : tr.find('.size').text(),
+                "status" : tr.find('input[name="status"]').val()
+            };
+            _this.setData(data);
+        });
+        $('#btn-save-display-option-list').unbind().bind("click", function(){
+            var newOptions = [];
+            $('#div-item-display-option .optionAddPreview .newOption').each(function () {
+                var optionStr = $(this).text().split('/');
+                newOptions.push({"color" : optionStr[0], "size" : optionStr[1]});
+            });
+            _this.saveList(newOptions);
+        });
+    },
+    clearTable : function(){
+        $('#item-display-options').empty();
+    },
+    clearForm : function(){
+        var form = $('#form-save-item-display-option');
+        form.find('input[name="id"]').val('');
+        form.find('input[name="color"]').val('');
+        form.find('input[name="size"]').val('');
+        form.find('input[name="status"]').val('');
+    },
+    setData : function(data){
+        var form = $('#form-save-item-display-option');
+        console.log(form.html());
+        form.find('input[name="id"]').val(data.id);
+        form.find('input[name="color"]').val(data.color);
+        form.find('input[name="size"]').val(data.size);
+        form.find('input[name="status"]').val(data.status);
+        console.log(form.data);
+    },
+    list : function (page){
+        var _this = this;
+        _this.clearTable();
+        _this.currPage = page;
+        $.ajax({
+            type: 'GET',
+            url: '/api/admin/itemDisplay/' + _this.displayId +'/itemDisplayOption/list?page=' + page +'&size=' + 5 + '&direction=DESC',
+            dataType: 'json',
+            contentType:'application/json; charset=utf-8'
+        }).done(function(response) {
+            var resultData = response.response;
+            //console.log(resultData);
+            $('#pagination-item-display-option').setPagination(
+                page,
+                _this.firstPage,
+                Math.min(resultData.totalPages, _this.lastPage),
+                5,
+                resultData.totalPages
+            );
+            if(resultData.totalElements > 0){
+                $.each(resultData.content, function(){
+                    //console.log(this);
+                    const option = this;
+                    const row = '<tr>'
+                        + '<input type="hidden" name="id" value="' + option.id + '"/>'
+                        + '<input type="hidden" name="status" value="' + option.status + '"/>'
+                        + '<td class="displayId">' + option.itemDisplay.itemDisplayName
+                        + '<input type="hidden" name="displayId" value="' + option.itemDisplay.id + '"/>'
+                        +'</td>'
+                        + '<td class="optionInfo"><span class="color">' + option.color +'</span>/<span class="size">'+ option.size +'</span></td>'
+                        + '<td>' + option.createAt +'</td>'
+                        + '<td><a class="btn btn-sm btn-outline-dark btn-modify">수정</a>'
+                        + '<a class="btn btn-sm btn-outline-dark btn-delete">삭제</a>'
+                        + '</tr>';
+                    $('#item-display-options').append(row);
+                });
+            }
+
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+    },
+    save : function(){
+        var _this = this;
+        var data = $('#form-save-item-option').serializeObject();
+        $.ajax({
+            type: 'POST',
+            url: '/api/admin/itemDisplay/' + _this.displayId + '/itemDisplayOption',
+            dataType: 'json',
+            contentType:'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function(response) {
+            console.log(response);
+            _this.list(1);
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+    },
+    update : function (){
+        var _this = this;
+        var data = $("#form-save-item-display-option").serializeObject();
+        $.ajax({
+            type: 'PUT',
+            url: '/api/admin/itemDisplayOption/' + data.id,
+            dataType: 'json',
+            contentType:'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function(response) {
+            //console.log(response);
+            _this.list(_this.currPage);
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+
+    },
+    delete : function (id){
+        var _this = this;
+        $.ajax({
+            type: 'DELETE',
+            url: '/api/admin/itemDisplayOption/' + id
+        }).done(function(response) {
+            //console.log(response);
+            _this.list(1);
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+    }
+
 };
 main.init();

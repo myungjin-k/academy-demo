@@ -15,7 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -109,6 +108,7 @@ public class ItemDisplayServiceTest {
         itemDisplayId = Id.of(ItemDisplay.class, saved.getId());
         assertThat(saved, is(notNullValue()));
         log.info("Saved Display Item: {}", saved);
+        log.info("Saved Display Item Options: {}", saved.getOptions());
 
     }
 

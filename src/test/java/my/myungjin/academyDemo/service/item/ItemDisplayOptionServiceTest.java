@@ -70,7 +70,7 @@ public class ItemDisplayOptionServiceTest {
     @Test
     @Order(4)
     void 상품_옵션_삭제하기() {
-        Id<ItemDisplay.ItemDisplayOption, String> deleted = itemDisplayOptionService.deleteById(itemDisplayOptionId);
+        ItemDisplay.ItemDisplayOption deleted = itemDisplayOptionService.deleteById(itemDisplayOptionId);
         assertThat(deleted, is(notNullValue()));
         log.info("Deleted Option: {}", deleted);
 
