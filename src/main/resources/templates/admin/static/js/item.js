@@ -77,18 +77,18 @@ var itemMaster = {
             var id = $(this).parents('tr').find('input[name="id"]').val();
             _this.delete(id);
         });
-        $(document).on('click', '#div-item-master page-link', function(){
+        $('#pagination-item-master').on('click', '.page-link', function(){
             var link = $(this).text();
             if(link === 'prev'){
                 _this.firstPage = _this.firstPage - 5;
                 _this.lastPage = _this.lastPage - 5;
-                _this.list(_this.groupId, _this.firstPage);
+                _this.list(_this.firstPage);
             } else if(link === 'next'){
                 _this.firstPage = _this.firstPage + 5;
                 _this.lastPage = _this.lastPage + 5;
-                _this.list(_this.groupId, _this.firstPage);
+                _this.list(_this.firstPage);
             } else {
-                _this.list(_this.groupId, link);
+                _this.list(link);
             }
         });
 
@@ -242,7 +242,7 @@ var itemOption = {
         _this.masterId = masterId;
         _this.list(_this.firstPage);
         $('#form-save-item-option input[name="itemMasterName"]').val(masterName);
-        $(document).on('click', '#div-item-option .page-link', function(){
+        $('#pagination-item-option').on('click', '.page-link', function(){
             var link = $(this).text();
             if(link === 'prev'){
                 _this.firstPage = _this.firstPage - 5;
