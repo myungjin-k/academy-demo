@@ -20,8 +20,9 @@ var main = {
             var div = $("#div-thumb");
             console.log(data);
             $.each(data.content, function(){
+                var onClick = "loadDetail('"+ this.displayId +"');";
                 var thumb =
-                    '<div class="itemThumb">' +
+                    '<div class="itemThumb" onclick="'+ onClick +'">' +
                     '    <div>' +
                     '        <a href="#">' +
                     '             <div>' +

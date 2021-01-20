@@ -20,6 +20,8 @@ public class ItemDetailResponse {
 
     private String thumbnail;
 
+    private String sizeInfo;
+
     private String material;
 
     private String description;
@@ -37,6 +39,7 @@ public class ItemDetailResponse {
         this.thumbnail = master.getThumbnail();
         this.originalPrice = master.getPrice();
         this.itemPrice = entity.getSalePrice();
+        this.sizeInfo = entity.getSize();
         this.material = entity.getMaterial();
         this.description = entity.getDescription();
         this.notice = entity.getNotice();
