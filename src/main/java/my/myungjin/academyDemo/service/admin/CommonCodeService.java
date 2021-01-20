@@ -68,6 +68,11 @@ public class CommonCodeService {
         return (List<CodeGroup>) codeGroupRepository.findAll(CodeGroupPredicate.search(code, nameEng, nameKor));
     }
 
+    @Transactional(readOnly = true)
+    public Page<CodeGroup> search(String code, String nameEng, String nameKor, Pageable pageable){
+        return codeGroupRepository.findAll(CodeGroupPredicate.search(code, nameEng, nameKor), pageable);
+    }
+
     @Cacheable(value="commonCodeCache", key="#groupId.value()")
     @Transactional(readOnly = true)
     public List<CommonCode> findAllCommonCodesByGroupId(@Valid Id<CodeGroup, String> groupId){

@@ -68,10 +68,7 @@ public class ItemAdminController {
             @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query", defaultValue = "5", value = "조회 갯수")
     })
     public Response<Page<ItemMaster>> search(@RequestParam String itemName, PageRequest pageRequest){
-        Pageable pageable = pageRequest.of();
-        List<ItemMaster> result = (List<ItemMaster>) itemMasterService.search(itemName, null, null);
-        Page<ItemMaster> page = new PageImpl<>(result, pageable, result.size());
-        return OK(page);
+        return OK(itemMasterService.search(itemName, null, null, pageRequest.of()));
     }
     @GetMapping("/commonCode/category/list")
     @ApiOperation(value = "상품 카테고리 검색")
@@ -122,13 +119,6 @@ public class ItemAdminController {
         );
     }
 
-    @GetMapping("/itemMaster")
-    @ApiOperation(value = "상품 마스터 검색(상품명, 등록일(from), 등록일(to)")
-    public Response<List<ItemMaster>> searchMaster(ItemSearchRequest request){
-        return  OK(
-                (List<ItemMaster>) itemMasterService.search(request.getItemName(), request.getStart(), request.getEnd())
-        );
-    }
 
     @GetMapping( "/itemMaster/{id}/itemOption/list")
     @ApiOperation(value = "마스터별 상품 옵션 목록 조회")

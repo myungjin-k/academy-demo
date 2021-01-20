@@ -70,13 +70,13 @@ var codeGroup = {
             if(link === 'prev'){
                 _this.firstPage = _this.firstPage - 5;
                 _this.lastPage = _this.lastPage - 5;
-                _this.list(_this.groupId, _this.firstPage);
+                _this.list(_this.firstPage);
             } else if(link === 'next'){
                 _this.firstPage = _this.firstPage + 5;
                 _this.lastPage = _this.lastPage + 5;
-                _this.list(_this.groupId, _this.firstPage);
+                _this.list(_this.firstPage);
             } else {
-                _this.list(_this.groupId, link);
+                _this.list(link);
             }
         });
         $('#btn-search-code-group').click(function (){

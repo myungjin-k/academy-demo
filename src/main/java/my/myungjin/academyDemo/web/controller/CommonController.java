@@ -14,8 +14,6 @@ import my.myungjin.academyDemo.web.request.CodeGroupRequest;
 import my.myungjin.academyDemo.web.request.CommonCodeRequest;
 import my.myungjin.academyDemo.web.request.PageRequest;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,11 +45,8 @@ public class CommonController {
             @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query", defaultValue = "0", value = "페이징 offset"),
             @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query", defaultValue = "5", value = "조회 갯수")
     })
-    public Response<Page<CodeGroup>> codeGroups(@RequestParam String code, PageRequest pageRequest){
-        Pageable pageable = pageRequest.of();
-        List<CodeGroup> result = sampleService.search(code, null, null);
-        Page<CodeGroup> page = new PageImpl<>(result, pageable, result.size());
-        return OK(page);
+    public Response<Page<CodeGroup>> search(@RequestParam String code, PageRequest pageRequest){
+        return OK(sampleService.search(code, null, null, pageRequest.of()));
     }
 
     @PostMapping("/codeGroup")

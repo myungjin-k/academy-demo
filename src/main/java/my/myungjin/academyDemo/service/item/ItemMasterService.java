@@ -135,8 +135,8 @@ public class ItemMasterService {
     }
 
     @Transactional(readOnly = true)
-    public Iterable<ItemMaster> search(String itemName, LocalDate start, LocalDate end){
-        return itemMasterRepository.findAll(ItemMasterPredicate.search(itemName, start, end));
+    public Page<ItemMaster> search(String itemName, LocalDate start, LocalDate end, Pageable pageable){
+        return itemMasterRepository.findAll(ItemMasterPredicate.search(itemName, start, end), pageable);
     }
 
     @Transactional(readOnly = true)

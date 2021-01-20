@@ -3,6 +3,7 @@ package my.myungjin.academyDemo.service.item;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.domain.item.ItemMaster;
+import my.myungjin.academyDemo.web.request.PageRequest;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.*;
@@ -10,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
@@ -111,9 +114,12 @@ public class ItemMasterServiceTest {
     @Test
     @Order(5)
     void 상품_검색하기(){
-
-        List<ItemMaster> results = (ArrayList<ItemMaster>) itemMasterService.search("알파카", null, null);
-        MatcherAssert.assertThat(results.size(), Is.is(1));
+        PageRequest pageRequest = new PageRequest();
+        pageRequest.setPage(0);
+        pageRequest.setSize(5);
+        pageRequest.setDirection(Sort.Direction.DESC);
+        Page<ItemMaster> results = itemMasterService.search("알파카", null, null, pageRequest.of());
+        MatcherAssert.assertThat(results.getContent().size(), Is.is(1));
     }
 
     @Test
