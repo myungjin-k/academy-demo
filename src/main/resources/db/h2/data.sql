@@ -182,7 +182,7 @@ INFO
 INSERT INTO item_display_option (id, color, status, display_id) VALUES ('fd0b906391ac4636b7984ab756006144', '라떼베이지', '1', 'fd0b906391ac4636b7984ab756006144');
 INSERT INTO item_display_option (id, color, status, display_id) VALUES ('3d190d6970ff423c803445d7f6270895', '시나몬브라운', '1', 'fd0b906391ac4636b7984ab756006144');
 INSERT INTO item_display_option (id, color, status, display_id) VALUES ('595ceb8327384a098ec17de8121c77d9', '스페이스블루', '1', 'fd0b906391ac4636b7984ab756006144');
-INSERT INTO item_master (id, item_name, category_id, price, thumbnail) VALUES ('2f120d7aa59f464ea35527c2900e6a57', '[N택] 브론테 바이 문 머플러', '88b09a7b0a7d4390a67ab3adf1d6d378', 61000, 'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/dev/itemMaster/9b1ab150-7c71-42b6-b672-76ffd42a5b84.jpg');
+INSERT INTO item_master (id, item_name, category_id, price, thumbnail) VALUES ('2f120d7aa59f464ea35527c2900e6a57', '[N택] 브론테 바이 문 머플러', '88b09a7b0a7d4390a67ab3adf1d6d378', 61000, 'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/dev/itemMaster/2f018400-b2bf-489e-bfe5-891102674837.jpg');
 
 INSERT INTO item_option (id, color, master_id) VALUES ('92b0a37bbc0a411ea8363b4c7857d3dd', '모스그린', '2f120d7aa59f464ea35527c2900e6a57');
 INSERT INTO item_option (id, color, master_id) VALUES ('4a4b3309e8d44eaa92ebdbc8a5e358c9', '카라멜브라운', '2f120d7aa59f464ea35527c2900e6a57');
