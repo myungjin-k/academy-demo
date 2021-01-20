@@ -617,7 +617,6 @@ var itemDisplayOption = {
         form.find('input[name="color"]').val(data.color);
         form.find('input[name="size"]').val(data.size);
         form.find('input[name="status"]').val(data.status);
-        console.log(form.data);
     },
     list : function (page){
         var _this = this;
@@ -671,7 +670,7 @@ var itemDisplayOption = {
             contentType:'application/json; charset=utf-8',
             data: JSON.stringify(data)
         }).done(function(response) {
-            console.log(response);
+            //console.log(response);
             _this.list(1);
         }).fail(function (error) {
             alert(JSON.stringify(error));
