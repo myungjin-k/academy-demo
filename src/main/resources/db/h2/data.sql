@@ -232,6 +232,45 @@ COLOR
 
 INSERT INTO item_display_option (id, color, status, display_id) VALUES ('86987dc60e6041b4a3966709f71ee7e2', '모스그린', '1', 'f9f3f6f31e0c4b889ff5bd020459d014');
 INSERT INTO item_display_option (id, color, status, display_id) VALUES ('651213add24840afb2a4be6657c2b687', '카라멜브라운', '1', 'f9f3f6f31e0c4b889ff5bd020459d014');
+INSERT INTO item_master (id, item_name, category_id, price, thumbnail) VALUES ('b193a871f08c46649f7fcd724e4b042d', '[N택] 린크 홀가먼트 니트', '44e94265588b428e8e01bbc23dfc0f7e', 61000, 'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/dev/itemMaster/13ccd6f8-8a65-482c-b84c-f730451860ac.jpg');
+
+INSERT INTO item_option (id, color, master_id) VALUES ('abef2dc914794775809597d91ffa5e08', '블랙', 'b193a871f08c46649f7fcd724e4b042d');
+INSERT INTO item_option (id, color, master_id) VALUES ('a9868a3ea5054aeda5a4be68da41c301', '그레이', 'b193a871f08c46649f7fcd724e4b042d');
+INSERT INTO item_option (id, color, master_id) VALUES ('003787b9a782423da236faa2924b4e60', '카키브라운', 'b193a871f08c46649f7fcd724e4b042d');
+
+INSERT INTO item_display (id, item_id, item_display_name, sale_price, material, size, description, status, detail_image) VALUES ('a8853254ada64200b9821b4dde6b02bb', 'b193a871f08c46649f7fcd724e4b042d', '린크 홀가먼트 니트 ', 41000,
+ '캐시미어5 파인울25 바셀린울15 캐시나일론55',
+ '어깨 - 가슴 50.5 암홀 30 팔통 19 소매단 10.5 팔길이 68 총길이 65.5',
+ '데일리하게 착용하기 좋은 홀가먼트 니트입니다.
+
+봉제선이 없는 홀가먼트 방식으로 제작되어 착용감이 편안하며
+어깨 라인을 타고 자연스럽게 흐르는 내추럴한 실루엣이 매력적입니다.
+
+밑단과 넥라인의 적당한 너비의 골지 짜임은
+심심하지 않으면서 은은하게 포인트 됩니다.
+
+캐시미어와 울이 블랜딩된 적당한 두께감의 원단으로
+드라이하면서도 유연한 촉감이 느껴집니다.
+
+여유로운 품과 기장감으로 비교적 체형 구애 없이 착용 가능하며
+단품으로는 물론 아우터 안에 이너로 착용하기도 좋은,
+베이직하면서 데일리하게 손이 갈 아이템으로 추천드립니다.
+
+*소재 특성상 잡실/털빠짐/냄새 등이 있을 수 있습니다.
+
+COLOR
+블랙-정석블랙
+그레이-적당한 밝기의 그레이
+카키브라운-카키빛이 감도는 차분하고 따뜻한 브라운
+
+INFO
+신축성-있음｜두께감-적당함｜비침- 없음｜촉감- 적당함', 1 ,
+ 'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/dev/itemDisplay/a790eb72-c3f2-47c9-b80f-572a98da04d1.jpg');
+
+INSERT INTO item_display_option (id, color, status, display_id) VALUES ('f8c0e9297e624113ae85c3cdd8a3e7f5', '블랙', '1', 'a8853254ada64200b9821b4dde6b02bb');
+INSERT INTO item_display_option (id, color, status, display_id) VALUES ('e3550d96ded84daaa5078f2e0685e015', '그레이', '1', 'a8853254ada64200b9821b4dde6b02bb');
+INSERT INTO item_display_option (id, color, status, display_id) VALUES ('ed764c2577694c1788a122a0438524d1', '카키브라운', '1', 'a8853254ada64200b9821b4dde6b02bb');
+
 INSERT INTO cart (id, member_id, item_id, count) VALUES ('f4597dfc1ae649a58edcb7921002aca5', '3a18e633a5db4dbd8aaee218fe447fa4', 'c9402883dbe540e898a417e4884845bf', 1);
 INSERT INTO cart (id, member_id, item_id, count) VALUES ('0a25d9eea6d94a3897e06b33e4bf5b69', '3a18e633a5db4dbd8aaee218fe447fa4', '91cc1c18f11e4d018566524b51d8419a', 1);
 
