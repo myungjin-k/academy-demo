@@ -26,6 +26,11 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             return false;
         }
 
+        if(uri.equals("/")){
+            response.sendRedirect("/mall/index");
+            return false;
+        }
+
         HttpSession session = request.getSession();
         SecurityContextImpl securityContext = (SecurityContextImpl) session.getAttribute("SPRING_SECURITY_CONTEXT");
         if(securityContext != null && securityContext.getAuthentication().isAuthenticated()) {
@@ -39,9 +44,6 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             else if(isMallPage)
                 response.sendRedirect("/mall/login");
         }
-
-        if(uri.equals("/"))
-            response.sendRedirect("/mall/index");
         return false;
     }
 }

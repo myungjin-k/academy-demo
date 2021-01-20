@@ -5,6 +5,7 @@ import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.common.CodeGroup;
 import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.domain.item.ItemStatus;
+import my.myungjin.academyDemo.domain.member.Role;
 import my.myungjin.academyDemo.security.User;
 import my.myungjin.academyDemo.service.admin.CommonCodeService;
 import org.springframework.security.core.Authentication;
@@ -27,7 +28,11 @@ public class IndexController {
     @GetMapping("/mall/index")
     public String main(Model model, @AuthenticationPrincipal Authentication authentication){
         setItemCategories(model);
-        setLoginUser(model, authentication);
+        if(authentication != null) {
+            User loginUser = (User) authentication.getDetails();
+            if(Role.MEMBER.equals(loginUser.getRole()))
+                model.addAttribute("loginUser", loginUser);
+        }
         return "index";
     }
 
@@ -50,7 +55,8 @@ public class IndexController {
         setItemCategories(model);
         if(authentication != null){
             User loginUser = (User) authentication.getDetails();
-            model.addAttribute("loginUser", loginUser);
+            if(Role.MEMBER.equals(loginUser.getRole()))
+                model.addAttribute("loginUser", loginUser);
         }
         return "mypage";
     }
