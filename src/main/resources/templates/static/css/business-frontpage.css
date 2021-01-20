@@ -55,11 +55,13 @@ ul {
   margin-bottom: 1rem;
 }
 .itemThumb .itemName {
+  width: 150px;
   float: left;
 }
 
 .itemThumb .itemPrice {
   float: right;
+  width: 60px;
   text-align: right;
 }
 .itemThumb .discount {

@@ -1,32 +1,25 @@
 var main = {
-    firstPage: 1,
-    lastPage: 5,
+    page: 1,
     init : function() {
         var _this = this;
         _this.loadAllItems(1);
 
         $(document).on('click', '#btn-load-more-items', function(){
-            var link = $(this).text();
-            if(link === 'load'){
-                _this.firstPage = _this.firstPage + 5;
-                _this.lastPage = _this.lastPage + 5;
-                _this.loadAllItems(_this.firstPage);
-            } else {
-                _this.loadAllItems(link);
-            }
+            _this.page = _this.page + 1;
+            _this.loadAllItems(_this.page);
         });
     },
     loadAllItems : function (page){
         $.ajax({
             type: 'GET',
-            url: '/api/mall/item/list?page=' + page +'&size=' + 5 + '&direction=DESC',
+            url: '/api/mall/item/list?page=' + page +'&size=' + 3 + '&direction=DESC',
             dataType: 'json',
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
             var data = response.response;
             var div = $("#div-thumb");
+            console.log(data);
             $.each(data.content, function(){
-                //console.log(this);
                 var thumb =
                     '<div class="itemThumb">' +
                     '    <div>' +
@@ -45,9 +38,11 @@ var main = {
                     '</div>';
                 div.append(thumb);
             });
-            if(data.totalPages > 1){
-                var button = '<span id = "btn-load-more-items" class="btn-outline-info">Load More</span>';
-                $("#div-load-more-items").append(button);
+            var loadMoreDiv = $("#div-load-more-items");
+            loadMoreDiv.empty();
+            if(data.totalPages > page){
+                var button = '<span id = "btn-load-more-items" class="btn btn-lg btn-outline-secondary">Load More</span>';
+                loadMoreDiv.append(button);
             }
         }).fail(function (error) {
             alert(JSON.stringify(error));
