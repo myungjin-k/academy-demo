@@ -60,10 +60,10 @@ INSERT INTO item_display (id, item_id, item_display_name, sale_price, material, 
  신축성-없음｜계절감-가을/겨울｜비침-없음｜촉감-부드러운 편', '크림 S사이즈 상품 준비 기간이 일주일 가량 소요됩니다.', 1 ,
  'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/dev/itemDisplay/e7bfe6ab-76b7-4df6-a557-51c83e30599d.jpg');
 
-INSERT INTO item_display_option (id, color, size, display_id) VALUES ('91cc1c18f11e4d018566524b51d8419a', '크림', 'S', 'f23ba30a47194a2c8a3fd2ccadd952a4');
-INSERT INTO item_display_option (id, color, size, display_id) VALUES ('91cc1c18f11e5d018566524b51d8419a', '크림', 'M', 'f23ba30a47194a2c8a3fd2ccadd952a4');
-INSERT INTO item_display_option (id, color, size, display_id) VALUES ('c9402883dbe540e898a417e4884845bf', '포그그레이', 'S', 'f23ba30a47194a2c8a3fd2ccadd952a4');
-INSERT INTO item_display_option (id, color, size, display_id) VALUES ('c9402883dbe540e898a417e4984845bf', '포그그레이', 'M', 'f23ba30a47194a2c8a3fd2ccadd952a4');
+INSERT INTO item_display_option (id, color, size, status, display_id) VALUES ('91cc1c18f11e4d018566524b51d8419a', '크림', 'S', '1', 'f23ba30a47194a2c8a3fd2ccadd952a4');
+INSERT INTO item_display_option (id, color, size, status, display_id) VALUES ('91cc1c18f11e5d018566524b51d8419a', '크림', 'M', '1', 'f23ba30a47194a2c8a3fd2ccadd952a4');
+INSERT INTO item_display_option (id, color, size, status, display_id) VALUES ('c9402883dbe540e898a417e4884845bf', '포그그레이', 'S', '1', 'f23ba30a47194a2c8a3fd2ccadd952a4');
+INSERT INTO item_display_option (id, color, size, status, display_id) VALUES ('c9402883dbe540e898a417e4984845bf', '포그그레이', 'M', '1', 'f23ba30a47194a2c8a3fd2ccadd952a4');
 
 INSERT INTO item_master (id, item_name, category_id, price, thumbnail)
 VALUES ('6b5cd6e21ffa4bb08a75e270c18e8e05', '[N택] 시티 하이넥 코트 (2color)', '36f651a982274a5b95dac3e9d85b0d1a', 190000, 'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/dev/itemMaster/095748bf-a3ba-4c9a-a239-aadbed7ac65d.jpg');
@@ -103,8 +103,8 @@ INSERT INTO item_display (id, item_id, item_display_name, sale_price, material, 
  'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/dev/itemDisplay/f3427d05-9e39-4f2e-998b-ab1af4326986.jpg'
 );
 
-INSERT INTO item_display_option (id, color, display_id) VALUES ('8130cede06c04fa2bbd8bc09a29787c8', '딥브라운', '6bdbf6eea40b425caae4410895ca4809');
-INSERT INTO item_display_option (id, color, display_id) VALUES ('fd778631e13944f393a73abf9e5dc5cf', '차콜그레이', '6bdbf6eea40b425caae4410895ca4809');
+INSERT INTO item_display_option (id, color, status, display_id) VALUES ('8130cede06c04fa2bbd8bc09a29787c8', '딥브라운', '1', '6bdbf6eea40b425caae4410895ca4809');
+INSERT INTO item_display_option (id, color, status, display_id) VALUES ('fd778631e13944f393a73abf9e5dc5cf', '차콜그레이', '1', '6bdbf6eea40b425caae4410895ca4809');
 
 INSERT INTO item_master (id, item_name, category_id, price, thumbnail) VALUES ('cc068e14469a4d0a958f8ff072009f04', '[R택] 로뎀 블랙 팬츠', '8afe84e9d3f948cf83bb1faed0175c63', 72000, 'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/dev/itemMaster/5bc15c96-d6d4-4a45-8186-c707a47deef8.jpg');
 
@@ -137,8 +137,8 @@ INFO
 신축성-없음｜촉감-적당함｜계절감-봄/가을', 1 ,
  'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/dev/itemDisplay/26e6c731-f9ae-4474-af8a-cfea6d3dbd92.jpg');
 
-INSERT INTO item_display_option (id, size, display_id) VALUES ('15b84d4afc6644fcbc64ef8c2e6212bd', 'S', '839ebdcc2b2843a6ae681d9cb82c6a7c');
-INSERT INTO item_display_option (id, size, display_id) VALUES ('2a6866f21c4f4a37b1e2f80057884792', 'M', '839ebdcc2b2843a6ae681d9cb82c6a7c');
+INSERT INTO item_display_option (id, size, status, display_id) VALUES ('15b84d4afc6644fcbc64ef8c2e6212bd', 'S', '1', '839ebdcc2b2843a6ae681d9cb82c6a7c');
+INSERT INTO item_display_option (id, size, status, display_id) VALUES ('2a6866f21c4f4a37b1e2f80057884792', 'M', '1', '839ebdcc2b2843a6ae681d9cb82c6a7c');
 
 INSERT INTO item_master (id, item_name, category_id, price, thumbnail) VALUES ('abe14fe1e242449886adf0e78088e847', '[N택] 마론 라쿤 골지 가디건', '0cba0f39833e443598f3a07d4b36dca9', 61000, 'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/dev/itemMaster/9b1ab150-7c71-42b6-b672-76ffd42a5b84.jpg');
 
@@ -179,9 +179,9 @@ INFO
 신축성-있음｜계절감-가을/겨울｜비침- 없음｜촉감-적당함', 1 ,
  'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/dev/itemDisplay/26e6c731-f9ae-4474-af8a-cfea6d3dbd92.jpg');
 
-INSERT INTO item_display_option (id, color, display_id) VALUES ('fd0b906391ac4636b7984ab756006144', '라떼베이지', 'fd0b906391ac4636b7984ab756006144');
-INSERT INTO item_display_option (id, color, display_id) VALUES ('3d190d6970ff423c803445d7f6270895', '시나몬브라운', 'fd0b906391ac4636b7984ab756006144');
-INSERT INTO item_display_option (id, color, display_id) VALUES ('595ceb8327384a098ec17de8121c77d9', '스페이스블루', 'fd0b906391ac4636b7984ab756006144');
+INSERT INTO item_display_option (id, color, status, display_id) VALUES ('fd0b906391ac4636b7984ab756006144', '라떼베이지', '1', 'fd0b906391ac4636b7984ab756006144');
+INSERT INTO item_display_option (id, color, status, display_id) VALUES ('3d190d6970ff423c803445d7f6270895', '시나몬브라운', '1', 'fd0b906391ac4636b7984ab756006144');
+INSERT INTO item_display_option (id, color, status, display_id) VALUES ('595ceb8327384a098ec17de8121c77d9', '스페이스블루', '1', 'fd0b906391ac4636b7984ab756006144');
 INSERT INTO item_master (id, item_name, category_id, price, thumbnail) VALUES ('2f120d7aa59f464ea35527c2900e6a57', '[N택] 브론테 바이 문 머플러', '88b09a7b0a7d4390a67ab3adf1d6d378', 61000, 'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/dev/itemMaster/9b1ab150-7c71-42b6-b672-76ffd42a5b84.jpg');
 
 INSERT INTO item_option (id, color, master_id) VALUES ('92b0a37bbc0a411ea8363b4c7857d3dd', '모스그린', '2f120d7aa59f464ea35527c2900e6a57');
@@ -230,8 +230,8 @@ COLOR
 카라멜브라운-은은한 카라멜빛의 깊은 브라운', 1 ,
 'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/dev/itemDisplay/b7c35a29-a187-4d9e-acb6-31b1e1eb0fa2.jpg');
 
-INSERT INTO item_display_option (id, color, display_id) VALUES ('86987dc60e6041b4a3966709f71ee7e2', '모스그린', 'f9f3f6f31e0c4b889ff5bd020459d014');
-INSERT INTO item_display_option (id, color, display_id) VALUES ('651213add24840afb2a4be6657c2b687', '카라멜브라운', 'f9f3f6f31e0c4b889ff5bd020459d014');
+INSERT INTO item_display_option (id, color, status, display_id) VALUES ('86987dc60e6041b4a3966709f71ee7e2', '모스그린', '1', 'f9f3f6f31e0c4b889ff5bd020459d014');
+INSERT INTO item_display_option (id, color, status, display_id) VALUES ('651213add24840afb2a4be6657c2b687', '카라멜브라운', '1', 'f9f3f6f31e0c4b889ff5bd020459d014');
 INSERT INTO cart (id, member_id, item_id, count) VALUES ('f4597dfc1ae649a58edcb7921002aca5', '3a18e633a5db4dbd8aaee218fe447fa4', 'c9402883dbe540e898a417e4884845bf', 1);
 INSERT INTO cart (id, member_id, item_id, count) VALUES ('0a25d9eea6d94a3897e06b33e4bf5b69', '3a18e633a5db4dbd8aaee218fe447fa4', '91cc1c18f11e4d018566524b51d8419a', 1);
 
