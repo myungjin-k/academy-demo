@@ -14,6 +14,7 @@ import my.myungjin.academyDemo.domain.item.ItemOptionRepository;
 import my.myungjin.academyDemo.error.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -42,7 +43,9 @@ public class ItemMasterService {
 
     private final S3Client s3Client;
 
-    private final String S3_BASE_PATH = "itemMaster";
+    private final Environment environment;
+
+    private final String S3_BASE_PATH = "/itemMaster";
 
     private Logger log = LoggerFactory.getLogger(ItemMasterService.class);
 
@@ -58,10 +61,19 @@ public class ItemMasterService {
         return itemMasterRepository.findAllByCategoryId(categoryId.value());
     }
 
+    private String getServerProfile(){
+        String[] profiles = environment.getActiveProfiles();
+        for(String profile : profiles){
+            if(profile.equals("real"))
+                return profile;
+        }
+        return "dev";
+    }
+
     private Optional<String> uploadThumbnail(AttachedFile thumbnailFile) {
         String thumbnailUrl = null;
         if (thumbnailFile != null) {
-            String key = thumbnailFile.randomName(S3_BASE_PATH, "jpeg");
+            String key = thumbnailFile.randomName(getServerProfile() + S3_BASE_PATH, "jpeg");
             try {
                 thumbnailUrl = s3Client.upload(thumbnailFile.inputStream(),
                         thumbnailFile.length(),

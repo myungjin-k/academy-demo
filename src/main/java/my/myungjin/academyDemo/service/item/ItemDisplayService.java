@@ -10,6 +10,7 @@ import my.myungjin.academyDemo.domain.item.*;
 import my.myungjin.academyDemo.error.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -37,7 +38,9 @@ public class ItemDisplayService {
 
     private final S3Client s3Client;
 
-    private final String S3_BASE_PATH = "itemDisplay";
+    private final Environment environment;
+
+    private final String S3_BASE_PATH = "/itemDisplay";
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -80,10 +83,19 @@ public class ItemDisplayService {
                 }).orElseThrow(() -> new NotFoundException(ItemDisplay.class, itemDisplayId));
     }
 
+    private String getServerProfile(){
+        String[] profiles = environment.getActiveProfiles();
+        for(String profile : profiles){
+            if(profile.equals("real"))
+                return profile;
+        }
+        return "dev";
+    }
+
     private Optional<String> uploadDetailImage(AttachedFile detailImageFile) {
         String detailImageUrl = null;
         if (detailImageFile != null) {
-            String key = detailImageFile.randomName(S3_BASE_PATH, "jpeg");
+            String key = detailImageFile.randomName(getServerProfile() + S3_BASE_PATH, "jpeg");
             try {
                 detailImageUrl = s3Client.upload(detailImageFile.inputStream(),
                         detailImageFile.length(),
