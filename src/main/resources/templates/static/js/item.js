@@ -20,7 +20,7 @@ var main = {
             var div = $("#div-thumb");
             console.log(data);
             $.each(data.content, function(){
-                var onClick = "loadDetail('"+ this.displayId +"');";
+                var onClick = "loadDetail('"+ this.displayId +"', '"+ this.categoryId +"', '"+ this.categoryName +"');";
                 var thumb =
                     '<div class="itemThumb" onclick="'+ onClick +'">' +
                     '    <div>' +
@@ -31,8 +31,10 @@ var main = {
                     '             <div>' +
                     '                 <input type="hidden" class="displayId" value="'+ this.displayId +'"/>' +
                     '                 <span class="itemText itemName" id="thumb-name">' + this.itemName + '</span>' +
-                    '                 <span class="itemText itemPrice discount">' + this.originalPrice + '</span>' +
-                    '                 <span class="itemText itemPrice" id="thumb-price">' + this.itemPrice + '</span>' +
+                    '                 <span class="itemText itemPrice">' +
+                    '                     <span class="discount">' + this.originalPrice + '</span>' +
+                    '                     <span id="thumb-price">' + this.itemPrice + '</span>' +
+                    '                 </span>' +
                     '             </div>' +
                     '        </a>' +
                     '    </div>' +

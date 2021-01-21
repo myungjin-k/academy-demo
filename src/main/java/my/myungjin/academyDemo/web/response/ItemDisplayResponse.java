@@ -9,6 +9,10 @@ public class ItemDisplayResponse {
 
     private String displayId;
 
+    private String categoryId;
+
+    private String categoryName;
+
     private String itemName;
 
     private int originalPrice;
@@ -24,6 +28,8 @@ public class ItemDisplayResponse {
         ItemMaster master = entity.getItemMaster();
         this.originalPrice = master.getPrice();
         this.thumbnail = master.getThumbnail();
+        this.categoryId = master.getCategory().getId();
+        this.categoryName = master.getCategory().getNameKor();
         return this;
     }
 }

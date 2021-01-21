@@ -1,5 +1,8 @@
-function loadDetail(id){
+function loadDetail(id, categoryId, categoryName){
     $('#div-sales-item-list').addClass('d-none');
+    $('#category-sub .categoryName').text(categoryName);
+    $('#category-sub input[name="categoryId"]').val(categoryId);
+    $('#category-sub').removeClass('d-none');
     itemDetail.init(id);
 }
 var itemDetail = {
@@ -31,7 +34,7 @@ var itemDetail = {
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
             var data = response.response;
-            console.log(data);
+            //console.log(data);
             _this.div.find('#div-item-detail-thumbnail #img-thumbnail').prop("src", data.thumbnail);
             _this.div.find('#div-item-detail-notice #p-notice').text(data.notice);
             _this.div.find('#div-item-detail-description #text-description').val(data.description);
