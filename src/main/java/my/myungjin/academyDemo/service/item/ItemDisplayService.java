@@ -62,6 +62,11 @@ public class ItemDisplayService {
     }
 
     @Transactional(readOnly = true)
+    public Page<ItemDisplay> findAllByCategoryGroup(@Valid Id<CommonCode, String> categoryId, Pageable pageable){
+        return itemDisplayRepository.findAllByItemMasterCategoryIdOrItemMasterCategoryCodeGroupIdAndStatusEquals(categoryId.value(), categoryId.value(), ItemStatus.ON_SALE, pageable);
+    }
+
+    @Transactional(readOnly = true)
     public Optional<ItemDisplay> findByItemMaster(@Valid Id<ItemMaster, String> itemMasterId){
         return itemDisplayRepository.findByItemMasterId(itemMasterId.value());
     }

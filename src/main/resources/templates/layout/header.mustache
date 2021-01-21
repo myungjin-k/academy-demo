@@ -64,7 +64,9 @@
                 <li><a class="nav-link" href="#">BEST SELLERS</a></li>
                 {{#items}}
                 <li class="nav-item">
-                    <a class="nav-link" href="#">{{nameKor}}</a>
+                    <a class="nav-link mainCategory" href="" onclick="return false;">{{nameKor}}
+                        <input type="hidden" name="id" value="{{id}}"/>
+                    </a>
                 </li>
                 {{/items}}
             </ul>

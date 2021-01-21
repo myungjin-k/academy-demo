@@ -13,6 +13,10 @@ var itemDetail = {
         _this.displayId = id;
         $('#div-sales-item-detail').removeClass('d-none');
         _this.load();
+
+        $('.categoryName').click(function(){
+           alert('!!');
+        });
     },
     clear : function(){
         this.div.find('#div-item-detail-thumbnail #img-thumbnail').prop("src", '');
