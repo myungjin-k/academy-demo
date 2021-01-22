@@ -17,4 +17,5 @@ public interface ItemDisplayRepository extends JpaRepository<ItemDisplay, String
 
     // 상품 대분류, 전시상태로 검색
     Page<ItemDisplay> findAllByItemMasterCategoryIdOrItemMasterCategoryCodeGroupIdAndStatusEquals(String categoryId, String groupId, ItemStatus status, Pageable pageable);
+
 }

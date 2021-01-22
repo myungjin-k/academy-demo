@@ -6,8 +6,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
+import my.myungjin.academyDemo.domain.common.CodeGroup;
 import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
+import my.myungjin.academyDemo.service.admin.CommonCodeService;
 import my.myungjin.academyDemo.service.item.ItemDisplayService;
 import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.ItemSearchRequest;
@@ -20,13 +22,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
+import static java.util.Collections.emptyList;
 import static my.myungjin.academyDemo.web.Response.OK;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/mall")
 @RestController
 public class ItemSaleController {
+
     private final ItemDisplayService itemDisplayService;
+
+    private final CommonCodeService commonCodeService;
 
     @GetMapping(path = "/item/list")
     @ApiOperation(value = "전시상품 전체 리스트 조회(API 키 필요없음)")
@@ -78,6 +86,17 @@ public class ItemSaleController {
         return  OK(
                 itemDisplayService.findAllByCategoryGroup(Id.of(CommonCode.class, categoryId), pageRequest.of())
                         .map(itemDisplay -> new ItemDisplayResponse().of(itemDisplay))
+        );
+    }
+
+    @GetMapping("/category/{categoryId}/sub/list")
+    @ApiOperation(value = "카테고리별 서브카테고리 조회")
+    public Response<List<CommonCode>> getSubCategories(@PathVariable @ApiParam(value = "대상 카테고리 PK", defaultValue = "3ebebfeb9fbe4ecfa5935f96ed308854") String categoryId){
+        return  OK(
+                commonCodeService.findGroupById(Id.of(CodeGroup.class, categoryId))
+                        .filter(codeGroup -> !"C".equals(codeGroup.getCode()))
+                        .map(commonCodeService::findAllCommonCodesByCodeGroup)
+                        .orElse(emptyList())
         );
     }
 }

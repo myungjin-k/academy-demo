@@ -66,7 +66,7 @@ INSERT INTO item_display_option (id, color, size, status, display_id) VALUES ('c
 INSERT INTO item_display_option (id, color, size, status, display_id) VALUES ('c9402883dbe540e898a417e4984845bf', '포그그레이', 'M', '1', 'f23ba30a47194a2c8a3fd2ccadd952a4');
 
 INSERT INTO item_master (id, item_name, category_id, price, thumbnail)
-VALUES ('6b5cd6e21ffa4bb08a75e270c18e8e05', '[N택] 시티 하이넥 코트 (2color)', '36f651a982274a5b95dac3e9d85b0d1a', 190000, 'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/dev/itemMaster/095748bf-a3ba-4c9a-a239-aadbed7ac65d.jpg');
+VALUES ('6b5cd6e21ffa4bb08a75e270c18e8e05', '[N택] 시티 하이넥 코트 (2color)', '979143570fc54210a83655db48a923dd', 190000, 'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/dev/itemMaster/095748bf-a3ba-4c9a-a239-aadbed7ac65d.jpg');
 
 INSERT INTO item_display (id, item_id, item_display_name, sale_price, material, size, description, status, detail_image) VALUES
 ('6bdbf6eea40b425caae4410895ca4809', '6b5cd6e21ffa4bb08a75e270c18e8e05', '시티 하이넥 코트 (2color)', 190000, '울30 나일론70',

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.common.*;
 import my.myungjin.academyDemo.error.NotFoundException;
+import org.aspectj.apache.bcel.classfile.Code;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -35,6 +36,11 @@ public class CommonCodeService {
     @Transactional(readOnly = true)
     public Page<CodeGroup> findAllGroups(Pageable pageable){
         return codeGroupRepository.findAll(pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<CodeGroup> findGroupById(@Valid Id<CodeGroup, String> id){
+        return codeGroupRepository.findById(id.value());
     }
 
     @Transactional(readOnly = true)
@@ -79,6 +85,12 @@ public class CommonCodeService {
         return findGroupById(groupId.value())
                 .map(commonCodeRepository::findAllByCodeGroup)
                 .orElseThrow(() -> new NotFoundException(CodeGroup.class, groupId));
+    }
+
+    @Cacheable(value="commonCodeCache", key="#group.id")
+    @Transactional(readOnly = true)
+    public List<CommonCode> findAllCommonCodesByCodeGroup(@Valid CodeGroup group){
+        return commonCodeRepository.findAllByCodeGroup(group);
     }
 
     @Transactional(readOnly = true)

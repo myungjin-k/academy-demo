@@ -2,25 +2,41 @@
 
 <!-- Index Content -->
 
-<div>
-    <p id="breadcrumb">
-        <a class="categoryTitle">BEST</a>
-        <span class="categoryTitle d-none" id="category-sub">
-        >
-            <a class="categoryName">
-                <input type="hidden" name="categoryId" />
-            </a>
-        </span>
-    </p>
-
-</div>
 <div id="div-sales-item-list">
+    <div class="categoryTitle">
+        <p id="title">
+            <a class="main text-decoration-none">BEST</a>
+        </p>
+        <div id="div-sub-cates"></div>
+    </div>
     <div class="row" id="div-thumb">
 
     </div>
     <div id="div-load-more-items"></div>
 </div>
 <div class="d-none p-2" id="div-sales-item-detail">
+    <div>
+        <p id="breadcrumb">
+            <a class="categoryTitle all" href="" onclick="return false;">
+                All
+            </a>
+            <span class="cateArea main">
+                >
+                <a class="categoryTitle" href="" onclick="return false;">
+                    Main Category
+                </a>
+                <input type="hidden" name="categoryId" />
+            </span>
+            <span class="cateArea sub d-none">
+                >
+                <a class="categoryTitle" href="" onclick="return false;">
+                    Sub Category
+                </a>
+                <input type="hidden" name="categoryId" />
+            </span>
+        </p>
+
+    </div>
     <div class="row text-center">
         <div class="col-sm-9">
             <div class="row mb-lg-5">

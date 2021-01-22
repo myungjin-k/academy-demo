@@ -8,21 +8,21 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <link rel="shortcut icon" href="../favicon.ico">
-    <link rel="icon" href="../favicon.ico">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="icon" href="/favicon.ico">
 
     <title>MESMERIZIN'</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="../static/css/business-frontpage.css" rel="stylesheet">
+    <link href="/static/css/business-frontpage.css" rel="stylesheet">
 
     <!-- Bootstrap core JavaScript -->
-    <script src="../static/js/jquery/jquery.min.js"></script>
-    <script src="../static/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="../static/js/common.js"></script>
+    <script src="/static/js/jquery/jquery.min.js"></script>
+    <script src="/static/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/common.js"></script>
 
 </head>
 
@@ -31,7 +31,7 @@
 <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">
-            <img src="../logo.png" height="25"/>
+            <img src="/logo.png" height="25"/>
         </a>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
@@ -61,10 +61,10 @@
         <!-- Category -->
         <div class="col-sm-3" id="div-item-menu">
             <ul class="nav flex-column">
-                <li><a class="nav-link" href="#">BEST SELLERS</a></li>
+                <li><a class="nav-link itemMenu best" href="#">BEST SELLERS</a></li>
                 {{#items}}
                 <li class="nav-item">
-                    <a class="nav-link mainCategory" href="" onclick="return false;">{{nameKor}}
+                    <a class="nav-link itemMenu mainCategory" href="" onclick="return false;">{{nameKor}}
                         <input type="hidden" name="id" value="{{id}}"/>
                     </a>
                 </li>
