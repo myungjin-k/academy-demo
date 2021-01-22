@@ -11,6 +11,7 @@ var main = {
             $('#div-sales-item-detail').addClass('d-none');
             _this.div.removeClass('d-none');
             $("#div-thumb").empty();
+            _this.page = 1;
             if($(this).hasClass('best')){
                 _this.cateId = '';
                 _this.cateName = 'BEST';
@@ -26,7 +27,8 @@ var main = {
         _this.div.on('click', '.sub', function(){
             _this.cateId = $(this).find('input[name="id"]').val();
             $("#div-thumb").empty();
-            _this.loadCateItems(1);
+            _this.page = 1;
+            _this.loadCateItems(_this.page);
         });
 
         _this.div.on('click', '#btn-load-more-items', function(){

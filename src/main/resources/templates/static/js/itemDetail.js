@@ -25,6 +25,7 @@ var itemDetail = {
 
         _this.div.find('.cateArea').unbind().bind('click', function(){
             main.cateId = $(this).find('input[name="categoryId"]').val();
+            main.page = 1;
             $("#div-thumb").empty();
             main.loadCateItems(1);
             main.div.removeClass('d-none');
