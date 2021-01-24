@@ -55,13 +55,13 @@ var main = {
         //console.log(data.groupId);
         $.ajax({
             type: 'POST',
-            url: '/api/auth',
+            url: '/auth',
             dataType: 'json',
             contentType:'application/json; charset=utf-8',
             data: JSON.stringify(data)
         }).done(function(response) {
             //console.log(response);
-            location.href = "/";
+            location.href = data.redirectUri === undefined ? "/" : redirectUri;
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
