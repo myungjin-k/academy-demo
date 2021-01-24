@@ -7,7 +7,8 @@
         {{>layout/category}}
         <div class="col-sm-8" id="root" style="overflow: auto;">
             <!-- Index Content -->
-            <div id="div-sales-item-list">
+            <!-- Item List -->
+            <div id="div-sales-item-list" class="contentDiv">
                 <div class="categoryTitle">
                     <p id="title">
                         <a class="main text-decoration-none">BEST</a>
@@ -19,7 +20,9 @@
                 </div>
                 <div id="div-load-more-items"></div>
             </div>
-            <div class="d-none p-2" id="div-sales-item-detail">
+            <!-- //Item List -->
+            <!-- Item Detail -->
+            <div class="d-none p-2 contentDiv" id="div-sales-item-detail">
                 <div>
                     <p id="breadcrumb">
                         <a class="categoryTitle all" href="" onclick="return false;">
@@ -88,6 +91,29 @@
                         </div>
                     </div>
                 </div>
-                <!-- // Index Content-->
             </div>
+            <!-- //Item Detail -->
+            <!-- Cart -->
+            <div class="d-none p-2 contentDiv" id="div-cart" >
+                <h4 class="mb-3">장바구니</h4>
+                <div class="mb-3">
+                    <table class="table table-horizontal table-bordered">
+                        <thead class="thead-strong">
+                        <tr>
+                            <th width="5%">선택</th>
+                            <th width="50%">상품명</th>
+                            <th width="15%">수량</th>
+                            <th width="15% ">금액</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody id="cart-items">
+
+                        </tbody>
+                    </table>
+                    <a class="btn btn-lg btn-primary" id="btn-order">주문하기</a>
+                </div>
+            </div>
+            <!-- // Cart -->
+            <!-- // Index Content-->
 {{>layout/footer}}

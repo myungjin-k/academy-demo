@@ -1,21 +1,43 @@
 function loadCart(optionId) {
-    console.log(optionId);
     var userId = $('.loginInfo').val();
-
-    console.log(userId);
-    cart.init(optionId, userId);
+    // TODO 수량 설정기능
+    addCart(userId, optionId, 1);
+    $('#div-sales-item-detail').addClass('d-none');
+    $('#div-cart').removeClass('d-none');
+    cart.init(userId);
 }
-var cart = {
-    optionId : '',
-    userId : '',
-    init : function(optionId, userId){
-        var _this = this;
-        _this.optionId = optionId;
-        _this.userId = userId;
-        if(_this.optionId === ''){
-            alert('옵션을 확인해 주세요.');
+function addCart(userId, optionId, count){
+    if(optionId === undefined){
+        alert('옵션을 확인해 주세요.');
+        return false;
+    }
+    var data = {
+        "itemId" : optionId,
+        "count" : count
+    };
+    $.ajax({
+        type: 'POST',
+        url: '/api/mall/member/'+ userId +'/cart',
+        dataType: 'json',
+        contentType:'application/json; charset=utf-8',
+        data: JSON.stringify(data)
+    }).done(function(response) {
+        console.log(response);
+    }).fail(function (error) {
+        alert(JSON.stringify(error));
+        if(userId === undefined){
+            alert('로그인 후 이용해 주세요.');
+            location.href='/mall/login'
             return false;
         }
+    });
+}
+
+var cart = {
+    userId : '',
+    init : function(userId){
+        var _this = this;
+        _this.userId = userId;
         _this.load();
     },
     load : function(){
@@ -27,19 +49,35 @@ var cart = {
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
             var data = response.response;
-            console.log(response);
-            /*
-            $('#div-sub-cates').empty();
+            console.log(data);
+            $('#cart-items').empty();
             $.each(data, function(){
-                var cate = this;
-                var el = '<a class="sub mr-3" href="" onclick="return false;">' + cate.nameKor +
-                    '<input type="hidden" name="id" value="' + cate.id +'"' +
-                    '</a>';
-                $('#div-sub-cates').append(el);
-            });*/
+                var cartItem = this;
+                var option = cartItem.itemOption;
+                var display = option.itemDisplay;
+                const row = '<tr>'
+                    + '<td>'
+                    +   '<input type="checkbox" class="cartItemChk"  name="id" value="' + cartItem.id + ' selected "/>'
+                    + '</td>'
+                    + '<td class="itemInfo">'
+                    + '  <a>'
+                    + '    <img class="thumbnail mr-3" src="'+ display.itemMaster.thumbnail +'">'
+                    +      display.itemDisplayName
+                    + '    </br>'
+                    + '    옵션 : ' + option.color + '/' + option.size
+                    + '  </a>'
+                    +'</td>'
+                    + '<td class="itemCount">'+ cartItem.count +'</td>'
+                    + '<td class="itemCount">'+ cartItem.count * display.salePrice +'</td>'
+                    + '<td>'
+                    + '  <a class="btn btn-sm btn-outline-dark btn-modify">수정</a>'
+                    + '  <a class="btn btn-sm btn-outline-dark btn-delete">삭제</a>'
+                    + '</td>'
+                    + '</tr>';
+                $('#cart-items').append(row);
+            });
         }).fail(function (error) {
             alert(JSON.stringify(error));
-
             if(_this.userId === undefined){
                 alert('로그인 후 이용해 주세요.');
                 location.href='/mall/login'

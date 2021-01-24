@@ -16,6 +16,7 @@ import my.myungjin.academyDemo.service.member.MemberService;
 import my.myungjin.academyDemo.service.order.CartService;
 import my.myungjin.academyDemo.service.order.OrderService;
 import my.myungjin.academyDemo.web.Response;
+import my.myungjin.academyDemo.web.request.CartRequest;
 import my.myungjin.academyDemo.web.request.OrderRequest;
 import my.myungjin.academyDemo.web.request.PageRequest;
 import my.myungjin.academyDemo.web.response.MemberInformRatingResponse;
@@ -45,13 +46,13 @@ public class OrderController {
     @ApiOperation(value = "장바구니 추가")
     public Response<CartItem> addCart(
             @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String id,
-            @RequestParam String itemId, @RequestParam int count, @AuthenticationPrincipal Authentication authentication){
+            @RequestBody CartRequest request, @AuthenticationPrincipal Authentication authentication){
         return OK(
                 cartService.add(
                         Id.of(Member.class, id),
                         Id.of(Member.class, ((User) authentication.getDetails()).getId()),
-                        Id.of(ItemDisplay.ItemDisplayOption.class, itemId),
-                        count
+                        Id.of(ItemDisplay.ItemDisplayOption.class, request.getItemId()),
+                        request.getCount()
                 )
         );
     }

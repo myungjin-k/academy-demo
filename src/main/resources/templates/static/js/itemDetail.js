@@ -31,7 +31,7 @@ var itemDetail = {
             main.div.removeClass('d-none');
             _this.div.addClass('d-none');
         });
-        _this.div.find('#btn-add-cart').click(function(){
+        _this.div.find('#btn-add-cart').unbind().bind('click', function(){
             var optionId =_this.div.find('#div-item-detail-options #select-option').val();
             var isSoldOut = _this.div.find('#div-item-detail-options #select-option option[value="'+ optionId +'"]').find(".soldOut");
             if(isSoldOut.length > 0){

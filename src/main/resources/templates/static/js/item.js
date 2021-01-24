@@ -8,7 +8,7 @@ var main = {
         _this.loadAllItems(1);
 
         $('.itemMenu').click(function(){
-            $('#div-sales-item-detail').addClass('d-none');
+            $('.contentDiv').not(_this.div).addClass('d-none');
             _this.div.removeClass('d-none');
             $("#div-thumb").empty();
             _this.page = 1;

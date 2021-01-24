@@ -643,7 +643,7 @@ var itemDisplayOption = {
                     //console.log(this);
                     const option = this;
                     const row = '<tr>'
-                        + '<input type="hidden" name="id" value="' + option.id + '"/>'
+                        + '<input type="hidden" name="id" value="' + option.id + '" selected />'
                         + '<input type="hidden" name="status" value="' + option.status + '"/>'
                         + '<td class="displayId">' + option.itemDisplay.itemDisplayName
                         + '<input type="hidden" name="displayId" value="' + option.itemDisplay.id + '"/>'

@@ -99,3 +99,7 @@ ul {
 #div-item-summary {
   line-height: 1.0em;
 }
+
+#div-cart .itemInfo img {
+  height: 50px;
+}
