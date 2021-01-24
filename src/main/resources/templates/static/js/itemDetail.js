@@ -31,6 +31,15 @@ var itemDetail = {
             main.div.removeClass('d-none');
             _this.div.addClass('d-none');
         });
+        _this.div.find('#btn-add-cart').click(function(){
+            var optionId =_this.div.find('#div-item-detail-options #select-option').val();
+            var isSoldOut = _this.div.find('#div-item-detail-options #select-option option[value="'+ optionId +'"]').find(".soldOut");
+            if(isSoldOut.length > 0){
+                alert('해당 옵션은 품절되었습니다.');
+                return false;
+            }
+            loadCart(optionId);
+        });
     },
     clear : function(){
         this.div.find('#div-item-detail-thumbnail #img-thumbnail').prop("src", '');
@@ -52,7 +61,7 @@ var itemDetail = {
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
             var data = response.response;
-            console.log(data);
+            //console.log(data);
             _this.clear();
             _this.div.find('#div-item-detail-thumbnail #img-thumbnail').prop("src", data.thumbnail);
             _this.div.find('#div-item-detail-notice #p-notice').text(data.notice);
@@ -65,7 +74,10 @@ var itemDetail = {
             _this.div.find('#div-item-summary #div-item-detail-material #p-material').text(data.material);
             var optionsEl = _this.div.find('#div-item-summary #div-item-detail-options #select-option');
             $.each(data.options, function(){
-                optionsEl.append("<option value='" + this.optionId + "'>" + this.color + "/" + this.size +"</option>");
+                var optionName = this.color + "/" + this.size;
+                if(this.soldOut)
+                    optionName += '<span class="soldOut"> [품절]</span>';
+                optionsEl.append("<option value='" + this.optionId + "'>" + optionName +"</option>");
             });
         }).fail(function (error) {
             alert(JSON.stringify(error));
