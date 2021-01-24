@@ -53,13 +53,15 @@ var itemDetail = {
         }).done(function(response) {
             var data = response.response;
             console.log(data);
+            _this.clear();
             _this.div.find('#div-item-detail-thumbnail #img-thumbnail').prop("src", data.thumbnail);
             _this.div.find('#div-item-detail-notice #p-notice').text(data.notice);
             _this.div.find('#div-item-detail-description #text-description').val(data.description);
-            _this.div.find('#div-item-detail-image #img-detail').prop("src", data.detailImage);
+            _this.div.find('#div-item-detail-image  #img-detail').prop("src", data.detailImage);
             _this.div.find('#div-item-summary #div-item-detail-name #p-name').text(data.itemName);
             _this.div.find('#div-item-summary #div-item-detail-price #p-price').text(data.itemPrice);
-            _this.div.find('#div-item-summary #div-item-detail-size #p-size').text(data.sizeInfo);
+            var sizeInfo = data.sizeInfo.replaceAll('\n' , '<br>');
+            _this.div.find('#div-item-summary #div-item-detail-size #p-size').text(sizeInfo);
             _this.div.find('#div-item-summary #div-item-detail-material #p-material').text(data.material);
             var optionsEl = _this.div.find('#div-item-summary #div-item-detail-options #select-option');
             $.each(data.options, function(){
