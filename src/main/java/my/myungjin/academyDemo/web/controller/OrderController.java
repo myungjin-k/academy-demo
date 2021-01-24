@@ -25,9 +25,11 @@ import my.myungjin.academyDemo.web.response.OrderResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static my.myungjin.academyDemo.web.Response.OK;
 
@@ -42,18 +44,21 @@ public class OrderController {
 
     private final MemberService memberService;
 
+    @Transactional
     @PostMapping("/member/{id}/cart")
-    @ApiOperation(value = "장바구니 추가")
-    public Response<CartItem> addCart(
+    @ApiOperation(value = "장바구니 추가 (리스트)")
+    public Response<List<CartItem>> addCart(
             @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String id,
-            @RequestBody CartRequest request, @AuthenticationPrincipal Authentication authentication){
+            @RequestBody List<CartRequest> requestList, @AuthenticationPrincipal Authentication authentication){
         return OK(
-                cartService.add(
-                        Id.of(Member.class, id),
-                        Id.of(Member.class, ((User) authentication.getDetails()).getId()),
-                        Id.of(ItemDisplay.ItemDisplayOption.class, request.getItemId()),
-                        request.getCount()
-                )
+                requestList.stream()
+                .map(newCartItemRequest ->
+                        cartService.add(
+                            Id.of(Member.class, id),
+                            Id.of(Member.class, ((User) authentication.getDetails()).getId()),
+                            Id.of(ItemDisplay.ItemDisplayOption.class, newCartItemRequest.getItemId()),
+                            newCartItemRequest.getCount()
+                )).collect(Collectors.toList())
         );
     }
 

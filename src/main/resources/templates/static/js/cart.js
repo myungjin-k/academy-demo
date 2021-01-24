@@ -1,25 +1,20 @@
-function loadCart(optionId) {
+function loadCart(itemList) {
     var userId = $('.loginInfo').val();
-    // TODO 수량 설정기능
-    addCart(userId, optionId, 1);
+    addCart(userId, itemList);
     $('#div-sales-item-detail').addClass('d-none');
     $('#div-cart').removeClass('d-none');
 }
-function addCart(userId, optionId, count){
-    if(optionId === undefined){
+function addCart(userId, itemList){
+    if(itemList.length === 0){
         alert('옵션을 확인해 주세요.');
         return false;
     }
-    var data = {
-        "itemId" : optionId,
-        "count" : count
-    };
     $.ajax({
         type: 'POST',
         url: '/api/mall/member/'+ userId +'/cart',
         dataType: 'json',
         contentType:'application/json; charset=utf-8',
-        data: JSON.stringify(data)
+        data: JSON.stringify(itemList)
     }).done(function(response) {
         //console.log(response);
         cart.init(userId);

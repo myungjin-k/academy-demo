@@ -33,7 +33,6 @@ public class CartService {
         return cartRepository.findAllByMember(findMember(memberId));
     }
 
-    @Transactional
     public CartItem add(@Valid Id<Member, String> memberId, @Valid Id<Member, String> loginUserId,
                         @Valid Id<ItemDisplay.ItemDisplayOption, String> itemId, @Positive int count){
         if(!loginUserId.value().equals(memberId.value()))

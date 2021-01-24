@@ -13,6 +13,7 @@ function loadDetail(id, categoryId, categoryName, parentCategoryId, parentCatego
     }
     itemDetail.init(id);
 }
+
 var itemDetail = {
     displayId : '',
     div : $("#div-sales-item-detail"),
@@ -32,14 +33,44 @@ var itemDetail = {
             _this.div.addClass('d-none');
         });
         _this.div.find('#btn-add-cart').unbind().bind('click', function(){
-            var optionId =_this.div.find('#div-item-detail-options #select-option').val();
-            var isSoldOut = _this.div.find('#div-item-detail-options #select-option option[value="'+ optionId +'"]').find(".soldOut");
+            var addItemList = [];
+            _this.div.find('#div-selected-result .selectedItem').each(function(){
+                var id = $(this).find("input[name='optionId']").val();
+                var count = $(this).find("input[name='count']").val();
+                addItemList.push({"itemId" : id, "count" : count});
+            })
+            loadCart(addItemList);
+        });
+        _this.div.find('#div-item-detail-options #select-option').unbind().bind('change', function(){
+            var optionId = $(this).val();
+            var selected = $(this).find('option[value="'+ optionId +'"]');
+            var info = selected.text();
+            var isSoldOut = selected.find(".soldOut");
+            if($('#div-selected-result').find('input[value="'+ optionId+'"]').length > 0)
+                return false;
+            if(optionId === undefined){
+                alert('옵션을 선택해 주세요.');
+                return false;
+            }
             if(isSoldOut.length > 0){
                 alert('해당 옵션은 품절되었습니다.');
                 return false;
             }
-            loadCart(optionId);
+            _this.addSelectedResult(optionId, info);
         });
+        _this.div.find('#div-selected-result').off().on('click', '.btn', function(){
+            _this.adjustCount($(this));
+        });
+    },
+    adjustCount : function(btn){
+        var count = btn.parents('.count').find('input[name="count"]');
+        if(btn.hasClass('plus')){
+            count.val(Number(count.val()) + 1);
+        } else if(btn.hasClass('minus')){
+            if(Number(count.val()) === 1)
+                return false;
+            count.val(Number(count.val()) - 1);
+        }
     },
     clear : function(){
         this.div.find('#div-item-detail-thumbnail #img-thumbnail').prop("src", '');
@@ -50,7 +81,18 @@ var itemDetail = {
         this.div.find('#div-item-summary #div-item-detail-price #p-price').text('');
         this.div.find('#div-item-summary #div-item-detail-size #p-size').text('');
         this.div.find('#div-item-summary #div-item-detail-material #p-material').text('');
-        this.div.find('#div-item-summary #div-item-detail-options #select-option').empty();
+        this.div.find('#div-item-summary #div-item-detail-options #select-option').empty().append("<option value='' />");
+        this.div.find('#div-item-summary #div-selected-result').empty();
+    },
+    addSelectedResult : function(optionId, info){
+        var el = $("<p class='selectedItem'/>");
+        var idEl = $("<input type='hidden' name='optionId' value='"+ optionId +"'/>");
+        var countEl = $("<span class='count float-right ml-2'/>")
+            .append($("<input class='mr-2' type='text' name='count' value='1' style='width: 20px' readonly/>"))
+            .append($("<button class='btn plus p-0 mr-2''>+</button>"))
+            .append($("<button class='btn minus p-0 ''>-</button>"));
+        el.append(info).append(countEl).append(idEl);
+        $('#div-selected-result').append(el);
     },
     load : function(){
         var _this = this;

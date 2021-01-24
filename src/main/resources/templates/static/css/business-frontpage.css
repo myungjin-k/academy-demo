@@ -9,6 +9,10 @@
 .h250 {
   height: 250px !important;
 }
+
+.lh1 {
+  line-height: 1.0rem;
+}
 body {
   padding-top: 150px;
   min-height: 100vh;
