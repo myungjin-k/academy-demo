@@ -1,0 +1,14 @@
+<!-- Category -->
+<div class="col-sm-3" id="div-item-menu">
+    <ul class="nav flex-column">
+        <li><a class="nav-link itemMenu best" href="#">BEST SELLERS</a></li>
+        {{#items}}
+            <li class="nav-item">
+                <a class="nav-link itemMenu mainCategory" href="" onclick="return false;">{{nameKor}}
+                    <input type="hidden" name="id" value="{{id}}"/>
+                </a>
+            </li>
+        {{/items}}
+    </ul>
+</div>
+<!-- Category End -->
