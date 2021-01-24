@@ -20,8 +20,8 @@ var itemDetail = {
     init : function(id){
         var _this = this;
         _this.displayId = id;
-        $('#div-sales-item-list').addClass('d-none');
-        $('#div-sales-item-detail').removeClass('d-none');
+        $('.contentDiv').not(_this.div).addClass('d-none');
+        _this.div.removeClass('d-none');
         _this.load();
 
         _this.div.find('.cateArea').unbind().bind('click', function(){

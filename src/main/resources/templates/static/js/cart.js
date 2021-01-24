@@ -1,31 +1,30 @@
 function loadCart(itemList) {
     var userId = $('.loginInfo').val();
     addCart(userId, itemList);
-    $('#div-sales-item-detail').addClass('d-none');
-    $('#div-cart').removeClass('d-none');
 }
 function addCart(userId, itemList){
     if(itemList.length === 0){
         alert('옵션을 확인해 주세요.');
         return false;
+    } else {
+        $.ajax({
+            type: 'POST',
+            url: '/api/mall/member/'+ userId +'/cart',
+            dataType: 'json',
+            contentType:'application/json; charset=utf-8',
+            data: JSON.stringify(itemList)
+        }).done(function(response) {
+            //console.log(response);
+            cart.init(userId);
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+            if(userId === undefined){
+                alert('로그인 후 이용해 주세요.');
+                location.href='/mall/login'
+                return false;
+            }
+        });
     }
-    $.ajax({
-        type: 'POST',
-        url: '/api/mall/member/'+ userId +'/cart',
-        dataType: 'json',
-        contentType:'application/json; charset=utf-8',
-        data: JSON.stringify(itemList)
-    }).done(function(response) {
-        //console.log(response);
-        cart.init(userId);
-    }).fail(function (error) {
-        alert(JSON.stringify(error));
-        if(userId === undefined){
-            alert('로그인 후 이용해 주세요.');
-            location.href='/mall/login'
-            return false;
-        }
-    });
 }
 
 var cart = {
@@ -35,10 +34,18 @@ var cart = {
         var _this = this;
         _this.userId = userId;
         _this.load();
+        $('.contentDiv').not(_this.div).addClass('d-none');
+        _this.div.removeClass('d-none');
         _this.div.off().on('click', '.btn-delete', function(){
            var cartId = $(this).parents('tr').find('input[name="id"]').val();
             //console.log(cartId);
            _this.delete(cartId);
+        });
+
+        _this.div.off().on('click', '.itemInfo', function(){
+            var itemId = $(this).find('input[name="itemId"]').val();
+            //console.log(cartId);
+            itemDetail.init(itemId);
         });
     },
     load : function(){
@@ -58,10 +65,11 @@ var cart = {
                 var display = option.itemDisplay;
                 const row = '<tr>'
                     + '<td>'
-                    +   '<input type="checkbox" class="cartItemChk"  name="id" value="' + cartItem.id + '" selected />'
+                    +   '<input type="checkbox" class="cartItemChk"  name="id" value="' + cartItem.id + '" />'
                     + '</td>'
                     + '<td class="itemInfo">'
-                    + '  <a>'
+                    + '  <a href="" onclick="return false;">'
+                    + '    <input type="hidden" name="itemId" value="' + display.id + '" />'
                     + '    <img class="thumbnail mr-3" src="'+ display.itemMaster.thumbnail +'">'
                     +      display.itemDisplayName
                     + '    </br>'
