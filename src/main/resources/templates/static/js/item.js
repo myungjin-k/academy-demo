@@ -63,7 +63,7 @@ var main = {
     },
     makeItemHtml : function(data, page){
         var div = $("#div-thumb");
-        console.log(data.content);
+        //console.log(data.content);
 
         $.each(data.content, function(){
             var item = this;

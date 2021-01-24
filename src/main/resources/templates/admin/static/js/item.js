@@ -608,15 +608,16 @@ var itemDisplayOption = {
         form.find('input[name="id"]').val('');
         form.find('input[name="color"]').val('');
         form.find('input[name="size"]').val('');
-        form.find('input[name="status"]').val('');
+        form.find('#optionStatus').val('');
+        form.find('#optionStatus option:eq(0)').prop("selected", true);
     },
     setData : function(data){
         var form = $('#form-save-item-display-option');
-        console.log(form.html());
         form.find('input[name="id"]').val(data.id);
         form.find('input[name="color"]').val(data.color);
         form.find('input[name="size"]').val(data.size);
-        form.find('input[name="status"]').val(data.status);
+        form.find('#optionStatus').val(data.status);
+        form.find('#optionStatus option[value="'+ data.status +'"]').prop("selected", true);
     },
     list : function (page){
         var _this = this;
