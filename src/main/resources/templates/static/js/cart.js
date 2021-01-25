@@ -37,10 +37,14 @@ var cart = {
         $('.contentDiv').not(_this.div).addClass('d-none');
         _this.div.removeClass('d-none');
 
-        _this.div.find('#cart-items').off('click').on('click', '.btn-delete', function(){
+        _this.div.find('#cart-items').off('click').on('click', '.btnTd .btn', function(){
             var cartId = $(this).parents('tr').find('input[name="id"]').val();
-            //console.log(cartId);
-            _this.delete(cartId);
+            if($(this).hasClass('btn-delete'))
+                _this.delete(cartId);
+            else if($(this).hasClass('btn-modify-count')){
+                var count = $(this).parents('tr').find('input[name="count"]').val();
+                _this.modifyCount(cartId, count);
+            }
         });
 
         _this.div.find('#cart-items').on('click', '.itemInfo', function(){
@@ -50,6 +54,7 @@ var cart = {
         });
 
         _this.div.find('#cart-items').on('click', '.itemCount .btn', function(){
+            //console.log(this);
             _this.adjustCount($(this));
         });
     },
@@ -86,6 +91,7 @@ var cart = {
                 const row = $('<tr/>');
                 const chkbox = $('<input class="cartItemChk" type="checkbox"/>')
                     .prop('name', 'id')
+                    .prop('checked', true)
                     .val(cartItem.id);
 
                 const itemLink = $('<a href="" onclick="return false;"/>')
@@ -100,7 +106,7 @@ var cart = {
 
                 const btn = '<a class="btn btn-sm btn-outline-dark"/>';
 
-                const btnTd = $('<td/>');
+                const btnTd = $('<td class="btnTd"/>');
                     btnTd.append($(btn).addClass('btn-modify-count').text('수량변경'));
                     btnTd.append($(btn).addClass('btn-delete').text('삭제'))
 
@@ -128,6 +134,19 @@ var cart = {
             url: '/api/mall/member/' + _this.userId + '/cart/' + id
         }).done(function(response) {
             //console.log(response);
+            _this.load();
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+    },
+    modifyCount : function (id, updatedCnt){
+        var _this = this;
+        $.ajax({
+            type: 'PATCH',
+            url: '/api/mall/member/' + _this.userId + '/cart/' + id +'?count=' + updatedCnt
+        }).done(function(response) {
+            //console.log(response);
+            alert('변경되었습니다.');
             _this.load();
         }).fail(function (error) {
             alert(JSON.stringify(error));
