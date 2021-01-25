@@ -111,8 +111,12 @@ var itemDetail = {
             _this.div.find('#div-item-detail-image  #img-detail').prop("src", data.detailImage);
             _this.div.find('#div-item-summary #div-item-detail-name #p-name').text(data.itemName);
             _this.div.find('#div-item-summary #div-item-detail-price #p-price').text(data.itemPrice);
-            var sizeInfo = data.sizeInfo.replaceAll('\n' , '<br>');
-            _this.div.find('#div-item-summary #div-item-detail-size #p-size').text(sizeInfo);
+            var sizes = data.sizeInfo.split('\n');
+            $.each(sizes, function(){
+                _this.div.find('#div-item-summary #div-item-detail-size #p-size')
+                    .append($('<div/>').append(this));
+            });
+            //_this.div.find('#div-item-summary #div-item-detail-size #p-size').text(sizeInfo);
             _this.div.find('#div-item-summary #div-item-detail-material #p-material').text(data.material);
             var optionsEl = _this.div.find('#div-item-summary #div-item-detail-options #select-option');
             $.each(data.options, function(){

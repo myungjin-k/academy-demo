@@ -10,9 +10,10 @@
   height: 250px !important;
 }
 
-.lh1 {
-  line-height: 1.0rem;
+.lh75 {
+  line-height: 0.875rem;
 }
+
 body {
   padding-top: 150px;
   min-height: 100vh;
@@ -101,7 +102,11 @@ ul {
 }
 
 #div-item-summary {
-  line-height: 1.0em;
+  line-height: 1rem;
+}
+
+#div-item-summary .info {
+  margin-bottom: 1.0rem;
 }
 
 #div-cart .itemInfo img {
