@@ -36,13 +36,14 @@ var cart = {
         _this.load();
         $('.contentDiv').not(_this.div).addClass('d-none');
         _this.div.removeClass('d-none');
-        _this.div.off().on('click', '.btn-delete', function(){
-           var cartId = $(this).parents('tr').find('input[name="id"]').val();
+
+        _this.div.find('#cart-items').off('click').on('click', '.btn-delete', function(){
+            var cartId = $(this).parents('tr').find('input[name="id"]').val();
             //console.log(cartId);
-           _this.delete(cartId);
+            _this.delete(cartId);
         });
 
-        _this.div.off().on('click', '.itemInfo', function(){
+        _this.div.find('#cart-items').on('click', '.itemInfo', function(){
             var itemId = $(this).find('input[name="itemId"]').val();
             //console.log(cartId);
             itemDetail.init(itemId);
@@ -78,7 +79,7 @@ var cart = {
                     +'</td>'
                     + '<td class="itemCount">'+ cartItem.count +'</td>'
                     + '<td class="itemCount">'+ cartItem.count * display.salePrice +'</td>'
-                    + '<td>'
+                    + '<td class="btnTd">'
                     + '  <a class="btn btn-sm btn-outline-dark btn-modify-count">수량변경</a>'
                     + '  <a class="btn btn-sm btn-outline-dark btn-delete">삭제</a>'
                     + '</td>'
