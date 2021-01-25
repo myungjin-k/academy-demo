@@ -119,5 +119,97 @@
                 </div>
             </div>
             <!-- // Cart -->
+            <!-- Order -->
+            <div class="d-none p-2 contentDiv" id="div-order" >
+                <div class="mb-3 orderItemInfo">
+                    <h4 class="mb-3">주문상품정보</h4>
+                    <table class="table table-horizontal table-bordered">
+                        <thead class="thead-strong">
+                        <tr>
+                            <th >상품명</th>
+                            <th width="10%">수량</th>
+                            <th width="10% ">금액</th>
+                        </tr>
+                        </thead>
+                        <tbody id="order-items">
+
+                        </tbody>
+                    </table>
+                    <div class="amountInfo">
+                        <h5>가용포인트</h5>
+                        <div class="usablePoints"></div>
+                        <div class="usePoints">
+                            <label for="use-all-points" >포인트 전부 사용</label>
+                            <input type="checkbox" id="use-all-points" />
+                            <input type="text" name="usedPoints" /> P
+                        </div>
+                        <h5 class="float-right text-right">총 주문금액</h5>
+                        <div class="totalAmount text-right"></div>
+                    </div>
+                </div>
+                <h4 class="mb-3">주문정보</h4>
+                <div class="mb-3 ordererInfo">
+                    <form id="form-order-info">
+                        <div class="form-group form-row">
+                            <div class="col-sm-2"><label for="orderName">주문자명</label></div>
+                            <div class="col-sm-10"><input type="text" class="form-control" name="orderName" id="orderName" /></div>
+                        </div>
+
+                        <div class="form-group form-row">
+                            <div class="col-sm-2"><label for="orderTel">휴대전화</label></div>
+                            <input type="hidden" name="tel" id="orderTel"/>
+                            <div class="col-sm-3"><input type="text" class="form-control" id="orderTel1" /></div> -
+                            <div class="col-sm-3"><input type="text" class="form-control" id="orderTel2" /></div> -
+                            <div class="col-sm-3"><input type="text" class="form-control" id="orderTel3" /></div>
+                        </div>
+                        <div class="form-group form-row">
+                            <div class="col-sm-2">주소</div>
+                            <div class="col-sm-1">
+                                <input type="button" class="btn btn-sm btn-outline-primary" onclick="sample4_execDaumPostcode()" value="주소 찾기"><br>
+                            </div>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" name="addr1" id="orderAddr1" />
+                            </div>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="addr2" id="orderAddr2" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <h4 class="mb-3">배송정보</h4>
+                <div class="mb-3 deliverInfo">
+                    <form id="form-deliver-info">
+                        <div class="form-group form-row">
+                            <div class="col-sm-2"><label for="receiverName">배송인</label></div>
+                            <div class="col-sm-10"><input type="text" class="form-control" name="receiverName" id="receiverName" /></div>
+                        </div>
+
+                        <div class="form-group form-row">
+                            <div class="col-sm-2"><label for="receiverTel">휴대전화</label></div>
+                            <input type="hidden" name="receiverTel" id="receiverTel"/>
+                            <div class="col-sm-3"><input type="text" class="form-control" id="receiverTel1" /></div> -
+                            <div class="col-sm-3"><input type="text" class="form-control" id="receiverTel2" /></div> -
+                            <div class="col-sm-3"><input type="text" class="form-control" id="receiverTel3" /></div>
+                        </div>
+                        <div class="form-group form-row">
+                            <div class="col-sm-2">주소</div>
+                            <div class="col-sm-1">
+                                <input type="button" class="btn btn-sm btn-outline-primary" onclick="sample4_execDaumPostcode()" value="주소 찾기"><br>
+                            </div>
+                            <div class="col-sm-5">
+                                <input type="text" class="form-control" name="receiverAddr1" id="receiverAddr1" />
+                            </div>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="receiverAddr2" id="receiverAddr2" />
+                            </div>
+                        </div>
+                        <div class="form-group form-row">
+                            <div class="col-sm-2"><label for="message">배송메세지</label></div>
+                            <div class="col-sm-10"><input type="text" class="form-control" name="message" id="message" /></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- // Order -->
             <!-- // Index Content-->
 {{>layout/footer}}

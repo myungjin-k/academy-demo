@@ -59,18 +59,8 @@ var itemDetail = {
             _this.addSelectedResult(optionId, info);
         });
         _this.div.find('#div-selected-result').off().on('click', '.btn', function(){
-            _this.adjustCount($(this));
+            $(this).adjustCount();
         });
-    },
-    adjustCount : function(btn){
-        var count = btn.parents('.count').find('input[name="count"]');
-        if(btn.hasClass('plus')){
-            count.val(Number(count.val()) + 1);
-        } else if(btn.hasClass('minus')){
-            if(Number(count.val()) === 1)
-                return false;
-            count.val(Number(count.val()) - 1);
-        }
     },
     clear : function(){
         this.div.find('#div-item-detail-thumbnail #img-thumbnail').prop("src", '');

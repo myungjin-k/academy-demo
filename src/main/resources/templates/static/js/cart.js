@@ -55,18 +55,19 @@ var cart = {
 
         _this.div.find('#cart-items').on('click', '.itemCount .btn', function(){
             //console.log(this);
-            _this.adjustCount($(this));
+            $(this).adjustCount();
         });
-    },
-    adjustCount : function(btn){
-        var count = btn.parents('.count').find('input[name="count"]');
-        if(btn.hasClass('plus')){
-            count.val(Number(count.val()) + 1);
-        } else if(btn.hasClass('minus')){
-            if(Number(count.val()) === 1)
-                return false;
-            count.val(Number(count.val()) - 1);
-        }
+
+        _this.div.find('#btn-order').unbind('click').bind('click', function(){
+            var cartItemIds = [];
+            _this.div.find('#cart-items tr').each(function() {
+                var id = $(this).find("input[name='id']").val();
+                cartItemIds.push(id);
+            });
+            console.log(cartItemIds);
+            newOrder(cartItemIds);
+        });
+
     },
     load : function(){
         var _this = this;
