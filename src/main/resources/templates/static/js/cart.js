@@ -48,6 +48,20 @@ var cart = {
             //console.log(cartId);
             itemDetail.init(itemId);
         });
+
+        _this.div.find('#cart-items').on('click', '.itemCount .btn', function(){
+            _this.adjustCount($(this));
+        });
+    },
+    adjustCount : function(btn){
+        var count = btn.parents('.count').find('input[name="count"]');
+        if(btn.hasClass('plus')){
+            count.val(Number(count.val()) + 1);
+        } else if(btn.hasClass('minus')){
+            if(Number(count.val()) === 1)
+                return false;
+            count.val(Number(count.val()) - 1);
+        }
     },
     load : function(){
         var _this = this;
@@ -64,26 +78,39 @@ var cart = {
                 var cartItem = this;
                 var option = cartItem.itemOption;
                 var display = option.itemDisplay;
-                const row = '<tr>'
-                    + '<td>'
-                    +   '<input type="checkbox" class="cartItemChk"  name="id" value="' + cartItem.id + '" />'
-                    + '</td>'
-                    + '<td class="itemInfo">'
-                    + '  <a href="" onclick="return false;">'
-                    + '    <input type="hidden" name="itemId" value="' + display.id + '" />'
-                    + '    <img class="thumbnail mr-3" src="'+ display.itemMaster.thumbnail +'">'
-                    +      display.itemDisplayName
-                    + '    </br>'
-                    + '    옵션 : ' + option.color + '/' + option.size
-                    + '  </a>'
-                    +'</td>'
-                    + '<td class="itemCount">'+ cartItem.count +'</td>'
-                    + '<td class="itemCount">'+ cartItem.count * display.salePrice +'</td>'
-                    + '<td class="btnTd">'
-                    + '  <a class="btn btn-sm btn-outline-dark btn-modify-count">수량변경</a>'
-                    + '  <a class="btn btn-sm btn-outline-dark btn-delete">삭제</a>'
-                    + '</td>'
-                    + '</tr>';
+                var countEl = $("<span class='count'/>")
+                    .append($("<input class='mr-2' type='text' name='count' style='width: 20px' readonly/>").val(cartItem.count))
+                    .append($("<button class='btn plus p-0 mr-2''>+</button>"))
+                    .append($("<button class='btn minus p-0 ''>-</button>"));
+
+                const row = $('<tr/>');
+                const chkbox = $('<input class="cartItemChk" type="checkbox"/>')
+                    .prop('name', 'id')
+                    .val(cartItem.id);
+
+                const itemLink = $('<a href="" onclick="return false;"/>')
+                    .append($('<input type="hidden"/>')
+                            .prop('name', 'itemId')
+                            .val(display.id))
+                    .append($('<img class="thumbnail mr-3"/>')
+                        .prop('src', display.itemMaster.thumbnail))
+                    .append(display.itemDisplayName)
+                    .append($('<br/>'))
+                    .append('옵션 : ' + option.color + '/' + option.size);
+
+                const btn = '<a class="btn btn-sm btn-outline-dark"/>';
+
+                const btnTd = $('<td/>');
+                    btnTd.append($(btn).addClass('btn-modify-count').text('수량변경'));
+                    btnTd.append($(btn).addClass('btn-delete').text('삭제'))
+
+                row
+                    .append($('<td/>').append(chkbox))
+                    .append($('<td class="itemInfo"/>').append(itemLink))
+                    .append($('<td class="itemCount"/>').append(countEl))
+                    .append($('<td/>').text(cartItem.count * display.salePrice))
+                    .append(btnTd);
+
                 $('#cart-items').append(row);
             });
         }).fail(function (error) {
