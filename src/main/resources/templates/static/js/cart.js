@@ -59,13 +59,17 @@ var cart = {
         });
 
         _this.div.find('#btn-order').unbind('click').bind('click', function(){
-            var cartItemIds = [];
+            var cartItems = [];
             _this.div.find('#cart-items tr').each(function() {
                 var id = $(this).find("input[name='id']").val();
-                cartItemIds.push(id);
+                var itemName = $(this).find(".itemInfo").text();
+                var count = $(this).find("input[name='count']").val();
+                var oriPrice = $(this).find(".itemPrice .oriPrice").text();
+                var salePrice = $(this).find(".itemPrice .salePrice").text();
+                cartItems.push({"id" : id, "itemName" : itemName, "count" : count, "oriPrice" : oriPrice, "salePrice" : salePrice});
             });
-            console.log(cartItemIds);
-            newOrder(cartItemIds);
+            console.log(cartItems);
+            newOrder(cartItems);
         });
 
     },
@@ -103,7 +107,7 @@ var cart = {
                         .prop('src', display.itemMaster.thumbnail))
                     .append(display.itemDisplayName)
                     .append($('<br/>'))
-                    .append('옵션 : ' + option.color + '/' + option.size);
+                    .append('\n' + option.color + '/' + option.size);
 
                 const btn = '<a class="btn btn-sm btn-outline-dark"/>';
 
@@ -111,11 +115,14 @@ var cart = {
                     btnTd.append($(btn).addClass('btn-modify-count').text('수량변경'));
                     btnTd.append($(btn).addClass('btn-delete').text('삭제'))
 
+                const oriPrice = $('<div class="discount oriPrice"/>').text(display.itemMaster.price * cartItem.count);
+                const salePrice = $('<div class="salePrice"/>').text(display.salePrice * cartItem.count);
+
                 row
                     .append($('<td/>').append(chkbox))
                     .append($('<td class="itemInfo"/>').append(itemLink))
                     .append($('<td class="itemCount"/>').append(countEl))
-                    .append($('<td/>').text(cartItem.count * display.salePrice))
+                    .append($('<td class="itemPrice"/>').append(oriPrice).append(salePrice))
                     .append(btnTd);
 
                 $('#cart-items').append(row);

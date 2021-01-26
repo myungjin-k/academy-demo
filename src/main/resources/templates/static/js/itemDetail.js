@@ -100,6 +100,7 @@ var itemDetail = {
             _this.div.find('#div-item-detail-description #text-description').val(data.description);
             _this.div.find('#div-item-detail-image  #img-detail').prop("src", data.detailImage);
             _this.div.find('#div-item-summary #div-item-detail-name #p-name').text(data.itemName);
+            _this.div.find('#div-item-summary #div-item-detail-price #p-ori-price').text(data.originalPrice);
             _this.div.find('#div-item-summary #div-item-detail-price #p-price').text(data.itemPrice);
             var sizes = data.sizeInfo.split('\n');
             $.each(sizes, function(){

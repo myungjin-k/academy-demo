@@ -53,7 +53,7 @@
                             </div>
                         </div>
                         <div class="row mb-lg-5">
-                            <div id="div-item-detail-notice">
+                            <div class="text-center" id="div-item-detail-notice">
                                 <p id="p-notice"></p>
                             </div>
                         </div>
@@ -73,7 +73,8 @@
                             <b><p id="p-name"></p></b>
                         </div>
                         <div class="mb-lg-5" id="div-item-detail-price">
-                            <p><span id="p-price"></span> won</p>
+                            <div><span class="discount" id="p-ori-price"></span> won</div>
+                            <div><span id="p-price"></span> won</div>
                         </div>
                         <div class="info" id="div-item-detail-size">
                             <div>사이즈</div>
@@ -121,7 +122,7 @@
             <!-- // Cart -->
             <!-- Order -->
             <div class="d-none p-2 contentDiv" id="div-order" >
-                <div class="mb-3 orderItemInfo">
+                <div class="mb-5 orderItemInfo">
                     <h4 class="mb-3">주문상품정보</h4>
                     <table class="table table-horizontal table-bordered">
                         <thead class="thead-strong">
@@ -135,21 +136,46 @@
 
                         </tbody>
                     </table>
-                    <div class="amountInfo">
-                        <h5>가용포인트</h5>
-                        <div class="usablePoints"></div>
-                        <div class="usePoints">
-                            <label for="use-all-points" >포인트 전부 사용</label>
-                            <input type="checkbox" id="use-all-points" />
-                            <input type="text" name="usedPoints" /> P
-                        </div>
-                        <h5 class="float-right text-right">총 주문금액</h5>
-                        <div class="totalAmount text-right"></div>
-                    </div>
                 </div>
-                <h4 class="mb-3">주문정보</h4>
-                <div class="mb-3 ordererInfo">
-                    <form id="form-order-info">
+                <form id="form-save-order">
+                    <div class="amountInfo">
+                        <h5>포인트 사용</h5>
+                        <div class="usePoints">
+                            <!--<label for="use-all-points" >포인트 전부 사용</label>
+                            <input type="checkbox" id="use-all-points" />-->
+                            <p>가용포인트 : <span class="usablePoints"></span> P</p>
+                            <p>
+                                <label for="usePoints" >사용포인트 : </label>
+                                <input class="text-right" type="text" name="usedPoints" id="usePoints" value="0"/> P
+                            </p>
+                        </div>
+                        <div class="row text-right">
+                            <div class="col-9">상품금액</div>
+                            <div class="col">
+                                <span class="float-right text-right"><b><span class="totalItemPrice text-secondary"></span></b> 원</span>
+                            </div>
+                        </div>
+                        <div class="row text-right">
+                            <div class="col-9">상품할인금액</div>
+                            <div class="col">
+                                <span class="float-right text-right"><b>- <span class="totalDiscountPrice text-secondary"></span></b> 원</span>
+                            </div>
+                        </div>
+                        <div class="row text-right">
+                            <div class="col-9">포인트사용금액</div>
+                            <div class="col">
+                                <span class="float-right text-right"><b>- <span class="usedPoints text-secondary"></span></b> 원</span>
+                            </div>
+                        </div>
+                        <h5 class="row text-lg-right">
+                            <div class="col-9">총 주문액</div>
+                            <div class="col">
+                                <span class="float-right text-right"><b><span class="totalAmount text-primary"></span></b> 원</span>
+                            </div>
+                        </h5>
+                    </div>
+                    <h4 class="mb-3">주문정보</h4>
+                    <div class="mb-5 ordererInfo">
                         <div class="form-group form-row">
                             <div class="col-sm-2"><label for="orderName">주문자명</label></div>
                             <div class="col-sm-10"><input type="text" class="form-control" name="orderName" id="orderName" /></div>
@@ -174,11 +200,9 @@
                                 <input type="text" class="form-control" name="addr2" id="orderAddr2" />
                             </div>
                         </div>
-                    </form>
-                </div>
-                <h4 class="mb-3">배송정보</h4>
-                <div class="mb-3 deliverInfo">
-                    <form id="form-deliver-info">
+                    </div>
+                    <h4 class="mb-3">배송정보</h4>
+                    <div class="mb-3 deliverInfo">
                         <div class="form-group form-row">
                             <div class="col-sm-2"><label for="receiverName">배송인</label></div>
                             <div class="col-sm-10"><input type="text" class="form-control" name="receiverName" id="receiverName" /></div>
@@ -207,8 +231,9 @@
                             <div class="col-sm-2"><label for="message">배송메세지</label></div>
                             <div class="col-sm-10"><input type="text" class="form-control" name="message" id="message" /></div>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
+                <a class="btn btn-lg btn-primary" id="btn-order-process">주문 진행하기</a>
             </div>
             <!-- // Order -->
             <!-- // Index Content-->

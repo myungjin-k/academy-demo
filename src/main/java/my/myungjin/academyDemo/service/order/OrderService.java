@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -74,6 +75,10 @@ public class OrderService {
             item.setReview(reviewRepository.findByOrderItemIdAndMemberId(item.getId(), memberId.value()).orElse(null));
         }
         return o;
+    }
+
+    public Optional<Member> findMemberInfo(@Valid Id<Member, String> memberId){
+        return memberRepository.findById(memberId.value());
     }
 
     @Transactional

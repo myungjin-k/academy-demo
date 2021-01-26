@@ -21,6 +21,7 @@ import my.myungjin.academyDemo.web.request.OrderRequest;
 import my.myungjin.academyDemo.web.request.PageRequest;
 import my.myungjin.academyDemo.web.response.MemberInformRatingResponse;
 import my.myungjin.academyDemo.web.response.OrderDetailResponse;
+import my.myungjin.academyDemo.web.response.OrderInfoResponse;
 import my.myungjin.academyDemo.web.response.OrderResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
@@ -100,6 +101,18 @@ public class OrderController {
                         Id.of(Member.class, id),
                         Id.of(Member.class, ((User)authentication.getDetails()).getId()),
                         Id.of(CartItem.class, itemId)
+                )
+        );
+    }
+
+
+    @GetMapping("/member/{memberId}/orderMemberInfo")
+    @ApiOperation(value = "회원정보에서 주문자 정보 로드")
+    public Response<OrderInfoResponse> findOrderMemberInfo(
+            @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String memberId){
+        return OK(
+                OrderInfoResponse.of(
+                        orderService.findMemberInfo(Id.of(Member.class, memberId)).orElse(null)
                 )
         );
     }
