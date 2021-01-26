@@ -61,14 +61,17 @@ var cart = {
         _this.div.find('#btn-order').unbind('click').bind('click', function(){
             var cartItems = [];
             _this.div.find('#cart-items tr').each(function() {
-                var id = $(this).find("input[name='id']").val();
-                var itemName = $(this).find(".itemInfo").text();
-                var count = $(this).find("input[name='count']").val();
-                var oriPrice = $(this).find(".itemPrice .oriPrice").text();
-                var salePrice = $(this).find(".itemPrice .salePrice").text();
-                cartItems.push({"id" : id, "itemName" : itemName, "count" : count, "oriPrice" : oriPrice, "salePrice" : salePrice});
+                if($(this).find('.cartItemChk').prop('checked')){
+                    cartItems.push({
+                        "id" : $(this).find("input[name='id']").val(),
+                        "itemName" : $(this).find(".itemInfo").text(),
+                        "count" : $(this).find("input[name='count']").val(),
+                        "oriPrice" : $(this).find(".itemPrice .oriPrice").text(),
+                        "salePrice" : $(this).find(".itemPrice .salePrice").text()
+                    });
+                }
             });
-            console.log(cartItems);
+            //console.log(cartItems);
             newOrder(cartItems);
         });
 
