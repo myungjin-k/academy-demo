@@ -2,6 +2,10 @@ function loadCart(itemList) {
     var userId = $('.loginInfo').val();
     addCart(userId, itemList);
 }
+function goCart() {
+    var userId = $('.loginInfo').val();
+    cart.init(userId);
+}
 function addCart(userId, itemList){
     if(itemList.length === 0){
         alert('옵션을 확인해 주세요.');

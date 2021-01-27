@@ -24,6 +24,11 @@
                         <a class="nav-link" href="" onclick="goMyPage(); return false;" id="link-mypage">회원정보</a>
                     {{/loginUser}}
                 </li>
+                <li class="nav-item">
+                    {{#loginUser}}
+                        <a class="nav-link" href="" onclick="goCart(); return false;" id="link-cart">장바구니</a>
+                    {{/loginUser}}
+                </li>
             </ul>
         </div>
     </div>
