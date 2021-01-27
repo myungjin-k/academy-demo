@@ -191,7 +191,7 @@
                         <div class="form-group form-row">
                             <div class="col-sm-2">주소</div>
                             <div class="col-sm-1">
-                                <input type="button" class="btn btn-sm btn-outline-primary" onclick="sample4_execDaumPostcode()" value="주소 찾기"><br>
+                                <input type="button" class="btn btn-sm btn-outline-primary" onclick="orderer_execDaumPostcode()" value="주소 찾기"><br>
                             </div>
                             <div class="col-sm-5">
                                 <input type="text" class="form-control" name="addr1" id="orderAddr1" />
@@ -218,7 +218,7 @@
                         <div class="form-group form-row">
                             <div class="col-sm-2">주소</div>
                             <div class="col-sm-1">
-                                <input type="button" class="btn btn-sm btn-outline-primary" onclick="sample4_execDaumPostcode()" value="주소 찾기"><br>
+                                <input type="button" class="btn btn-sm btn-outline-primary" onclick="receiver_execDaumPostcode()" value="주소 찾기"><br>
                             </div>
                             <div class="col-sm-5">
                                 <input type="text" class="form-control" name="receiverAddr1" id="receiverAddr1" />
@@ -236,5 +236,50 @@
                 <a class="btn btn-lg btn-primary" id="btn-order-process">주문 진행하기</a>
             </div>
             <!-- // Order -->
+            <!-- My Page -->
+            <div class="d-none p-2 contentDiv" id="div-member-info" >
+                <h4 class="mb-3">회원정보</h4>
+                <div class="row mb-3">
+                    <div class="col">
+                        <form id="form-info">
+                            <div class="form-group form-row">
+                                <div class="col-sm-2"><label for="userId">아이디</label></div>
+                                <div class="col-sm-10 w-25"><input type="text" class="form-control" name="userId" id="userId" readonly/></div>
+                            </div>
+                            <div class="form-group form-row">
+                                <div class="col-sm-2"><label for="password">비밀번호</label></div>
+                                <div class="col-sm-10"><input type="password" class="form-control" name="password" id="password" /></div>
+                            </div>
+                            <div class="form-group form-row">
+                                <div class="col-sm-2"><label for="name">닉네임</label></div>
+                                <div class="col-sm-10"><input type="text" class="form-control" name="name" id="name" /></div>
+                            </div>
+                            <div class="form-group form-row">
+                                <div class="col-sm-2"><label for="tel">휴대전화</label></div>
+                                <input type="hidden" name="tel" id="tel"/>
+                                <div class="col-sm-3"><input type="text" class="form-control" id="tel1" /></div> -
+                                <div class="col-sm-3"><input type="text" class="form-control" id="tel2" /></div> -
+                                <div class="col-sm-3"><input type="text" class="form-control" id="tel3" /></div>
+                            </div>
+                            <div class="form-group form-row">
+                                <div class="col-sm-2">주소</div>
+                                <div class="col-sm-1">
+                                    <input type="button" class="btn btn-sm btn-outline-primary mr2 " onclick="mypage_execDaumPostcode()" value="주소 찾기"><br>
+                                </div>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control" name="addr1" id="addr1" />
+                                </div>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" name="addr2" id="addr2" />
+                                </div>
+                            </div>
+                            <div class="div-form-buttons">
+                                <a class="btn btn-primary" id="btn-save">저장</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- // My Page -->
             <!-- // Index Content-->
 {{>layout/footer}}

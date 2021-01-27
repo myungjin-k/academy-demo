@@ -15,13 +15,13 @@
                         <a class="nav-link" href="/mall/login" id="login">로그인</a>
                     {{/loginUser}}
                     {{#loginUser}}
-                        <input class="loginInfo" type="hidden" name="id" value="{{id}}"/>
+                        <input class="loginInfo" id="loginUserId" type="hidden" name="id" value="{{id}}"/>
                         <a class="nav-link" href="/logout" id="logout">로그아웃</a>
                     {{/loginUser}}
                 </li>
                 <li class="nav-item">
                     {{#loginUser}}
-                        <a class="nav-link" href="/mall/myPage" id="myPage">회원정보</a>
+                        <a class="nav-link" href="" onclick="goMyPage(); return false;" id="link-mypage">회원정보</a>
                     {{/loginUser}}
                 </li>
             </ul>

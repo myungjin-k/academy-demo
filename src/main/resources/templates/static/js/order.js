@@ -121,3 +121,27 @@ var order = {
         });
     }
 };
+
+function orderer_execDaumPostcode() {
+    new daum.Postcode({
+        popupName: 'ordererPostcodePopup',
+        oncomplete: function(data) {
+            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+            var roadAddr = data.roadAddress; // 도로명 주소 변수
+            // 주소 정보를 해당 필드에 넣는다.
+            document.getElementById("addr1").value = roadAddr;
+        }
+    }).open();
+}
+
+function receiver_execDaumPostcode() {
+    new daum.Postcode({
+        popupName: 'receiverPostcodePopup',
+        oncomplete: function(data) {
+            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+            var roadAddr = data.roadAddress; // 도로명 주소 변수
+            // 주소 정보를 해당 필드에 넣는다.
+            document.getElementById("receiverAddr1").value = roadAddr;
+        }
+    }).open();
+}
