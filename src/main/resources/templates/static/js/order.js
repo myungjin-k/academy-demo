@@ -36,9 +36,14 @@ var order = {
                 _this.copyOrdererInfo();
         });
 
-        _this.div.find('#btn-order-process').click(function(){
+        _this.div.find('#btn-order-process').unbind().bind('click', function(){
            _this.save();
         });
+    },
+    clearForm : function (){
+        var _this = this;
+        _this.div.find('#form-save-order input').val('');
+        _this.div.find('#useOrdererInfo').prop('checked', false);
     },
     copyOrdererInfo : function(){
         var _this = this;
@@ -84,6 +89,7 @@ var order = {
             url: '/api/mall/member/' + _this.userId + '/orderMemberInfo',
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
+            _this.clearForm();
             var data = response.response;
             //console.log(data);
             var ordererInfo = _this.div.find('.ordererInfo');
@@ -122,7 +128,7 @@ var order = {
         form.find('input[name="receiverTel"]').val(receiverTel);
         var data = $('#form-save-order').serializeObject();
         data['cartItemIds'] = _this.collectItemIds();
-        console.log(data);
+        //console.log(data);
 
         $.ajax({
             type: 'POST',
@@ -133,7 +139,9 @@ var order = {
         }).done(function(response) {
             var data = response.response;
             console.log(data);
+            // TODO 결제api 추가
             alert('주문이 완료되었습니다.');
+            loadMyOrderDetail(data.id);
         }).fail(function (error) {
             alert(JSON.stringify(error));
             if(_this.userId === undefined){

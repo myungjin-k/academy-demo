@@ -191,10 +191,10 @@
                         </div>
                         <div class="form-group form-row">
                             <div class="col-sm-2">주소</div>
-                            <div class="col-sm-1">
-                                <input type="button" class="btn btn-sm btn-outline-primary" onclick="orderer_execDaumPostcode()" value="주소 찾기"><br>
+                            <div class="col-sm-2">
+                                <a class="btn btn-sm btn-outline-primary" onclick="orderer_execDaumPostcode()" >주소 검색</a><br>
                             </div>
-                            <div class="col-sm-5">
+                            <div class="col-sm-4">
                                 <input type="text" class="form-control" name="addr1" id="orderAddr1" />
                             </div>
                             <div class="col-sm-4">
@@ -222,10 +222,10 @@
                         </div>
                         <div class="form-group form-row">
                             <div class="col-sm-2">주소</div>
-                            <div class="col-sm-1">
-                                <input type="button" class="btn btn-sm btn-outline-primary" onclick="receiver_execDaumPostcode()" value="주소 찾기"><br>
+                            <div class="col-sm-2">
+                                <a class="btn btn-sm btn-outline-primary" onclick="receiver_execDaumPostcode()">주소 검색</a><br>
                             </div>
-                            <div class="col-sm-5">
+                            <div class="col-sm-4">
                                 <input type="text" class="form-control" name="receiverAddr1" id="receiverAddr1" />
                             </div>
                             <div class="col-sm-4">
@@ -286,5 +286,26 @@
                 </div>
             </div>
             <!-- // My Page -->
+            <!-- Order List -->
+            <div class="d-none p-2 contentDiv" id="div-my-order-list" >
+                <h4 class="mb-3">주문조회</h4>
+                <div class="mb-3">
+                    <table class="table table-horizontal table-bordered">
+                        <thead class="thead-strong">
+                        <tr>
+                            <th width="3%">선택</th>
+                            <th width="10%" >주문일시</th>
+                            <th>상품명</th>
+                            <th width="10% ">총 주문금액</th>
+                            <th width="15%"></th>
+                        </tr>
+                        </thead>
+                        <tbody id="my-orders">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- // Order List -->
             <!-- // Index Content-->
 {{>layout/footer}}
