@@ -143,6 +143,7 @@
                         <div class="usePoints">
                             <!--<label for="use-all-points" >포인트 전부 사용</label>
                             <input type="checkbox" id="use-all-points" />-->
+                            <p class="text-danger">※ 포인트 사용 시 포인트 적립이 되지 않습니다.</p>
                             <p>가용포인트 : <span class="usablePoints"></span> P</p>
                             <p>
                                 <label for="usePoints" >사용포인트 : </label>
@@ -203,6 +204,10 @@
                     </div>
                     <h4 class="mb-3">배송정보</h4>
                     <div class="mb-3 deliverInfo">
+                        <p>
+                            <input type="checkbox" id="useOrdererInfo" />
+                            <label for="useOrdererInfo" >주문자 정보와 동일</label>
+                        </p>
                         <div class="form-group form-row">
                             <div class="col-sm-2"><label for="receiverName">배송인</label></div>
                             <div class="col-sm-10"><input type="text" class="form-control" name="receiverName" id="receiverName" /></div>

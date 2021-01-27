@@ -26,9 +26,26 @@ var order = {
             _this.div.find('.amountInfo .totalAmount').text(_this.totalAmount - p);
         });
 
+        _this.div.find('.deliverInfo #useOrdererInfo').change(function(){
+            if($(this).prop('checked'))
+                _this.copyOrdererInfo();
+        });
+
         _this.div.find('#btn-order-process').click(function(){
            _this.save();
         });
+    },
+    copyOrdererInfo : function(){
+        var _this = this;
+        var orderInfo = _this.div.find('.ordererInfo');
+        var deliverInfo = _this.div.find('.deliverInfo');
+        deliverInfo.find('input[name="receiverName"]').val(orderInfo.find('input[name="orderName"]').val());
+        deliverInfo.find('input[name="receiverTel"]').val(orderInfo.find('input[name="orderTel"]').val());
+        deliverInfo.find('#receiverTel1').val(orderInfo.find('#orderTel1').val());
+        deliverInfo.find('#receiverTel2').val(orderInfo.find('#orderTel2').val());
+        deliverInfo.find('#receiverTel3').val(orderInfo.find('#orderTel3').val());
+        deliverInfo.find('input[name="receiverAddr1"]').val(orderInfo.find('input[name="addr1"]').val());
+        deliverInfo.find('input[name="receiverAddr2"]').val(orderInfo.find('input[name="addr2"]').val());
     },
     setCartItems : function(){
         var orderItems = $('#order-items');
