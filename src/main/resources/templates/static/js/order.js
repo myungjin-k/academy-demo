@@ -1,6 +1,11 @@
 function newOrder(items) {
     var userId = $('.loginInfo').val();
-    order.init(userId, items);
+    if(items.length === 0){
+        alert('주문할 상품이 없습니다.');
+        return false;
+    } else {
+        order.init(userId, items);
+    }
 }
 var order = {
     userId : '',
