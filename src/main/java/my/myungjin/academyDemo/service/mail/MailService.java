@@ -3,12 +3,8 @@ package my.myungjin.academyDemo.service.mail;
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.mail.Mail;
 import my.myungjin.academyDemo.configure.MailConfig;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -23,8 +19,13 @@ import java.util.Properties;
 public class MailService {
 
     static final String FROM = "admin@mesmerizin.com";
+
     static final String FROMNAME = "mesmerizin";
+
     private final MailConfig mailConfig;
+
+    private final Logger log = LoggerFactory.getLogger(getClass());
+
     public void sendMail(Mail mail) throws MessagingException, UnsupportedEncodingException {
 
         // Create a Properties object to contain connection configuration information.
@@ -54,10 +55,9 @@ public class MailService {
 
             // Send the email.
             transport.sendMessage(msg, msg.getAllRecipients());
-            System.out.println("Email sent!");
+            log.info("Email Sent");
         } catch (Exception ex) {
-            System.out.println("The email was not sent.");
-            System.out.println("Error message: " + ex.getMessage());
+            log.warn("Email send Exception : {}", ex.getMessage());
         } finally {
             // Close and terminate the connection.
             transport.close();

@@ -77,10 +77,10 @@ public class MemberService {
             String address = getHostAddress();
             Mail mail = Mail.builder()
                     .to(email)
-                    .title("[demo] 비밀번호 찾기/변경 안내")
+                    .title("[mesmerizin'] 비밀번호 찾기/변경 안내")
                     .content(
                             "<p> 아래 링크에서 비밀번호 변경 가능합니다.</p> " +
-                                    "<a href="+ address + ":" + getServerPort() +"/mall/changePassword/"+ id + "'>비밀번호 변경하기</a>"
+                            "<a href='http://"+ address + ":" + getServerPort() +"/mall/changePassword/"+ id + "'>비밀번호 변경하기</a>"
                     ).build();
             try {
                 mailService.sendMail(mail);
