@@ -307,5 +307,75 @@
                 </div>
             </div>
             <!-- // Order List -->
+            <!-- Order Detail -->
+            <div class="d-none p-2 contentDiv" id="div-my-order-detail" >
+                <h4 class="mb-3">주문 상세</h4>
+                <input type="hidden" name="orderId"/>
+                <div class="mb-3 orderItem">
+                    <table class="table table-horizontal table-bordered">
+                        <thead class="thead-strong">
+                        <tr>
+                            <th>상품명</th>
+                            <th width="10% ">주문수량</th>
+                            <th width="10% ">상품금액</th>
+                            <th width="10% ">배송상태</th>
+                        </tr>
+                        </thead>
+                        <tbody id="order-items">
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mb-3 payInfo p-2">
+                    <h5>결제 정보</h5>
+                    <div>
+                        <label for="totalAmount">총 결제금액</label>
+                        <span id="totalAmount"></span>
+                    </div>
+                    <div>
+                        <label for="originalAmount">총 주문금액</label>
+                        <span id="originalAmount"></span>
+                    </div>
+                    <div>
+                        <label for="discounted">상품 할인</label>
+                        <span id="discounted"></span>
+                    </div>
+                    <div>
+                        <label for="orderTel">포인트 사용</label>
+                        <span id="orderTel"></span>
+                    </div>
+                </div>
+                <div class="mb-3 orderInfo p-2">
+                    <h5>주문자 정보</h5>
+                    <div>
+                        <label for="orderName">이름</label>
+                        <span id="orderName"></span>
+                    </div>
+                    <div>
+                        <label for="orderTel">휴대전화</label>
+                        <span id="orderTel"></span>
+                    </div>
+                </div>
+                <div class="mb-3 deliverInfo p-2">
+                    <h5>배송지 정보</h5>
+                    <div>
+                        <label for="receiverName">수신인</label>
+                        <span id="receiverName"></span>
+                    </div>
+                    <div>
+                        <label for="receiverTel">휴대전화</label>
+                        <span id="receiverTel"></span>
+                    </div>
+                    <div>
+                        <label for="receiverAddr">주소</label>
+                        <span id="receiverAddr"></span>
+                    </div>
+                    <div>
+                        <label for="message">주소</label>
+                        <span id="message"></span>
+                    </div>
+                </div>
+            </div>
+            <!-- // Order Detail -->
             <!-- // Index Content-->
 {{>layout/footer}}
