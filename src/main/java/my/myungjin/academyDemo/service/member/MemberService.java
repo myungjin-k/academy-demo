@@ -9,6 +9,7 @@ import my.myungjin.academyDemo.error.NotFoundException;
 import my.myungjin.academyDemo.service.mail.MailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.mail.MailException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import org.springframework.validation.annotation.Validated;
 import javax.mail.MessagingException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Optional;
@@ -34,6 +36,8 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     private final MailService mailService;
+
+    private final Environment environment;
 
     @Transactional
     public Member join(@Valid Member newMember) {
@@ -57,6 +61,15 @@ public class MemberService {
                 .map(Member::getUserId);
     }
 
+    private String getServerPort(){
+        String[] profiles = environment.getActiveProfiles();
+        for(String profile : profiles){
+            if(profile.equals("real"))
+                return "7090";
+        }
+        return "7060";
+    }
+
     @Transactional(readOnly = true)
     public Optional<String> findPassword(@NotBlank String email){
         return memberRepository.findByEmail(email).map(member -> {
@@ -67,11 +80,11 @@ public class MemberService {
                     .title("[demo] 비밀번호 찾기/변경 안내")
                     .content(
                             "<p> 아래 링크에서 비밀번호 변경 가능합니다.</p> " +
-                                    "<a href='"+ address +":7090/mall/changePassword/"+ id + "'>비밀번호 변경하기</a>"
+                                    "<a href="+ address + ":" + getServerPort() +"/mall/changePassword/"+ id + "'>비밀번호 변경하기</a>"
                     ).build();
             try {
                 mailService.sendMail(mail);
-            } catch (MessagingException e){
+            } catch (MessagingException | UnsupportedEncodingException e){
                 log.warn("Messaging Error ({}) : {}", mail, e.getMessage(), e);
             } catch (MailException me){
                 log.warn("Mailing Error : {}", me.getMessage(), me);

@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.zaxxer.hikari.HikariDataSource;
 import my.myungjin.academyDemo.aws.S3Client;
+import my.myungjin.academyDemo.service.mail.MailService;
 import my.myungjin.academyDemo.util.MessageUtil;
 import net.sf.log4jdbc.Log4jdbcProxyDataSource;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -65,5 +66,10 @@ public class ServiceConfigure {
     @Bean
     public S3Client s3Client(AmazonS3 amazonS3, AwsConfigure awsConfigure){
         return new S3Client(amazonS3, awsConfigure.getUrl(), awsConfigure.getBucketName());
+    }
+
+    @Bean
+    public MailService mailService(MailConfig mailConfig){
+        return new MailService(mailConfig);
     }
 }
