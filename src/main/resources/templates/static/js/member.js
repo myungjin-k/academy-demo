@@ -38,14 +38,14 @@ var main = {
 
         $.ajax({
             type: 'POST',
-            url: '/api/member/join',
+            url: '/api/mall/join',
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify(data)
         }).done(function (response) {
             console.log(response);
             alert("가입 되었습니다.")
-            location.href = "/login";
+            location.href = "/mall/login";
         }).fail(function (error) {
             alert(JSON.stringify(error));
         })
@@ -70,7 +70,7 @@ var main = {
         var data = {"tel" : $('#id-find-key').val()};
         $.ajax({
             type: 'GET',
-            url: 'member/id',
+            url: '/api/mall/find/id',
             dataType: 'json',
             contentType:'application/json; charset=utf-8',
             data: data
@@ -93,7 +93,7 @@ var main = {
         $("#btn-forgot-password").attr("disabled", true);
         $.ajax({
             type: 'GET',
-            url: 'member/password',
+            url: '/api/mall/find/password',
             dataType: 'json',
             contentType:'application/json; charset=utf-8',
             data: data
