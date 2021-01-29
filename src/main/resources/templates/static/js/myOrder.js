@@ -9,22 +9,50 @@ function loadMyOrderDetail(orderId){
 var myOrder = {
     div : $('#div-my-order-list'),
     userId : '',
+    firstPage: 1,
+    lastPage: 5,
+    currPage: 1,
     init : function(userId) {
         var _this = this;
         _this.userId = userId;
-        _this.load();
         $('.contentDiv').not(_this.div).addClass('d-none');
         _this.div.removeClass('d-none');
+        _this.list(_this.currPage);
+
+
+        /*$('#pagination-item-display-option').on('click', '.page-link', function(){
+            var link = $(this).text();
+            if(link === 'prev'){
+                _this.firstPage = _this.firstPage - 5;
+                _this.lastPage = _this.lastPage - 5;
+                _this.list(_this.firstPage);
+            } else if(link === 'next'){
+                _this.firstPage = _this.firstPage + 5;
+                _this.lastPage = _this.lastPage + 5;
+                _this.list(_this.firstPage);
+            } else {
+                _this.list(link);
+            }
+        });*/
     },
-    list : function (){
+    list : function (page){
         var _this = this;
         $.ajax({
             type: 'GET',
-            url: '/api/mall/' + _this.userId + '/order/list',
+            url: '/api/mall/member/' + _this.userId + '/order/list?page=' + page + '&size=' + 5 + '&direction=DESC',
             dataType: 'json',
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
             console.log(response);
+            const resultData = response.response;
+            $('#pagination-order').setPagination(
+                page,
+                _this.firstPage,
+                Math.min(resultData.totalPages, _this.lastPage),
+                5,
+                resultData.totalPages
+            );
+
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
@@ -41,6 +69,23 @@ var myOrderDetail = {
         _this.load();
         $('.contentDiv').not(_this.div).addClass('d-none');
         _this.div.removeClass('d-none');
+    },
+    clear : function(){
+        _this.div.find('#order-items').empty();const amountDiv = _this.div.find('.amountInfo');
+        amountDiv.find('#payAmount').text('');
+        amountDiv.find('#orderAmount').text('');
+        amountDiv.find('#discountedAmount').text('');
+        amountDiv.find('#usedPoints').text('');
+        const orderDiv = _this.div.find('.orderInfo');
+        orderDiv.find('#orderId').text('');
+        orderDiv.find('#orderDate').text('');
+        orderDiv.find('#orderName').text('');
+        orderDiv.find('#orderStatus').text('');
+        const deliverDiv = _this.div.find('.deliverInfo');
+        deliverDiv.find('#receiverName').text('');
+        deliverDiv.find('#receiverTel').text('');
+        deliverDiv.find('#receiverAddr').text('');
+        deliverDiv.find('#message').text('');
     },
     makeItemRow : function(item){
       let row = $('<tr/>');
@@ -74,11 +119,10 @@ var myOrderDetail = {
         }).done(function(response) {
             console.log(response);
             const order = response.response;
-
+            _this.clear();
             // TODO  ui 정리
             const items = order.items;
             const itemDiv = _this.div.find('#order-items');
-            itemDiv.empty();
             $(items).each(function(){
                 const row = _this.makeItemRow(this);
                 itemDiv.append(row);
