@@ -49,7 +49,7 @@ var order = {
         var _this = this;
         var orderInfo = _this.div.find('.ordererInfo');
         var deliverInfo = _this.div.find('.deliverInfo');
-        deliverInfo.find('input[name="receiverName"]').val(orderInfo.find('input[name="orderName"]').val());
+        deliverInfo.find('input[name="receiverName"]').val(orderInfo.find('input[name="name"]').val());
         deliverInfo.find('input[name="receiverTel"]').val(orderInfo.find('input[name="orderTel"]').val());
         deliverInfo.find('#receiverTel1').val(orderInfo.find('#orderTel1').val());
         deliverInfo.find('#receiverTel2').val(orderInfo.find('#orderTel2').val());
@@ -93,7 +93,7 @@ var order = {
             var data = response.response;
             //console.log(data);
             var ordererInfo = _this.div.find('.ordererInfo');
-            ordererInfo.find('input[name="orderName"]').val(data.name);
+            ordererInfo.find('input[name="name"]').val(data.name);
             var tel = data.tel.split('-');
             ordererInfo.find('#orderTel1').val(tel[0]);
             ordererInfo.find('#orderTel2').val(tel[1]);
@@ -128,7 +128,7 @@ var order = {
         form.find('input[name="receiverTel"]').val(receiverTel);
         var data = $('#form-save-order').serializeObject();
         data['cartItemIds'] = _this.collectItemIds();
-        //console.log(data);
+        console.log(data);
 
         $.ajax({
             type: 'POST',

@@ -2,6 +2,7 @@ package my.myungjin.academyDemo.web.response;
 
 import lombok.Getter;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
+import my.myungjin.academyDemo.domain.item.ItemMaster;
 import my.myungjin.academyDemo.domain.order.DeliveryItem;
 import my.myungjin.academyDemo.domain.order.OrderItem;
 
@@ -15,6 +16,8 @@ public class OrderItemResponse {
     private String itemDisplayId;
 
     private String itemName;
+
+    private int salePrice;
 
     private int itemPrice;
 
@@ -37,8 +40,10 @@ public class OrderItemResponse {
         ItemDisplay display = entity.getItemOption().getItemDisplay();
         this.itemDisplayId = display.getId();
         this.itemName = display.getItemDisplayName();
-        this.itemPrice = display.getSalePrice();
-        this.thumbnail = display.getItemMaster().getThumbnail();
+        this.salePrice = display.getSalePrice();
+        ItemMaster master = display.getItemMaster();
+        this.itemPrice = master.getPrice();
+        this.thumbnail = master.getThumbnail();
         ItemDisplay.ItemDisplayOption option = entity.getItemOption();
         this.itemOptionId = option.getId();
         this.size = option.getSize();

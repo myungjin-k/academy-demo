@@ -74,9 +74,8 @@ var myOrderDetail = {
         }).done(function(response) {
             console.log(response);
             const order = response.response;
-            _this.div.find('input[name="orderId"]').val(order.orderId);
 
-            // TODO 정가 있어야함
+            // TODO  ui 정리
             const items = order.items;
             const itemDiv = _this.div.find('#order-items');
             itemDiv.empty();
@@ -84,13 +83,21 @@ var myOrderDetail = {
                 const row = _this.makeItemRow(this);
                 itemDiv.append(row);
             });
+            const amountDiv = _this.div.find('.amountInfo');
+            amountDiv.find('#payAmount').text(order.payAmount);
+            amountDiv.find('#orderAmount').text(order.orderAmount);
+            amountDiv.find('#discountedAmount').text(order.discountedAmount);
+            amountDiv.find('#usedPoints').text(order.usedPoints);
             const orderDiv = _this.div.find('.orderInfo');
+            orderDiv.find('#orderId').text(order.orderId);
+            orderDiv.find('#orderDate').text(order.orderDate);
             orderDiv.find('#orderName').text(order.orderName);
-            orderDiv.find('#orderTel').text(order.orderTel);
+            orderDiv.find('#orderStatus').text(order.orderStatus);
             const deliverDiv = _this.div.find('.deliverInfo');
             deliverDiv.find('#receiverName').text(order.deliveryName);
             deliverDiv.find('#receiverTel').text(order.deliveryTel);
             deliverDiv.find('#receiverAddr').text(order.deliveryAddr);
+            deliverDiv.find('#message').text(order.deliveryMessage);
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });

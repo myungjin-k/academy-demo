@@ -27,7 +27,7 @@ public class Order {
 
     @Id @Getter
     @GeneratedValue(generator = "orderId")
-    @GenericGenerator(name = "orderId", strategy = "my.myungjin.academyDemo.commons.IdGenerator")
+    @GenericGenerator(name = "orderId", strategy = "my.myungjin.academyDemo.domain.order.OrderIdGenerator")
     private String id;
 
     @Getter @Setter

@@ -146,7 +146,7 @@ public class OrderService {
             oItem.setItemOption(item.getItemOption());
             oItem.setOrder(order);
             order.addItem(save(oItem));
-            totalAmount += oItem.getItemOption().getItemDisplay().getSalePrice() * item.getCount();
+            totalAmount += oItem.getItemOption().getItemDisplay().getItemMaster().getPrice() * item.getCount();
         }
         order.setTotalAmount(totalAmount);
         StringBuilder abbrOrderItems = new StringBuilder();

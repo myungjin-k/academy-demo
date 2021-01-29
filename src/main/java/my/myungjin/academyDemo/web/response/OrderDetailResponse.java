@@ -21,11 +21,13 @@ public class OrderDetailResponse {
 
     private String orderStatus;
 
-    private int totalAmount;
-
-    private int usedPoints;
+    private int orderAmount;
 
     private int payAmount;
+
+    private int discountedAmount;
+
+    private int usedPoints;
 
     private List<OrderItemResponse> items = new ArrayList<>();
 
@@ -41,12 +43,17 @@ public class OrderDetailResponse {
         this.orderId = entity.getId();
         this.orderName = entity.getOrderName();
         this.orderDate = entity.getCreateAt().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
-        this.totalAmount = entity.getTotalAmount();
-        this.usedPoints = entity.getUsedPoints();
-        this.payAmount = this.totalAmount - this.usedPoints;
         this.items = entity.getItems().stream()
                 .map(orderItem -> new OrderItemResponse().of(orderItem))
                 .collect(Collectors.toList());
+        this.orderAmount = entity.getTotalAmount();
+        int discountAmount = 0;
+        for(OrderItemResponse item : items){
+            discountAmount += (item.getItemPrice() - item.getSalePrice()) * item.getCount();
+        }
+        this.discountedAmount = discountAmount;
+        this.usedPoints = entity.getUsedPoints();
+        this.payAmount = this.orderAmount - this.discountedAmount - this.usedPoints;
         Delivery d = entity.getDeliveries().get(0);
         this.orderStatus = d.getStatus().getDescription();
         this.deliveryName = d.getReceiverName();

@@ -179,7 +179,7 @@
                     <div class="mb-5 ordererInfo">
                         <div class="form-group form-row">
                             <div class="col-sm-2"><label for="orderName">주문자명</label></div>
-                            <div class="col-sm-10"><input type="text" class="form-control" name="orderName" id="orderName" /></div>
+                            <div class="col-sm-10"><input type="text" class="form-control" name="name" id="orderName" /></div>
                         </div>
 
                         <div class="form-group form-row">
@@ -310,7 +310,45 @@
             <!-- Order Detail -->
             <div class="d-none p-2 contentDiv" id="div-my-order-detail" >
                 <h4 class="mb-3">주문 상세</h4>
-                <input type="hidden" name="orderId"/>
+                <div class="mb-3 orderInfo p-2">
+                    <h5>주문 정보</h5>
+                    <div>
+                        <label for="orderId">주문번호</label>
+                        <span id="orderId"></span>
+                    </div>
+                    <div>
+                        <label for="orderDate">주문일시</label>
+                        <span id="orderDate"></span>
+                    </div>
+                    <div>
+                        <label for="orderName">주문자명</label>
+                        <span id="orderName"></span>
+                    </div>
+                    <div>
+                        <label for="orderStatus">주문처리상태</label>
+                        <span id="orderStatus"></span>
+                    </div>
+                </div>
+
+                <div class="mb-3 amountInfo p-2">
+                    <h5>결제 정보</h5>
+                    <div>
+                        <label for="orderAmount">총 주문금액</label>
+                        <span id="orderAmount"></span>
+                    </div>
+                    <div>
+                        <label for="discountedAmount">상품 할인</label>
+                        <span id="discountedAmount"></span>
+                    </div>
+                    <div>
+                        <label for="usedPoints">포인트 사용</label>
+                        <span id="usedPoints"></span>
+                    </div>
+                    <div>
+                        <label for="payAmount">총 결제금액</label>
+                        <span id="payAmount"></span>
+                    </div>
+                </div>
                 <div class="mb-3 orderItem">
                     <table class="table table-horizontal table-bordered">
                         <thead class="thead-strong">
@@ -325,36 +363,6 @@
 
                         </tbody>
                     </table>
-                </div>
-                <div class="mb-3 payInfo p-2">
-                    <h5>결제 정보</h5>
-                    <div>
-                        <label for="totalAmount">총 결제금액</label>
-                        <span id="totalAmount"></span>
-                    </div>
-                    <div>
-                        <label for="originalAmount">총 주문금액</label>
-                        <span id="originalAmount"></span>
-                    </div>
-                    <div>
-                        <label for="discounted">상품 할인</label>
-                        <span id="discounted"></span>
-                    </div>
-                    <div>
-                        <label for="orderTel">포인트 사용</label>
-                        <span id="orderTel"></span>
-                    </div>
-                </div>
-                <div class="mb-3 orderInfo p-2">
-                    <h5>주문자 정보</h5>
-                    <div>
-                        <label for="orderName">이름</label>
-                        <span id="orderName"></span>
-                    </div>
-                    <div>
-                        <label for="orderTel">휴대전화</label>
-                        <span id="orderTel"></span>
-                    </div>
                 </div>
                 <div class="mb-3 deliverInfo p-2">
                     <h5>배송지 정보</h5>
@@ -371,7 +379,7 @@
                         <span id="receiverAddr"></span>
                     </div>
                     <div>
-                        <label for="message">주소</label>
+                        <label for="message">배송메세지</label>
                         <span id="message"></span>
                     </div>
                 </div>
