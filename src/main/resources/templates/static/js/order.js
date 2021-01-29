@@ -100,6 +100,7 @@ var order = {
             ordererInfo.find('#orderTel3').val(tel[2]);
             ordererInfo.find('input[name="addr1"]').val(data.addr1);
             ordererInfo.find('input[name="addr2"]').val(data.addr2);
+            ordererInfo.find('input[name="email"]').val(data.email);
             _this.div.find('.amountInfo .usePoints .usablePoints').text(data.points);
             //_this.div.find('.amountInfo .usePoints input[name="usePoints"]').val(data.points);
             //_this.div.find('.amountInfo .usedPoints').text(data.points);

@@ -117,7 +117,7 @@ public class OrderService {
         if(d.getStatus().getValue() > 1){
             throw new StatusNotSatisfiedException(Order.class, orderId, d.getStatus());
         }
-        o.modify(order.getOrderName(), order.getOrderTel(), order.getOrderAddr1(), order.getOrderAddr2());
+        o.modify(order.getOrderName(), order.getOrderEmail(), order.getOrderTel(), order.getOrderAddr1(), order.getOrderAddr2());
         return save(o);
     }
 

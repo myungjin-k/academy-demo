@@ -7,6 +7,7 @@ import my.myungjin.academyDemo.domain.member.Member;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
@@ -54,6 +55,11 @@ public class Order {
     private String orderTel;
 
     @Getter
+    @Email
+    @Column(name = "order_email", nullable = false)
+    private String orderEmail;
+
+    @Getter
     @Column(name = "order_addr1", nullable = false)
     private String orderAddr1;
 
@@ -86,10 +92,11 @@ public class Order {
     private List<Delivery> deliveries = new ArrayList<>();
 
     @Builder
-    public Order(String id, int totalAmount, @Size(min = 1, max = 10) String orderName, @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$", message = "전화번호는 010-0000-0000 형태여야 합니다.") String orderTel, String orderAddr1, String orderAddr2, int usedPoints) {
+    public Order(String id, int totalAmount, @Size(min = 1, max = 10) String orderName, String orderEmail, @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$", message = "전화번호는 010-0000-0000 형태여야 합니다.") String orderTel, String orderAddr1, String orderAddr2, int usedPoints) {
         this.id = id;
         this.totalAmount = totalAmount;
         this.orderName = orderName;
+        this.orderEmail = orderEmail;
         this.orderTel = orderTel;
         this.orderAddr1 = orderAddr1;
         this.orderAddr2 = orderAddr2;
@@ -110,8 +117,9 @@ public class Order {
         delivery.setOrder(this);
     }
 
-    public void modify(String orderName, String orderTel, String orderAddr1, String orderAddr2){
+    public void modify(String orderName, String orderEmail, String orderTel, String orderAddr1, String orderAddr2){
         this.orderName = orderName;
+        this.orderEmail = orderEmail;
         this.orderTel = orderTel;
         this.orderAddr1 = orderAddr1;
         this.orderAddr2 = orderAddr2;

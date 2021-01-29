@@ -25,6 +25,8 @@ public class OrderRequest {
 
     private String name;
 
+    private String email;
+
     private String tel;
 
     private String addr1;
@@ -50,6 +52,7 @@ public class OrderRequest {
     public Order newOrder(){
         return Order.builder()
                 .orderName(name)
+                .orderEmail(email)
                 .orderTel(tel)
                 .orderAddr1(addr1)
                 .orderAddr2(addr2)
