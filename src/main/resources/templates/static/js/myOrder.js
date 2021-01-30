@@ -19,8 +19,13 @@ var myOrder = {
         _this.div.removeClass('d-none');
         _this.list(_this.currPage);
 
+        _this.div.find('#my-orders').off('click').on('click', '.orderDetailLink', function () {
+            const orderId = $(this).find('.orderId').text();
+            //console.log(orderId);
+           loadMyOrderDetail(orderId);
+        });
 
-        /*$('#pagination-item-display-option').on('click', '.page-link', function(){
+        $('#pagination-order').on('click', '.page-link', function(){
             var link = $(this).text();
             if(link === 'prev'){
                 _this.firstPage = _this.firstPage - 5;
@@ -33,7 +38,10 @@ var myOrder = {
             } else {
                 _this.list(link);
             }
-        });*/
+        });
+    },
+    clear : function (){
+      this.div.find('#my-orders').empty();
     },
     list : function (page){
         var _this = this;
@@ -43,6 +51,7 @@ var myOrder = {
             dataType: 'json',
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
+            _this.clear();
             console.log(response);
             const resultData = response.response;
             $('#pagination-order').setPagination(
@@ -52,6 +61,30 @@ var myOrder = {
                 5,
                 resultData.totalPages
             );
+            if(resultData.totalElements > 0){
+                $.each(resultData.content, function(){
+                    //console.log(this);
+                    const order = this;
+                    let row = $('<tr/>');
+                    const detailLink = $('<a class="orderDetailLink" href="" onClick="return false;" />')
+                        .append('[' + '<span class="orderId" >' + this.orderId + '</span>' + ']');
+                    const orderInfo = $('<td class="orderInfo" />')
+                        .append(this.orderDate)
+                        .append('<br/>')
+                        .append(detailLink);
+                    const itemInfo = $('<td class="itemInfo" />')
+                        .append(order.abbrItemName);
+                    const price =  $('<td class="priceInfo" />')
+                        .append(order.totalAmount);
+                    const status = $('<td class="statusInfo" />')
+                        .append(order.status);
+                    row.append(orderInfo)
+                        .append(itemInfo)
+                        .append(price)
+                        .append(status);
+                    $('#my-orders').append(row);
+                });
+            }
 
         }).fail(function (error) {
             alert(JSON.stringify(error));
@@ -71,17 +104,18 @@ var myOrderDetail = {
         _this.div.removeClass('d-none');
     },
     clear : function(){
-        _this.div.find('#order-items').empty();const amountDiv = _this.div.find('.amountInfo');
+        this.div.find('#order-items').empty();
+        const amountDiv = this.div.find('.amountInfo');
         amountDiv.find('#payAmount').text('');
         amountDiv.find('#orderAmount').text('');
         amountDiv.find('#discountedAmount').text('');
         amountDiv.find('#usedPoints').text('');
-        const orderDiv = _this.div.find('.orderInfo');
+        const orderDiv = this.div.find('.orderInfo');
         orderDiv.find('#orderId').text('');
         orderDiv.find('#orderDate').text('');
         orderDiv.find('#orderName').text('');
         orderDiv.find('#orderStatus').text('');
-        const deliverDiv = _this.div.find('.deliverInfo');
+        const deliverDiv = this.div.find('.deliverInfo');
         deliverDiv.find('#receiverName').text('');
         deliverDiv.find('#receiverTel').text('');
         deliverDiv.find('#receiverAddr').text('');

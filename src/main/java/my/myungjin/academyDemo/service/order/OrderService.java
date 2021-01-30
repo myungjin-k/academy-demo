@@ -80,7 +80,7 @@ public class OrderService {
     public Optional<Member> findMemberInfo(@Valid Id<Member, String> memberId){
         return memberRepository.findById(memberId.value());
     }
-
+    // TODO 주문 확인 이메일 발송
     @Transactional
     public Order ordering(@Valid Id<Member, String> memberId, @Valid Order newOrder,
                           @Valid Delivery delivery, List<Id<CartItem, String>> itemIds){
