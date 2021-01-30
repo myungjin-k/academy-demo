@@ -25,7 +25,7 @@ public class OrderInfoResponse {
     public static OrderInfoResponse of(Member entity){
         if(entity == null)
             return new OrderInfoResponse(null, null, null,  null, null, 0);
-        return new OrderInfoResponse(entity.getName(), entity.getEmail(), entity.getTel(), entity.getAddr1(), entity.getAddr2(), entity.getReserves());
+        return new OrderInfoResponse(entity.getName(), entity.getTel(), entity.getEmail(), entity.getAddr1(), entity.getAddr2(), entity.getReserves());
     }
 
 }
