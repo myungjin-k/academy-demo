@@ -7,6 +7,8 @@ import my.myungjin.academyDemo.domain.member.Rating;
 @Getter
 public class MemberInformRatingResponse {
 
+    private String name;
+
     private String currRating;
 
     private int ratio;
@@ -17,16 +19,20 @@ public class MemberInformRatingResponse {
 
     private int remainingAmount;
 
+    private int reserves;
+
     public MemberInformRatingResponse of(Member entity){
+        this.name = entity.getName();
         Rating currRating = entity.getRating();
         this.currRating = currRating.getValue();
-        this.ratio = (int) currRating.getReserveRatio() * 100;
+        this.ratio = (int) (currRating.getReserveRatio() * 100);
         this.orderedAmount = entity.getOrderAmount();
         Rating nextRating = Rating.of(currRating.getSeq() + 1);
         if(nextRating != null){
             this.nextRating = nextRating.getValue();
             this.remainingAmount = nextRating.getAmount() - this.orderedAmount;
         }
+        this.reserves = entity.getReserves();
         return this;
     }
 }

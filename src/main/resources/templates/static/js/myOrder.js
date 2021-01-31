@@ -17,6 +17,7 @@ var myOrder = {
         _this.userId = userId;
         $('.contentDiv').not(_this.div).addClass('d-none');
         _this.div.removeClass('d-none');
+        _this.loadMemberInfo();
         _this.list(_this.currPage);
 
         _this.div.find('#my-orders').off('click').on('click', '.orderDetailLink', function () {
@@ -42,6 +43,38 @@ var myOrder = {
     },
     clear : function (){
       this.div.find('#my-orders').empty();
+    },
+    clearMemberInfo : function(){
+        const memberInfoDiv = this.div.find('.memberInfo');
+        memberInfoDiv.find('.name').text('');
+        memberInfoDiv.find('.currRating').text('');
+        memberInfoDiv.find('.ratio').text('');
+        memberInfoDiv.find('.nextRating').text('');
+        memberInfoDiv.find('.remainingAmount').text('');
+        memberInfoDiv.find('.orderedAmount').text('');
+        memberInfoDiv.find('.reserves').text('');
+    },
+    loadMemberInfo : function(){
+        var _this = this;
+        $.ajax({
+            type: 'GET',
+            url: '/api/mall/member/' + _this.userId + '/ratingInfo',
+            contentType:'application/json; charset=utf-8'
+        }).done(function(response) {
+            _this.clearMemberInfo();
+            //console.log(response);
+            const resultData = response.response;
+            const memberInfoDiv = _this.div.find('.memberInfo');
+            memberInfoDiv.find('.name').text(resultData.name);
+            memberInfoDiv.find('.currRating').text(resultData.currRating);
+            memberInfoDiv.find('.ratio').text(resultData.ratio);
+            memberInfoDiv.find('.nextRating').text(resultData.nextRating);
+            memberInfoDiv.find('.remainingAmount').text(resultData.remainingAmount);
+            memberInfoDiv.find('.orderedAmount').text(resultData.orderedAmount);
+            memberInfoDiv.find('.reserves').text(resultData.reserves);
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
     },
     list : function (page){
         var _this = this;
