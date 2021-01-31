@@ -35,6 +35,8 @@ public class OrderItemResponse {
 
     private String invoiceNum;
 
+    private String deliveryId;
+
     public OrderItemResponse of(OrderItem entity){
         this.orderItemId = entity.getId();
         ItemDisplay display = entity.getItemOption().getItemDisplay();
@@ -52,6 +54,7 @@ public class OrderItemResponse {
         Optional<DeliveryItem> deliveryItem = Optional.ofNullable(entity.getDeliveryItem());
         this.deliveryStatus = deliveryItem.map(d -> d.getDelivery().getStatus().getDescription()).orElse("");
         this.invoiceNum = deliveryItem.map(d -> d.getDelivery().getInvoiceNum()).orElse("");
+        this.deliveryId = deliveryItem.map(d -> d.getDelivery().getId()).orElse("");
         return this;
     }
 

@@ -42,23 +42,24 @@ INSERT INTO item_option (id, color, size, master_id) VALUES ('fb32787b91614b978c
 INSERT INTO item_option (id, color, size, master_id) VALUES ('af412e9968dc4f11a83f9352a251f0aa', '포그그레이', 'S', 'c62bb955f4f94203b31f157fa72deef2');
 INSERT INTO item_option (id, color, size, master_id) VALUES ('af412e9968ec4f11a83f9352a251f0aa', '포그그레이', 'M', 'c62bb955f4f94203b31f157fa72deef2');
 
-INSERT INTO item_display (id, item_id, item_display_name, sale_price, material, size, description, notice, status, detail_image) VALUES ('f23ba30a47194a2c8a3fd2ccadd952a4', 'c62bb955f4f94203b31f157fa72deef2', '그랜드 핀턱 팬츠 (2color)', 43000, '기모면(오랜 시간 원형 보존을 위해 드라이클리닝을 추천해 드립니다.) ',
-                                                                                                                                         'S(26-27) 허리 33 엉덩이 49.5 허벅지 31.5 밑위 29.5 밑단 20 총길이 92
-                                                                                                                                         M(28-29) 허리 35 엉덩이 50.5 허벅지 32.5 밑위 29.5 밑단 21 총길이 92',
-                                                                                                                                         '데일리하면서도 멋스러운 핏감의 핀턱 팬츠입니다.
-                                                                                                                                         부드러운 터칭감이 느껴지는 톡톡한 기모 원단으로
-                                                                                                                                         지금부터 겨울까지 착용하기 좋은 적당한 두께감입니다.
-                                                                                                                                         이중 잠금으로 히든 버튼으로 한번,
-                                                                                                                                         사이드의 무늬 버튼으로 한번 클로징 가능합니다.
-                                                                                                                                         사이드의 버튼 디테일은 은은하면서 포인트가 됩니다.
-                                                                                                                                         과하게 오버하지 않으면서도 적당히 여유롭게 떨어지는 핏감으로
-                                                                                                                                         핀턱 라인이 적당히 볼륨감 있는 아웃라인을 형성해줍니다.
-                                                                                                                                         데일리로 착용하기 좋은 부드럽고 은은한 빛의 크림 색상과
-                                                                                                                                         안개가 낀 듯 오묘한 색감의 차분한 포그그레이 색상준비했습니다.
-                                                                                                                                         크림-부드럽고 은은한 빛의 화사한 크림
-                                                                                                                                         포그그레이-안개가 낀듯 오묘한 색감의 차분하고 딥한 그레이
-                                                                                                                                         신축성-없음｜계절감-가을/겨울｜비침-없음｜촉감-부드러운 편', '크림 S사이즈 상품 준비 기간이 일주일 가량 소요됩니다.', 1 ,
-                                                                                                                                         'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/dev/itemDisplay/e7bfe6ab-76b7-4df6-a557-51c83e30599d.jpg');
+INSERT INTO item_display (id, item_id, item_display_name, sale_price, material, size, description, notice, status, detail_image) VALUES
+('f23ba30a47194a2c8a3fd2ccadd952a4', 'c62bb955f4f94203b31f157fa72deef2', '그랜드 핀턱 팬츠 (2color)', 43000, '기모면(오랜 시간 원형 보존을 위해 드라이클리닝을 추천해 드립니다.) ',
+ 'S(26-27) 허리 33 엉덩이 49.5 허벅지 31.5 밑위 29.5 밑단 20 총길이 92
+ M(28-29) 허리 35 엉덩이 50.5 허벅지 32.5 밑위 29.5 밑단 21 총길이 92',
+ '데일리하면서도 멋스러운 핏감의 핀턱 팬츠입니다.
+ 부드러운 터칭감이 느껴지는 톡톡한 기모 원단으로
+ 지금부터 겨울까지 착용하기 좋은 적당한 두께감입니다.
+ 이중 잠금으로 히든 버튼으로 한번,
+ 사이드의 무늬 버튼으로 한번 클로징 가능합니다.
+ 사이드의 버튼 디테일은 은은하면서 포인트가 됩니다.
+ 과하게 오버하지 않으면서도 적당히 여유롭게 떨어지는 핏감으로
+ 핀턱 라인이 적당히 볼륨감 있는 아웃라인을 형성해줍니다.
+ 데일리로 착용하기 좋은 부드럽고 은은한 빛의 크림 색상과
+ 안개가 낀 듯 오묘한 색감의 차분한 포그그레이 색상준비했습니다.
+ 크림-부드럽고 은은한 빛의 화사한 크림
+ 포그그레이-안개가 낀듯 오묘한 색감의 차분하고 딥한 그레이
+ 신축성-없음｜계절감-가을/겨울｜비침-없음｜촉감-부드러운 편', '크림 S사이즈 상품 준비 기간이 일주일 가량 소요됩니다.', 1 ,
+ 'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/dev/itemDisplay/e7bfe6ab-76b7-4df6-a557-51c83e30599d.jpg');
 
 INSERT INTO item_display_option (id, color, size, status, display_id) VALUES ('91cc1c18f11e4d018566524b51d8419a', '크림', 'S', '1', 'f23ba30a47194a2c8a3fd2ccadd952a4');
 INSERT INTO item_display_option (id, color, size, status, display_id) VALUES ('91cc1c18f11e5d018566524b51d8419a', '크림', 'M', '1', 'f23ba30a47194a2c8a3fd2ccadd952a4');
@@ -111,31 +112,32 @@ INSERT INTO item_master (id, item_name, category_id, price, thumbnail) VALUES ('
 INSERT INTO item_option (id, size, master_id) VALUES ('97d1a59bc83045ef99c633f4c36ac10c', 'S', 'cc068e14469a4d0a958f8ff072009f04');
 INSERT INTO item_option (id, size, master_id) VALUES ('ca3720d375374d8cb0a11cd867aeb510', 'M', 'cc068e14469a4d0a958f8ff072009f04');
 
-INSERT INTO item_display (id, item_id, item_display_name, sale_price, material, size, description, status, detail_image) VALUES ('839ebdcc2b2843a6ae681d9cb82c6a7c', 'cc068e14469a4d0a958f8ff072009f04', '로뎀 블랙 팬츠', 35000,
-                                                                                                                                 '면100',
-                                                                                                                                 'S(26-27) 허리 32 엉덩이 46 허벅지 26 밑위 29 밑단 15 총길이 86
-                                                                                                                                M(28-29) 허리 34 엉덩이 47 허벅지 27 밑위 29 밑단 16 총길이 86',
-                                                                                                                                 '경쾌한 기장으로 깔끔한 핏의 블랙 팬츠 입니다.
+INSERT INTO item_display (id, item_id, item_display_name, sale_price, material, size, description, status, detail_image) VALUES
+('839ebdcc2b2843a6ae681d9cb82c6a7c', 'cc068e14469a4d0a958f8ff072009f04', '로뎀 블랙 팬츠', 35000,
+ '면100',
+ 'S(26-27) 허리 32 엉덩이 46 허벅지 26 밑위 29 밑단 15 총길이 86
+ M(28-29) 허리 34 엉덩이 47 허벅지 27 밑위 29 밑단 16 총길이 86',
+ '경쾌한 기장으로 깔끔한 핏의 블랙 팬츠 입니다.
 
-                                                                                                                                어디든 매치하기 좋은 스탠다드한 일자 핏입니다.
+ 어디든 매치하기 좋은 스탠다드한 일자 핏입니다.
 
-                                                                                                                                적당히 슬림하면서도 깔끔하게 일자로 툭 떨어집니다.
+ 적당히 슬림하면서도 깔끔하게 일자로 툭 떨어집니다.
 
-                                                                                                                                발목이 살짝 드러나는 경쾌한 기장으로
-                                                                                                                                양말과 함께 코디하기에도 좋고
-                                                                                                                                부츠와 매치하기도 알맞습니다.
+ 발목이 살짝 드러나는 경쾌한 기장으로
+ 양말과 함께 코디하기에도 좋고
+ 부츠와 매치하기도 알맞습니다.
 
-                                                                                                                                딥한 블랙 데님으로
-                                                                                                                                워싱감이 거의 느껴지지 않아 깔끔하고
-                                                                                                                                실버 버튼으로 어디든 쉽게 매치 하기 좋답니다.
-                                                                                                                                여기저기 매치하기 좋아 다양하게 활용하게될 아이템입니다.
+ 딥한 블랙 데님으로
+ 워싱감이 거의 느껴지지 않아 깔끔하고
+ 실버 버튼으로 어디든 쉽게 매치 하기 좋답니다.
+ 여기저기 매치하기 좋아 다양하게 활용하게될 아이템입니다.
 
-                                                                                                                                COLOR
-                                                                                                                                워싱감이 적은 블랙 데님
+ COLOR
+ 워싱감이 적은 블랙 데님
 
-                                                                                                                                INFO
-                                                                                                                                신축성-없음｜촉감-적당함｜계절감-봄/가을', 1 ,
-                                                                                                                                 'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/dev/itemDisplay/26e6c731-f9ae-4474-af8a-cfea6d3dbd92.jpg');
+ INFO
+ 신축성-없음｜촉감-적당함｜계절감-봄/가을', 1 ,
+ 'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/dev/itemDisplay/26e6c731-f9ae-4474-af8a-cfea6d3dbd92.jpg');
 
 INSERT INTO item_display_option (id, size, status, display_id) VALUES ('15b84d4afc6644fcbc64ef8c2e6212bd', 'S', '1', '839ebdcc2b2843a6ae681d9cb82c6a7c');
 INSERT INTO item_display_option (id, size, status, display_id) VALUES ('2a6866f21c4f4a37b1e2f80057884792', 'M', '1', '839ebdcc2b2843a6ae681d9cb82c6a7c');
@@ -146,38 +148,39 @@ INSERT INTO item_option (id, color, master_id) VALUES ('8812e33b92464834b0e4ff39
 INSERT INTO item_option (id, color, master_id) VALUES ('d95a3d3508e04688a41b8824e61f1c27', '시나몬브라운', 'abe14fe1e242449886adf0e78088e847');
 INSERT INTO item_option (id, color, master_id) VALUES ('3e9032e8a494447ca384156112f2d75f', '스페이스블루', 'abe14fe1e242449886adf0e78088e847');
 
-INSERT INTO item_display (id, item_id, item_display_name, sale_price, material, size, description, status, detail_image) VALUES ('fd0b906391ac4636b7984ab756006144', 'abe14fe1e242449886adf0e78088e847', '마론 라쿤 골지 가디건', 50000,
-                                                                                                                                 '라쿤30 울30 나일론40',
-                                                                                                                                 '어깨 39.5 가슴 47 암홀 21 팔통 14.5 소매단 7.5 팔길이 57 총길이 56',
-                                                                                                                                 '심플하게 착용하기 좋은 라쿤 골지 가디건입니다.
+INSERT INTO item_display (id, item_id, item_display_name, sale_price, material, size, description, status, detail_image) VALUES
+('fd0b906391ac4636b7984ab756006144', 'abe14fe1e242449886adf0e78088e847', '마론 라쿤 골지 가디건', 50000,
+ '라쿤30 울30 나일론40',
+ '어깨 39.5 가슴 47 암홀 21 팔통 14.5 소매단 7.5 팔길이 57 총길이 56',
+ '심플하게 착용하기 좋은 라쿤 골지 가디건입니다.
 
-                                                                                                                                울과 라쿤 혼방의 라이트한 무게감의 원단으로
-                                                                                                                                라쿤 소재 특유의 포슬한 헤어감이 느껴집니다.
+ 울과 라쿤 혼방의 라이트한 무게감의 원단으로
+ 라쿤 소재 특유의 포슬한 헤어감이 느껴집니다.
 
-                                                                                                                                은은한 짜임의 잔잔한 골지 무늬와
-                                                                                                                                미니멀한 크기의 자개 단추는 깔끔하면서 포인트가 됩니다.
+ 은은한 짜임의 잔잔한 골지 무늬와
+ 미니멀한 크기의 자개 단추는 깔끔하면서 포인트가 됩니다.
 
-                                                                                                                                너무 오버하지도 핏 되지도 않는 베이직한 실루엣으로
-                                                                                                                                넣어입거나 빼어 입기 모두 좋은 기장감입니다.
+ 너무 오버하지도 핏 되지도 않는 베이직한 실루엣으로
+ 넣어입거나 빼어 입기 모두 좋은 기장감입니다.
 
-                                                                                                                                적당한 깊이로 파인 브이넥으로
-                                                                                                                                모델과 같이 단추를 모두 잠궈 니트처럼 활용하기 좋습니다.
+ 적당한 깊이로 파인 브이넥으로
+ 모델과 같이 단추를 모두 잠궈 니트처럼 활용하기 좋습니다.
 
-                                                                                                                                부드러운 라떼빛이 감도는 따뜻한 베이지,
-                                                                                                                                약간의 붉은빛이 감도는 깊은 브라운,
-                                                                                                                                그리고 고급스러운 청록빛이 감도는 딥한 블루 색상 준비했습니다.
-                                                                                                                                세 컬러 모두 베이직하면서도 특별한, 소장가치 있는 색상으로 빠짐없이 추천드립니다.
+ 부드러운 라떼빛이 감도는 따뜻한 베이지,
+ 약간의 붉은빛이 감도는 깊은 브라운,
+ 그리고 고급스러운 청록빛이 감도는 딥한 블루 색상 준비했습니다.
+ 세 컬러 모두 베이직하면서도 특별한, 소장가치 있는 색상으로 빠짐없이 추천드립니다.
 
-                                                                                                                                *소재 특성상 잡실/털빠짐/냄새/까끌거림이 있을 수 있습니다.
+ *소재 특성상 잡실/털빠짐/냄새/까끌거림이 있을 수 있습니다.
 
-                                                                                                                                COLOR
-                                                                                                                                라떼베이지-부드러운 라떼빛이 감도는 따뜻한 베이지
-                                                                                                                                시나몬브라운-약간의 붉은빛이 감도는 깊은 브라운
-                                                                                                                                스페이스블루-고급스러운 청록빛이 감도는 딥한 블루
+ COLOR
+ 라떼베이지-부드러운 라떼빛이 감도는 따뜻한 베이지
+ 시나몬브라운-약간의 붉은빛이 감도는 깊은 브라운
+ 스페이스블루-고급스러운 청록빛이 감도는 딥한 블루
 
-                                                                                                                                INFO
-                                                                                                                                신축성-있음｜계절감-가을/겨울｜비침- 없음｜촉감-적당함', 1 ,
-                                                                                                                                 'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/dev/itemDisplay/26e6c731-f9ae-4474-af8a-cfea6d3dbd92.jpg');
+ INFO
+ 신축성-있음｜계절감-가을/겨울｜비침- 없음｜촉감-적당함', 1 ,
+ 'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/dev/itemDisplay/26e6c731-f9ae-4474-af8a-cfea6d3dbd92.jpg');
 
 INSERT INTO item_display_option (id, color, status, display_id) VALUES ('fd0b906391ac4636b7984ab756006144', '라떼베이지', '1', 'fd0b906391ac4636b7984ab756006144');
 INSERT INTO item_display_option (id, color, status, display_id) VALUES ('3d190d6970ff423c803445d7f6270895', '시나몬브라운', '1', 'fd0b906391ac4636b7984ab756006144');
@@ -187,48 +190,49 @@ INSERT INTO item_master (id, item_name, category_id, price, thumbnail) VALUES ('
 INSERT INTO item_option (id, color, master_id) VALUES ('92b0a37bbc0a411ea8363b4c7857d3dd', '모스그린', '2f120d7aa59f464ea35527c2900e6a57');
 INSERT INTO item_option (id, color, master_id) VALUES ('4a4b3309e8d44eaa92ebdbc8a5e358c9', '카라멜브라운', '2f120d7aa59f464ea35527c2900e6a57');
 
-INSERT INTO item_display (id, item_id, item_display_name, sale_price, material, size, description, status, detail_image) VALUES ('f9f3f6f31e0c4b889ff5bd020459d014', '2f120d7aa59f464ea35527c2900e6a57', '브론테 바이 문 머플러 (2color)', 54000,
-                                                                                                                                 '영국산 메리노울 100',
-                                                                                                                                 '너비 25 총길이(프린지제외) 174',
-                                                                                                                                 '영국을 대표하는 프리미엄 브랜드
-                                                                                                                                bronte by moon사 원단으로 제작된 머플러입니다.
+INSERT INTO item_display (id, item_id, item_display_name, sale_price, material, size, description, status, detail_image) VALUES
+('f9f3f6f31e0c4b889ff5bd020459d014', '2f120d7aa59f464ea35527c2900e6a57', '브론테 바이 문 머플러 (2color)', 54000,
+ '영국산 메리노울 100',
+ '너비 25 총길이(프린지제외) 174',
+ '영국을 대표하는 프리미엄 브랜드
+ bronte by moon사 원단으로 제작된 머플러입니다.
 
-                                                                                                                                브론테 바이 문은 180년 이상을 이어온 세계 3대 직물 제조 명가
-                                                                                                                                아브라함 문의 홈패션 및 패션 소품 전문 브랜드로,
-                                                                                                                                디자인부터 직물의 생산 염색까지
-                                                                                                                                모든 공정을 직접 진행하며 엄격하게 관리하고 있습니다.
+ 브론테 바이 문은 180년 이상을 이어온 세계 3대 직물 제조 명가
+ 아브라함 문의 홈패션 및 패션 소품 전문 브랜드로,
+ 디자인부터 직물의 생산 염색까지
+ 모든 공정을 직접 진행하며 엄격하게 관리하고 있습니다.
 
-                                                                                                                                -
+ -
 
-                                                                                                                                영국산 메리노울 100 소재로 일반 양모 대비 부드럽고 유연한
-                                                                                                                                어린 양털을 사용하여 통기성과 보온성이 우수합니다.
+ 영국산 메리노울 100 소재로 일반 양모 대비 부드럽고 유연한
+ 어린 양털을 사용하여 통기성과 보온성이 우수합니다.
 
-                                                                                                                                데일리하게 착용하기 좋은 가벼운 중량감으로
-                                                                                                                                자연스럽게 두어번 둘러 매어 착용하시거나
-                                                                                                                                머플러를 반으로 접어 클래식하게 착용하셔도 멋스럽습니다.
+ 데일리하게 착용하기 좋은 가벼운 중량감으로
+ 자연스럽게 두어번 둘러 매어 착용하시거나
+ 머플러를 반으로 접어 클래식하게 착용하셔도 멋스럽습니다.
 
-                                                                                                                                대체적으로 무게감이 느껴지는 겨울 아이템들 속에서
-                                                                                                                                조금 더 편안하고 라이트한 포인트 아이템을 찾으셨던 분들께 추천드립니다.
-                                                                                                                                -
+ 대체적으로 무게감이 느껴지는 겨울 아이템들 속에서
+ 조금 더 편안하고 라이트한 포인트 아이템을 찾으셨던 분들께 추천드립니다.
+ -
 
-                                                                                                                                끝단의 내추럴한 프린지 디테일은 은은하게 포인트 됩니다.
-                                                                                                                                고급스러운 짜임과 컬러 구성 또한 매력적입니다.
+ 끝단의 내추럴한 프린지 디테일은 은은하게 포인트 됩니다.
+ 고급스러운 짜임과 컬러 구성 또한 매력적입니다.
 
-                                                                                                                                비교적 단조로운 색감의 겨울 옷들 사이에서
-                                                                                                                                은근하게 포인트가 되어줄 2가지 색상 준비했습니다.
+ 비교적 단조로운 색감의 겨울 옷들 사이에서
+ 은근하게 포인트가 되어줄 2가지 색상 준비했습니다.
 
-                                                                                                                                오묘한 녹색 빛의 모스그린
-                                                                                                                                은은한 카라멜 빛의 깊은 카라멜브라운
-                                                                                                                                각기 다른 매력으로 룩을 더욱 빛나게 해줄 매력적인 컬러들입니다.
-                                                                                                                                -
-                                                                                                                                클래식하면서도 고급스럽게 착용하기 좋은 시즌 아이템으로
-                                                                                                                                옷장에 하나쯤 소장하신다면
-                                                                                                                                매년 겨울 꺼내 입기 좋은 소장 가치 있는 머플러로 추천드립니다.
+ 오묘한 녹색 빛의 모스그린
+ 은은한 카라멜 빛의 깊은 카라멜브라운
+ 각기 다른 매력으로 룩을 더욱 빛나게 해줄 매력적인 컬러들입니다.
+ -
+ 클래식하면서도 고급스럽게 착용하기 좋은 시즌 아이템으로
+ 옷장에 하나쯤 소장하신다면
+ 매년 겨울 꺼내 입기 좋은 소장 가치 있는 머플러로 추천드립니다.
 
-                                                                                                                                COLOR
-                                                                                                                                모스그린-여러색의 원사가 섞인 오묘한 녹색 빛
-                                                                                                                                카라멜브라운-은은한 카라멜빛의 깊은 브라운', 1 ,
-                                                                                                                                 'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/dev/itemDisplay/b7c35a29-a187-4d9e-acb6-31b1e1eb0fa2.jpg');
+ COLOR
+ 모스그린-여러색의 원사가 섞인 오묘한 녹색 빛
+ 카라멜브라운-은은한 카라멜빛의 깊은 브라운', 1 ,
+ 'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/dev/itemDisplay/b7c35a29-a187-4d9e-acb6-31b1e1eb0fa2.jpg');
 
 INSERT INTO item_display_option (id, color, status, display_id) VALUES ('86987dc60e6041b4a3966709f71ee7e2', '모스그린', '1', 'f9f3f6f31e0c4b889ff5bd020459d014');
 INSERT INTO item_display_option (id, color, status, display_id) VALUES ('651213add24840afb2a4be6657c2b687', '카라멜브라운', '1', 'f9f3f6f31e0c4b889ff5bd020459d014');
@@ -238,34 +242,35 @@ INSERT INTO item_option (id, color, master_id) VALUES ('abef2dc914794775809597d9
 INSERT INTO item_option (id, color, master_id) VALUES ('a9868a3ea5054aeda5a4be68da41c301', '그레이', 'b193a871f08c46649f7fcd724e4b042d');
 INSERT INTO item_option (id, color, master_id) VALUES ('003787b9a782423da236faa2924b4e60', '카키브라운', 'b193a871f08c46649f7fcd724e4b042d');
 
-INSERT INTO item_display (id, item_id, item_display_name, sale_price, material, size, description, status, detail_image) VALUES ('a8853254ada64200b9821b4dde6b02bb', 'b193a871f08c46649f7fcd724e4b042d', '린크 홀가먼트 니트 ', 41000,
-                                                                                                                                 '캐시미어5 파인울25 바셀린울15 캐시나일론55',
-                                                                                                                                 '어깨 - 가슴 50.5 암홀 30 팔통 19 소매단 10.5 팔길이 68 총길이 65.5',
-                                                                                                                                 '데일리하게 착용하기 좋은 홀가먼트 니트입니다.
+INSERT INTO item_display (id, item_id, item_display_name, sale_price, material, size, description, status, detail_image) VALUES
+('a8853254ada64200b9821b4dde6b02bb', 'b193a871f08c46649f7fcd724e4b042d', '린크 홀가먼트 니트 ', 41000,
+ '캐시미어5 파인울25 바셀린울15 캐시나일론55',
+ '어깨 - 가슴 50.5 암홀 30 팔통 19 소매단 10.5 팔길이 68 총길이 65.5',
+ '데일리하게 착용하기 좋은 홀가먼트 니트입니다.
 
-                                                                                                                                봉제선이 없는 홀가먼트 방식으로 제작되어 착용감이 편안하며
-                                                                                                                                어깨 라인을 타고 자연스럽게 흐르는 내추럴한 실루엣이 매력적입니다.
+ 봉제선이 없는 홀가먼트 방식으로 제작되어 착용감이 편안하며
+ 어깨 라인을 타고 자연스럽게 흐르는 내추럴한 실루엣이 매력적입니다.
 
-                                                                                                                                밑단과 넥라인의 적당한 너비의 골지 짜임은
-                                                                                                                                심심하지 않으면서 은은하게 포인트 됩니다.
+ 밑단과 넥라인의 적당한 너비의 골지 짜임은
+ 심심하지 않으면서 은은하게 포인트 됩니다.
 
-                                                                                                                                캐시미어와 울이 블랜딩된 적당한 두께감의 원단으로
-                                                                                                                                드라이하면서도 유연한 촉감이 느껴집니다.
+ 캐시미어와 울이 블랜딩된 적당한 두께감의 원단으로
+ 드라이하면서도 유연한 촉감이 느껴집니다.
 
-                                                                                                                                여유로운 품과 기장감으로 비교적 체형 구애 없이 착용 가능하며
-                                                                                                                                단품으로는 물론 아우터 안에 이너로 착용하기도 좋은,
-                                                                                                                                베이직하면서 데일리하게 손이 갈 아이템으로 추천드립니다.
+ 여유로운 품과 기장감으로 비교적 체형 구애 없이 착용 가능하며
+ 단품으로는 물론 아우터 안에 이너로 착용하기도 좋은,
+ 베이직하면서 데일리하게 손이 갈 아이템으로 추천드립니다.
 
-                                                                                                                                *소재 특성상 잡실/털빠짐/냄새 등이 있을 수 있습니다.
+ *소재 특성상 잡실/털빠짐/냄새 등이 있을 수 있습니다.
 
-                                                                                                                                COLOR
-                                                                                                                                블랙-정석블랙
-                                                                                                                                그레이-적당한 밝기의 그레이
-                                                                                                                                카키브라운-카키빛이 감도는 차분하고 따뜻한 브라운
+ COLOR
+ 블랙-정석블랙
+ 그레이-적당한 밝기의 그레이
+ 카키브라운-카키빛이 감도는 차분하고 따뜻한 브라운
 
-                                                                                                                                INFO
-                                                                                                                                신축성-있음｜두께감-적당함｜비침- 없음｜촉감- 적당함', 1 ,
-                                                                                                                                 'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/dev/itemDisplay/a790eb72-c3f2-47c9-b80f-572a98da04d1.jpg');
+ INFO
+ 신축성-있음｜두께감-적당함｜비침- 없음｜촉감- 적당함', 1 ,
+ 'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/dev/itemDisplay/a790eb72-c3f2-47c9-b80f-572a98da04d1.jpg');
 
 INSERT INTO item_display_option (id, color, status, display_id) VALUES ('f8c0e9297e624113ae85c3cdd8a3e7f5', '블랙', '1', 'a8853254ada64200b9821b4dde6b02bb');
 INSERT INTO item_display_option (id, color, status, display_id) VALUES ('e3550d96ded84daaa5078f2e0685e015', '그레이', '1', 'a8853254ada64200b9821b4dde6b02bb');

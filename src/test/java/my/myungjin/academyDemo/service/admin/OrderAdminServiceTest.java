@@ -1,4 +1,4 @@
-package my.myungjin.academyDemo.service.order;
+package my.myungjin.academyDemo.service.admin;
 
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
@@ -11,9 +11,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.jdbc.Sql;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,12 +27,12 @@ import static org.hamcrest.Matchers.notNullValue;
 @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class DeliveryServiceTest {
+public class OrderAdminServiceTest {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private DeliveryService deliveryService;
+    private OrderAdminService deliveryService;
 
     private Id<Delivery, String> deliveryId;
 
@@ -139,6 +141,15 @@ public class DeliveryServiceTest {
         Delivery deleted = deliveryService.deleteDelivery(newDeliveryId);
         assertThat(deleted, is(notNullValue()));
         log.info("Deleted Delivery: {}", deleted);
+    }
+
+    @Test
+    @Order(10)
+    void 주문_검색(){
+        PageRequest pageRequest = PageRequest.of(0, 5);
+        Page<DeliveryItem> result = deliveryService.searchOrders(null, LocalDate.now(), null, pageRequest);
+        assertThat(result, is(notNullValue()));
+        log.info("Found Orders: {}", result.getContent());
     }
 
 }

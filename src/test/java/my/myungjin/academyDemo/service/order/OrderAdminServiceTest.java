@@ -26,7 +26,7 @@ import static org.hamcrest.Matchers.notNullValue;
 @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class OrderServiceTest {
+public class OrderAdminServiceTest {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 

@@ -1,4 +1,4 @@
-package my.myungjin.academyDemo.service.order;
+package my.myungjin.academyDemo.service.admin;
 
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
@@ -7,17 +7,20 @@ import my.myungjin.academyDemo.domain.item.ItemDisplayOptionRepository;
 import my.myungjin.academyDemo.domain.order.*;
 import my.myungjin.academyDemo.error.NotFoundException;
 import my.myungjin.academyDemo.error.StatusNotSatisfiedException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-public class DeliveryService {
+public class OrderAdminService {
 
     private final DeliveryRepository deliveryRepository;
 
@@ -28,6 +31,11 @@ public class DeliveryService {
     private final OrderRepository orderRepository;
 
     private final OrderItemRepository orderItemRepository;
+
+    @Transactional(readOnly = true)
+    public Page<DeliveryItem> searchOrders(Id<Order, String> orderId, LocalDate start, LocalDate end, Pageable pageable){
+        return deliveryItemRepository.findAll(DeliveryItemPredicate.search(orderId, start, end), pageable);
+    }
 
     @Transactional(readOnly = true)
     public List<OrderItem> findAllOrderItems(@Valid Id<Delivery, String> deliveryId){

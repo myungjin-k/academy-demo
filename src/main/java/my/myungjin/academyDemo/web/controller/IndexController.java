@@ -6,6 +6,7 @@ import my.myungjin.academyDemo.domain.common.CodeGroup;
 import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.domain.item.ItemStatus;
 import my.myungjin.academyDemo.domain.member.Role;
+import my.myungjin.academyDemo.domain.order.DeliveryStatus;
 import my.myungjin.academyDemo.security.User;
 import my.myungjin.academyDemo.service.admin.CommonCodeService;
 import org.springframework.security.core.Authentication;
@@ -83,6 +84,15 @@ public class IndexController {
         model.addAttribute("isAdmin", true);
         model.addAttribute("itemStatus", ItemStatus.values());
         return "admin/item";
+    }
+
+    @GetMapping("/admin/orderIndex")
+    public String adminORderIndex(Model model, @AuthenticationPrincipal Authentication authentication){
+        setItemCategories(model);
+        setLoginUser(model, authentication);
+        model.addAttribute("isAdmin", true);
+        model.addAttribute("deliveryStatus", DeliveryStatus.values());
+        return "admin/order";
     }
 
     private void setItemCategories(Model model){
