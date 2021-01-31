@@ -8,11 +8,11 @@ import my.myungjin.academyDemo.domain.order.OrderItem;
 import java.util.Optional;
 
 @Getter
-public class AdminDeliveryListResponse {
+public class AdminOrderListResponse {
 
     private String orderId;
 
-    private String deliveryItemId;
+    private String orderItemId;
 
     private String itemName;
 
@@ -24,19 +24,17 @@ public class AdminDeliveryListResponse {
 
     private String deliveryStatus;
 
-    private String deliveryId;
-
-    public AdminDeliveryListResponse of(DeliveryItem entity){
-        this.orderId = entity.getOrderItem().getOrder().getId();
-        this.deliveryItemId = entity.getId();
+    public AdminOrderListResponse of(OrderItem entity){
+        this.orderId = entity.getOrder().getId();
+        this.orderItemId = entity.getId();
         ItemDisplay display = entity.getItemOption().getItemDisplay();
         this.itemName = display.getItemDisplayName();
         ItemDisplay.ItemDisplayOption option = entity.getItemOption();
         this.size = option.getSize();
         this.color = option.getColor();
         this.count = entity.getCount();
-        this.deliveryStatus = entity.getDelivery().getStatus().getDescription();
-        this.deliveryId = entity.getDelivery().getId();
+        Optional<DeliveryItem> deliveryItem = Optional.ofNullable(entity.getDeliveryItem());
+        this.deliveryStatus = deliveryItem.map(d -> d.getDelivery().getStatus().getDescription()).orElse("");
         return this;
     }
 

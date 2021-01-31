@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.item.ItemDisplayOptionRepository;
+import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.order.*;
 import my.myungjin.academyDemo.error.NotFoundException;
 import my.myungjin.academyDemo.error.StatusNotSatisfiedException;
@@ -33,8 +34,17 @@ public class OrderAdminService {
     private final OrderItemRepository orderItemRepository;
 
     @Transactional(readOnly = true)
-    public Page<DeliveryItem> searchOrders(Id<Order, String> orderId, LocalDate start, LocalDate end, Pageable pageable){
-        return deliveryItemRepository.findAll(DeliveryItemPredicate.search(orderId, start, end), pageable);
+    public Page<OrderItem> searchOrders(Id<Order, String> orderId, LocalDate start, LocalDate end, Pageable pageable){
+        return orderItemRepository.findAll(OrderItemPredicate.search(orderId, start, end), pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Order getOrderDetail(@Valid Id<Order, String> orderId) {
+        Order o = orderRepository.findById(orderId.value())
+                .orElseThrow(() -> new NotFoundException(Order.class, orderId));
+        o.setItems(orderItemRepository.findAllByOrder(o));
+        o.setDeliveries(deliveryRepository.getAllByOrderOrderByCreateAtDesc(o));
+        return o;
     }
 
     @Transactional(readOnly = true)

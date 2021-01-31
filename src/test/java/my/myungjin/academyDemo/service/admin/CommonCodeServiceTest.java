@@ -1,9 +1,8 @@
-package my.myungjin.academyDemo.service.common;
+package my.myungjin.academyDemo.service.admin;
 
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.common.CodeGroup;
 import my.myungjin.academyDemo.domain.common.CommonCode;
-import my.myungjin.academyDemo.service.admin.CommonCodeService;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;

@@ -6,12 +6,12 @@ import my.myungjin.academyDemo.commons.Id;
 
 import java.time.LocalDate;
 
-public class DeliveryItemPredicate {
+public class OrderItemPredicate {
     public static Predicate search(Id<Order, String> orderId, LocalDate start, LocalDate end){
-        QDeliveryItem item = QDeliveryItem.deliveryItem;
+        QOrderItem item = QOrderItem.orderItem;
         BooleanBuilder builder = new BooleanBuilder();
         if(orderId != null){
-            builder.and(item.orderItem.order.id.eq(orderId.value()));
+            builder.and(item.order.id.eq(orderId.value()));
         }
         if(start != null){
             builder.and(item.createAt.after(start.atStartOfDay()));

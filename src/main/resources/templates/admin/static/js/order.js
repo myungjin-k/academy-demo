@@ -1,29 +1,40 @@
 var main = {
     init : function() {
-        deliveryItem.init();
+        orderList.init();
         //delivery.init();
 
-        /*$(document).on('click', '.btn-search-codes', function(){
-            var id = $(this).parents('tr').find('input[name="id"]').val();
-            $('#div-code-group').removeClass('active');
-            $('#div-code').addClass('active').addClass('show');
+        $('#div-order-list').off('click').on('click', '.orderLink', function(){
+            var orderId = $(this).text();
+            $('#div-order-list').removeClass('active');
+            $('#div-order-detail').addClass('active').addClass('show');
 
-            $('#tab-code-group').removeClass('active').prop('aria-selected', false);
-            $('#tab-code').show().addClass('active').prop('aria-selected', true);
-            commonCode.list(id, 1);
-        });*/
+            $('#tab-order-list').removeClass('active').prop('aria-selected', false);
+            $('#tab-order-detail').show().addClass('active').prop('aria-selected', true);
+            orderDetail.load(orderId);
+        });
+
+        $('#div-order-detail').off('click').on('click', '.deliveryLink', function(){
+            var deliveryId = $(this).text();
+            $('#div-order-detail').removeClass('active');
+            $('#div-delivery-detail').addClass('active').addClass('show');
+
+            $('#tab-order-detail').removeClass('active').prop('aria-selected', false);
+            $('#tab-delivery-detail').show().addClass('active').prop('aria-selected', true);
+            deliveryDetail.load(deliveryId);
+        });
     }
 }
 
 //TODO 배송상태변경
 //TODO 배송상품 추가, 삭제
 //TODO 배송 추가, 삭제
-var deliveryItem = {
+var orderList = {
     firstPage: 1,
     lastPage: 5,
+    div : $('#div-order-list'),
     init : function () {
         var _this = this;
-        $(document).on('click', '#pagination-delivery-item .page-link', function(){
+        _this.div.on('click', '#pagination-order .page-link', function(){
             var link = $(this).text();
             if(link === 'prev'){
                 _this.firstPage = _this.firstPage - 5;
@@ -37,19 +48,20 @@ var deliveryItem = {
                 _this.list(link);
             }
         });
-        $('#btn-search-delivery-item').click(function (){
+        _this.div.find('#btn-search-order').click(function (){
             _this.firstPage = 1;
             _this.lastPage = 5;
             _this.list(_this.firstPage);
         });
+
     },
     clearTable : function(){
-        $('#deliveryItems').empty();
+        $('#orders').empty();
     },
     list : function (page){
         var _this = this;
         this.clearTable();
-        var param = $('#input-search-delivery-item').val();
+        var param = $('#input-search-order').val();
         $.ajax({
             type: 'GET',
             url: '/api/admin/order/search?orderId='+ param +'&page=' + page +'&size=' + 5 + '&direction=DESC',
@@ -57,7 +69,7 @@ var deliveryItem = {
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
             var resultData = response.response;
-            console.log(resultData);
+            //console.log(resultData);
             if(resultData.totalElements > 0){
                 $('#pagination-order').setPagination(
                     page,
@@ -70,15 +82,14 @@ var deliveryItem = {
                     //console.log(this);
                     const item = this;
                     const row = '<tr>'
-                        + '<input type="hidden" name="id" value="' + item.deliveryItemId + '"/>'
-                        + '<td class="orderId">' + item.orderId +'</td>'
+                        + '<input type="hidden" name="id" value="' + item.orderItemId + '"/>'
+                        + '<td class="orderId">' + '<a class="orderLink" href="" onclick="return false;">' + item.orderId + '</a>' +'</td>'
                         + '<td class="itemName">' + item.itemName +'</td>'
                         + '<td class="option">' + item.color + '/' + item.size +'</td>'
                         + '<td class="count">' + item.count +'</td>'
                         + '<td class="deliveryStatus">' + item.deliveryStatus +'</td>'
-                        + '<td><a class="btn btn-sm btn-outline-dark btn-modify-status">배송정보변경</a></td>'
                         + '</tr>';
-                    $('#deliveryItems').append(row);
+                    $('#orders').append(row);
                 });
             }
 
@@ -86,56 +97,98 @@ var deliveryItem = {
             alert(JSON.stringify(error));
         });
 
-    },
-    save : function (){
-        var _this = this;
-        var data = $('#form-save-group').serializeObject();
-        $.ajax({
-            type: 'POST',
-            url: '/api/admin/codeGroup',
-            dataType: 'json',
-            contentType:'application/json; charset=utf-8',
-            data: JSON.stringify(data)
-        }).done(function(response) {
-            //console.log(response);
-            _this.list(1);
-        }).fail(function (error) {
-            alert(JSON.stringify(error));
-        });
+    }
+};
+var orderDetail = {
+  div : $('#div-order-detail'),
+  load : function (id) {
+      var _this = this;
+      //this.clearTable();
+      $.ajax({
+          type: 'GET',
+          url: '/api/admin/order/' + id,
+          dataType: 'json',
+          contentType:'application/json; charset=utf-8'
+      }).done(function(response) {
+          var resultData = response.response;
+          console.log(resultData);
+          const orderInfo = _this.div.find('.orderInfo');
+          orderInfo.find('#orderId').text(resultData.id);
+          orderInfo.find('#orderName').text(resultData.orderName);
+          orderInfo.find('#orderDate').text(resultData.createAt);
+          const orderItem = _this.div.find('#order-items');
+          orderItem.empty();
+          $.each(resultData.items, function(){
+              const item = this;
+              const itemOption = item.itemOption;
+              const row = '<tr>'
+                  + '<input type="hidden" name="id" value="' + item.id + '"/>'
+                  + '<td class="itemName">' + itemOption.itemDisplay.itemDisplayName +'</td>'
+                  + '<td class="option">' + itemOption.color + '/' + itemOption.size +'</td>'
+                  + '<td class="count">' + item.count +'</td>'
+                  + '<td class="price">' + itemOption.itemDisplay.itemMaster.price +'</td>'
+                  + '</tr>';
+              orderItem.append(row);
+          });
+          const deliveries = _this.div.find('#deliveries');
+          deliveries.empty();
+          $.each(resultData.deliveries, function(){
+              const delivery = this;
+              const items = delivery.items;
+              let abbrItem = items[0].itemOption.itemDisplay.itemDisplayName;
+              if(items.length > 1)
+                  abbrItem += '외 ' + String(items.length - 1) + '건';
+              const row = '<tr>'
+                  + '<input type="hidden" name="id" value="' + delivery.id + '"/>'
+                  + '<td class="deliveryId">' + '<a class="deliveryLink" href="" onclick="return false;">' + delivery.id + '</a>' +'</td>'
+                  + '<td class="itemName">' + abbrItem +'</td>'
+                  + '<td class="createAt">' + delivery.createAt +'</td>'
+                  + '</tr>';
+              deliveries.append(row);
+          });
+      }).fail(function (error) {
+          alert(JSON.stringify(error));
+      });
 
-    },
-    setData : function(data){
-        var form = $('#form-save-group');
-        form.find('input[name="id"]').val(data.id);
-        form.find('input[name="code"]').val(data.code);
-        form.find('input[name="nameEng"]').val(data.nameEng);
-        form.find('input[name="nameKor"]').val(data.nameKor);
-    },
-    update : function (){
-        var _this = this;
-        var data = $('#form-save-group').serializeObject();
-        $.ajax({
-            type: 'PUT',
-            url: '/api/admin/codeGroup/' + data.id,
-            dataType: 'json',
-            contentType:'application/json; charset=utf-8',
-            data: JSON.stringify(data)
-        }).done(function(response) {
-            //console.log(response);
-            _this.list(1);
-        }).fail(function (error) {
-            alert(JSON.stringify(error));
-        });
+  }
+};
 
-    },
-    delete : function (id){
+var deliveryDetail = {
+    div : $('#div-delivery-detail'),
+    load : function (id) {
         var _this = this;
+        //this.clearTable();
         $.ajax({
-            type: 'DELETE',
-            url: '/api/admin/codeGroup/' + id
+            type: 'GET',
+            url: '/api/admin/delivery/' + id,
+            dataType: 'json',
+            contentType:'application/json; charset=utf-8'
         }).done(function(response) {
-            //console.log(response);
-            _this.list(1);
+            var resultData = response.response;
+            console.log(resultData);
+            const deliveryInfo = _this.div.find('.deliveryInfo');
+            deliveryInfo.find('#deliveryId').text(resultData.id);
+            deliveryInfo.find('#orderName').text(resultData.receiverName);
+            deliveryInfo.find('#receiverTel').text(resultData.receiverTel);
+            deliveryInfo.find('#receiverAddr1').text(resultData.receiverAddr1);
+            deliveryInfo.find('#receiverAddr2').text(resultData.receiverAddr2);
+            deliveryInfo.find('#message').text(resultData.message);
+            deliveryInfo.find('#status').text(resultData.status);
+            deliveryInfo.find('#invoiceNum').text(resultData.invoiceNum);
+            const deliveryItem = _this.div.find('#delivery-items');
+            deliveryItem.empty();
+            $.each(resultData.items, function(){
+                const item = this;
+                const itemOption = item.itemOption;
+                const row = '<tr>'
+                    + '<input type="hidden" name="id" value="' + item.id + '"/>'
+                    + '<td class="itemName">' + itemOption.itemDisplay.itemDisplayName +'</td>'
+                    + '<td class="option">' + itemOption.color + '/' + itemOption.size +'</td>'
+                    + '<td class="count">' + item.count +'</td>'
+                    + '<td class="price">' + itemOption.itemDisplay.itemMaster.price +'</td>'
+                    + '</tr>';
+                deliveryItem.append(row);
+            });
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });

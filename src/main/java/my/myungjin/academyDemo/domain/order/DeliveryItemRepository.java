@@ -6,7 +6,7 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import java.util.List;
 import java.util.Optional;
 
-public interface DeliveryItemRepository extends JpaRepository<DeliveryItem, String>, QuerydslPredicateExecutor<DeliveryItem> {
+public interface DeliveryItemRepository extends JpaRepository<DeliveryItem, String>{
 
     // 배송정보 엔티티로 검색
     List<DeliveryItem> findAllByDelivery (Delivery delivery);

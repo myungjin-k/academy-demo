@@ -147,7 +147,7 @@ public class OrderAdminServiceTest {
     @Order(10)
     void 주문_검색(){
         PageRequest pageRequest = PageRequest.of(0, 5);
-        Page<DeliveryItem> result = deliveryService.searchOrders(null, LocalDate.now(), null, pageRequest);
+        Page<OrderItem> result = deliveryService.searchOrders(null, LocalDate.now(), null, pageRequest);
         assertThat(result, is(notNullValue()));
         log.info("Found Orders: {}", result.getContent());
     }
