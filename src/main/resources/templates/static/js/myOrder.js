@@ -124,6 +124,7 @@ var myOrder = {
         });
     }
 };
+//TODO 배송준비 단계에서 배송정보 수정 기능
 var myOrderDetail = {
     div : $('#div-my-order-detail'),
     userId : '',
