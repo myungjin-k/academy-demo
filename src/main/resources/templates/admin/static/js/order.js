@@ -166,10 +166,18 @@ var deliveryDetail = {
          $(this).parents('.deliveryStatus').find('.text').addClass('d-none');
       });
 
-        _this.div.find('#btn-save-delivery-status').unbind('click').bind('click', function(){
-            _this.updateStatus();
-        });
+      _this.div.find('#btn-save-delivery-status').unbind('click').bind('click', function(){
+          _this.updateStatus();
+      });
 
+      _this.div.find('#btn-edit-invoice-num').unbind('click').bind('click', function(){
+          $(this).parents('.invoiceNum').find('.edit').removeClass('d-none');
+          $(this).parents('.invoiceNum').find('.text').addClass('d-none');
+      });
+
+      _this.div.find('#btn-save-invoice-num').unbind('click').bind('click', function(){
+          _this.updateInvoiceNum();
+      });
 
 
     },
@@ -179,15 +187,38 @@ var deliveryDetail = {
         const param = _this.div.find('.deliveryStatus select[name="status"]').val();
         $.ajax({
             type: 'PATCH',
-            url: '/api/admin/delivery/' + _this.id + '?status=' + param,
+            url: '/api/admin/delivery/' + _this.id + '/status/' + param,
             dataType: 'json',
             contentType:'application/json; charset=utf-8',
         }).done(function(response) {
             var resultData = response.response;
-            console.log(resultData);
+            //console.log(resultData);
             const deliveryInfo = _this.div.find('.deliveryInfo');
             deliveryInfo.find('select[name="status"]').val(resultData.status);
             deliveryInfo.find('#status').text(resultData.status);
+            deliveryInfo.find('.text').removeClass('d-none');
+            deliveryInfo.find('.edit').addClass('d-none');
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+
+    },
+    updateInvoiceNum : function() {
+        var _this = this;
+        //this.clearTable();
+        const param = _this.div.find('.invoiceNum input[name="invoiceNum"]').val();
+        $.ajax({
+            type: 'PATCH',
+            url: '/api/admin/delivery/' + _this.id + '/invoiceNum/' + param,
+
+            dataType: 'json',
+            contentType:'application/json; charset=utf-8',
+        }).done(function(response) {
+            var resultData = response.response;
+            //console.log(resultData);
+            const deliveryInfo = _this.div.find('.invoiceNum');
+            deliveryInfo.find('input[name="invoiceNum"]').val(resultData.invoiceNum);
+            deliveryInfo.find('#invoiceNum').text(resultData.invoiceNum);
             deliveryInfo.find('.text').removeClass('d-none');
             deliveryInfo.find('.edit').addClass('d-none');
         }).fail(function (error) {
@@ -205,7 +236,7 @@ var deliveryDetail = {
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
             var resultData = response.response;
-            console.log(resultData);
+            //console.log(resultData);
             const deliveryInfo = _this.div.find('.deliveryInfo');
             deliveryInfo.find('#deliveryId').text(resultData.id);
             deliveryInfo.find('#receiverName').text(resultData.receiverName);
@@ -216,6 +247,7 @@ var deliveryDetail = {
             deliveryInfo.find('select[name="status"]').val(resultData.status);
             deliveryInfo.find('#status').text(resultData.status);
             deliveryInfo.find('#invoiceNum').text(resultData.invoiceNum);
+            deliveryInfo.find('input[name="invoiceNum"]').val(resultData.invoiceNum);
             const deliveryItem = _this.div.find('#delivery-items');
             deliveryItem.empty();
             $.each(resultData.items, function(){

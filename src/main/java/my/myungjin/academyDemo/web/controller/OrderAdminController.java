@@ -79,14 +79,25 @@ public class OrderAdminController {
     }
 
 
-    @PatchMapping("/delivery/{id}")
+    @PatchMapping("/delivery/{id}/status/{status}")
     @ApiOperation(value = "배송상태 업데이트")
     public Response<Delivery> updateDeliveryStatus(
             @PathVariable @ApiParam(value = "조회 대상 배송정보 PK", example = "cd2940ee2dfc418384eedc450be832a2") String id,
-            @RequestParam String status
+            @PathVariable @ApiParam(value = "조회 대상 배송상태 이름", example = "DELIVERED") String status
             ){
         return OK(
                 orderAdminService.modifyStatus(Id.of(Delivery.class, id), DeliveryStatus.valueOf(status))
+        );
+    }
+
+    @PatchMapping("/delivery/{id}/invoiceNum/{invoiceNum}")
+    @ApiOperation(value = "송장번호 업데이트")
+    public Response<Delivery> updateInvoiceNum(
+            @PathVariable @ApiParam(value = "조회 대상 배송정보 PK", example = "cd2940ee2dfc418384eedc450be832a2") String id,
+            @PathVariable @ApiParam(value = "조회 대상 송장번호", example = "0123456789") String invoiceNum
+    ){
+        return OK(
+                orderAdminService.updateInvoice(Id.of(Delivery.class, id), invoiceNum)
         );
     }
 
