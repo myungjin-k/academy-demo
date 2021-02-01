@@ -116,4 +116,9 @@ public class Delivery {
     public void updateInvoice(String invoiceNum){
         this.invoiceNum = invoiceNum;
     }
+
+    public void updateAddress(String addr1, String addr2){
+        this.receiverAddr1 = addr1;
+        this.receiverAddr2 = addr2;
+    }
 }

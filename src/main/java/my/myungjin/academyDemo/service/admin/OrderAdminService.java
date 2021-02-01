@@ -147,6 +147,12 @@ public class OrderAdminService {
         return save(d);
     }
 
+    @Transactional
+    public Delivery modifyAddress(@Valid Id<Delivery, String> deliveryId, @NotBlank String addr1, @NotBlank String addr2) {
+        Delivery d = findById(deliveryId);
+        d.updateAddress(addr1, addr2);
+        return save(d);
+    }
     private void saveItem(DeliveryItem deliveryItem, Id<ItemDisplay.ItemDisplayOption, String> itemId){
         itemDisplayOptionRepository.findById(itemId.value())
             .map(displayOption -> {

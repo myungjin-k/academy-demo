@@ -204,27 +204,68 @@ var deliveryDetail = {
     div : $('#div-delivery-detail'),
     deliveryId : '',
     init : function(id){
-      const _this = this;
-      _this.id = id;
-      _this.load(_this.id);
+        const _this = this;
+        _this.id = id;
+        _this.load(_this.id);
 
-      _this.div.find('#btn-edit-delivery-status').unbind('click').bind('click', function(){
-         $(this).parents('.deliveryStatus').find('.edit').removeClass('d-none');
-         $(this).parents('.deliveryStatus').find('.text').addClass('d-none');
-      });
+        _this.div.find('#btn-edit-delivery-status').unbind('click').bind('click', function(){
+             $(this).parents('.deliveryStatus').find('.edit').removeClass('d-none');
+            $(this).parents('.deliveryStatus').find('.text').addClass('d-none');
+        });
 
-      _this.div.find('#btn-save-delivery-status').unbind('click').bind('click', function(){
-          _this.updateStatus();
-      });
+        _this.div.find('#btn-save-delivery-status').unbind('click').bind('click', function(){
+            _this.updateStatus();
+        });
 
-      _this.div.find('#btn-edit-invoice-num').unbind('click').bind('click', function(){
-          $(this).parents('.invoiceNum').find('.edit').removeClass('d-none');
-          $(this).parents('.invoiceNum').find('.text').addClass('d-none');
-      });
+        _this.div.find('#btn-edit-invoice-num').unbind('click').bind('click', function(){
+            $(this).parents('.invoiceNum').find('.edit').removeClass('d-none');
+            $(this).parents('.invoiceNum').find('.text').addClass('d-none');
+        });
 
-      _this.div.find('#btn-save-invoice-num').unbind('click').bind('click', function(){
-          _this.updateInvoiceNum();
-      });
+        _this.div.find('#btn-save-invoice-num').unbind('click').bind('click', function(){
+            _this.updateInvoiceNum();
+        });
+
+        _this.div.find('#btn-edit-delivery-address').unbind('click').bind('click', function(){
+            if(_this.div.find('.deliveryInfo #status').text() !== 'PROCESSING'){
+                alert('상품 발송 이후에는 주소 변경이 불가합니다.');
+                return false;
+            } else {
+                $(this).parents('.deliveryAddress').find('.edit').removeClass('d-none');
+                $(this).parents('.deliveryAddress').find('.text').addClass('d-none');
+            }
+        });
+
+        _this.div.find('#btn-save-delivery-address').unbind('click').bind('click', function(){
+            _this.updateAddress();
+        });
+    },
+    updateAddress : function() {
+        var _this = this;
+        //this.clearTable();
+        const param = {
+            "addr1" : _this.div.find('.deliveryAddress input[name="addr1"]').val(),
+            "addr2" : _this.div.find('.deliveryAddress input[name="addr2"]').val()
+        }
+        $.ajax({
+            type: 'PATCH',
+            url: '/api/admin/delivery/' + _this.id + '/address',
+            dataType: 'json',
+            contentType:'application/json; charset=utf-8',
+            data: JSON.stringify(param)
+        }).done(function(response) {
+            var resultData = response.response;
+            console.log(resultData);
+            const deliveryInfo = _this.div.find('.deliveryInfo');
+            deliveryInfo.find('input[name="addr1"]').val(resultData.receiverAddr1);
+            deliveryInfo.find('input[name="addr2"]').val(resultData.receiverAddr2);
+            deliveryInfo.find('#receiverAddr1').text(resultData.receiverAddr1);
+            deliveryInfo.find('#receiverAddr2').text(resultData.receiverAddr2);
+            deliveryInfo.find('.text').removeClass('d-none');
+            deliveryInfo.find('.edit').addClass('d-none');
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
 
     },
     updateStatus : function() {
@@ -288,7 +329,9 @@ var deliveryDetail = {
             deliveryInfo.find('#receiverName').text(resultData.receiverName);
             deliveryInfo.find('#receiverTel').text(resultData.receiverTel);
             deliveryInfo.find('#receiverAddr1').text(resultData.receiverAddr1);
+            deliveryInfo.find('input[name="addr1"]').val(resultData.receiverAddr1);
             deliveryInfo.find('#receiverAddr2').text(resultData.receiverAddr2);
+            deliveryInfo.find('input[name="addr2"').val(resultData.receiverAddr2);
             deliveryInfo.find('#message').text(resultData.message);
             deliveryInfo.find('select[name="status"]').val(resultData.status);
             deliveryInfo.find('#status').text(resultData.status);

@@ -9,7 +9,6 @@ import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.order.*;
 import my.myungjin.academyDemo.service.admin.OrderAdminService;
-import my.myungjin.academyDemo.service.order.OrderService;
 import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.DeliveryRequest;
 import my.myungjin.academyDemo.web.request.OrderSearchRequest;
@@ -20,6 +19,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static my.myungjin.academyDemo.web.Response.OK;
@@ -98,6 +98,17 @@ public class OrderAdminController {
     ){
         return OK(
                 orderAdminService.updateInvoice(Id.of(Delivery.class, id), invoiceNum)
+        );
+    }
+
+    @PatchMapping("/delivery/{id}/address")
+    @ApiOperation(value = "송장번호 업데이트")
+    public Response<Delivery> updateAddress(
+            @PathVariable @ApiParam(value = "조회 대상 배송정보 PK", example = "cd2940ee2dfc418384eedc450be832a2") String id,
+            @RequestBody @ApiParam(value = "조회 대상 배송주소") Map<String, String> address
+    ){
+        return OK(
+                orderAdminService.modifyAddress(Id.of(Delivery.class, id), address.get("addr1"), address.get("addr2"))
         );
     }
 

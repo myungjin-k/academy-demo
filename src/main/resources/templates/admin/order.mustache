@@ -127,9 +127,16 @@
                         <div class="col-2">연락처</div>
                         <div class="col"><span id="receiverTel"></span></div>
                     </div>
-                    <div class="row">
+                    <div class="row deliveryAddress">
                         <div class="col-2">배송주소</div>
-                        <div class="col"><span id="receiverAddr1"></span><span id="receiverAddr2"></span></div>
+                        <div class="col text">
+                            <span id="receiverAddr1"></span><span id="receiverAddr2"></span>
+                            <button class="ml-2" id="btn-edit-delivery-address">변경</button>
+                        </div>
+                        <div class="col edit d-none">
+                            <input type="text" name="addr1" /><input type="text" name="addr2" />
+                            <button class="ml-2" id="btn-save-delivery-address">저장</button>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-2">배송메세지</div>
