@@ -10,7 +10,7 @@ var main = {
 
             $('#tab-order-list').removeClass('active').prop('aria-selected', false);
             $('#tab-order-detail').show().addClass('active').prop('aria-selected', true);
-            orderDetail.load(orderId);
+            orderDetail.init(orderId);
         });
 
         $('#div-order-detail').off('click').on('click', '.deliveryLink', function(){
@@ -100,13 +100,49 @@ var orderList = {
     }
 };
 var orderDetail = {
-  div : $('#div-order-detail'),
-  load : function (id) {
-      var _this = this;
+    div : $('#div-order-detail'),
+    id : '',
+    init : function(id){
+        const _this = this;
+        _this.id = id;
+        _this.load();
+
+        _this.div.find('#btn-save-delivery').unbind('click').bind('click', function () {
+           _this.addDelivery();
+        });
+
+    },
+    addDelivery : function(){
+        const _this = this;
+        const data = $('#form-save-delivery').serializeObject();
+        let itemIds = [];
+        _this.div.find('#order-items tr').each(function(){
+           const orderItemId = $(this).find('input[name="id"]').val();
+           itemIds.push(orderItemId);
+        });
+        data['orderItemIds'] = itemIds;
+        console.log(data);
+        $.ajax({
+            type: 'POST',
+            url: '/api/admin/order/' + _this.id + '/delivery',
+            dataType: 'json',
+            contentType:'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function(response) {
+            var resultData = response.response;
+            //console.log(resultData);
+            alert('생성되었습니다.');
+            _this.load();
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+    },
+    load : function () {
+      const _this = this;
       //this.clearTable();
       $.ajax({
           type: 'GET',
-          url: '/api/admin/order/' + id,
+          url: '/api/admin/order/' + _this.id,
           dataType: 'json',
           contentType:'application/json; charset=utf-8'
       }).done(function(response) {
@@ -146,6 +182,17 @@ var orderDetail = {
                   + '</tr>';
               deliveries.append(row);
           });
+
+          const lastDelivery = resultData.deliveries[0];
+          if(lastDelivery !== undefined){
+              const newDeliveryForm = _this.div.find('#form-save-delivery');
+              newDeliveryForm.find('input[name="receiverName"]').val(lastDelivery.receiverName);
+              newDeliveryForm.find('input[name="receiverTel"]').val(lastDelivery.receiverTel);
+              newDeliveryForm.find('input[name="receiverAddr1"]').val(lastDelivery.receiverAddr1);
+              newDeliveryForm.find('input[name="receiverAddr2"]').val(lastDelivery.receiverAddr2);
+              newDeliveryForm.find('input[name="message"]').val(lastDelivery.message);
+          }
+
       }).fail(function (error) {
           alert(JSON.stringify(error));
       });
@@ -178,7 +225,6 @@ var deliveryDetail = {
       _this.div.find('#btn-save-invoice-num').unbind('click').bind('click', function(){
           _this.updateInvoiceNum();
       });
-
 
     },
     updateStatus : function() {

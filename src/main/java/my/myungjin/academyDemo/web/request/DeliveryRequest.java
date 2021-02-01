@@ -24,8 +24,6 @@ public class DeliveryRequest {
 
     private String receiverAddr2;
 
-    private int status;
-
     private String message;
 
     private List<String> orderItemIds;
@@ -36,7 +34,7 @@ public class DeliveryRequest {
                 .receiverTel(receiverTel)
                 .receiverAddr1(receiverAddr1)
                 .receiverAddr2(receiverAddr2)
-                .status(DeliveryStatus.of(status))
+                .status(DeliveryStatus.of(1))
                 .build();
     }
 
