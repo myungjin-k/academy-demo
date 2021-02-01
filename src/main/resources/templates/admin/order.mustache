@@ -120,9 +120,17 @@
                         <div class="col-2">배송메세지</div>
                         <div class="col"><span id="message"></span></div>
                     </div>
-                    <div class="row">
+                    <div class="row deliveryStatus">
                         <div class="col-2">배송상태</div>
-                        <div class="col"><span id="status"></span></div>
+                        <div class="col text"><span id="status"></span><button class="ml-2 btn btn-sm btn-primary" id="btn-edit-delivery-status">변경</button></div>
+                        <div class="col edit d-none">
+                            <select name="status">
+                                {{#deliveryStatus}}
+                                    <option value="{{name}}">{{description}}</option>
+                                {{/deliveryStatus}}
+                            </select>
+                            <button class="p-2 btn btn-sm btn-primary" id="btn-save-delivery-status">저장</button>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-2">송장번호</div>

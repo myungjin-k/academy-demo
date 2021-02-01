@@ -20,7 +20,7 @@ var main = {
 
             $('#tab-order-detail').removeClass('active').prop('aria-selected', false);
             $('#tab-delivery-detail').show().addClass('active').prop('aria-selected', true);
-            deliveryDetail.load(deliveryId);
+            deliveryDetail.init(deliveryId);
         });
     }
 }
@@ -155,12 +155,52 @@ var orderDetail = {
 
 var deliveryDetail = {
     div : $('#div-delivery-detail'),
-    load : function (id) {
+    deliveryId : '',
+    init : function(id){
+      const _this = this;
+      _this.id = id;
+      _this.load(_this.id);
+
+      _this.div.find('#btn-edit-delivery-status').unbind('click').bind('click', function(){
+         $(this).parents('.deliveryStatus').find('.edit').removeClass('d-none');
+         $(this).parents('.deliveryStatus').find('.text').addClass('d-none');
+      });
+
+        _this.div.find('#btn-save-delivery-status').unbind('click').bind('click', function(){
+            _this.updateStatus();
+        });
+
+
+
+    },
+    updateStatus : function() {
+        var _this = this;
+        //this.clearTable();
+        const param = _this.div.find('.deliveryStatus select[name="status"]').val();
+        $.ajax({
+            type: 'PATCH',
+            url: '/api/admin/delivery/' + _this.id + '?status=' + param,
+            dataType: 'json',
+            contentType:'application/json; charset=utf-8',
+        }).done(function(response) {
+            var resultData = response.response;
+            console.log(resultData);
+            const deliveryInfo = _this.div.find('.deliveryInfo');
+            deliveryInfo.find('select[name="status"]').val(resultData.status);
+            deliveryInfo.find('#status').text(resultData.status);
+            deliveryInfo.find('.text').removeClass('d-none');
+            deliveryInfo.find('.edit').addClass('d-none');
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+
+    },
+    load : function () {
         var _this = this;
         //this.clearTable();
         $.ajax({
             type: 'GET',
-            url: '/api/admin/delivery/' + id,
+            url: '/api/admin/delivery/' + _this.id,
             dataType: 'json',
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
@@ -168,11 +208,12 @@ var deliveryDetail = {
             console.log(resultData);
             const deliveryInfo = _this.div.find('.deliveryInfo');
             deliveryInfo.find('#deliveryId').text(resultData.id);
-            deliveryInfo.find('#orderName').text(resultData.receiverName);
+            deliveryInfo.find('#receiverName').text(resultData.receiverName);
             deliveryInfo.find('#receiverTel').text(resultData.receiverTel);
             deliveryInfo.find('#receiverAddr1').text(resultData.receiverAddr1);
             deliveryInfo.find('#receiverAddr2').text(resultData.receiverAddr2);
             deliveryInfo.find('#message').text(resultData.message);
+            deliveryInfo.find('select[name="status"]').val(resultData.status);
             deliveryInfo.find('#status').text(resultData.status);
             deliveryInfo.find('#invoiceNum').text(resultData.invoiceNum);
             const deliveryItem = _this.div.find('#delivery-items');
