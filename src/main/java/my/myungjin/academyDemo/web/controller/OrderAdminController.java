@@ -102,7 +102,7 @@ public class OrderAdminController {
     }
 
     @PatchMapping("/delivery/{id}/address")
-    @ApiOperation(value = "송장번호 업데이트")
+    @ApiOperation(value = "배송주소 업데이트")
     public Response<Delivery> updateAddress(
             @PathVariable @ApiParam(value = "조회 대상 배송정보 PK", example = "cd2940ee2dfc418384eedc450be832a2") String id,
             @RequestBody @ApiParam(value = "조회 대상 배송주소") Map<String, String> address

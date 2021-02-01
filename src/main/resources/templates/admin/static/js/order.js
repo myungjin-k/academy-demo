@@ -111,6 +111,30 @@ var orderDetail = {
            _this.addDelivery();
         });
 
+        _this.div.find('#deliveries').off('click').on('click', '.delete-delivery', function () {
+            const deliveryId = $(this).parents('tr').find('input[name="id"]').val();
+            const status = $(this).parents('tr').find('.status').text();
+            if(status !== 'PROCESSING')
+                alert('이미 발송된 배송정보는 취소할 수 없습니다.');
+            else
+                _this.deleteDelivery(deliveryId);
+        });
+    },
+    deleteDelivery : function(id){
+        const _this = this;
+        $.ajax({
+            type: 'DELETE',
+            url: '/api/admin/delivery/' + id ,
+            dataType: 'json',
+            contentType:'application/json; charset=utf-8'
+        }).done(function(response) {
+            var resultData = response.response;
+            console.log(resultData);
+            alert('삭제되었습니다.');
+            _this.load();
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
     },
     addDelivery : function(){
         const _this = this;
@@ -174,11 +198,16 @@ var orderDetail = {
               let abbrItem = items[0].itemOption.itemDisplay.itemDisplayName;
               if(items.length > 1)
                   abbrItem += '외 ' + String(items.length - 1) + '건';
+              const deleteBtn = (delivery.status !== "PROCESSING") ?
+                "" : '<a class="btn btn-sm delete-delivery" href="" onclick="return false;">취소</a>'
+              ;
               const row = '<tr>'
                   + '<input type="hidden" name="id" value="' + delivery.id + '"/>'
                   + '<td class="deliveryId">' + '<a class="deliveryLink" href="" onclick="return false;">' + delivery.id + '</a>' +'</td>'
                   + '<td class="itemName">' + abbrItem +'</td>'
+                  + '<td class="status">' + delivery.status +'</td>'
                   + '<td class="createAt">' + delivery.createAt +'</td>'
+                  + '<td class="delete">' + deleteBtn +'</td>'
                   + '</tr>';
               deliveries.append(row);
           });
@@ -208,26 +237,46 @@ var deliveryDetail = {
         _this.id = id;
         _this.load(_this.id);
 
+        const status = _this.div.find('.deliveryInfo #status').text();
         _this.div.find('#btn-edit-delivery-status').unbind('click').bind('click', function(){
-             $(this).parents('.deliveryStatus').find('.edit').removeClass('d-none');
-            $(this).parents('.deliveryStatus').find('.text').addClass('d-none');
+            if (status === 'DELETED'){
+                alert('삭제된 배송정보입니다.');
+                return false;
+            } else {
+                $(this).parents('.deliveryStatus').find('.edit').removeClass('d-none');
+                $(this).parents('.deliveryStatus').find('.text').addClass('d-none');
+            }
         });
 
         _this.div.find('#btn-save-delivery-status').unbind('click').bind('click', function(){
-            _this.updateStatus();
+            if(status !== 'PROCESSING'
+                && $(this).parents('.deliveryStatus select[name="status"]').val() === 'DELETED'){
+                alert('상품 발송 이후에는 배송 취소가 불가합니다.');
+                return false;
+            } else {
+                _this.updateStatus();
+            }
         });
 
         _this.div.find('#btn-edit-invoice-num').unbind('click').bind('click', function(){
-            $(this).parents('.invoiceNum').find('.edit').removeClass('d-none');
-            $(this).parents('.invoiceNum').find('.text').addClass('d-none');
+            if (status === 'DELETED'){
+                alert('삭제된 배송정보입니다.');
+                return false;
+            } else {
+                $(this).parents('.invoiceNum').find('.edit').removeClass('d-none');
+                $(this).parents('.invoiceNum').find('.text').addClass('d-none');
+            }
         });
 
         _this.div.find('#btn-save-invoice-num').unbind('click').bind('click', function(){
             _this.updateInvoiceNum();
         });
 
-        _this.div.find('#btn-edit-delivery-address').unbind('click').bind('click', function(){
-            if(_this.div.find('.deliveryInfo #status').text() !== 'PROCESSING'){
+        _this.div.find('#btn-edit-delivery-address').unbind('click').bind('click', function() {
+            if (status === 'DELETED'){
+                alert('삭제된 배송정보입니다.');
+                return false;
+            } else if(status !== 'PROCESSING'){
                 alert('상품 발송 이후에는 주소 변경이 불가합니다.');
                 return false;
             } else {
