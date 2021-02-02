@@ -7,8 +7,10 @@ import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
+import my.myungjin.academyDemo.domain.item.ItemMaster;
 import my.myungjin.academyDemo.domain.order.*;
 import my.myungjin.academyDemo.service.admin.OrderAdminService;
+import my.myungjin.academyDemo.service.item.ItemDisplayOptionService;
 import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.DeliveryRequest;
 import my.myungjin.academyDemo.web.request.OrderSearchRequest;
@@ -31,6 +33,7 @@ public class OrderAdminController {
 
     private final OrderAdminService orderAdminService;
     
+    private final ItemDisplayOptionService itemDisplayOptionService;
 
     @GetMapping("/order/search")
     @ApiOperation(value = "주문 검색(주문번호, 등록일)")
@@ -129,6 +132,17 @@ public class OrderAdminController {
         return OK(
                 orderAdminService.deleteDelivery(Id.of(Delivery.class, id))
         );
+    }
+
+    @GetMapping("/itemDisplayOption/list")
+    @ApiOperation(value = "전시상품 옵션 검색(상품명, 전시상품 아이디)")
+    /*@ApiImplicitParams({
+            @ApiImplicitParam(name = "direction", dataType = "string", paramType = "query", defaultValue = "ASC", value = "정렬 방향"),
+            @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query", defaultValue = "0", value = "페이징 offset"),
+            @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query", defaultValue = "5", value = "조회 갯수")
+    })*/
+    public Response<List<ItemDisplay.ItemDisplayOption>> search(@RequestParam String displayId, @RequestParam String itemName){
+        return OK(itemDisplayOptionService.search(Id.of(ItemDisplay.class, displayId), itemName));
     }
 
     @PostMapping("/delivery/{deliveryId}/item")

@@ -70,6 +70,7 @@ public class ItemAdminController {
     public Response<Page<ItemMaster>> search(@RequestParam String itemName, PageRequest pageRequest){
         return OK(itemMasterService.search(itemName, null, null, pageRequest.of()));
     }
+
     @GetMapping("/commonCode/category/list")
     @ApiOperation(value = "상품 카테고리 검색")
     public Response<List<CommonCode>> searchCategory(@RequestParam @ApiParam(value = "상품 카테고리 검색어(카테고리 한글이름)", defaultValue = "니트") String searchParam){

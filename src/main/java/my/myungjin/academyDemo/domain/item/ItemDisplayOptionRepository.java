@@ -13,4 +13,6 @@ public interface ItemDisplayOptionRepository extends JpaRepository<ItemDisplay.I
 
     // 전시상품 엔티티로 검색
     Page<ItemDisplay.ItemDisplayOption> findAllByItemDisplay(ItemDisplay display, Pageable pageable);
+
+    List<ItemDisplay.ItemDisplayOption> findAllByItemDisplayIdEqualsOrItemDisplayItemDisplayNameContaining(String displayId, String displayName);
 }

@@ -1,0 +1,91 @@
+
+<!-- Modal -->
+<div class="modal fade" id="itemOptionSearchModal" tabindex="-1" aria-labelledby="itemOptionSearchModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="itemOptionSearchModalLabel">전시상품 옵션 검색</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row mb-3">
+                        <div class="col-sm">
+                            <label for="itemDisplayId" >전시상품ID</label>
+                            <input type="text" class="form-control w-100" id="itemDisplayId" name="itemDisplayId"/>
+                        </div>
+                        <div class="col-sm">
+                            <label for="itemDisplayName" >전시상품명</label>
+                            <input type="text" class="form-control w-100" id="itemDisplayName" name="itemDisplayName"/>
+                        </div>
+                        <div class="col-sm-3">
+                            <button type="button" class="btn btn-primary" id="btn-item-search" >검색</button>
+                        </div>
+                    </div>
+                    <div class="row p-3 ">
+                        <div  id="itemSearchResult"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var modal = {
+        div : $('#itemOptionSearchModal'),
+        init : function(){
+            var _this = this;
+            $("#btn-item-search").click(function(){
+                _this.search();
+            });
+
+        },
+        appendResult : function(){
+            this.div.on("click", ".itemSearchResult", function (e) {
+                var el = $(e.target);
+                /*var id = el.find("input[name='itemOptionId']").val();
+                var name = el.find("input[name='categoryName']").val();
+                $("#form-save-item-master #categoryId").val(id);
+                $("#form-save-item-master #categoryName").val(name);
+                $('#categorySearchResult').empty();
+                $('#categorySearchModal').modal('hide');*/
+            })
+        },
+        search : function(){
+            var _this = this;
+            var id = _this.div.find("#itemDisplayId").val();
+            var name = _this.div.find("#itemDisplayName").val();
+            $.ajax({
+                type: 'GET',
+                url: '/api/admin/itemDisplayOption/list?displayId='+ id + '&itemName='+ name,
+                dataType: 'json',
+                contentType:'application/json; charset=utf-8'
+            }).done(function(response) {
+                var resultData = response.response;
+                console.log(resultData);
+                /*if(resultData.length > 0){
+                    $.each(resultData, function(){
+                        //console.log(this);
+                        const cate = this;
+                        const row = '<button class="btn btn-sm btn-outline-dark categorySearchResult ">' + cate.nameKor +
+                                '<input type="hidden" name="categoryId" value="' + cate.id +'"/>' +
+                                '<input type="hidden" name="categoryName" value="' + cate.nameKor +'"/>' +
+                                '</button>';
+                        $('#categorySearchResult').empty().append(row);
+                    });
+                    _this.appendResult();
+                }*/
+            }).fail(function (error) {
+                alert(JSON.stringify(error));
+            });
+        }
+    };
+    $("#categorySearchModal").click(function(){
+        modal.init();
+    });
+</script>

@@ -71,6 +71,11 @@ public class ItemDisplayOptionService {
                 }).orElseThrow(() -> new NotFoundException(ItemDisplay.ItemDisplayOption.class, itemDisplayOptionId));
     }
 
+    @Transactional
+    public List<ItemDisplay.ItemDisplayOption> search(Id<ItemDisplay, String> itemDisplayId, String itemName){
+        return itemDisplayOptionRepository.findAllByItemDisplayIdEqualsOrItemDisplayItemDisplayNameContaining(itemDisplayId.value(), itemName);
+    }
+
     private Optional<ItemDisplay> findDisplay(Id<ItemDisplay, String> itemDisplayId){
         return itemDisplayRepository.findById(itemDisplayId.value());
     }

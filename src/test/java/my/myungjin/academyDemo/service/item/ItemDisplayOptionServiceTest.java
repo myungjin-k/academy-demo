@@ -11,7 +11,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static org.assertj.core.api.Assertions.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -76,5 +78,20 @@ public class ItemDisplayOptionServiceTest {
 
         List<ItemDisplay.ItemDisplayOption> options = itemDisplayOptionService.findAllByMasterId(itemDisplayId);
         assertThat(options.size(), is(4));
+    }
+
+    @Test
+    @Order(5)
+    void 상품_옵션_검색하기() {
+        List<String> result = itemDisplayOptionService.search(Id.of(ItemDisplay.class, ""), "팬츠")
+                .stream()
+                .map(displayOption ->
+                        displayOption.getItemDisplay().getItemDisplayName()
+                        .concat(displayOption.getColor())
+                        .concat(displayOption.getSize()))
+                .collect(Collectors.toList());
+
+        assertThat(result, is(notNullValue()));
+        log.info("Found Option: {}", result);
     }
 }
