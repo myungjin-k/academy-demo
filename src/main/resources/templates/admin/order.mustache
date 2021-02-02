@@ -167,16 +167,28 @@
                 </div>
 
                 <div class="p-2 mb-3 deliveryItem">
-                    <div class="div-crud-buttons">
-                        <a class="btn btn-outline-primary" id="btn-add-delivery-item" data-toggle="modal" data-target="#itemOptionSearchModal">배송상품 추가</a>
+                    <div class="row p-2 mb-3 d-none" id="div-add-delivery-item">
+                        <span class="font-weight-bolder">배송상품 추가</span>
+                        <div class="col-4">
+                            <label for="itemInfo">상품정보</label>
+                            <a class="btn btn-sm btn-outline-primary" id="btn-add-delivery-item" data-toggle="modal" data-target="#itemOptionSearchModal">검색</a>
+                            <input type="text" name="itemInfo" id="itemInfo" style="width: 66%;" readonly/>
+                            <input type="hidden" name="itemId" value="" />
+                        </div>
+                        <div class="col-4">
+                            <label for="newItemCount">수량</label>
+                            <input type="text" class="w10" value="1" name="count" />
+                        </div>
+                        <a class="btn btn-sm btn-primary" id="btn-save-delivery-item">저장</a>
                     </div>
                     <table class="table table-horizontal table-bordered">
                         <thead class="thead-strong">
                         <tr>
                             <th>상품명</th>
-                            <th width="15% ">옵션</th>
-                            <th width="10% ">주문수량</th>
-                            <th width="10% ">상품금액</th>
+                            <th width="15%">옵션</th>
+                            <th width="10%">주문수량</th>
+                            <th width="10%">상품금액</th>
+                            <th width="10%"></th>
                         </tr>
                         </thead>
                         <tbody id="delivery-items">

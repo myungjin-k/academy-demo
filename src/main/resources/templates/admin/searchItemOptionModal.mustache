@@ -25,7 +25,18 @@
                         </div>
                     </div>
                     <div class="row p-3 ">
-                        <div  id="itemSearchResult"></div>
+                        <table class="table table-horizontal table-bordered">
+                            <thead class="thead-strong">
+                            <tr>
+                                <th width="20% ">전시상품ID</th>
+                                <th>상품명</th>
+                                <th width="15% ">옵션</th>
+                            </tr>
+                            </thead>
+                            <tbody id="itemSearchResult">
+
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -40,20 +51,20 @@
         div : $('#itemOptionSearchModal'),
         init : function(){
             var _this = this;
-            $("#btn-item-search").click(function(){
+            _this.div.find("#btn-item-search").unbind('click').bind('click', function(){
                 _this.search();
             });
 
         },
         appendResult : function(){
-            this.div.on("click", ".itemSearchResult", function (e) {
-                var el = $(e.target);
-                /*var id = el.find("input[name='itemOptionId']").val();
-                var name = el.find("input[name='categoryName']").val();
-                $("#form-save-item-master #categoryId").val(id);
-                $("#form-save-item-master #categoryName").val(name);
-                $('#categorySearchResult').empty();
-                $('#categorySearchModal').modal('hide');*/
+           this.div.off("click").on("click", ".itemRow", function (e) {
+                var el = $(this);
+                var id = el.find(".id").text();
+                var info = el.find(".itemName").text() + '[' + el.find(".option").text() + ']';
+                $("#div-add-delivery-item input[name='itemId']").val(id);
+                $("#div-add-delivery-item input[name='itemInfo']").val(info);
+                $('#itemSearchResult').empty();
+                $('#itemOptionSearchModal').modal('hide');
             })
         },
         search : function(){
@@ -68,24 +79,27 @@
             }).done(function(response) {
                 var resultData = response.response;
                 console.log(resultData);
-                /*if(resultData.length > 0){
+
+                const searchResult = _this.div.find('#itemSearchResult');
+                searchResult.empty();
+                if(resultData.length > 0){
                     $.each(resultData, function(){
-                        //console.log(this);
-                        const cate = this;
-                        const row = '<button class="btn btn-sm btn-outline-dark categorySearchResult ">' + cate.nameKor +
-                                '<input type="hidden" name="categoryId" value="' + cate.id +'"/>' +
-                                '<input type="hidden" name="categoryName" value="' + cate.nameKor +'"/>' +
-                                '</button>';
-                        $('#categorySearchResult').empty().append(row);
+                        const option = this;
+                        const row = '<tr class="itemRow" style="cursor: pointer !important;">'
+                                + '<td class="id">' + option.id +'</td>'
+                                + '<td class="itemName">' + option.itemDisplay.itemDisplayName +'</td>'
+                                + '<td class="option">' + option.color + '/' + option.size +'</td>'
+                                + '</tr>';
+                        searchResult.append(row);
                     });
                     _this.appendResult();
-                }*/
+                }
             }).fail(function (error) {
                 alert(JSON.stringify(error));
             });
         }
     };
-    $("#categorySearchModal").click(function(){
+    $("#itemOptionSearchModal").click(function(){
         modal.init();
     });
 </script>

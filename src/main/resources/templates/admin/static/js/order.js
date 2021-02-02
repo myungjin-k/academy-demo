@@ -288,6 +288,46 @@ var deliveryDetail = {
         _this.div.find('#btn-save-delivery-address').unbind('click').bind('click', function(){
             _this.updateAddress();
         });
+
+        _this.div.find('#btn-save-delivery-item').unbind('click').bind('click', function(){
+            if(status !== 'PROCESSING'){
+                alert('상품 발송 이후에는 배송상품 변경이 불가합니다.');
+                return false;
+            } else {
+                _this.addDeliveryItem();
+            }
+        });
+    },
+    addDeliveryItem : function(){
+        var _this = this;
+        //this.clearTable();
+        const addDiv = _this.div.find('#div-add-delivery-item');
+        const itemId = addDiv.find('input[name="itemId"]').val();
+        const count = addDiv.find('input[name="count"]').val();
+        const data = {deliveryId: _this.id, itemId : itemId, count : count};
+        //console.log(data);
+        $.ajax({
+            type: 'POST',
+            url: '/api/admin/delivery/' + _this.id + '/item',
+            dataType: 'json',
+            contentType:'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function(response) {
+            var resultData = response.response;
+            //console.log(resultData);
+            if(resultData === null)
+                alert('해당 상품이 이미 존재합니다. 기존 상품 삭제 후 추가 가능합니다.');
+            else {
+                addDiv.find('input[name="itemId"]').val('');
+                addDiv.find('input[name="itemInfo"]').val('');
+                addDiv.find('input[name="count"]').val(1);
+                _this.load();
+            }
+
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+
     },
     updateAddress : function() {
         var _this = this;
@@ -391,15 +431,21 @@ var deliveryDetail = {
             $.each(resultData.items, function(){
                 const item = this;
                 const itemOption = item.itemOption;
+                const deleteBtn = (resultData.status !== "PROCESSING") ?
+                    "" : '<a class="btn btn-sm delete-delivery" href="" onclick="return false;">삭제</a>';
+
                 const row = '<tr>'
                     + '<input type="hidden" name="id" value="' + item.id + '"/>'
                     + '<td class="itemName">' + itemOption.itemDisplay.itemDisplayName +'</td>'
                     + '<td class="option">' + itemOption.color + '/' + itemOption.size +'</td>'
                     + '<td class="count">' + item.count +'</td>'
                     + '<td class="price">' + itemOption.itemDisplay.itemMaster.price +'</td>'
+                    + '<td class="deleteBtn">' + deleteBtn +'</td>'
                     + '</tr>';
                 deliveryItem.append(row);
             });
+            if(resultData.status === "PROCESSING")
+                _this.div.find('#div-add-delivery-item').removeClass('d-none');
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });

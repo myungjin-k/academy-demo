@@ -7,11 +7,11 @@ import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
-import my.myungjin.academyDemo.domain.item.ItemMaster;
 import my.myungjin.academyDemo.domain.order.*;
 import my.myungjin.academyDemo.service.admin.OrderAdminService;
 import my.myungjin.academyDemo.service.item.ItemDisplayOptionService;
 import my.myungjin.academyDemo.web.Response;
+import my.myungjin.academyDemo.web.request.DeliveryItemRequest;
 import my.myungjin.academyDemo.web.request.DeliveryRequest;
 import my.myungjin.academyDemo.web.request.OrderSearchRequest;
 import my.myungjin.academyDemo.web.request.PageRequest;
@@ -149,9 +149,12 @@ public class OrderAdminController {
     @ApiOperation(value = "배송상품 추가")
     public Response<DeliveryItem> addDeliveryItem(
             @PathVariable @ApiParam(value = "조회 대상 배송정보 PK", example = "cd2940ee2dfc418384eedc450be832a2") String deliveryId,
-            @RequestParam String itemId, @RequestParam int count){
+            @RequestBody DeliveryItemRequest request){
         return OK(
-                orderAdminService.addDeliveryItem(Id.of(Delivery.class, deliveryId), Id.of(ItemDisplay.ItemDisplayOption.class, itemId), count)
+                orderAdminService.addDeliveryItem(
+                        Id.of(Delivery.class, request.getDeliveryId()),
+                        Id.of(ItemDisplay.ItemDisplayOption.class, request.getItemId()),
+                        request.getCount())
                 .orElse(null)
         );
     }
