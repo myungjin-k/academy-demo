@@ -297,10 +297,31 @@ var deliveryDetail = {
                 _this.addDeliveryItem();
             }
         });
+
+        _this.div.find('.deliveryItem').off('click').on('click', '.delete-delivery-item', function(){
+            const itemId = $(this).parents('tr').find('input[name="id"]').val();
+            _this.deleteDeliveryItem(itemId);
+        });
+
+    },
+    deleteDeliveryItem : function(id){
+        var _this = this;
+        //console.log(data);
+        $.ajax({
+            type: 'DELETE',
+            url: '/api/admin/delivery/' + _this.id + '/item/' + id,
+            dataType: 'json',
+            contentType:'application/json; charset=utf-8'
+        }).done(function(response) {
+            var resultData = response.response;
+            console.log(resultData);
+            _this.load();
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
     },
     addDeliveryItem : function(){
         var _this = this;
-        //this.clearTable();
         const addDiv = _this.div.find('#div-add-delivery-item');
         const itemId = addDiv.find('input[name="itemId"]').val();
         const count = addDiv.find('input[name="count"]').val();
@@ -327,7 +348,6 @@ var deliveryDetail = {
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
-
     },
     updateAddress : function() {
         var _this = this;
@@ -432,7 +452,7 @@ var deliveryDetail = {
                 const item = this;
                 const itemOption = item.itemOption;
                 const deleteBtn = (resultData.status !== "PROCESSING") ?
-                    "" : '<a class="btn btn-sm delete-delivery" href="" onclick="return false;">삭제</a>';
+                    "" : '<a class="btn btn-sm delete-delivery-item" href="" onclick="return false;">삭제</a>';
 
                 const row = '<tr>'
                     + '<input type="hidden" name="id" value="' + item.id + '"/>'
