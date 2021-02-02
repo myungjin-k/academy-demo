@@ -298,18 +298,40 @@ var deliveryDetail = {
             }
         });
 
-        _this.div.find('.deliveryItem').off('click').on('click', '.delete-delivery-item', function(){
+        _this.div.off('click').on('click', '#delivery-items .delete-delivery-item', function(){
             const itemId = $(this).parents('tr').find('input[name="id"]').val();
             _this.deleteDeliveryItem(itemId);
         });
 
+        _this.div.off('click').on('click', '#delivery-items .modify-delivery-item-count', function(){
+            const itemId = $(this).parents('tr').find('input[name="id"]').val();
+            const count = $(this).parents('.count').find('input[name="count"]').val();
+            _this.modifyItemCount(itemId, count);
+        });
     },
-    deleteDeliveryItem : function(id){
+    modifyItemCount : function (itemId, count){
+        var _this = this;
+        //console.log(data);
+        $.ajax({
+            type: 'PATCH',
+            url: '/api/admin/delivery/' + _this.id + '/item/' + itemId + '?count=' + count,
+            dataType: 'json',
+            contentType:'application/json; charset=utf-8'
+        }).done(function(response) {
+            var resultData = response.response;
+            //console.log(resultData);
+            alert('변경되었습니다.');
+            _this.load();
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+    },
+    deleteDeliveryItem : function(itemId){
         var _this = this;
         //console.log(data);
         $.ajax({
             type: 'DELETE',
-            url: '/api/admin/delivery/' + _this.id + '/item/' + id,
+            url: '/api/admin/delivery/' + _this.id + '/item/' + itemId,
             dataType: 'json',
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
@@ -406,7 +428,6 @@ var deliveryDetail = {
         $.ajax({
             type: 'PATCH',
             url: '/api/admin/delivery/' + _this.id + '/invoiceNum/' + param,
-
             dataType: 'json',
             contentType:'application/json; charset=utf-8',
         }).done(function(response) {
@@ -453,12 +474,15 @@ var deliveryDetail = {
                 const itemOption = item.itemOption;
                 const deleteBtn = (resultData.status !== "PROCESSING") ?
                     "" : '<a class="btn btn-sm delete-delivery-item" href="" onclick="return false;">삭제</a>';
-
+                const modifyCnt = (resultData.status !== "PROCESSING") ?
+                    item.count :
+                    '<input name="count" value="' + item.count + '" style="width: 33%;">'
+                    + '<a class="btn btn-sm modify-delivery-item-count" href="" onclick="return false;">변경</a>';
                 const row = '<tr>'
                     + '<input type="hidden" name="id" value="' + item.id + '"/>'
                     + '<td class="itemName">' + itemOption.itemDisplay.itemDisplayName +'</td>'
                     + '<td class="option">' + itemOption.color + '/' + itemOption.size +'</td>'
-                    + '<td class="count">' + item.count +'</td>'
+                    + '<td class="count">' + modifyCnt +'</td>'
                     + '<td class="price">' + itemOption.itemDisplay.itemMaster.price +'</td>'
                     + '<td class="deleteBtn">' + deleteBtn +'</td>'
                     + '</tr>';
