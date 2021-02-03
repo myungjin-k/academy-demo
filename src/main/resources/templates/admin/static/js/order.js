@@ -297,12 +297,12 @@ var deliveryDetail = {
             }
         });
 
-        _this.div.find('#delivery-items').off().on('click', '.delete-delivery-item', function(){
+        _this.div.find('#delivery-items').on('click', '.delete-delivery-item', function(){
             const itemId = $(this).parents('tr').find('input[name="id"]').val();
             _this.deleteDeliveryItem(itemId);
         });
 
-        _this.div.find('#delivery-items').off().on('click', '.modify-delivery-item-count', function(){
+        _this.div.find('#delivery-items').on('click', '.modify-delivery-item-count', function(){
             const itemId = $(this).parents('tr').find('input[name="id"]').val();
             const count = $(this).parents('.count').find('input[name="count"]').val();
             _this.modifyItemCount(itemId, count);
