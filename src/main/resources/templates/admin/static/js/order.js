@@ -232,14 +232,13 @@ var orderDetail = {
 var deliveryDetail = {
     div : $('#div-delivery-detail'),
     deliveryId : '',
+    deliveryStatus : '',
     init : function(id){
         const _this = this;
         _this.id = id;
         _this.load(_this.id);
-
-        const status = _this.div.find('.deliveryInfo #status').text();
         _this.div.find('#btn-edit-delivery-status').unbind('click').bind('click', function(){
-            if (status === 'DELETED'){
+            if (_this.deliveryStatus === 'DELETED'){
                 alert('삭제된 배송정보입니다.');
                 return false;
             } else {
@@ -249,7 +248,7 @@ var deliveryDetail = {
         });
 
         _this.div.find('#btn-save-delivery-status').unbind('click').bind('click', function(){
-            if(status !== 'PROCESSING'
+            if(_this.deliveryStatus !== 'PROCESSING'
                 && $(this).parents('.deliveryStatus select[name="status"]').val() === 'DELETED'){
                 alert('상품 발송 이후에는 배송 취소가 불가합니다.');
                 return false;
@@ -259,7 +258,7 @@ var deliveryDetail = {
         });
 
         _this.div.find('#btn-edit-invoice-num').unbind('click').bind('click', function(){
-            if (status === 'DELETED'){
+            if (_this.deliveryStatus === 'DELETED'){
                 alert('삭제된 배송정보입니다.');
                 return false;
             } else {
@@ -273,10 +272,10 @@ var deliveryDetail = {
         });
 
         _this.div.find('#btn-edit-delivery-address').unbind('click').bind('click', function() {
-            if (status === 'DELETED'){
+            if (_this.deliveryStatus === 'DELETED'){
                 alert('삭제된 배송정보입니다.');
                 return false;
-            } else if(status !== 'PROCESSING'){
+            } else if(_this.deliveryStatus !== 'PROCESSING'){
                 alert('상품 발송 이후에는 주소 변경이 불가합니다.');
                 return false;
             } else {
@@ -290,7 +289,7 @@ var deliveryDetail = {
         });
 
         _this.div.find('#btn-save-delivery-item').unbind('click').bind('click', function(){
-            if(status !== 'PROCESSING'){
+            if(_this.deliveryStatus !== 'PROCESSING'){
                 alert('상품 발송 이후에는 배송상품 변경이 불가합니다.');
                 return false;
             } else {
@@ -298,12 +297,12 @@ var deliveryDetail = {
             }
         });
 
-        _this.div.off('click').on('click', '#delivery-items .delete-delivery-item', function(){
+        _this.div.find('#delivery-items').off().on('click', '.delete-delivery-item', function(){
             const itemId = $(this).parents('tr').find('input[name="id"]').val();
             _this.deleteDeliveryItem(itemId);
         });
 
-        _this.div.off('click').on('click', '#delivery-items .modify-delivery-item-count', function(){
+        _this.div.find('#delivery-items').off().on('click', '.modify-delivery-item-count', function(){
             const itemId = $(this).parents('tr').find('input[name="id"]').val();
             const count = $(this).parents('.count').find('input[name="count"]').val();
             _this.modifyItemCount(itemId, count);
@@ -411,11 +410,13 @@ var deliveryDetail = {
         }).done(function(response) {
             var resultData = response.response;
             //console.log(resultData);
+            const updated = resultData.status;
             const deliveryInfo = _this.div.find('.deliveryInfo');
-            deliveryInfo.find('select[name="status"]').val(resultData.status);
-            deliveryInfo.find('#status').text(resultData.status);
+            deliveryInfo.find('select[name="status"]').val(updated);
+            deliveryInfo.find('#status').text(updated);
             deliveryInfo.find('.text').removeClass('d-none');
             deliveryInfo.find('.edit').addClass('d-none');
+            _this.deliveryStatus = updated;
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
@@ -454,6 +455,7 @@ var deliveryDetail = {
         }).done(function(response) {
             var resultData = response.response;
             //console.log(resultData);
+            _this.deliveryStatus = resultData.status;
             const deliveryInfo = _this.div.find('.deliveryInfo');
             deliveryInfo.find('#deliveryId').text(resultData.id);
             deliveryInfo.find('#receiverName').text(resultData.receiverName);

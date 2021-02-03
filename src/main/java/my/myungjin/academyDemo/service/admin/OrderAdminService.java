@@ -110,14 +110,20 @@ public class OrderAdminService {
 
     @Transactional
     public DeliveryItem deleteDeliveryItem(@Valid Id<Delivery, String> deliveryId, @Valid Id<DeliveryItem, String> itemId){
-        return findItem(deliveryId, itemId)
-                .map(deliveryItem -> {
-                    if(!deliveryItem.getDelivery().getStatus().equals(DeliveryStatus.PROCESSING)){
-                        throw new StatusNotSatisfiedException(DeliveryItem.class, Id.of(DeliveryItem.class, deliveryItem.getId()), deliveryId, itemId);
-                    }
-                    delete(deliveryItem);
-                    return deliveryItem;
-                }).orElseThrow(() -> new NotFoundException(DeliveryItem.class, deliveryId, itemId));
+        Delivery delivery = findById(deliveryId);
+        DeliveryItem item = findItem(deliveryId, itemId)
+                .orElseThrow(() -> new NotFoundException(DeliveryItem.class, deliveryId, itemId));
+
+        if(!delivery.getStatus().equals(DeliveryStatus.PROCESSING)){
+            throw new StatusNotSatisfiedException(DeliveryItem.class, Id.of(DeliveryItem.class, item.getId()), deliveryId, itemId);
+        }
+
+        delivery.getItems().remove(item);
+        item.setDelivery(null);
+
+        deliveryItemRepository.delete(item);
+
+        return item;
     }
 
     @Transactional
@@ -169,7 +175,7 @@ public class OrderAdminService {
         return deliveryRepository.save(delivery);
     }
 
-    private void delete(DeliveryItem deliveryItem){
+/*    private void delete(DeliveryItem deliveryItem){
         deliveryItemRepository.delete(deliveryItem);
-    }
+    }*/
 }

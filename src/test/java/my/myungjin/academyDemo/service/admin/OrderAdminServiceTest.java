@@ -18,6 +18,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -94,6 +95,12 @@ public class OrderAdminServiceTest {
         DeliveryItem deleted = deliveryService.deleteDeliveryItem(deliveryId, newDeliveryItemId);
         assertThat(deleted, is(notNullValue()));
         log.info("Deleted Item: {}", deleted);
+
+        Optional<DeliveryItem> check = deliveryService.findItem(deliveryId, newDeliveryItemId);
+        assertThat(check, is(Optional.empty()));
+
+        List<DeliveryItem> items = deliveryService.findById(deliveryId).getItems();
+        log.info("Updated Item List: {}", items);
     }
 
     @Test
