@@ -1,6 +1,7 @@
 package my.myungjin.academyDemo.web.response;
 
 import lombok.Getter;
+import my.myungjin.academyDemo.domain.order.DeliveryStatus;
 import my.myungjin.academyDemo.domain.order.Order;
 
 import java.time.format.DateTimeFormatter;
@@ -31,7 +32,11 @@ public class OrderResponse {
         this.abbrItemName = entity.getAbbrOrderItems();
         this.totalAmount = entity.getTotalAmount();
         this.payAmount = this.totalAmount - entity.getUsedPoints();
-        this.status = entity.getDeliveries().get(0).getStatus().getDescription();
+        this.status = entity.getDeliveries()
+                .stream()
+                .filter(delivery -> !delivery.getStatus().equals(DeliveryStatus.DELETED))
+                .collect(Collectors.toList())
+                .get(0).getStatus().getDescription();
         this.items = entity.getItems().stream()
                 .map(orderItem -> new OrderItemResponse().of(orderItem))
                 .collect(Collectors.toList());

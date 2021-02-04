@@ -89,7 +89,7 @@ public class ReviewService {
         OrderItem orderItem = orderItemRepository.findById(orderItemId.value())
                 .orElseThrow(() -> new NotFoundException(OrderItem.class, orderItemId));
         List<DeliveryItem> deliveryItems = deliveryItemRepository
-                .findAllByDeliveryOrderAndItemOptionIdOrderByCreateAtDesc(orderItem.getOrder(), orderItem.getItemOption().getId());
+                .findAllByDeliveryOrderAndItemOptionIdAndDeliveryStatusNotOrderByCreateAtDesc(orderItem.getOrder(), orderItem.getItemOption().getId(), DeliveryStatus.DELETED);
         if(deliveryItems.isEmpty())
             throw new NotFoundException(DeliveryItem.class, orderItem);
         DeliveryStatus deliveryStatus = deliveryItems.get(0).getDelivery().getStatus();

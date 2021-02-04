@@ -17,7 +17,7 @@ public interface DeliveryItemRepository extends JpaRepository<DeliveryItem, Stri
     // 배송정보 PK와 상품옵션 PK로 검색
     boolean existsByDeliveryIdAndItemOptionId (String deliveryId, String itemId);
 
-    // 주문 엔티티와 상품옵션 PK로 검색, 생성일 오름차순
-    List<DeliveryItem> findAllByDeliveryOrderAndItemOptionIdOrderByCreateAtDesc(Order order, String itemId);
+    // 주문 엔티티와 상품옵션 PK로 검색, 특정배송상태 제외, 생성일 오름차순
+    List<DeliveryItem> findAllByDeliveryOrderAndItemOptionIdAndDeliveryStatusNotOrderByCreateAtDesc(Order order, String itemId, DeliveryStatus exceptStatus);
 
 }

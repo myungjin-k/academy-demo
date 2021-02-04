@@ -334,7 +334,7 @@ var deliveryDetail = {
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
             var resultData = response.response;
-            console.log(resultData);
+            //console.log(resultData);
             _this.load();
         }).fail(function (error) {
             alert(JSON.stringify(error));
@@ -384,7 +384,7 @@ var deliveryDetail = {
             data: JSON.stringify(param)
         }).done(function(response) {
             var resultData = response.response;
-            console.log(resultData);
+            //console.log(resultData);
             const deliveryInfo = _this.div.find('.deliveryInfo');
             deliveryInfo.find('input[name="addr1"]').val(resultData.receiverAddr1);
             deliveryInfo.find('input[name="addr2"]').val(resultData.receiverAddr2);

@@ -64,7 +64,7 @@ public class OrderService {
     private Order getItems(@Valid Id<Member, String> memberId, @Valid Order o){
         for(OrderItem item : o.getItems()){
             List<DeliveryItem> deliveryItems = deliveryItemRepository
-                    .findAllByDeliveryOrderAndItemOptionIdOrderByCreateAtDesc(item.getOrder(), item.getItemOption().getId());
+                    .findAllByDeliveryOrderAndItemOptionIdAndDeliveryStatusNotOrderByCreateAtDesc(item.getOrder(), item.getItemOption().getId(), DeliveryStatus.DELETED);
             if(deliveryItems.isEmpty())
                 continue;
 

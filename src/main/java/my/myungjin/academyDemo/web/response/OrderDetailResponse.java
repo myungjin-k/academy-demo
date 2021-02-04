@@ -2,6 +2,7 @@ package my.myungjin.academyDemo.web.response;
 
 import lombok.Getter;
 import my.myungjin.academyDemo.domain.order.Delivery;
+import my.myungjin.academyDemo.domain.order.DeliveryStatus;
 import my.myungjin.academyDemo.domain.order.Order;
 import org.apache.commons.lang3.StringUtils;
 
@@ -54,7 +55,11 @@ public class OrderDetailResponse {
         this.discountedAmount = discountAmount;
         this.usedPoints = entity.getUsedPoints();
         this.payAmount = this.orderAmount - this.discountedAmount - this.usedPoints;
-        Delivery d = entity.getDeliveries().get(0);
+        Delivery d = entity.getDeliveries()
+                .stream()
+                .filter(delivery -> !delivery.getStatus().equals(DeliveryStatus.DELETED))
+                .collect(Collectors.toList())
+                .get(0);
         this.orderStatus = d.getStatus().getDescription();
         this.deliveryName = d.getReceiverName();
         this.deliveryAddr = StringUtils.join(d.getReceiverAddr1(), d.getReceiverAddr2(), " ");
