@@ -36,6 +36,10 @@ public class OrderDetailResponse {
 
     private String deliveryAddr;
 
+    private String deliveryAddr1;
+
+    private String deliveryAddr2;
+
     private String deliveryTel;
 
     private String deliveryMessage;
@@ -63,6 +67,8 @@ public class OrderDetailResponse {
         this.orderStatus = d.getStatus().getDescription();
         this.deliveryName = d.getReceiverName();
         this.deliveryAddr = StringUtils.join(d.getReceiverAddr1(), d.getReceiverAddr2(), " ");
+        this.deliveryAddr1 = d.getReceiverAddr1();
+        this.deliveryAddr2 = d.getReceiverAddr2();
         this.deliveryTel = d.getReceiverTel();
         this.deliveryMessage = d.getMessage();
         return this;

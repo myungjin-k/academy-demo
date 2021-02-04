@@ -136,6 +136,41 @@ var myOrderDetail = {
         _this.load();
         $('.contentDiv').not(_this.div).addClass('d-none');
         _this.div.removeClass('d-none');
+        _this.div.find('#btn-update-delivery').unbind('click').click(function(){
+            const deliveryId = $(this).parents('#form-update-delivery').find('input[name="deliveryId"]').val();
+           _this.updateDelivery(deliveryId);
+        });
+    },
+    updateDelivery : function(deliveryId){
+        const _this = this;
+
+        const form = _this.div.find('#form-update-delivery');
+
+        const receiverTel = form.find('#receiverTel1').val() + '-' + form.find('#receiverTel2').val() + '-' + form.find('#receiverTel3').val();
+        form.find('input[name="receiverTel"]').val(receiverTel);
+        const data = form.serializeObject();
+
+        console.log(data);
+
+        $.ajax({
+            type: 'PUT',
+            url: '/api/mall/member/' + _this.userId + '/order/' + _this.orderId + '/delivery/' +deliveryId,
+            dataType: 'json',
+            contentType:'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function(response) {
+            var data = response.response;
+            console.log(data);
+            // TODO 배송준비중 단계에서만 수정 가능하게
+            alert('배송정보가 수정되었습니다.');
+            loadMyOrderDetail(_this.orderId);
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+            if(_this.userId === undefined){
+                alert('로그인 후 이용해 주세요.');
+                location.href='/mall/login'
+            }
+        });
     },
     clear : function(){
         this.div.find('#order-items').empty();
@@ -154,6 +189,12 @@ var myOrderDetail = {
         deliverDiv.find('#receiverTel').text('');
         deliverDiv.find('#receiverAddr').text('');
         deliverDiv.find('#message').text('');
+        const deliverForm = this.div.find('#form-update-delivery');
+        deliverForm.find('#receiverName').val('');
+        deliverForm.find('#receiverTel').val('');
+        deliverForm.find('#receiverAddr1').val('');
+        deliverForm.find('#receiverAddr2').val('');
+        deliverForm.find('#message').val('');
     },
     makeItemRow : function(item){
       let row = $('<tr/>');
@@ -210,6 +251,17 @@ var myOrderDetail = {
             deliverDiv.find('#receiverTel').text(order.deliveryTel);
             deliverDiv.find('#receiverAddr').text(order.deliveryAddr);
             deliverDiv.find('#message').text(order.deliveryMessage);
+
+            const deliverForm = this.div.find('#form-update-delivery');
+            deliverForm.find('#receiverName').val(order.deliveryName);
+            deliverForm.find('#receiverTel').val(order.deliveryTel);
+            const splitedTel = order.deliveryTel.split('-');
+            deliverForm.find('#receiverTel1').val(splitedTel[0]);
+            deliverForm.find('#receiverTel2').val(splitedTel[1]);
+            deliverForm.find('#receiverTel3').val(splitedTel[2]);
+            deliverForm.find('#receiverAddr1').val(order.deliveryAddr1);
+            deliverForm.find('#receiverAddr2').val(order.deliveryAddr2);
+            deliverForm.find('#message').val(order.deliveryMessage);
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
