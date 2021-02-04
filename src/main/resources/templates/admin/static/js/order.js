@@ -25,9 +25,6 @@ var main = {
     }
 }
 
-//TODO 배송상태변경
-//TODO 배송상품 추가, 삭제
-//TODO 배송 추가, 삭제
 var orderList = {
     firstPage: 1,
     lastPage: 5,
@@ -297,9 +294,11 @@ var deliveryDetail = {
             }
         });
 
-        _this.div.find('#delivery-items').off().on('click', '.delete-delivery-item', function(){
-            const itemId = $(this).parents('tr').find('input[name="id"]').val();
-            _this.deleteDeliveryItem(itemId);
+        _this.div.off().on('click', '#delivery-items .delete-delivery-item', function(){
+            if(confirm('해당 배송상품을 삭제하시겠습니까?')){
+                const itemId = $(this).parents('tr').find('input[name="id"]').val();
+                _this.deleteDeliveryItem(itemId);
+            }
         });
 
         _this.div.find('#delivery-items').off().on('click', '.modify-delivery-item-count', function(){

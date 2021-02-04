@@ -1,7 +1,7 @@
 
 <!-- Modal -->
 <div class="modal fade" id="itemOptionSearchModal" tabindex="-1" aria-labelledby="itemOptionSearchModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="itemOptionSearchModalLabel">전시상품 옵션 검색</h5>
@@ -12,17 +12,13 @@
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="row mb-3">
-                        <div class="col-sm">
-                            <label for="itemDisplayId" >전시상품ID</label>
-                            <input type="text" class="form-control w-100" id="itemDisplayId" name="itemDisplayId"/>
-                        </div>
-                        <div class="col-sm">
-                            <label for="itemDisplayName" >전시상품명</label>
-                            <input type="text" class="form-control w-100" id="itemDisplayName" name="itemDisplayName"/>
-                        </div>
-                        <div class="col-sm-3">
-                            <button type="button" class="btn btn-primary" id="btn-item-search" >검색</button>
-                        </div>
+                        <div class="col-2"><label for="itemDisplayName" >전시상품명</label></div>
+                        <div class="col-9"><input type="text" class="col-4 form-control w-100" id="itemDisplayName" name="itemDisplayName"/></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2"><label for="itemDisplayId" >전시상품ID</label></div>
+                        <div class="col-4"><input type="text" class="form-control w-100" id="itemDisplayId" name="itemDisplayId"/></div>
+                        <div class="col-5"><button type="button" class="btn btn-primary" id="btn-item-search" >검색</button></div>
                     </div>
                     <div class="row p-3 ">
                         <table class="table table-horizontal table-bordered">
@@ -30,7 +26,7 @@
                             <tr>
                                 <th width="20% ">전시상품ID</th>
                                 <th>상품명</th>
-                                <th width="15% ">옵션</th>
+                                <th width="20%% ">옵션</th>
                             </tr>
                             </thead>
                             <tbody id="itemSearchResult">
