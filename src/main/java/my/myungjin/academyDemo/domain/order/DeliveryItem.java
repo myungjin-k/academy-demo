@@ -50,7 +50,7 @@ public class DeliveryItem {
 
     @Getter @Setter
     @JsonBackReference
-    @OneToOne(mappedBy = "deliveryItem", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "deliveryItem", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private OrderItem orderItem;
 
     public DeliveryItem(int count) {
