@@ -12,36 +12,44 @@
             <div class="modal-body">
                 <div class="container-fluid">
                     <div class="row mb-3">
-                        <span class="mr-3">
+                        <div class="col-2">별점</div>
+                        <div class="col-10">
+                            <span class="mr-3">
                             <input type="radio" name="score" value="5" id="review-5-score" checked>
                             <label for="review-5-score">5</label>
                         </span>
-
-                        <span class="mr-3">
+                            <span class="mr-3">
                             <input type="radio" name="score" value="4" id="review-4-score">
                             <label for="review-4-score">4</label>
                         </span>
-                        <span class="mr-3">
+                            <span class="mr-3">
                             <input type="radio" name="score" value="3" id="review-3-score">
                             <label for="review-3-score">3</label>
                         </span>
-                        <span class="mr-3">
+                            <span class="mr-3">
                             <input type="radio" name="score" value="2" id="review-2-score">
                             <label for="review-2-score">2</label>
                         </span>
-                        <span class="mr-3">
+                            <span class="mr-3">
                             <input type="radio" name="score" value="1" id="review-1-score">
                             <label for="review-1-score">1</label>
                         </span>
+                        </div>
                     </div>
                     <div class="row mb-3">
-                        <textarea name="content" cols="20" rows="10"></textarea>
+                        <div class="col-2">내용</div>
+                        <div class="col-10">
+                            <textarea name="content" cols="20" rows="10"></textarea>
+                        </div>
                     </div>
                     <div class="row mb-3">
-                        <label for="reviewImgFile">이미지</label>
-                        <p class="reviewImgFileInfo d-none"><img class="oriReviewImgFile" width="50px"/><span id="btn-delete-thumbnail" class="btn btn-sm btn-outline-dark ml-2">X</span></p>
-                        <input type="file" class="form-control mb-2" accept="image/png, image/jpeg" name="reviewImgFile" id="reviewImgFile"/>
-
+                        <div class="col-2"><label for="reviewImgFile">이미지</label></div>
+                        <div class="col-3">
+                            <p class="reviewImgFileInfo d-none"><img class="oriReviewImgFile" width="50px"/></p>
+                        </div>
+                        <div class="col">
+                            <input type="file" class="form-control mb-2" accept="image/png, image/jpeg" name="reviewImgFile" id="reviewImgFile"/>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -62,14 +70,20 @@
             _this.memberId = memberId;
             _this.itemId = itemId;
             _this.reviewId = reviewId;
-            $('#reviewModal #btn-save-review').unbind('click').click(function(){
-               _this.writeReview();
-            });
+
             if(_this.reviewId !== ''){
                 _this.loadReview();
             } else {
                 _this.clear();
             }
+
+            $('#reviewModal #btn-save-review').unbind('click').click(function(){
+                if(_this.reviewId !== ''){
+                    _this.writeReview();
+                } else {
+                    _this.updateReview();
+                }
+            });
         },
         clear : function(){
             $('#reviewModal input[name="score"]').val('5');
@@ -112,6 +126,31 @@
             $.ajax({
                 type: 'POST',
                 url: '/api/mall/member/' + _this.memberId + '/orderItem/' + _this.itemId + '/review',
+                processData: false,
+                contentType: false,
+                data : data
+            }).done(function(response) {
+                //console.log(response);
+                alert('저장되었습니다.');
+                myOrderDetail.load();
+                $('#reviewModal').modal('hide');
+            }).fail(function (error) {
+                alert(JSON.stringify(error));
+            });
+        },
+        updateReview : function(){
+            const _this = this;
+            let data = new FormData();
+            const div = $('#reviewModal');
+            data.append('score', div.find('input[name="score"]:checked').val());
+            data.append('content', div.find('textarea[name="content"]').val());
+            data.append('reviewImgFile', div.find("input[name='reviewImgFile']")[0].files[0]);
+            console.log(data.getAll('score'));
+            console.log(data.getAll('content'));
+            console.log(data.getAll('reviewImgFile'));
+            $.ajax({
+                type: 'PUT',
+                url: '/api/mall/member/' + _this.memberId + '/review/' + _this.reviewId,
                 processData: false,
                 contentType: false,
                 data : data
