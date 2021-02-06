@@ -136,22 +136,27 @@ var myOrderDetail = {
         _this.load();
         $('.contentDiv').not(_this.div).addClass('d-none');
         _this.div.removeClass('d-none');
+
         _this.div.find('#btn-update-delivery').unbind('click').click(function(){
-            const deliveryId = $(this).parents('#form-update-delivery').find('input[name="deliveryId"]').val();
+            const deliveryId = _this.div.find('#form-update-delivery input[name="deliveryId"]').val();
+            //console.log(deliveryId);
            _this.updateDelivery(deliveryId);
         });
+
+        _this.div.find('#btn-edit-my-delivery').unbind('click').bind('click', function(){
+            _this.div.find('.updateDelivery').removeClass('d-none');
+            _this.div.find('.deliverInfo').addClass('d-none');
+            _this.div.find('#btn-edit-my-delivery').addClass('d-none');
+        });
+
     },
     updateDelivery : function(deliveryId){
         const _this = this;
-
         const form = _this.div.find('#form-update-delivery');
-
         const receiverTel = form.find('#receiverTel1').val() + '-' + form.find('#receiverTel2').val() + '-' + form.find('#receiverTel3').val();
         form.find('input[name="receiverTel"]').val(receiverTel);
         const data = form.serializeObject();
-
-        console.log(data);
-
+        //console.log(data);
         $.ajax({
             type: 'PUT',
             url: '/api/mall/member/' + _this.userId + '/order/' + _this.orderId + '/delivery/' +deliveryId,
@@ -160,10 +165,12 @@ var myOrderDetail = {
             data: JSON.stringify(data)
         }).done(function(response) {
             var data = response.response;
-            console.log(data);
+            //console.log(data);
             // TODO 배송준비중 단계에서만 수정 가능하게
             alert('배송정보가 수정되었습니다.');
             loadMyOrderDetail(_this.orderId);
+            _this.div.find('.updateDelivery').addClass('d-none');
+            _this.div.find('.deliverInfo').removeClass('d-none');
         }).fail(function (error) {
             alert(JSON.stringify(error));
             if(_this.userId === undefined){
@@ -189,7 +196,9 @@ var myOrderDetail = {
         deliverDiv.find('#receiverTel').text('');
         deliverDiv.find('#receiverAddr').text('');
         deliverDiv.find('#message').text('');
+        this.div.find('#btn-edit-my-delivery').addClass('d-none');
         const deliverForm = this.div.find('#form-update-delivery');
+        deliverForm.find('input[name="deliveryId"]').val('');
         deliverForm.find('#receiverName').val('');
         deliverForm.find('#receiverTel').val('');
         deliverForm.find('#receiverAddr1').val('');
@@ -252,18 +261,36 @@ var myOrderDetail = {
             deliverDiv.find('#receiverAddr').text(order.deliveryAddr);
             deliverDiv.find('#message').text(order.deliveryMessage);
 
-            const deliverForm = this.div.find('#form-update-delivery');
-            deliverForm.find('#receiverName').val(order.deliveryName);
-            deliverForm.find('#receiverTel').val(order.deliveryTel);
-            const splitedTel = order.deliveryTel.split('-');
-            deliverForm.find('#receiverTel1').val(splitedTel[0]);
-            deliverForm.find('#receiverTel2').val(splitedTel[1]);
-            deliverForm.find('#receiverTel3').val(splitedTel[2]);
-            deliverForm.find('#receiverAddr1').val(order.deliveryAddr1);
-            deliverForm.find('#receiverAddr2').val(order.deliveryAddr2);
-            deliverForm.find('#message').val(order.deliveryMessage);
+            if(order.orderStatus === '배송준비중'){
+                const deliverForm = _this.div.find('#form-update-delivery');
+                deliverForm.find('input[name="deliveryId"]').val(order.deliveryId);
+                deliverForm.find('#receiverName').val(order.deliveryName);
+                deliverForm.find('#receiverTel').val(order.deliveryTel);
+                const splitedTel = order.deliveryTel.split('-');
+                deliverForm.find('#receiverTel1').val(splitedTel[0]);
+                deliverForm.find('#receiverTel2').val(splitedTel[1]);
+                deliverForm.find('#receiverTel3').val(splitedTel[2]);
+                deliverForm.find('#receiverAddr1').val(order.deliveryAddr1);
+                deliverForm.find('#receiverAddr2').val(order.deliveryAddr2);
+                deliverForm.find('#message').val(order.deliveryMessage);
+                _this.div.find('#btn-edit-my-delivery').removeClass('d-none');
+            }
+
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
     }
 };
+
+function delivery_update_execDaumPostcode() {
+    new daum.Postcode({
+        popupName: 'deliveryUpdatePostcodePopup',
+        oncomplete: function(data) {
+            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+            var roadAddr = data.roadAddress; // 도로명 주소 변수
+            // 주소 정보를 해당 필드에 넣는다.
+            var input = document.querySelector('#div-my-order-detail .updateDelivery #receiverAddr1');
+            input.value = roadAddr;
+        }
+    }).open();
+}

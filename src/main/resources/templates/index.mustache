@@ -380,8 +380,9 @@
                         </tbody>
                     </table>
                 </div>
+                <h5>배송지 정보</h5>
+                <a class="btn btn-sm btn-primary d-none" href="" onclick="return false;" id="btn-edit-my-delivery">수정</a>
                 <div class="mb-3 deliverInfo p-2">
-                    <h5>배송지 정보</h5>
                     <div class="row">
                         <div class="col-2">수신인명</div>
                         <div class="col"><span id="receiverName"></span></div>
@@ -399,41 +400,40 @@
                         <div class="col"><span id="message"></span></div>
                     </div>
                 </div>
-            </div>
-            <div class="d-none">
-                <form id="form-update-delivery">
-                    <input type="hidden" name="deliveryId" />
-                    <div class="form-group form-row">
-                        <div class="col-sm-2"><label for="receiverName">배송인</label></div>
-                        <div class="col-sm-10"><input type="text" class="form-control" name="receiverName" id="receiverName" /></div>
-                    </div>
+                <div class="p-2 d-none updateDelivery" >
+                    <form id="form-update-delivery">
+                        <input type="hidden" name="deliveryId" />
+                        <div class="form-group form-row">
+                            <div class="col-sm-2"><label for="receiverName">배송인</label></div>
+                            <div class="col-sm-10"><input type="text" class="form-control" name="receiverName" id="receiverName" /></div>
+                        </div>
 
-                    <div class="form-group form-row">
-                        <div class="col-sm-2"><label for="receiverTel">휴대전화</label></div>
-                        <input type="hidden" name="receiverTel" id="receiverTel"/>
-                        <div class="col-sm-3"><input type="text" class="form-control" id="receiverTel1" /></div> -
-                        <div class="col-sm-3"><input type="text" class="form-control" id="receiverTel2" /></div> -
-                        <div class="col-sm-3"><input type="text" class="form-control" id="receiverTel3" /></div>
-                    </div>
-                    <div class="form-group form-row">
-                        <div class="col-sm-2">주소</div>
-                        <div class="col-sm-2">
-                            <a class="btn btn-sm btn-outline-primary" onclick="receiver_execDaumPostcode()">주소 검색</a><br>
+                        <div class="form-group form-row">
+                            <div class="col-sm-2"><label for="receiverTel">휴대전화</label></div>
+                            <input type="hidden" name="receiverTel" id="receiverTel"/>
+                            <div class="col-sm-3"><input type="text" class="form-control" id="receiverTel1" /></div> -
+                            <div class="col-sm-3"><input type="text" class="form-control" id="receiverTel2" /></div> -
+                            <div class="col-sm-3"><input type="text" class="form-control" id="receiverTel3" /></div>
+                        </div><div class="form-group form-row">
+                            <div class="col-sm-2">주소</div>
+                            <div class="col-sm-2">
+                                <a class="btn btn-sm btn-outline-primary" onclick="delivery_update_execDaumPostcode()">주소 검색</a><br>
+                            </div>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="receiverAddr1" id="receiverAddr1" />
+                            </div>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="receiverAddr2" id="receiverAddr2" />
+                            </div>
                         </div>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control" name="receiverAddr1" id="receiverAddr1" />
+                        <div class="form-group form-row">
+                            <div class="col-sm-2"><label for="message">배송메세지</label></div>
+                            <div class="col-sm-10"><input type="text" class="form-control" name="message" id="message" /></div>
                         </div>
-                        <div class="col-sm-4">
-                            <input type="text" class="form-control" name="receiverAddr2" id="receiverAddr2" />
-                        </div>
+                    </form>
+                    <div class="div-form-buttons">
+                        <a class="btn btn-primary" id="btn-update-delivery">저장</a>
                     </div>
-                    <div class="form-group form-row">
-                        <div class="col-sm-2"><label for="message">배송메세지</label></div>
-                        <div class="col-sm-10"><input type="text" class="form-control" name="message" id="message" /></div>
-                    </div>
-                </form>
-                <div class="div-form-buttons">
-                    <a class="btn btn-primary" id="btn-update-delivery">저장</a>
                 </div>
             </div>
             <!-- // Order Detail -->

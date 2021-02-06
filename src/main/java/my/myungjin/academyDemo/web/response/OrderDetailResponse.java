@@ -32,6 +32,8 @@ public class OrderDetailResponse {
 
     private List<OrderItemResponse> items = new ArrayList<>();
 
+    private String deliveryId;
+
     private String deliveryName;
 
     private String deliveryAddr;
@@ -65,6 +67,7 @@ public class OrderDetailResponse {
                 .collect(Collectors.toList())
                 .get(0);
         this.orderStatus = d.getStatus().getDescription();
+        this.deliveryId = d.getId();
         this.deliveryName = d.getReceiverName();
         this.deliveryAddr = StringUtils.join(d.getReceiverAddr1(), d.getReceiverAddr2(), " ");
         this.deliveryAddr1 = d.getReceiverAddr1();
