@@ -49,6 +49,13 @@ public class ReviewService {
     }
 
     @Transactional(readOnly = true)
+    public Review findById(@Valid Id<Review, String> reviewId){
+        return reviewRepository.findById(reviewId.value())
+                .orElseThrow(() -> new NotFoundException(Review.class, reviewId));
+    }
+
+
+    @Transactional(readOnly = true)
     public Review findByMemberAndItem(@Valid Id<Member, String> memberId, @Valid Id<OrderItem, String> itemId){
         //  TODO Review 엔티티 중복 조인(?) 문제
         return reviewRepository.findByOrderItemIdAndMemberId(itemId.value(), memberId.value())

@@ -9,6 +9,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -35,6 +36,7 @@ public class Review {
     @Column(name = "review_img")
     private String reviewImg;
 
+    @NotBlank
     @Column(name = "content", nullable = false)
     private String content;
 

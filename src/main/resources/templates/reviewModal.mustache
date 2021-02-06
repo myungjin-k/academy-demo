@@ -1,0 +1,134 @@
+
+<!-- Modal -->
+<div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reviewModalLabel">리뷰 작성</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row mb-3">
+                        <span class="mr-3">
+                            <input type="radio" name="score" value="5" id="review-5-score" checked>
+                            <label for="review-5-score">5</label>
+                        </span>
+
+                        <span class="mr-3">
+                            <input type="radio" name="score" value="4" id="review-4-score">
+                            <label for="review-4-score">4</label>
+                        </span>
+                        <span class="mr-3">
+                            <input type="radio" name="score" value="3" id="review-3-score">
+                            <label for="review-3-score">3</label>
+                        </span>
+                        <span class="mr-3">
+                            <input type="radio" name="score" value="2" id="review-2-score">
+                            <label for="review-2-score">2</label>
+                        </span>
+                        <span class="mr-3">
+                            <input type="radio" name="score" value="1" id="review-1-score">
+                            <label for="review-1-score">1</label>
+                        </span>
+                    </div>
+                    <div class="row mb-3">
+                        <textarea name="content" cols="20" rows="10"></textarea>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="reviewImgFile">이미지</label>
+                        <p class="reviewImgFileInfo d-none"><img class="oriReviewImgFile" width="50px"/><span id="btn-delete-thumbnail" class="btn btn-sm btn-outline-dark ml-2">X</span></p>
+                        <input type="file" class="form-control mb-2" accept="image/png, image/jpeg" name="reviewImgFile" id="reviewImgFile"/>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btn-save-review">등록</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var reviewModal = {
+        itemId : '',
+        memberId : '',
+        reviewId : '',
+        init : function(memberId, itemId, reviewId){
+            var _this = this;
+            _this.memberId = memberId;
+            _this.itemId = itemId;
+            _this.reviewId = reviewId;
+            $('#reviewModal #btn-save-review').unbind('click').click(function(){
+               _this.writeReview();
+            });
+            if(_this.reviewId !== ''){
+                _this.loadReview();
+            } else {
+                _this.clear();
+            }
+        },
+        clear : function(){
+            $('#reviewModal input[name="score"]').val('5');
+            $('#reviewModal textarea[name="content"]').text('');
+            $('#reviewModal .reviewImgFileInfo').addClass("d-none");
+            $('#reviewModal .oriReviewImgFile').prop("src", '');
+            $('#reviewModal .input[name="reviewImgFile"]').val('');
+        },
+        loadReview : function(){
+            const _this = this;
+            $.ajax({
+                type: 'GET',
+                url: '/api/mall/review/' + _this.reviewId,
+                contentType: 'application/json; charset=utf-8',
+            }).done(function(response) {
+                const review = response.response;
+                console.log(review);
+                $('#reviewModal input[name="score"]').val(review.score);
+                $('#reviewModal textarea[name="content"]').text(review.content);
+                if(review.reviewImg !== null){
+                    $('#reviewModal .reviewImgFileInfo').removeClass("d-none");
+                    $('#reviewModal .oriReviewImgFile').prop("src", review.reviewImg);
+                }
+            }).fail(function (error) {
+                alert(JSON.stringify(error));
+            });
+
+        },
+        writeReview : function(){
+            const _this = this;
+
+            let data = new FormData();
+            const div = $('#reviewModal');
+            data.append('score', div.find('input[name="score"]:checked').val());
+            data.append('content', div.find('textarea[name="content"]').val());
+            data.append('reviewImgFile', div.find("input[name='reviewImgFile']")[0].files[0]);
+            console.log(data.getAll('score'));
+            console.log(data.getAll('content'));
+            console.log(data.getAll('reviewImgFile'));
+            $.ajax({
+                type: 'POST',
+                url: '/api/mall/member/' + _this.memberId + '/orderItem/' + _this.itemId + '/review',
+                processData: false,
+                contentType: false,
+                data : data
+            }).done(function(response) {
+                //console.log(response);
+                alert('저장되었습니다.');
+                myOrderDetail.load();
+                $('#reviewModal').modal('hide');
+            }).fail(function (error) {
+                alert(JSON.stringify(error));
+            });
+        }
+    };
+    $(document).on('click', '.btn-review', function(){
+        const itemId = $(this).find('input[name="orderItemId"]').val();
+        const userId = $(this).find('input[name="userId"]').val();
+        const reviewId = $(this).find('input[name="reviewId"]').val();
+        reviewModal.init(userId, itemId, reviewId);
+    });
+</script>

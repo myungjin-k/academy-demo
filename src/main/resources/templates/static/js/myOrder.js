@@ -124,7 +124,6 @@ var myOrder = {
         });
     }
 };
-//TODO 배송준비 단계에서 배송정보 수정 기능
 var myOrderDetail = {
     div : $('#div-my-order-detail'),
     userId : '',
@@ -218,13 +217,21 @@ var myOrderDetail = {
             .append($('<br/>'))
             .append('\n' + item.color + '/' + item.size);
 
-        //const salePrice = $('<div class="salePrice"/>').text(display.salePrice * cartItem.count);
+      const reviewChk = item.reviewId === '' ? '리뷰 작성' : '리뷰 수정';
+      const reviewLink = item.deliveryStatus !== '배송완료' ?
+          '' :
+          $('<a class="btn-review" href="" data-toggle="modal" data-target="#reviewModal"/>')
+              .append('<input type="hidden" name="orderItemId" value="' + item.orderItemId +'" />')
+              .append('<input type="hidden" name="userId" value="' + this.userId +'"/>')
+              .append('<input type="hidden" name="reviewId" value="' + item.reviewId +'"/>')
+              .append(reviewChk);
+      row
+          .append($('<td class="itemInfo"/>').append(itemLink))
+          .append($('<td class="itemCount"/>').append(item.count))
+          .append($('<td class="itemPrice"/>').append(item.itemPrice))
+          .append($('<td class="deliveryStatus"/>').append(item.deliveryStatus + '\n' + item.invoiceNum))
+          .append($('<td class="reviewBtn"/>').append(reviewLink));
 
-        row
-            .append($('<td class="itemInfo"/>').append(itemLink))
-            .append($('<td class="itemCount"/>').append(item.count))
-            .append($('<td class="itemPrice"/>').append(item.itemPrice))
-            .append($('<td class="deliveryStatus"/>').append(item.deliveryStatus + '\n' + item.invoiceNum));
         return row;
     },
     load : function (){
@@ -235,7 +242,7 @@ var myOrderDetail = {
             dataType: 'json',
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
-            //console.log(response);
+            console.log(response);
             const order = response.response;
             _this.clear();
             // TODO  ui 정리

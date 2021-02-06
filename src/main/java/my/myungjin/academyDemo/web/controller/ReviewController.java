@@ -16,6 +16,8 @@ import my.myungjin.academyDemo.service.review.ReviewService;
 import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.PageRequest;
 import my.myungjin.academyDemo.web.request.ReviewRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -36,6 +38,8 @@ public class ReviewController {
 
     private final MemberService memberService;
 
+    Logger log = LoggerFactory.getLogger(getClass());
+
     @GetMapping("/mall/item/{itemId}/review/list")
     @ApiOperation(value = "상품별 리뷰 목록 조회(api key 필요없음)")
     @ApiImplicitParams({
@@ -48,6 +52,19 @@ public class ReviewController {
             PageRequest pageRequest){
         return OK(
                 reviewService.findAllByItem(Id.of(ItemDisplay.class, itemId), pageRequest.of())
+        );
+    }
+
+    @GetMapping("/mall/review/{id}")
+    @ApiOperation(value = "리뷰 단건 조회")
+    public Response<Review> findReviewById(
+            @PathVariable @ApiParam(value = "조회 대상 리뷰 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String id){
+        Review ret = reviewService.findById(
+                Id.of(Review.class, id)
+        );
+        log.info("Found Review : {}",  ret);
+        return OK(
+                ret
         );
     }
 

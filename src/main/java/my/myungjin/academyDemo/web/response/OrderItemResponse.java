@@ -5,6 +5,7 @@ import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.item.ItemMaster;
 import my.myungjin.academyDemo.domain.order.DeliveryItem;
 import my.myungjin.academyDemo.domain.order.OrderItem;
+import my.myungjin.academyDemo.domain.review.Review;
 
 import java.util.Optional;
 
@@ -37,6 +38,8 @@ public class OrderItemResponse {
 
     private String deliveryId;
 
+    private String reviewId;
+
     public OrderItemResponse of(OrderItem entity){
         this.orderItemId = entity.getId();
         ItemDisplay display = entity.getItemOption().getItemDisplay();
@@ -55,6 +58,9 @@ public class OrderItemResponse {
         this.deliveryStatus = deliveryItem.map(d -> d.getDelivery().getStatus().getDescription()).orElse("");
         this.invoiceNum = deliveryItem.map(d -> d.getDelivery().getInvoiceNum()).orElse("");
         this.deliveryId = deliveryItem.map(d -> d.getDelivery().getId()).orElse("");
+        this.reviewId = Optional.ofNullable(entity.getReview())
+                .map(Review::getId)
+                .orElse("");
         return this;
     }
 

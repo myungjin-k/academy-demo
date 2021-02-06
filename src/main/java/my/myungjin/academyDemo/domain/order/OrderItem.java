@@ -1,7 +1,6 @@
 package my.myungjin.academyDemo.domain.order;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
@@ -58,7 +57,7 @@ public class OrderItem {
     private DeliveryItem deliveryItem;
 
     @Setter @Getter
-    @JsonIgnore
+    @JsonManagedReference
     @OneToOne(mappedBy = "orderItem", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Review review;
 
