@@ -39,15 +39,13 @@
                     <div class="row mb-3">
                         <div class="col-2">내용</div>
                         <div class="col-10">
-                            <textarea name="content" cols="20" rows="10"></textarea>
+                            <textarea name="content" cols="50" rows="10"></textarea>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-2"><label for="reviewImgFile">이미지</label></div>
-                        <div class="col-3">
-                            <p class="reviewImgFileInfo d-none"><img class="oriReviewImgFile" width="50px"/></p>
-                        </div>
                         <div class="col">
+                            <p class="reviewImgFileInfo d-none"><img class="oriReviewImgFile" width="50px"/></p>
                             <input type="file" class="form-control mb-2" accept="image/png, image/jpeg" name="reviewImgFile" id="reviewImgFile"/>
                         </div>
                     </div>
@@ -71,14 +69,16 @@
             _this.itemId = itemId;
             _this.reviewId = reviewId;
 
-            if(_this.reviewId !== ''){
+            console.log(_this.reviewId);
+            const isNewReview = _this.reviewId === '';
+            if(!isNewReview){
                 _this.loadReview();
             } else {
                 _this.clear();
             }
 
             $('#reviewModal #btn-save-review').unbind('click').click(function(){
-                if(_this.reviewId !== ''){
+                if(isNewReview){
                     _this.writeReview();
                 } else {
                     _this.updateReview();
