@@ -16,15 +16,19 @@ import my.myungjin.academyDemo.service.review.ReviewService;
 import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.PageRequest;
 import my.myungjin.academyDemo.web.request.ReviewRequest;
+import my.myungjin.academyDemo.web.response.ReviewResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static my.myungjin.academyDemo.commons.AttachedFile.toAttachedFile;
 import static my.myungjin.academyDemo.web.Response.OK;
@@ -49,12 +53,14 @@ public class ReviewController {
             @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query", defaultValue = "0", value = "페이징 offset"),
             @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query", defaultValue = "5", value = "조회 갯수")
     })
-    public Response<Page<Review>> findAllReviewsByItem(
+    public Response<Page<ReviewResponse>> findAllReviewsByItem(
             @PathVariable @ApiParam(value = "조회 대상 전시상품 PK", example = "f23ba30a47194a2c8a3fd2ccadd952a4") String itemId,
             PageRequest pageRequest){
-        return OK(
-                reviewService.findAllByItem(Id.of(ItemDisplay.class, itemId), pageRequest.of())
-        );
+        List<ReviewResponse> reviews = reviewService.findAllByItem(Id.of(ItemDisplay.class, itemId), pageRequest.of()).getContent()
+                .stream()
+                .map(review -> new ReviewResponse().of(review))
+                .collect(Collectors.toList());
+        return OK(new PageImpl<>(reviews));
     }
 
     @GetMapping("/mall/review/{id}")

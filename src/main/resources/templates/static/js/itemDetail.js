@@ -14,23 +14,82 @@ function loadDetail(id, categoryId, categoryName, parentCategoryId, parentCatego
     itemDetail.init(id);
 }
 var review = {
+    div : $('#div-item-review'),
     itemId : '',
-    page : 1,
+    currPage : 1,
+    firstPage : 1,
+    lastPage : 5,
     init : function(itemId){
         const _this = this;
         _this.itemId = itemId;
-        _this.load();
+        _this.load(_this.currPage);
+
+        _this.div.on('click', '#pagination-review .page-link', function() {
+            var link = $(this).text();
+            if (link === 'prev') {
+                _this.firstPage = _this.firstPage - 5;
+                _this.lastPage = _this.lastPage - 5;
+                _this.list(_this.firstPage);
+            } else if (link === 'next') {
+                _this.firstPage = _this.firstPage + 5;
+                _this.lastPage = _this.lastPage + 5;
+                _this.list(_this.firstPage);
+            } else {
+                _this.list(link);
+            }
+        });
     },
-    load : function(){
+    clear : function (){
+      this.div.find('#item-reviews').empty();
+    },
+    load : function (page){
         var _this = this;
         $.ajax({
             type: 'GET',
-            url: '/api/mall/item/' + _this.itemId + '/review/list?page=' + _this.page + '&size=5&direction=DESC',
+            url: '/api/mall/item/' + _this.itemId + '/review/list?page=' + page + '&size=5&direction=DESC',
             dataType: 'json',
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
-            var data = response.response;
-            console.log(data);
+            _this.clear();
+            _this.currPage = page;
+            const resultData = response.response;
+            if(resultData.totalElements > 0) {
+                $('#pagination-review').setPagination(
+                    page,
+                    _this.firstPage,
+                    Math.min(resultData.totalPages, _this.lastPage),
+                    5,
+                    resultData.totalPages
+                );
+                // TODO ROW 클릭 이벤트
+                $.each(resultData.content, function () {
+                    console.log(this);
+                    const review = this;
+                    const listRow = $('<tr class="text-left reviewTitle"/>');
+                    listRow.append($('<input type="hidden" name="id" />').val(review.id))
+                        .append($('<td class="score"/>').append(review.score))
+                        .append($('<td class="abbr"/>').append(review.content.split('\n')[0]))
+                        .append($('<td class="writer"/>').append(review.writerUserId));
+
+                    const detailRow = $('<tr class="text-left reviewDetail"/>');
+                    const detailTd = $('<td class="text-left" colspan="3"/>');
+                    const optionDiv = $('<div class="reviewOption text-info"/>').append('옵션 : ').append(review.optionInfo);
+                    const fullContentDiv = $('<div class="reviewContent"/>')
+                        .append(review.content.replaceAll('\n', '<br/>'))
+                        .append($('<br/>'))
+                        .append(($('<a class="reviewImg"/>')
+                            .append($('<img style="width: 100%;"/>').prop('src', review.reviewImgUrl))
+                        ));
+                    detailTd
+                        .append(optionDiv)
+                        .append(fullContentDiv);
+                    detailRow
+                        .append(detailTd);
+                    _this.div.find('#item-reviews')
+                        .append(listRow)
+                        .append(detailRow);
+                });
+            }
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });

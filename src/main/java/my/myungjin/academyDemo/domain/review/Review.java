@@ -36,7 +36,7 @@ public class Review {
     @Column(name = "review_img")
     private String reviewImg;
 
-    @NotBlank
+    @Getter @NotBlank
     @Column(name = "content", nullable = false)
     private String content;
 
