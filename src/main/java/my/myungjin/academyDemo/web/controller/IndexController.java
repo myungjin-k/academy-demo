@@ -1,6 +1,9 @@
 package my.myungjin.academyDemo.web.controller;
 
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import lombok.RequiredArgsConstructor;
+import my.myungjin.academyDemo.aws.S3Client;
+import my.myungjin.academyDemo.commons.AttachedFile;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.common.CodeGroup;
 import my.myungjin.academyDemo.domain.common.CommonCode;
@@ -9,15 +12,21 @@ import my.myungjin.academyDemo.domain.member.Role;
 import my.myungjin.academyDemo.domain.order.DeliveryStatus;
 import my.myungjin.academyDemo.security.User;
 import my.myungjin.academyDemo.service.admin.CommonCodeService;
+import my.myungjin.academyDemo.service.review.ReviewService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+
+import static java.util.Optional.ofNullable;
+import static my.myungjin.academyDemo.commons.AttachedFile.toAttachedFile;
 
 @RequiredArgsConstructor
 @Controller
@@ -25,7 +34,29 @@ public class IndexController {
 
     private final CommonCodeService commonCodeService;
 
-    private List<CommonCode> itemCategories ;
+    private List<CommonCode> itemCategories;
+
+    private final S3Client s3Client;
+
+    private final Logger log = LoggerFactory.getLogger(getClass());
+
+    @PostMapping("/mall/imgUpload/test")
+    public String imgUploadTest(@RequestPart MultipartFile imageFile) throws IOException {
+        String imageUrl = null;
+        AttachedFile attachedImgFile = toAttachedFile(imageFile);
+        assert attachedImgFile != null;
+        String key = attachedImgFile.randomName("test", "jpeg");
+        try {
+            imageUrl = s3Client.upload(attachedImgFile.inputStream(),
+                    attachedImgFile.length(),
+                    key,
+                    attachedImgFile.getContentType(),
+                    null);
+        } catch (AmazonS3Exception e) {
+            log.warn("Amazon S3 error (key: {}): {}", key, e.getMessage(), e);
+        }
+        return imageUrl;
+    }
 
     @GetMapping("/mall/index")
     public String main(Model model, @AuthenticationPrincipal Authentication authentication){

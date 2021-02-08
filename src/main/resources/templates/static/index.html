@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Business Frontpage - Start Bootstrap Template</title>
+    <title>TEST</title>
 
     <!-- Bootstrap core CSS -->
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -16,6 +16,9 @@
     <!-- Custom styles for this template -->
     <link href="css/business-frontpage.css" rel="stylesheet">
 
+    <!-- toast ui -->
+    <link href="toast-ui/codemirror/codemirror.css" rel="stylesheet">
+    <link href="toast-ui/toastui-editor.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -62,75 +65,12 @@
 
 <!-- Page Content -->
 <div class="container">
+    <!-- toast ui editor test -->
+    <div id="editor" >
 
-    <div class="row">
-        <div class="col-md-8 mb-5">
-            <h2>What We Do</h2>
-            <hr>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A deserunt neque tempore recusandae animi soluta quasi? Asperiores rem dolore eaque vel, porro, soluta unde debitis aliquam laboriosam. Repellat explicabo, maiores!</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis optio neque consectetur consequatur magni in nisi, natus beatae quidem quam odit commodi ducimus totam eum, alias, adipisci nesciunt voluptate. Voluptatum.</p>
-            <a class="btn btn-primary btn-lg" href="#">Call to Action &raquo;</a>
-        </div>
-        <div class="col-md-4 mb-5">
-            <h2>Contact Us</h2>
-            <hr>
-            <address>
-                <strong>Start Bootstrap</strong>
-                <br>3481 Melrose Place
-                <br>Beverly Hills, CA 90210
-                <br>
-            </address>
-            <address>
-                <abbr title="Phone">P:</abbr>
-                (123) 456-7890
-                <br>
-                <abbr title="Email">E:</abbr>
-                <a href="mailto:#">name@example.com</a>
-            </address>
-        </div>
     </div>
-    <!-- /.row -->
-
-    <div class="row">
-        <div class="col-md-4 mb-5">
-            <div class="card h-100">
-                <img class="card-img-top" src="https://placehold.it/300x200" alt="">
-                <div class="card-body">
-                    <h4 class="card-title">Card title</h4>
-                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque sequi doloribus.</p>
-                </div>
-                <div class="card-footer">
-                    <a href="#" class="btn btn-primary">Find Out More!</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-5">
-            <div class="card h-100">
-                <img class="card-img-top" src="https://placehold.it/300x200" alt="">
-                <div class="card-body">
-                    <h4 class="card-title">Card title</h4>
-                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque sequi doloribus totam ut praesentium aut.</p>
-                </div>
-                <div class="card-footer">
-                    <a href="#" class="btn btn-primary">Find Out More!</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-5">
-            <div class="card h-100">
-                <img class="card-img-top" src="https://placehold.it/300x200" alt="">
-                <div class="card-body">
-                    <h4 class="card-title">Card title</h4>
-                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
-                </div>
-                <div class="card-footer">
-                    <a href="#" class="btn btn-primary">Find Out More!</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- /.row -->
-
+    <button class="btn btn-primary" id="btn-save">저장</button>
+    <!-- // toast ui editor test -->
 </div>
 <!-- /.container -->
 
@@ -146,8 +86,48 @@
 <script src="js/jquery/jquery.min.js"></script>
 <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
 
+<!-- toast ui -->
+<script src="toast-ui/toastui-editor-all.min.js"></script>
 
-<script src="../admin/static/js/comonCode.js"></script>
 </body>
 
+
 </html>
+
+<script>
+    $(document).ready(function(){
+        $('#btn-save').click(function(){
+            console.log(editor.getHtml());
+        });
+    });
+    const editor = new toastui.Editor({
+        el: document.querySelector('#editor'),
+        previewStyle: 'vertical',
+        height: '500px',
+        initialEditType: 'wysiwyg',
+        hooks: {
+            addImageBlobHook: function(file){
+                console.log(this.uploadImage(file));
+            }
+
+        },
+        uploadImage(file){
+            let formData = new FormData();
+            formData.append('imageFile', file);
+            $.ajax({
+                type: 'POST',
+                url: '/mall/imgUpload/test',
+                processData: false,
+                processType: false,
+                data: formData,
+                headers : {'Content-type' : 'multipart/form-data' }
+            }).done(function(response) {
+                console.log(response.response);
+                return response.response;
+            }).fail(function (error) {
+                alert(JSON.stringify(error));
+            });
+        }
+    });
+
+</script>
