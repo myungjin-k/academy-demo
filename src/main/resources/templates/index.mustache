@@ -52,21 +52,42 @@
                                 <img src="" id="img-thumbnail" />
                             </div>
                         </div>
-                        <div class="row mb-lg-5">
-                            <div class="text-center" id="div-item-detail-notice">
-                                <p id="p-notice"></p>
+                        <ul class="nav nav-tabs" id="itemDetailTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="tab-item-info" data-toggle="tab" href="#div-item-info" role="tab" aria-controls="div-item-info" aria-selected="true">상세정보</a>
+                            </li>
+                            <li class="nav-item" >
+                                <a class="nav-link" id="tab-item-reivew" data-toggle="tab" href="#div-item-review" role="tab" aria-controls="div-item-review" aria-selected="false">리뷰</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="itemDetailTabContent">
+                            <div class="tab-pane fade show active" id="div-item-info" role="tabpanel" aria-labelledby="tab-item-info" >
+                                <div class="row mb-lg-5">
+                                    <div class="text-center" id="div-item-detail-notice">
+                                        <p id="p-notice"></p>
+                                    </div>
+                                </div>
+                                <div class="row mb-5">
+                                    <div id="div-item-detail-description" >
+                                        <textarea class="text-center border-0" id="text-description" readonly></textarea>
+                                    </div>
+                                </div>
+                                <div class="row mb-lg-5">
+                                    <div class="text-center" id="div-item-detail-image">
+                                        <img src="" id="img-detail"/>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row mb-5">
-                            <div id="div-item-detail-description" >
-                                <textarea class="text-center border-0" id="text-description" readonly></textarea>
+                            <!-- reviews -->
+                            <div class="tab-pane fade show active" id="div-item-review" role="tabpanel" aria-labelledby="tab-item-review" >
+                                <div class="row mb-lg-5">
+                                    <h2>REVIEW LIST TAB</h2>
+                                </div>
                             </div>
+                            <!-- // reviews -->
                         </div>
-                        <div class="row mb-lg-5">
-                            <div class="text-center" id="div-item-detail-image">
-                                <img src="" id="img-detail"/>
-                            </div>
-                        </div>
+
+
                     </div>
                     <div class="col-sm-3 text-left pl-5 pr-2" id="div-item-summary" >
                         <div id="div-item-detail-name">

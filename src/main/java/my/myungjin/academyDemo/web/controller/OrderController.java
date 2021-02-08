@@ -118,6 +118,7 @@ public class OrderController {
         );
     }
 
+    // TODO 결제 API 적용
     @PostMapping("/member/{memberId}/order")
     @ApiOperation(value = "주문 생성")
     public Response<Order> order(

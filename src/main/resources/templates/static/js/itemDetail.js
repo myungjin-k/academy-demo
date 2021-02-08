@@ -13,7 +13,29 @@ function loadDetail(id, categoryId, categoryName, parentCategoryId, parentCatego
     }
     itemDetail.init(id);
 }
-
+var review = {
+    itemId : '',
+    page : 1,
+    init : function(itemId){
+        const _this = this;
+        _this.itemId = itemId;
+        _this.load();
+    },
+    load : function(){
+        var _this = this;
+        $.ajax({
+            type: 'GET',
+            url: '/api/mall/item/' + _this.itemId + '/review/list?page=' + _this.page + '&size=5&direction=DESC',
+            dataType: 'json',
+            contentType:'application/json; charset=utf-8'
+        }).done(function(response) {
+            var data = response.response;
+            console.log(data);
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+    }
+};
 var itemDetail = {
     displayId : '',
     div : $("#div-sales-item-detail"),
@@ -23,6 +45,7 @@ var itemDetail = {
         $('.contentDiv').not(_this.div).addClass('d-none');
         _this.div.removeClass('d-none');
         _this.load();
+        review.init(_this.displayId);
 
         _this.div.find('.cateArea').unbind().bind('click', function(){
             main.cateId = $(this).find('input[name="categoryId"]').val();

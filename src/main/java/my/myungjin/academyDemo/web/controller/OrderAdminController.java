@@ -81,6 +81,7 @@ public class OrderAdminController {
         );
     }
 
+    // TODO 배송상태 배치 업데이트
 
     @PatchMapping("/delivery/{id}/status/{status}")
     @ApiOperation(value = "배송상태 업데이트")

@@ -1,3 +1,4 @@
+// TODO 숫자 <-> 원화 컨버팅 함수
 jQuery.fn.serializeObject = function() {
     var obj = null;
     try {

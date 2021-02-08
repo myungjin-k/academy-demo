@@ -148,6 +148,12 @@ var myOrderDetail = {
             _this.div.find('#btn-edit-my-delivery').addClass('d-none');
         });
 
+        _this.div.find('#order-items').on('click', '.itemLink', function(){
+            var itemId = $(this).find('input[name="itemDisplayId"]').val();
+            itemDetail.init(itemId);
+        });
+
+
     },
     updateDelivery : function(deliveryId){
         const _this = this;
@@ -165,7 +171,6 @@ var myOrderDetail = {
         }).done(function(response) {
             var data = response.response;
             //console.log(data);
-            // TODO 배송준비중 단계에서만 수정 가능하게
             alert('배송정보가 수정되었습니다.');
             loadMyOrderDetail(_this.orderId);
             _this.div.find('.updateDelivery').addClass('d-none');
@@ -209,7 +214,7 @@ var myOrderDetail = {
     makeItemRow : function(item){
       let row = $('<tr/>');
 
-      const itemLink = $('<a href="" onclick="return false;"/>')
+      const itemLink = $('<a class="itemLink" href="" onclick="return false;"/>')
             .append($('<input type="hidden"/>')
                 .prop('name', 'itemDisplayId')
                 .val(item.itemDisplayId))

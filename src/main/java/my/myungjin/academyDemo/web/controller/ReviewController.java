@@ -40,6 +40,8 @@ public class ReviewController {
 
     Logger log = LoggerFactory.getLogger(getClass());
 
+    // TODO 리뷰 코멘트 엔티티 생성
+    // TODO 리뷰 이미지 파일업로더 추가
     @GetMapping("/mall/item/{itemId}/review/list")
     @ApiOperation(value = "상품별 리뷰 목록 조회(api key 필요없음)")
     @ApiImplicitParams({
