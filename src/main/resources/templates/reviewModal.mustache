@@ -85,7 +85,8 @@
             });
         },
         clear : function(){
-            $('#reviewModal input[name="score"]').val('5');
+            $('#reviewModal input[name="score"]').prop('checked', false);
+            $('#reviewModal #review-5-score').prop('checked', true);
             $('#reviewModal textarea[name="content"]').val('');
             $('#reviewModal .reviewImgFileInfo').addClass("d-none");
             $('#reviewModal .oriReviewImgFile').prop("src", '');
@@ -99,9 +100,14 @@
                 contentType: 'application/json; charset=utf-8',
             }).done(function(response) {
                 const review = response.response;
-                console.log(review);
-                $('#reviewModal input[name="score"]').val(review.score);
-                $('#reviewModal textarea[name="content"]').text(review.content);
+                //console.log(review);
+                $('#reviewModal input[name="score"]').each(function(){
+                    if($(this).val() == review.score){
+                        $(this).prop('checked', true);
+                        return false;
+                    }
+                });
+                $('#reviewModal textarea[name="content"]').val(review.content);
                 if(review.reviewImg !== null){
                     $('#reviewModal .reviewImgFileInfo').removeClass("d-none");
                     $('#reviewModal .oriReviewImgFile').prop("src", review.reviewImg);
@@ -113,15 +119,21 @@
         },
         writeReview : function(){
             const _this = this;
-
             let data = new FormData();
             const div = $('#reviewModal');
-            data.append('score', div.find('input[name="score"]:checked').val());
+            let score = 5;
+            $(div.find('input[name="score"]')).each(function(){
+               if($(this).prop('checked')){
+                   score = $(this).val();
+                   return false;
+               }
+            });
+            data.append('score', score);
             data.append('content', div.find('textarea[name="content"]').val());
             data.append('reviewImgFile', div.find("input[name='reviewImgFile']")[0].files[0]);
-            console.log(data.getAll('score'));
-            console.log(data.getAll('content'));
-            console.log(data.getAll('reviewImgFile'));
+            //console.log(data.getAll('score'));
+            //console.log(data.getAll('content'));
+            //console.log(data.getAll('reviewImgFile'));
             $.ajax({
                 type: 'POST',
                 url: '/api/mall/member/' + _this.memberId + '/orderItem/' + _this.itemId + '/review',
