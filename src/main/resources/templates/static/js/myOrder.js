@@ -191,11 +191,13 @@ var myOrderDetail = {
         orderDiv.find('#orderName').text('');
         orderDiv.find('#orderStatus').text('');
         const deliverDiv = this.div.find('.deliverInfo');
+        deliverDiv.removeClass('d-none');
         deliverDiv.find('#receiverName').text('');
         deliverDiv.find('#receiverTel').text('');
         deliverDiv.find('#receiverAddr').text('');
         deliverDiv.find('#message').text('');
         this.div.find('#btn-edit-my-delivery').addClass('d-none');
+        this.div.find('.updateDelivery').addClass('d-none');
         const deliverForm = this.div.find('#form-update-delivery');
         deliverForm.find('input[name="deliveryId"]').val('');
         deliverForm.find('#receiverName').val('');
@@ -265,7 +267,7 @@ var myOrderDetail = {
             const deliverDiv = _this.div.find('.deliverInfo');
             deliverDiv.find('#receiverName').text(order.deliveryName);
             deliverDiv.find('#receiverTel').text(order.deliveryTel);
-            deliverDiv.find('#receiverAddr').text(order.deliveryAddr);
+            deliverDiv.find('#receiverAddr').text(order.deliveryAddr1 + ', ' + order.deliveryAddr2);
             deliverDiv.find('#message').text(order.deliveryMessage);
 
             if(order.orderStatus === '배송준비중'){
