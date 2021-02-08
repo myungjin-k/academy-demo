@@ -69,7 +69,6 @@
             _this.itemId = itemId;
             _this.reviewId = reviewId;
 
-            console.log(_this.reviewId);
             const isNewReview = _this.reviewId === '';
             if(!isNewReview){
                 _this.loadReview();
@@ -87,7 +86,7 @@
         },
         clear : function(){
             $('#reviewModal input[name="score"]').val('5');
-            $('#reviewModal textarea[name="content"]').text('');
+            $('#reviewModal textarea[name="content"]').val('');
             $('#reviewModal .reviewImgFileInfo').addClass("d-none");
             $('#reviewModal .oriReviewImgFile').prop("src", '');
             $('#reviewModal .input[name="reviewImgFile"]').val('');
