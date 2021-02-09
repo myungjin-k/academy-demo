@@ -40,7 +40,9 @@ var review = {
         });
     },
     clear : function (){
-      this.div.find('#item-reviews').empty();
+        this.div.find('#table-review-list').addClass('d-none');
+        this.div.find('#no-review').removeClass('d-none');
+        this.div.find('#item-reviews').empty();
     },
     load : function (page){
         var _this = this;
@@ -54,6 +56,8 @@ var review = {
             _this.currPage = page;
             const resultData = response.response;
             if(resultData.totalElements > 0) {
+                _this.div.find('#table-review-list').removeClass('d-none');
+                _this.div.find('#no-review').addClass('d-none');
                 $('#pagination-review').setPagination(
                     page,
                     _this.firstPage,

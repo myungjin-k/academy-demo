@@ -62,9 +62,9 @@
                         </ul>
                         <div class="tab-content" id="itemDetailTabContent">
                             <div class="tab-pane fade show active" id="div-item-info" role="tabpanel" aria-labelledby="tab-item-info" >
-                                <div class="row mb-lg-5">
-                                    <div class="text-center" id="div-item-detail-notice">
-                                        <p id="p-notice"></p>
+                                <div class="row m-lg-5">
+                                    <div id="div-item-detail-notice" style="width: 100%;">
+                                        <p class="text-center" id="p-notice" ></p>
                                     </div>
                                 </div>
                                 <div class="row mb-5">
@@ -80,9 +80,10 @@
                             </div>
                             <!-- reviews -->
                             <div class="tab-pane fade show active" id="div-item-review" role="tabpanel" aria-labelledby="tab-item-review" >
-                                <div class="row mb-lg-5">
-                                    <div class="col-lg p-3">
-                                        <table class="table-bordered mb-3">
+                                <div class="row-cols-xl-1 mb-lg-5">
+                                    <p class="text-center p-2" id="no-review">작성된 리뷰가 없습니다.</p>
+                                    <div class="p-3" id="table-review-list" >
+                                        <table class="table-bordered mb-3" style="width: 100%;">
                                             <thead>
                                                 <th width="10%">별점</th>
                                                 <th class="text-left">리뷰내용</th>
