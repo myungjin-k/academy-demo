@@ -23,6 +23,7 @@ var review = {
         const _this = this;
         _this.itemId = itemId;
         _this.load(_this.currPage);
+        _this.div.find('.reviewDetail').addClass('d-none');
 
         _this.div.on('click', '#pagination-review .page-link', function() {
             var link = $(this).text();
@@ -37,6 +38,16 @@ var review = {
             } else {
                 _this.list(link);
             }
+        });
+
+        _this.div.off('click').on('click', '.reviewTitle', function(){
+           const reviewDetailRow = $(this).parents('tr').next();
+           //console.log(reviewDetailRow.html());
+           if(reviewDetailRow.hasClass('d-none')){
+               reviewDetailRow.removeClass('d-none');
+           } else {
+               reviewDetailRow.addClass('d-none');
+           }
         });
     },
     clear : function (){
@@ -67,15 +78,17 @@ var review = {
                 );
                 // TODO ROW 클릭 이벤트
                 $.each(resultData.content, function () {
-                    console.log(this);
+                    //console.log(this);
                     const review = this;
                     const listRow = $('<tr class="text-left reviewTitle"/>');
+                    const reviewTitle = $('<a class="reviewTitle" href="" onclick="return false;" />')
+                        .append(review.content.split('\n')[0]);
                     listRow.append($('<input type="hidden" name="id" />').val(review.id))
                         .append($('<td class="score"/>').append(review.score))
-                        .append($('<td class="abbr"/>').append(review.content.split('\n')[0]))
+                        .append($('<td class="abbr"/>').append(reviewTitle))
                         .append($('<td class="writer"/>').append(review.writerUserId));
 
-                    const detailRow = $('<tr class="text-left reviewDetail"/>');
+                    const detailRow = $('<tr class="text-left reviewDetail d-none"/>');
                     const detailTd = $('<td class="text-left" colspan="3"/>');
                     const optionDiv = $('<div class="reviewOption text-info"/>').append('옵션 : ').append(review.optionInfo);
                     const fullContentDiv = $('<div class="reviewContent"/>')

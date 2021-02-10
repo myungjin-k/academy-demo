@@ -249,7 +249,7 @@ var myOrderDetail = {
             dataType: 'json',
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
-            console.log(response);
+            //console.log(response);
             const order = response.response;
             _this.clear();
             // TODO  ui 정리
