@@ -76,7 +76,6 @@ var review = {
                     5,
                     resultData.totalPages
                 );
-                // TODO ROW 클릭 이벤트
                 $.each(resultData.content, function () {
                     //console.log(this);
                     const review = this;

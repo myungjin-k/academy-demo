@@ -119,7 +119,6 @@ public class ReviewService {
     @Transactional
     public Review modify(@Valid Id<Member, String> memberId, @Valid Id<Member, String> loginUserId,
                          @Valid Id<Review, String> reviewId, @NotBlank String content, @Positive int score, AttachedFile reviewImgFile){
-        // TODO 로그인 유저 확인 ?
         if(!loginUserId.value().equals(memberId.value()))
             throw new IllegalArgumentException("member id must be equal to login user id(member="+ memberId+", loginUser=" +loginUserId +")");
 

@@ -252,7 +252,6 @@ var myOrderDetail = {
             //console.log(response);
             const order = response.response;
             _this.clear();
-            // TODO  ui 정리
             const items = order.items;
             const itemDiv = _this.div.find('#order-items');
             $(items).each(function(){

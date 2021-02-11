@@ -49,7 +49,6 @@ public class ItemDisplayService {
         return itemDisplayRepository.findAllByStatusEquals(ItemStatus.ON_SALE, pageable);
     }
 
-    //TODO 카테고리별 상품 조회
     @Transactional(readOnly = true)
     public Page<ItemDisplay> findAllByCategory(@Valid Id<CommonCode, String> categoryId, Pageable pageable){
         List<ItemDisplay> list = itemMasterRepository.findAllByCategoryId(categoryId.value())

@@ -139,8 +139,7 @@ var order = {
             data: JSON.stringify(data)
         }).done(function(response) {
             var data = response.response;
-            console.log(data);
-            // TODO 결제api 추가
+            //console.log(data);
             alert('주문이 완료되었습니다.');
             loadMyOrderDetail(data.id);
         }).fail(function (error) {

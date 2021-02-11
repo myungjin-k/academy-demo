@@ -26,7 +26,6 @@ public class CommonCodeService {
     private final CodeGroupRepository codeGroupRepository;
 
     private final CommonCodeRepository commonCodeRepository;
-    //TODO 페이징 처리
 
     @Transactional(readOnly = true)
     public List<CodeGroup> findAllCategoryGroups(){
