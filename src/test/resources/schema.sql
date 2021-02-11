@@ -210,3 +210,16 @@ CREATE TABLE review (
                         CONSTRAINT fk_review_to_item_display FOREIGN KEY (item_id) REFERENCES item_display (id) ON DELETE CASCADE ON UPDATE RESTRICT,
                         CONSTRAINT fk_review_to_order_item FOREIGN KEY (order_item_id) REFERENCES order_item (id) ON DELETE CASCADE ON UPDATE RESTRICT
 );
+
+DROP TABLE IF EXISTS review_comment CASCADE;
+CREATE TABLE review_comment (
+                                id                   varchar(50) NOT NULL,
+                                admin_id             varchar(50) NOT NULL,
+                                review_id            varchar(50) NOT NULL,
+                                content              varchar(2000) NOT NULL,
+                                create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
+                                update_at            datetime DEFAULT null,
+                                PRIMARY KEY (id),
+                                CONSTRAINT fk_review_comment_to_admin FOREIGN KEY (admin_id) REFERENCES admin (id) ON DELETE CASCADE ON UPDATE RESTRICT,
+                                CONSTRAINT fk_review_comment_to_item_display FOREIGN KEY (review_id) REFERENCES review (id) ON DELETE CASCADE ON UPDATE RESTRICT
+);

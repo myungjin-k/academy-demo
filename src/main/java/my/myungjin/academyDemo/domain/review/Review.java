@@ -12,6 +12,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static java.util.Optional.ofNullable;
@@ -28,7 +29,7 @@ public class Review {
     private String id;
 
     @Getter
-    @Max(5)
+    @Max(1)
     @Column(name = "score", columnDefinition = "number default 1")
     private int score;
 
@@ -65,6 +66,11 @@ public class Review {
     @OneToOne
     @JoinColumn(name = "order_item_id", nullable = false)
     private OrderItem orderItem;
+
+    @Getter @Setter
+    @JsonBackReference
+    @OneToMany(mappedBy = "review", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<ReviewComment> comments;
 
     @Builder
     public Review(String id, @Size(min = 1, max = 5) int score, String reviewImg, String content) {
