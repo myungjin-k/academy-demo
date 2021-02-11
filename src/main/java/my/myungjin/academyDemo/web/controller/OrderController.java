@@ -119,6 +119,7 @@ public class OrderController {
     }
 
     // TODO 결제 API 적용
+    // TODO 배송비 조건 적용(70000 이상 구매 시 무료배송)
     @PostMapping("/member/{memberId}/order")
     @ApiOperation(value = "주문 생성")
     public Response<Order> order(
