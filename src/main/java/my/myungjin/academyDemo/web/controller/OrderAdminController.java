@@ -146,6 +146,8 @@ public class OrderAdminController {
         return OK(itemDisplayOptionService.search(Id.of(ItemDisplay.class, displayId), itemName));
     }
 
+    // TODO 추가할 배송상품 제한(ex 증정품)
+    // TODO 수기주문생성 기능 구현(합배송 등에 필요)
     @PostMapping("/delivery/{deliveryId}/item")
     @ApiOperation(value = "배송상품 추가")
     public Response<DeliveryItem> addDeliveryItem(
