@@ -19,7 +19,7 @@ import static java.util.Optional.ofNullable;
 
 @Entity
 @Table(name = "review")
-@ToString
+@ToString(exclude = "comments")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Review {
 
@@ -29,7 +29,7 @@ public class Review {
     private String id;
 
     @Getter
-    @Max(1)
+    @Max(5)
     @Column(name = "score", columnDefinition = "number default 1")
     private int score;
 
@@ -69,7 +69,7 @@ public class Review {
 
     @Getter @Setter
     @JsonBackReference
-    @OneToMany(mappedBy = "review", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "review", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ReviewComment> comments;
 
     @Builder

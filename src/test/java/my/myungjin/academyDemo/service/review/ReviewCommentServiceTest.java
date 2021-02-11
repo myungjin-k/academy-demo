@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -32,6 +33,8 @@ public class ReviewCommentServiceTest {
 
     private Id<Admin, String> adminId;
 
+    private Id<ReviewComment, String> commentId;
+
     @BeforeAll
     void setup(){
         reviewId = Id.of(Review.class, "43f217fd86c34ce0a305e02b9972a29e");
@@ -46,6 +49,7 @@ public class ReviewCommentServiceTest {
         ReviewComment written = reviewCommentService.write(reviewId, adminId, newComment);
         assertThat(written, is(notNullValue()));
         log.info("Written Comment : {}", written);
+        commentId = Id.of(ReviewComment.class, written.getId());
     }
 
     @Test
@@ -54,5 +58,25 @@ public class ReviewCommentServiceTest {
         List<ReviewComment> comments = reviewCommentService.findAllByReview(reviewId);
         assertThat(comments.size(), is(1));
         log.info("Comments : {}", comments);
+    }
+
+    @Test
+    @Order(3)
+    void 리뷰_코멘트를_수정한다() throws Exception {
+        String content = "수정됨";
+        ReviewComment updated = reviewCommentService.modifyContent(commentId, content);
+        assertThat(updated, is(notNullValue()));
+        assertThat(updated.getContent(), is(content));
+        log.info("Updated Comment : {}", updated);
+    }
+
+    @Test
+    @Order(4)
+    void 리뷰_코멘트를_삭제한다() throws Exception {
+        ReviewComment deleted = reviewCommentService.delete(commentId);
+        assertThat(deleted, is(notNullValue()));
+
+        Optional<ReviewComment> empty = reviewCommentService.findById(commentId);
+        assertThat(empty, is(Optional.empty()));
     }
 }
