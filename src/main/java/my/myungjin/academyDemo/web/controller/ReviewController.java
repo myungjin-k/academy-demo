@@ -7,11 +7,14 @@ import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
+import my.myungjin.academyDemo.domain.member.Admin;
 import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.order.OrderItem;
 import my.myungjin.academyDemo.domain.review.Review;
+import my.myungjin.academyDemo.domain.review.ReviewComment;
 import my.myungjin.academyDemo.security.User;
 import my.myungjin.academyDemo.service.member.MemberService;
+import my.myungjin.academyDemo.service.review.ReviewCommentService;
 import my.myungjin.academyDemo.service.review.ReviewService;
 import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.PageRequest;
@@ -42,9 +45,10 @@ public class ReviewController {
 
     private final MemberService memberService;
 
+    private final ReviewCommentService reviewCommentService;
+
     Logger log = LoggerFactory.getLogger(getClass());
 
-    // TODO 리뷰 코멘트 엔티티 생성
     // TODO 리뷰 이미지 파일업로더 추가
     @GetMapping("/mall/item/{itemId}/review/list")
     @ApiOperation(value = "상품별 리뷰 목록 조회(api key 필요없음)")
@@ -123,6 +127,45 @@ public class ReviewController {
         return OK(
                 memberService.updateReserves(Id.of(Member.class, memberId), minus, plus)
 
+        );
+    }
+
+    @GetMapping("/mall/review/{reviewId}/comment/list")
+    @ApiOperation(value = "리뷰별 코멘트 목록 조회(api key 필요없음)")
+    public Response<List<ReviewComment>> findAllCommentsByReview(
+            @PathVariable @ApiParam(value = "조회 대상 리뷰 PK", example = "f23ba30a47194a2c8a3fd2ccadd952a4") String reviewId){
+        return OK(reviewCommentService.findAllByReview(Id.of(Review.class, reviewId)));
+    }
+
+    @PostMapping("/mall/review/{reviewId}/comment")
+    @ApiOperation(value = "리뷰 코멘트 작성")
+    public Response<ReviewComment> commentReview(
+            @PathVariable @ApiParam(value = "조회 대상 리뷰 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String reviewId,
+            @RequestParam String content,
+            @AuthenticationPrincipal Authentication authentication) {
+        return OK(
+                reviewCommentService.write(
+                        Id.of(Review.class, reviewId),
+                        Id.of(Admin.class, ((User)authentication.getDetails()).getId()),
+                        new ReviewComment(content)
+                )
+        );
+    }
+
+    @PutMapping("/mall/review/comment/{commentId}")
+    @ApiOperation(value = "리뷰 코멘트 수정")
+    public Response<ReviewComment> modifyReviewComment(
+            @PathVariable @ApiParam(value = "조회 대상 리뷰 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String reviewId,
+            @PathVariable @ApiParam(value = "조회 대상 코멘트 PK", example = "c7bb4cb6efcd4f4bb388eafb6fa52fac") String commentId,
+            @RequestParam String content,
+            @AuthenticationPrincipal Authentication authentication) {
+        return OK(
+                reviewCommentService.modifyContent(
+                        Id.of(Review.class, reviewId),
+                        Id.of(ReviewComment.class, commentId),
+                        content,
+                        Id.of(Admin.class, ((User)authentication.getDetails()).getId())
+                )
         );
     }
 }
