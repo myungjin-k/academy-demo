@@ -55,21 +55,26 @@ public class ReviewCommentService {
     }
 
     @Transactional
-    public ReviewComment modifyContent(@Valid Id<ReviewComment, String> commentId, @NotBlank String content){
-        return findById(commentId)
+    public ReviewComment modifyContent(@Valid Id<Review, String> reviewId, @Valid Id<ReviewComment, String> commentId,
+                                       @NotBlank String content, @Valid Id<Admin, String> writerId){
+        return reviewCommentRepository.findByReviewIdAndId(reviewId.value(), commentId.value())
                 .map(reviewComment -> {
+                    String commentWriter = reviewComment.getWriter().getId();
+                    if(!commentWriter.equals(writerId.value()))
+                        throw new IllegalArgumentException("writerId must be equal to comment.writerId : " +
+                                "writerId=" + writerId.value() + "comment.writerId=" + commentWriter);
                     reviewComment.modify(content);
                     return save(reviewComment);
-                }).orElseThrow(() -> new NotFoundException(ReviewComment.class, commentId));
+                }).orElseThrow(() -> new NotFoundException(ReviewComment.class, reviewId, commentId));
     }
 
     @Transactional
-    public ReviewComment delete(@Valid Id<ReviewComment, String> commentId){
-        return findById(commentId)
+    public ReviewComment delete(@Valid Id<Review, String> reviewId, @Valid Id<ReviewComment, String> commentId){
+        return reviewCommentRepository.findByReviewIdAndId(reviewId.value(), commentId.value())
                 .map(reviewComment -> {
                     reviewCommentRepository.delete(reviewComment);
                     return reviewComment;
-                }).orElseThrow(() -> new NotFoundException(ReviewComment.class, commentId));
+                }).orElseThrow(() -> new NotFoundException(ReviewComment.class, reviewId, commentId));
     }
 
     private ReviewComment save(ReviewComment comment){

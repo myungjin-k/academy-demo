@@ -64,7 +64,7 @@ public class ReviewCommentServiceTest {
     @Order(3)
     void 리뷰_코멘트를_수정한다() throws Exception {
         String content = "수정됨";
-        ReviewComment updated = reviewCommentService.modifyContent(commentId, content);
+        ReviewComment updated = reviewCommentService.modifyContent(reviewId, commentId, content, adminId);
         assertThat(updated, is(notNullValue()));
         assertThat(updated.getContent(), is(content));
         log.info("Updated Comment : {}", updated);
@@ -73,7 +73,7 @@ public class ReviewCommentServiceTest {
     @Test
     @Order(4)
     void 리뷰_코멘트를_삭제한다() throws Exception {
-        ReviewComment deleted = reviewCommentService.delete(commentId);
+        ReviewComment deleted = reviewCommentService.delete(reviewId, commentId);
         assertThat(deleted, is(notNullValue()));
 
         Optional<ReviewComment> empty = reviewCommentService.findById(commentId);
