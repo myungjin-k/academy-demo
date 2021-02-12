@@ -228,7 +228,21 @@ var orderDetail = {
         });
 
         _this.div.find('#btn-save-delivery').unbind('click').bind('click', function () {
-           _this.addDelivery();
+            let isDuplicated = false;
+            $(_this.div.find('#deliveries tr')).each(function(){
+                const status = $(this).find('.status').text();
+                if(status !== 'DELETED')
+                    isDuplicated = true;
+            });
+            if(isDuplicated){
+                if(confirm('취소되지 않은 배송정보가 존재합니다. 계속하시겠습니까?')){
+                    _this.addDelivery();
+                } else {
+                    return false;
+                }
+            } else {
+                _this.addDelivery();
+            }
         });
 
         _this.div.find('#deliveries').off('click').on('click', '.delete-delivery', function () {
