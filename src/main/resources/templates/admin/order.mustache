@@ -3,20 +3,20 @@
 <div class="container" id="div-order-management" >
     <ul class="nav nav-tabs" id="adminOrderTab" role="tablist">
         <li class="nav-item">
-            <a class="nav-link active" id="tab-order-list" data-toggle="tab" href="#div-order-list" role="tab" aria-controls="div-order-list" aria-selected="true">주문조회</a>
+            <a class="nav-link active contentTab" id="tab-order-list" data-toggle="tab" href="#div-order-list" role="tab" aria-controls="div-order-list" aria-selected="true">주문조회</a>
         </li>
         <li class="nav-item" >
-            <a class="nav-link" id="tab-order-detail" data-toggle="tab" href="#div-order-detail" role="tab" aria-controls="div-order-detail" aria-selected="false" style="display: none;">주문상세</a>
+            <a class="nav-link contentTab" id="tab-order-detail" data-toggle="tab" href="#div-order-detail" role="tab" aria-controls="div-order-detail" aria-selected="false" style="display: none;">주문상세</a>
         </li>
         <li class="nav-item" >
-            <a class="nav-link" id="tab-delivery-detail" data-toggle="tab" href="#div-delivery-detail" role="tab" aria-controls="div-delivery-detail" aria-selected="false" style="display: none;">배송상세</a>
+            <a class="nav-link contentTab" id="tab-delivery-detail" data-toggle="tab" href="#div-delivery-detail" role="tab" aria-controls="div-delivery-detail" aria-selected="false" style="display: none;">배송상세</a>
         </li>
         <li class="nav-item" >
-            <a class="nav-link" id="tab-manual-order" data-toggle="tab" href="#div-manual-order" role="tab" aria-controls="div-manual-order" aria-selected="false" style="display: none;">주문수기등록</a>
+            <a class="nav-link contentTab" id="tab-manual-order" data-toggle="tab" href="#div-manual-order" role="tab" aria-controls="div-manual-order" aria-selected="false" style="display: none;">주문수기등록</a>
         </li>
     </ul>
     <div class="tab-content" id="adminOrderTabContent">
-        <div class="tab-pane fade p-2" id="div-manual-order" role="tabpanel" aria-labelledby="tab-manual-order">
+        <div class="tab-pane fade p-2 contentDiv" id="div-manual-order" role="tabpanel" aria-labelledby="tab-manual-order">
             <div class="mb-5 orderItemInfo">
                 <h4 class="mb-3">주문상품정보</h4>
                 <div class="row p-3 mb-3 addItem" id="div-add-manual-order-item">
@@ -154,7 +154,7 @@
             <a class="btn btn-lg btn-primary" id="btn-save-manual-order">주문 저장하기</a>
 
         </div>
-        <div class="tab-pane fade show active" id="div-order-list" role="tabpanel" aria-labelledby="tab-order-list">
+        <div class="tab-pane fade show active contentDiv" id="div-order-list" role="tabpanel" aria-labelledby="tab-order-list">
             <div class="pl-5 pt-3 pb-3 mt-3 mb-3 bg-light">
                 <label class="mr-2" for="btn-search-order">주문번호</label>
                 <input class="mr-2" type="text" name="code" id="input-search-order" >
@@ -185,7 +185,10 @@
                 </div>
             </div>
         </div>
-        <div class="tab-pane fade" id="div-order-detail" role="tabpanel" aria-labelledby="tab-order-detail" >
+        <div class="tab-pane fade contentDiv" id="div-order-detail" role="tabpanel" aria-labelledby="tab-order-detail" >
+            <div class="div-crud-buttons">
+                <a class="btn btn-outline-primary" id="btn-copy-order">새 주문으로 복사</a>
+            </div>
             <div class="p-2" >
                 <h5>주문 정보</h5>
                 <div class="mb-3 orderInfo p-2">
@@ -253,7 +256,7 @@
             </div>
         </div>
 
-        <div class="tab-pane fade" id="div-delivery-detail" role="tabpanel" aria-labelledby="tab-delivery-detail" >
+        <div class="tab-pane fade contentDiv" id="div-delivery-detail" role="tabpanel" aria-labelledby="tab-delivery-detail" >
             <div class="p-2" >
                 <h5>배송 정보</h5>
                 <div class="mb-3 deliveryInfo p-2">

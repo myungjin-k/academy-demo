@@ -2,44 +2,32 @@ var main = {
     init : function() {
         orderList.init();
         //delivery.init();
-
-        $('#div-order-list').off('click').on('click', '.orderLink', function(){
-            var orderId = $(this).text();
-            $('#div-order-list').removeClass('active');
-            $('#div-order-detail').addClass('active').addClass('show');
-
-            $('#tab-order-list').removeClass('active').prop('aria-selected', false);
-            $('#tab-order-detail').show().addClass('active').prop('aria-selected', true);
-            orderDetail.init(orderId);
-        });
-
-        $('#div-order-list #btn-manual-order').unbind('click').bind('click', function(){
-            $('#div-order-list').removeClass('active');
-            $('#div-manual-order').addClass('active').addClass('show');
-
-            $('#tab-order-list').removeClass('active').prop('aria-selected', false);
-            $('#tab-manual-order').show().addClass('active').prop('aria-selected', true);
-            manualOrder.init();
-        });
-
-        $('#div-order-detail').off('click').on('click', '.deliveryLink', function(){
-            var deliveryId = $(this).text();
-            $('#div-order-detail').removeClass('active');
-            $('#div-delivery-detail').addClass('active').addClass('show');
-
-            $('#tab-order-detail').removeClass('active').prop('aria-selected', false);
-            $('#tab-delivery-detail').show().addClass('active').prop('aria-selected', true);
-            deliveryDetail.init(deliveryId);
-        });
     }
 }
-// TODO 주문정보 끌어오기
+function goManualOrder(){
+    $('.contentDiv').not('#div-manual-order').removeClass('active');
+    $('#div-manual-order').addClass('active').addClass('show');
+
+    $('.contentTab').not('#tab-manual-order').removeClass('active').prop('aria-selected', false);
+    $('#tab-manual-order').show().addClass('active').prop('aria-selected', true);
+
+    manualOrder.init();
+}
+function copyOrder(order){
+    goManualOrder();
+    manualOrder.setOrder(order);
+}
 var manualOrder = {
     div : $('#div-manual-order'),
     init : function(){
         const _this = this;
+        _this.clear();
         _this.div.find('#btn-append-manual-order-item').unbind('click').bind('click', function(){
-            _this.appendOrderItem();
+            const addDiv = _this.div.find('#div-add-manual-order-item');
+            const itemId = addDiv.find('input[name="itemId"]').val();
+            const itemInfo = addDiv.find('#itemInfo').val();
+            const count = addDiv.find('input[name="count"]').val();
+            _this.appendOrderItem(itemId, itemInfo, count);
         });
         _this.div.find('#btn-save-manual-order').unbind('click').bind('click', function(){
             _this.save();
@@ -49,12 +37,45 @@ var manualOrder = {
             row.remove();
         });
     },
-    appendOrderItem : function(){
+    clear : function() {
+        $('#div-add-manual-order-item input').val('');
+        $('#manual-order-items').empty();
+        $('#form-save-manual-order input').val('');
+    },
+    setOrder : function(data){
         const _this = this;
-        const addDiv = _this.div.find('#div-add-manual-order-item');
-        const itemId = addDiv.find('input[name="itemId"]').val();
-        const itemInfo = addDiv.find('#itemInfo').val();
-        const count = addDiv.find('input[name="count"]').val();
+        $(data.items).each(function(){
+            const item = this;
+            const option = this.itemOption;
+           _this.appendOrderItem(
+                option.id,
+               option.itemDisplay.itemDisplayName + '[' + option.color + '/' + option.size +']' ,
+               item.count);
+        });
+        const ordererInfo = _this.div.find('.ordererInfo');
+        ordererInfo.find('input[name="name"]').val(data.orderName);
+        const tel = data.orderTel.split('-');
+        ordererInfo.find('#orderTel1').val(tel[0]);
+        ordererInfo.find('#orderTel2').val(tel[1]);
+        ordererInfo.find('#orderTel3').val(tel[2]);
+        ordererInfo.find('input[name="addr1"]').val(data.orderAddr1);
+        ordererInfo.find('input[name="addr2"]').val(data.orderAddr2);
+        if(data.deliveries.length > 0){
+            const receiverInfo = _this.div.find('.deliverInfo');
+            const lastDelivery = data.deliveries[data.deliveries.length - 1];
+            receiverInfo.find('input[name="receiverName"]').val(lastDelivery.receiverName);
+            const receiverTel = lastDelivery.receiverTel.split('-');
+            receiverInfo.find('#receiverTel1').val(receiverTel[0]);
+            receiverInfo.find('#receiverTel2').val(receiverTel[1]);
+            receiverInfo.find('#receiverTel3').val(receiverTel[2]);
+            receiverInfo.find('input[name="receiverAddr1"]').val(lastDelivery.receiverAddr1);
+            receiverInfo.find('input[name="receiverAddr2"]').val(lastDelivery.receiverAddr2);
+            receiverInfo.find('input[name="message"]').val(lastDelivery.message);
+        }
+
+    },
+    appendOrderItem : function(itemId, itemInfo, count){
+        const _this = this;
         const itemRow = $('<tr />');
 
         itemRow
@@ -87,7 +108,7 @@ var manualOrder = {
         form.find('input[name="receiverTel"]').val(receiverTel);
         var data = $('#form-save-manual-order').serializeObject();
         data['items'] = _this.collectItems();
-        console.log(data);
+        //console.log(data);
 
         $.ajax({
             type: 'POST',
@@ -97,8 +118,9 @@ var manualOrder = {
             data: JSON.stringify(data)
         }).done(function(response) {
             var data = response.response;
-            console.log(data);
-            alert('주문이 완료되었습니다.');
+            //console.log(data);
+            alert('주문 생성이 완료되었습니다.');
+            goDetail(data.id);
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
@@ -110,6 +132,15 @@ var orderList = {
     div : $('#div-order-list'),
     init : function () {
         var _this = this;
+
+        _this.div.off('click').on('click', '.orderLink', function(){
+            goDetail($(this).text())
+        });
+
+        _this.div.find('#btn-manual-order').unbind('click').bind('click', function(){
+            goManualOrder();
+        });
+
         _this.div.on('click', '#pagination-order .page-link', function(){
             var link = $(this).text();
             if(link === 'prev'){
@@ -175,6 +206,14 @@ var orderList = {
 
     }
 };
+function goDetail(orderId){
+    $('.contentDiv').not('#div-order-detail').removeClass('active');
+    $('#div-order-detail').addClass('active').addClass('show');
+
+    $('.contentTab').not('#tab-order-detail').removeClass('active').prop('aria-selected', false);
+    $('#tab-order-detail').show().addClass('active').prop('aria-selected', true);
+    orderDetail.init(orderId);
+}
 var orderDetail = {
     div : $('#div-order-detail'),
     id : '',
@@ -182,6 +221,11 @@ var orderDetail = {
         const _this = this;
         _this.id = id;
         _this.load();
+
+        _this.div.off('click').on('click', '.deliveryLink', function(){
+            var deliveryId = $(this).text();
+            goDeliveryDetail(deliveryId)
+        });
 
         _this.div.find('#btn-save-delivery').unbind('click').bind('click', function () {
            _this.addDelivery();
@@ -194,6 +238,22 @@ var orderDetail = {
                 alert('이미 발송된 배송정보는 취소할 수 없습니다.');
             else
                 _this.deleteDelivery(deliveryId);
+        });
+
+        _this.div.find('#btn-copy-order').unbind('click').bind('click', function(){
+            let order = [];
+            $.ajax({
+                type: 'GET',
+                url: '/api/admin/order/' + _this.id,
+                dataType: 'json',
+                contentType:'application/json; charset=utf-8'
+            }).done(function(response) {
+                order = response.response;
+                console.log(order);
+                copyOrder(order);
+            }).fail(function (error) {
+                alert(JSON.stringify(error));
+            });
         });
     },
     deleteDelivery : function(id){
@@ -221,7 +281,7 @@ var orderDetail = {
            itemIds.push(orderItemId);
         });
         data['orderItemIds'] = itemIds;
-        console.log(data);
+        //console.log(data);
         $.ajax({
             type: 'POST',
             url: '/api/admin/order/' + _this.id + '/delivery',
@@ -247,7 +307,7 @@ var orderDetail = {
           contentType:'application/json; charset=utf-8'
       }).done(function(response) {
           var resultData = response.response;
-          console.log(resultData);
+          //console.log(resultData);
           const orderInfo = _this.div.find('.orderInfo');
           orderInfo.find('#orderId').text(resultData.id);
           orderInfo.find('#orderName').text(resultData.orderName);
@@ -304,7 +364,15 @@ var orderDetail = {
 
   }
 };
+function goDeliveryDetail(deliveryId){
+    $('.contentDiv').not('#div-delivery-detail').removeClass('active');
+    $('#div-delivery-detail').addClass('active').addClass('show');
 
+    $('.contentTab').not('#tab-delivery-detail').removeClass('active').prop('aria-selected', false);
+    $('#tab-delivery-detail').show().addClass('active').prop('aria-selected', true);
+
+    deliveryDetail.init(deliveryId);
+}
 var deliveryDetail = {
     div : $('#div-delivery-detail'),
     deliveryId : '',
