@@ -77,7 +77,7 @@ var review = {
                     resultData.totalPages
                 );
                 $.each(resultData.content, function () {
-                    //console.log(this);
+                    console.log(this);
                     const review = this;
                     const listRow = $('<tr class="text-left reviewTitle"/>');
                     const reviewTitle = $('<a class="reviewTitle" href="" onclick="return false;" />')
@@ -90,12 +90,22 @@ var review = {
                     const detailRow = $('<tr class="text-left reviewDetail d-none"/>');
                     const detailTd = $('<td class="text-left" colspan="3"/>');
                     const optionDiv = $('<div class="reviewOption text-info"/>').append('옵션 : ').append(review.optionInfo);
+                    const commentListDiv = $('<div class="commentList" />');
+                    $.each(review.comments, function(){
+                       const comment = this;
+                       const commentDiv = $('<div class="comment row" />')
+                           .append($('<input type="hidden" name="id"/>').val(comment.id))
+                           .append($('<div class="col-2" />').append($('<span class="writer" />').append(comment.writer.adminId)))
+                           .append($('<div class="col" />').append($('<div class="content" />').append(comment.content)));
+                        commentListDiv.append(commentDiv);
+                    });
                     const fullContentDiv = $('<div class="reviewContent"/>')
                         .append(review.content.replaceAll('\n', '<br/>'))
                         .append($('<br/>'))
                         .append(($('<a class="reviewImg"/>')
                             .append($('<img style="width: 100%;"/>').prop('src', review.reviewImgUrl))
-                        ));
+                        ))
+                        .append(commentListDiv);
                     detailTd
                         .append(optionDiv)
                         .append(fullContentDiv);
