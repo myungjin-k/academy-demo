@@ -4,20 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 import my.myungjin.academyDemo.commons.Id;
-import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.order.CartItem;
 import my.myungjin.academyDemo.domain.order.Delivery;
 import my.myungjin.academyDemo.domain.order.DeliveryStatus;
 import my.myungjin.academyDemo.domain.order.Order;
-import my.myungjin.academyDemo.util.Util;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
-
-import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 
 @AllArgsConstructor
 @ToString
@@ -48,7 +42,11 @@ public class OrderRequest {
 
     private String message;
 
+    // 일반 주문
     private List<String> cartItemIds;
+
+    // 수기 주문
+    private List<CartRequest> items;
 
     public Order newOrder(){
         return Order.builder()
@@ -93,15 +91,15 @@ public class OrderRequest {
                 .status(DeliveryStatus.of(status))
                 .build();
     }
+
     public List<Id<CartItem, String>> collectItems(){
         return cartItemIds.stream()
                 .map(s -> Id.of(CartItem.class, s))
                 .collect(Collectors.toList());
     }
 
-    public List<Id<ItemDisplay.ItemDisplayOption, String>> collectItemsForManualOrder(){
-        return cartItemIds.stream()
-                .map(s -> Id.of(ItemDisplay.ItemDisplayOption.class, s))
-                .collect(Collectors.toList());
+    public Map<String, Integer> collectItemsAndCounts(){
+        return items.stream()
+                .collect(Collectors.toMap(CartRequest::getItemId, CartRequest::getCount));
     }
 }

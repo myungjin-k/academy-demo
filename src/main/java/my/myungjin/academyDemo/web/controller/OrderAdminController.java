@@ -11,10 +11,7 @@ import my.myungjin.academyDemo.domain.order.*;
 import my.myungjin.academyDemo.service.admin.OrderAdminService;
 import my.myungjin.academyDemo.service.item.ItemDisplayOptionService;
 import my.myungjin.academyDemo.web.Response;
-import my.myungjin.academyDemo.web.request.DeliveryItemRequest;
-import my.myungjin.academyDemo.web.request.DeliveryRequest;
-import my.myungjin.academyDemo.web.request.OrderSearchRequest;
-import my.myungjin.academyDemo.web.request.PageRequest;
+import my.myungjin.academyDemo.web.request.*;
 import my.myungjin.academyDemo.web.response.AdminOrderListResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -53,6 +50,18 @@ public class OrderAdminController {
         );
     }
 
+    @PostMapping("/order")
+    @ApiOperation(value = "수기 주문 생성")
+    public Response<Order> manualOrder(
+            @RequestBody OrderRequest orderRequest){
+        return OK(
+                orderAdminService.ordering(
+                        orderRequest.newOrder(),
+                        orderRequest.newDelivery(),
+                        orderRequest.collectItemsAndCounts()
+                )
+        );
+    }
 
     @GetMapping("/order/{id}")
     @ApiOperation(value = "주문 아이디별 상세 조회")

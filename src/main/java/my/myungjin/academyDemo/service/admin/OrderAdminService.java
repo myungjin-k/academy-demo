@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.item.ItemDisplayOptionRepository;
-import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.order.*;
 import my.myungjin.academyDemo.error.NotFoundException;
 import my.myungjin.academyDemo.error.StatusNotSatisfiedException;
+import my.myungjin.academyDemo.util.Util;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,6 +17,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -45,6 +46,56 @@ public class OrderAdminService {
         o.setItems(orderItemRepository.findAllByOrder(o));
         o.setDeliveries(deliveryRepository.getAllByOrderOrderByCreateAtDesc(o));
         return o;
+    }
+
+    @Transactional
+    public Order ordering(@Valid Order newOrder, @Valid Delivery delivery, Map<String, Integer> items){
+        // 주문
+        Order saved = orderRepository.save(newOrder);
+
+        // 주문상품
+        Order updated = saveOrderItems(items, saved);
+
+        // 배송정보
+        delivery.setOrder(updated);
+        Delivery d = save(delivery);
+
+        // 배송상품
+        saveDeliveryItems(updated.getItems(), d);
+        updated.addDelivery(d);
+        return updated;
+    }
+
+    private Order saveOrderItems(Map<String, Integer> items, Order order){
+        int totalAmount = 0;
+        for(String itemId : items.keySet()){
+            int count = items.get(itemId);
+            OrderItem oItem = new OrderItem(Util.getUUID(), items.get(itemId));
+            oItem.setItemOption(itemDisplayOptionRepository.findById(itemId)
+                    .orElseThrow(() -> new NotFoundException(ItemDisplay.ItemDisplayOption.class, itemId)));
+            oItem.setOrder(order);
+            order.addItem(orderItemRepository.save(oItem));
+            totalAmount += oItem.getItemOption().getItemDisplay().getItemMaster().getPrice() * count;
+        }
+        order.setTotalAmount(totalAmount);
+
+        // 주문상품정보 요약
+        StringBuilder abbrOrderItems = new StringBuilder();
+        abbrOrderItems.append(order.getItems().get(0).getItemOption().getItemDisplay().getItemDisplayName());
+        if(order.getItems().size() > 1)
+            abbrOrderItems.append("外 ").append(items.size() - 1).append("건");
+        order.setAbbrOrderItems(abbrOrderItems.toString());
+        return order;
+    }
+
+    private void saveDeliveryItems(List<OrderItem> orderItems, Delivery delivery){
+        for(OrderItem item : orderItems){
+            DeliveryItem dItem = new DeliveryItem(item.getCount());
+            dItem.setItemOption(item.getItemOption());
+            dItem.setOrderItem(item);
+            delivery.addItem(dItem);
+            item.setDeliveryItem(save(dItem));
+        }
     }
 
     @Transactional(readOnly = true)

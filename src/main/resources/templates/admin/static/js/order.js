@@ -55,17 +55,20 @@ var manualOrder = {
         itemRow
             .append($('<input type="hidden" name="itemId" />').val(itemId))
             .append($('<td />').text(itemInfo))
-            .append($('<td />').text(count));
+            .append($('<td class="count"/>').text(count));
 
         _this.div.find('#manual-order-items').append(itemRow);
     },
-    collectItemIds : function(){
-        var itemIds = [];
+    collectItems : function(){
+        var items = [];
         var _this = this;
-        $(_this.div.find('#manual-order-items input[name="itemId"]')).each(function(){
-            itemIds.push($(this).val());
+        $(_this.div.find('#manual-order-items tr')).each(function(){
+            items.push({
+                "itemId" : $(this).find('input[name="itemId"]').val(),
+                "count" : $(this).find('.count').text()
+            });
         });
-        return itemIds;
+        return items;
     },
     save : function(){
         var _this = this;
@@ -75,26 +78,21 @@ var manualOrder = {
         var receiverTel = form.find('#receiverTel1').val() + '-' + form.find('#receiverTel2').val() + '-' + form.find('#receiverTel3').val();
         form.find('input[name="receiverTel"]').val(receiverTel);
         var data = $('#form-save-manual-order').serializeObject();
-        data['cartItemIds'] = _this.collectItemIds();
+        data['items'] = _this.collectItems();
         console.log(data);
 
         $.ajax({
             type: 'POST',
-            url: '/api/mall/member/' + _this.userId + '/order',
+            url: '/api/admin/order',
             dataType: 'json',
             contentType:'application/json; charset=utf-8',
             data: JSON.stringify(data)
         }).done(function(response) {
             var data = response.response;
-            //console.log(data);
+            console.log(data);
             alert('주문이 완료되었습니다.');
-            loadMyOrderDetail(data.id);
         }).fail(function (error) {
             alert(JSON.stringify(error));
-            if(_this.userId === undefined){
-                alert('로그인 후 이용해 주세요.');
-                location.href='/mall/login'
-            }
         });
     }
 };
@@ -571,3 +569,30 @@ var deliveryDetail = {
     }
 };
 main.init();
+
+function orderer_execDaumPostcode() {
+    new daum.Postcode({
+        popupName: 'ordererPostcodePopup',
+        oncomplete: function(data) {
+            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+            var roadAddr = data.roadAddress; // 도로명 주소 변수
+            // 주소 정보를 해당 필드에 넣는다.
+            var input = document.querySelector('#div-manual-order #orderAddr1');
+            input.value = roadAddr;
+        }
+    }).open();
+}
+
+function receiver_execDaumPostcode() {
+    new daum.Postcode({
+        popupName: 'receiverPostcodePopup',
+        oncomplete: function(data) {
+            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+            var roadAddr = data.roadAddress; // 도로명 주소 변수
+            // 주소 정보를 해당 필드에 넣는다.
+
+            var input = document.querySelector('#div-manual-order #receiverAddr1');
+            input.value = roadAddr;
+        }
+    }).open();
+}
