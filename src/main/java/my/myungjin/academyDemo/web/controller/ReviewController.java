@@ -60,11 +60,11 @@ public class ReviewController {
     public Response<Page<ReviewResponse>> findAllReviewsByItem(
             @PathVariable @ApiParam(value = "조회 대상 전시상품 PK", example = "f23ba30a47194a2c8a3fd2ccadd952a4") String itemId,
             PageRequest pageRequest){
-        List<ReviewResponse> reviews = reviewService.findAllByItem(Id.of(ItemDisplay.class, itemId), pageRequest.of()).getContent()
+        List<ReviewResponse> reviews = reviewService.findAllByItem(Id.of(ItemDisplay.class, itemId), pageRequest.of())
                 .stream()
                 .map(review -> new ReviewResponse().of(review))
                 .collect(Collectors.toList());
-        return OK(new PageImpl<>(reviews));
+        return OK(new PageImpl<>(reviews, pageRequest.of(), reviews.size()));
     }
 
     @GetMapping("/mall/review/{id}")

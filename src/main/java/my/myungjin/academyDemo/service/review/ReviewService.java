@@ -9,12 +9,12 @@ import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.order.*;
 import my.myungjin.academyDemo.domain.review.Review;
+import my.myungjin.academyDemo.domain.review.ReviewCommentRepository;
 import my.myungjin.academyDemo.domain.review.ReviewRepository;
 import my.myungjin.academyDemo.error.NotFoundException;
 import my.myungjin.academyDemo.error.StatusNotSatisfiedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +24,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static java.util.Optional.ofNullable;
 
@@ -39,13 +40,18 @@ public class ReviewService {
 
     private final DeliveryItemRepository deliveryItemRepository;
 
+    private final ReviewCommentRepository reviewCommentRepository;
+
     private final S3Client s3Client;
 
     private final String S3_BASE_PATH = "review";
 
     @Transactional(readOnly = true)
-    public Page<Review> findAllByItem(@Valid Id<ItemDisplay, String> itemId, Pageable pageable){
-        return reviewRepository.findByItemId(itemId.value(), pageable);
+    public List<Review> findAllByItem(@Valid Id<ItemDisplay, String> itemId, Pageable pageable){
+        return reviewRepository.findByItemId(itemId.value())
+                .stream()
+                .peek(review -> review.setComments(reviewCommentRepository.findAllByReviewId(review.getId())))
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)

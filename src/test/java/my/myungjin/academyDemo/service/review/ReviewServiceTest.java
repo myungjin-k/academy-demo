@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
@@ -21,13 +20,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
 import static my.myungjin.academyDemo.commons.AttachedFile.toAttachedFile;
 import static org.apache.commons.io.IOUtils.toByteArray;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
+import static org.assertj.core.util.Lists.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 
 @SpringBootTest // H2 데이터베이스를 자동으로 실행
 @ActiveProfiles("test")
@@ -83,10 +83,10 @@ public class ReviewServiceTest {
         request.setSize(5);
         request.setDirection(Sort.Direction.DESC);
 
-        Page<Review> results = reviewService.findAllByItem(itemId, request.of());
+        List<Review> results = reviewService.findAllByItem(itemId, request.of());
 
-        assertThat(results, is(notNullValue()));
-        log.info("Results : {}", results.getContent());
+        assertThat(results, is(not(emptyList())));
+        log.info("Results : {}", results);
     }
 
     @Test

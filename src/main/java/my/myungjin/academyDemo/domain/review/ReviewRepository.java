@@ -1,9 +1,8 @@
 package my.myungjin.academyDemo.domain.review;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ReviewRepository extends JpaRepository<Review, String> {
@@ -15,6 +14,6 @@ public interface ReviewRepository extends JpaRepository<Review, String> {
     Optional<Review> findByOrderItemIdAndMemberId(String itemId, String memberId);
 
     // 전시상품 PK로 검색
-    Page<Review> findByItemId(String itemId, Pageable pageable);
+    List<Review> findByItemId(String itemId);
 
 }
