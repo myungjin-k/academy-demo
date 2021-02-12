@@ -12,7 +12,6 @@ import my.myungjin.academyDemo.domain.member.Role;
 import my.myungjin.academyDemo.domain.order.DeliveryStatus;
 import my.myungjin.academyDemo.security.User;
 import my.myungjin.academyDemo.service.admin.CommonCodeService;
-import my.myungjin.academyDemo.service.review.ReviewService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -25,7 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
-import static java.util.Optional.ofNullable;
 import static my.myungjin.academyDemo.commons.AttachedFile.toAttachedFile;
 
 @RequiredArgsConstructor
@@ -118,12 +116,21 @@ public class IndexController {
     }
 
     @GetMapping("/admin/orderIndex")
-    public String adminORderIndex(Model model, @AuthenticationPrincipal Authentication authentication){
+    public String adminOrderIndex(Model model, @AuthenticationPrincipal Authentication authentication){
         setItemCategories(model);
         setLoginUser(model, authentication);
         model.addAttribute("isAdmin", true);
         model.addAttribute("deliveryStatus", DeliveryStatus.values());
         return "admin/order";
+    }
+
+    @GetMapping("/admin/reviewIndex")
+    public String adminReviewIndex(Model model, @AuthenticationPrincipal Authentication authentication){
+        setItemCategories(model);
+        setLoginUser(model, authentication);
+        model.addAttribute("isAdmin", true);
+        model.addAttribute("deliveryStatus", DeliveryStatus.values());
+        return "admin/review";
     }
 
     private void setItemCategories(Model model){

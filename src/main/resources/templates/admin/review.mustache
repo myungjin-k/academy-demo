@@ -1,0 +1,99 @@
+{{>admin/layout/header}}
+<div class="container" id="div-review-management" >
+    <ul class="nav nav-tabs" id="adminReviewTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="tab-review-list" data-toggle="tab" href="#div-review-list" role="tab" aria-controls="div-review-list" aria-selected="true">리뷰조회</a>
+        </li>
+        <li class="nav-item" >
+            <a class="nav-link" id="tab-review-detail" data-toggle="tab" href="#div-review-detail" role="tab" aria-controls="div-review-detail" aria-selected="false" style="display: none;">리뷰상세</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="adminReviewTabContent">
+        <div class="tab-pane fade show active" id="div-review-list" role="tabpanel" aria-labelledby="tab-review-list">
+            <div class="pl-5 pt-3 pb-3 mt-3 mb-3 bg-light">
+                <label class="mr-2" for="btn-search-review-id">리뷰ID</label>
+                <input class="mr-2" type="text" name="id" id="input-search-review-id" >
+                <label class="mr-2" for="btn-search-review-user-id">작성자ID</label>
+                <input class="mr-2" type="text" name="userId" id="input-search-review-user-id" >
+                <a class="btn btn-sm btn-primary" id="btn-search-review">검색</a>
+
+            </div>
+            <div class="div-crud-buttons">
+                <a class="btn btn-outline-primary" id="btn-load-reviews">리뷰 불러오기</a>
+            </div>
+            <div class="mb-3">
+                <table class="table table-horizontal table-bordered">
+                    <thead class="thead-strong">
+                    <tr>
+                        <th width="10%">리뷰ID</th>
+                        <th width="15%">주문 및 옵션</th>
+                        <th >리뷰내용</th>
+                        <th width="10% ">별점</th>
+                        <th width="10% ">작성일시</th>
+                    </tr>
+                    </thead>
+                    <tbody id="reviews">
+
+                    </tbody>
+                </table>
+                <div>
+                    <ul class="pagination pagination-sm justify-content-center" id="pagination-reviews" >
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="div-review-detail" role="tabpanel" aria-labelledby="tab-review-detail" >
+            <div class="p-2" >
+                <h5>리뷰 상세</h5>
+                <div class="mb-3 reviewInfo p-2">
+                    <div class="row">
+                        <div class="col-2">리뷰ID</div>
+                        <div class="col"><span id="reviewId"></span></div>
+                    </div>
+                    <div class="row ">
+                        <div class="col-2">작성회원ID</div>
+                        <div class="col"><span id="writerUserId"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">상품정보</div>
+                        <div class="col"><span id="itemInfo"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">별점</div>
+                        <div class="col"><span id="score"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">작성일시</div>
+                        <div class="col"><span id="createAt"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">리뷰내용</div>
+                        <div class="col"><textarea id="content"></textarea></div>
+                    </div>
+                </div>
+
+                <div class="p-2 mb-3 commentInfo">
+                    <table class="table table-horizontal table-bordered">
+                        &lt;!&ndash;<thead class="thead-strong">
+                    <tr>
+                        <th width="10%">작성관리자ID</th>
+                        <th></th>
+                        <th width="10% ">주문수량</th>
+                        <th width="10% ">상품금액</th>
+                    </tr>
+                    </thead>&ndash;&gt;
+                        <tbody id="review-comments">
+
+                        </tbody>
+                    </table>
+                </div>
+                <h5>댓글 등록</h5>
+                <div class="mb-3 writeComment p-2">
+                    <textarea id="new-comment-content" cols="100"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="static/js/review.js"></script>
+{{>admin/layout/footer}}
