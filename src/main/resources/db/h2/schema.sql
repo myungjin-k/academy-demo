@@ -138,7 +138,7 @@ CREATE TABLE order_master (
                       point_used           number default 0,
                       order_name           varchar(50) NOT NULL,
                       order_tel            varchar(50) NOT NULL,
-                      order_email          varchar(50) NOT NULL,
+                      order_email          varchar(50),
                       order_addr1          varchar(255),
                       order_addr2          varchar(255),
                       create_at            datetime DEFAULT CURRENT_TIMESTAMP(),

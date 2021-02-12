@@ -13,6 +13,15 @@ var main = {
             orderDetail.init(orderId);
         });
 
+        $('#div-order-list #btn-manual-order').unbind('click').bind('click', function(){
+            $('#div-order-list').removeClass('active');
+            $('#div-manual-order').addClass('active').addClass('show');
+
+            $('#tab-order-list').removeClass('active').prop('aria-selected', false);
+            $('#tab-manual-order').show().addClass('active').prop('aria-selected', true);
+            manualOrder.init();
+        });
+
         $('#div-order-detail').off('click').on('click', '.deliveryLink', function(){
             var deliveryId = $(this).text();
             $('#div-order-detail').removeClass('active');
@@ -24,7 +33,71 @@ var main = {
         });
     }
 }
+var manualOrder = {
+    div : $('#div-manual-order'),
+    init : function(){
+        const _this = this;
+        _this.div.find('#btn-append-manual-order-item').unbind('click').bind('click', function(){
+            _this.appendOrderItem();
+        });
+        _this.div.find('#btn-save-manual-order').unbind('click').bind('click', function(){
+            _this.save();
+        });
+    },
+    appendOrderItem : function(){
+        const _this = this;
+        const addDiv = _this.div.find('#div-add-manual-order-item');
+        const itemId = addDiv.find('input[name="itemId"]').val();
+        const itemInfo = addDiv.find('#itemInfo').val();
+        const count = addDiv.find('input[name="count"]').val();
+        const itemRow = $('<tr />');
 
+        itemRow
+            .append($('<input type="hidden" name="itemId" />').val(itemId))
+            .append($('<td />').text(itemInfo))
+            .append($('<td />').text(count));
+
+        _this.div.find('#manual-order-items').append(itemRow);
+    },
+    collectItemIds : function(){
+        var itemIds = [];
+        var _this = this;
+        $(_this.div.find('#manual-order-items input[name="itemId"]')).each(function(){
+            itemIds.push($(this).val());
+        });
+        return itemIds;
+    },
+    save : function(){
+        var _this = this;
+        var form = _this.div.find('#form-save-manual-order');
+        var tel = form.find('#orderTel1').val() + '-' + form.find('#orderTel2').val() + '-' + form.find('#orderTel3').val();
+        form.find('input[name="tel"]').val(tel);
+        var receiverTel = form.find('#receiverTel1').val() + '-' + form.find('#receiverTel2').val() + '-' + form.find('#receiverTel3').val();
+        form.find('input[name="receiverTel"]').val(receiverTel);
+        var data = $('#form-save-manual-order').serializeObject();
+        data['cartItemIds'] = _this.collectItemIds();
+        console.log(data);
+
+        $.ajax({
+            type: 'POST',
+            url: '/api/mall/member/' + _this.userId + '/order',
+            dataType: 'json',
+            contentType:'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function(response) {
+            var data = response.response;
+            //console.log(data);
+            alert('주문이 완료되었습니다.');
+            loadMyOrderDetail(data.id);
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+            if(_this.userId === undefined){
+                alert('로그인 후 이용해 주세요.');
+                location.href='/mall/login'
+            }
+        });
+    }
+};
 var orderList = {
     firstPage: 1,
     lastPage: 5,

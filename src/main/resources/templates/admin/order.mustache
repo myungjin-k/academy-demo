@@ -11,8 +11,148 @@
         <li class="nav-item" >
             <a class="nav-link" id="tab-delivery-detail" data-toggle="tab" href="#div-delivery-detail" role="tab" aria-controls="div-delivery-detail" aria-selected="false" style="display: none;">배송상세</a>
         </li>
+        <li class="nav-item" >
+            <a class="nav-link" id="tab-manual-order" data-toggle="tab" href="#div-manual-order" role="tab" aria-controls="div-manual-order" aria-selected="false" style="display: none;">주문수기등록</a>
+        </li>
     </ul>
     <div class="tab-content" id="adminOrderTabContent">
+        <div class="tab-pane fade p-2" id="div-manual-order" role="tabpanel" aria-labelledby="tab-manual-order">
+            <div class="mb-5 orderItemInfo">
+                <h4 class="mb-3">주문상품정보</h4>
+                <div class="row p-3 mb-3 addItem" id="div-add-manual-order-item">
+                    <span class="font-weight-bolder">주문상품 추가</span>
+                    <div class="col-5">
+                        <div class="row-cols-sm-1">
+                            <label for="itemInfo">상품정보</label>
+                            <a class="btn btn-sm btn-outline-primary" id="btn-add-manual-order-item" data-toggle="modal" data-target="#itemOptionSearchModal">검색</a>
+                            <input type="text" name="itemInfo" id="itemInfo" style="width: 66%;" readonly/>
+                            <input type="hidden" name="itemId" value="" />
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="row-cols-sm-1">
+                            <label for="newItemCount">수량</label>
+                            <input type="text" class="w10" value="1" name="count" />
+                        </div>
+                    </div>
+                    <a class="btn btn-sm btn-primary" id="btn-append-manual-order-item">추가</a>
+                </div>
+                <table class="table table-horizontal table-bordered">
+                    <thead class="thead-strong">
+                    <tr>
+                        <th >상품명</th>
+                        <th width="10%">수량</th>
+                    </tr>
+                    </thead>
+                    <tbody id="manual-order-items">
+
+                    </tbody>
+                </table>
+            </div>
+            <form id="form-save-manual-order">
+                <!--<div class="amountInfo">
+                    <h5>포인트 사용</h5>
+                    <div class="usePoints">
+                        &lt;!&ndash;<label for="use-all-points" >포인트 전부 사용</label>
+                        <input type="checkbox" id="use-all-points" />&ndash;&gt;
+                        <p class="text-danger">※ 포인트 사용 시 포인트 적립이 되지 않습니다.</p>
+                        <p>가용포인트 : <span class="usablePoints"></span> P</p>
+                        <p>
+                            <label for="usePoints" >사용포인트 : </label>
+                            <input class="text-right" type="text" name="usedPoints" id="usePoints" value="0"/> P
+                        </p>
+                    </div>
+                    <div class="row text-right">
+                        <div class="col-9">상품금액</div>
+                        <div class="col">
+                            <span class="float-right text-right"><b><span class="totalItemPrice text-secondary"></span></b> 원</span>
+                        </div>
+                    </div>
+                    <div class="row text-right">
+                        <div class="col-9">상품할인금액</div>
+                        <div class="col">
+                            <span class="float-right text-right"><b>- <span class="totalDiscountPrice text-secondary"></span></b> 원</span>
+                        </div>
+                    </div>
+                    <div class="row text-right">
+                        <div class="col-9">포인트사용금액</div>
+                        <div class="col">
+                            <span class="float-right text-right"><b>- <span class="usedPoints text-secondary"></span></b> 원</span>
+                        </div>
+                    </div>
+                    <h5 class="row text-lg-right">
+                        <div class="col-9">총 주문액</div>
+                        <div class="col">
+                            <span class="float-right text-right"><b><span class="totalAmount text-primary"></span></b> 원</span>
+                        </div>
+                    </h5>
+                </div>-->
+                <h4 class="mb-3">주문정보</h4>
+                <div class="mb-5 ordererInfo">
+                    <div class="form-group form-row">
+                        <div class="col-sm-2"><label for="orderName">주문자명</label></div>
+                        <div class="col-sm-10"><input type="text" class="form-control" name="name" id="orderName" /></div>
+                    </div>
+
+                    <div class="form-group form-row">
+                        <div class="col-sm-2"><label for="orderTel">휴대전화</label></div>
+                        <input type="hidden" name="tel" id="orderTel"/>
+                        <div class="col-sm-3"><input type="text" class="form-control" id="orderTel1" /></div> -
+                        <div class="col-sm-3"><input type="text" class="form-control" id="orderTel2" /></div> -
+                        <div class="col-sm-3"><input type="text" class="form-control" id="orderTel3" /></div>
+                    </div>
+                    <div class="form-group form-row">
+                        <div class="col-sm-2">주소</div>
+                        <div class="col-sm-2">
+                            <a class="btn btn-sm btn-outline-primary" onclick="orderer_execDaumPostcode()" >주소 검색</a><br>
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" name="addr1" id="orderAddr1" />
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" name="addr2" id="orderAddr2" />
+                        </div>
+                    </div>
+                    <div class="form-group form-row">
+                        <div class="col-sm-2"><label for="orderEmail">주문확인용 이메일</label></div>
+                        <div class="col-sm-10"><input type="text" class="form-control" name="email" id="orderEmail" /></div>
+                    </div>
+                </div>
+                <h4 class="mb-3">배송정보</h4>
+                <div class="mb-3 deliverInfo">
+                    <div class="form-group form-row">
+                        <div class="col-sm-2"><label for="receiverName">배송인</label></div>
+                        <div class="col-sm-10"><input type="text" class="form-control" name="receiverName" id="receiverName" /></div>
+                    </div>
+
+                    <div class="form-group form-row">
+                        <div class="col-sm-2"><label for="receiverTel">휴대전화</label></div>
+                        <input type="hidden" name="receiverTel" id="receiverTel"/>
+                        <div class="col-sm-3"><input type="text" class="form-control" id="receiverTel1" /></div> -
+                        <div class="col-sm-3"><input type="text" class="form-control" id="receiverTel2" /></div> -
+                        <div class="col-sm-3"><input type="text" class="form-control" id="receiverTel3" /></div>
+                    </div>
+                    <div class="form-group form-row">
+                        <div class="col-sm-2">주소</div>
+                        <div class="col-sm-2">
+                            <a class="btn btn-sm btn-outline-primary" onclick="receiver_execDaumPostcode()">주소 검색</a><br>
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" name="receiverAddr1" id="receiverAddr1" />
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" name="receiverAddr2" id="receiverAddr2" />
+                        </div>
+                    </div>
+                    <div class="form-group form-row">
+                        <div class="col-sm-2"><label for="message">배송메세지</label></div>
+                        <div class="col-sm-10"><input type="text" class="form-control" name="message" id="message" /></div>
+                    </div>
+                </div>
+            </form>
+            <a class="btn btn-lg btn-primary" id="btn-save-manual-order">주문 저장하기</a>
+
+        </div>
         <div class="tab-pane fade show active" id="div-order-list" role="tabpanel" aria-labelledby="tab-order-list">
             <div class="pl-5 pt-3 pb-3 mt-3 mb-3 bg-light">
                 <label class="mr-2" for="btn-search-order">주문번호</label>
@@ -20,10 +160,9 @@
                 <a class="btn btn-sm btn-primary" id="btn-search-order">검색</a>
 
             </div>
-            <!--<div class="div-crud-buttons">
-                <a class="btn btn-outline-primary" id="btn-load-groups">코드그룹 불러오기</a>
-                <a class="btn btn-outline-primary" id="btn-add-group">코드그룹 등록</a>
-            </div>-->
+            <div class="div-crud-buttons">
+                <a class="btn btn-outline-primary" id="btn-manual-order">주문 수기 등록</a>
+            </div>
             <div class="mb-3">
                 <table class="table table-horizontal table-bordered">
                     <thead class="thead-strong">
@@ -167,7 +306,7 @@
                 </div>
 
                 <div class="p-2 mb-3 deliveryItem">
-                    <div class="row p-2 mb-3 d-none" id="div-add-delivery-item">
+                    <div class="row p-2 mb-3 d-none addItem" id="div-add-delivery-item">
                         <span class="font-weight-bolder">배송상품 추가</span>
                         <div class="col-5">
                             <div class="row-cols-sm-1">

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 import my.myungjin.academyDemo.commons.Id;
+import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.order.CartItem;
 import my.myungjin.academyDemo.domain.order.Delivery;
 import my.myungjin.academyDemo.domain.order.DeliveryStatus;
@@ -95,6 +96,12 @@ public class OrderRequest {
     public List<Id<CartItem, String>> collectItems(){
         return cartItemIds.stream()
                 .map(s -> Id.of(CartItem.class, s))
+                .collect(Collectors.toList());
+    }
+
+    public List<Id<ItemDisplay.ItemDisplayOption, String>> collectItemsForManualOrder(){
+        return cartItemIds.stream()
+                .map(s -> Id.of(ItemDisplay.ItemDisplayOption.class, s))
                 .collect(Collectors.toList());
     }
 }

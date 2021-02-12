@@ -56,7 +56,7 @@ public class Order {
 
     @Getter
     @Email
-    @Column(name = "order_email", nullable = false)
+    @Column(name = "order_email")
     private String orderEmail;
 
     @Getter
