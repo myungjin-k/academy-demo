@@ -33,6 +33,7 @@ var main = {
         });
     }
 }
+// TODO 주문정보 끌어오기
 var manualOrder = {
     div : $('#div-manual-order'),
     init : function(){
@@ -42,6 +43,10 @@ var manualOrder = {
         });
         _this.div.find('#btn-save-manual-order').unbind('click').bind('click', function(){
             _this.save();
+        });
+        _this.div.off('click').on('click', '#manual-order-items .deleteBtn', function(){
+            const row = $(this).parents('tr');
+            row.remove();
         });
     },
     appendOrderItem : function(){
@@ -55,7 +60,10 @@ var manualOrder = {
         itemRow
             .append($('<input type="hidden" name="itemId" />').val(itemId))
             .append($('<td />').text(itemInfo))
-            .append($('<td class="count"/>').text(count));
+            .append($('<td class="count"/>').text(count))
+            .append($('<td class="deleteBtn"/>')
+                        .append($('<a class="deleteBtn" href="" onclick="return false;"/>').text('삭제'))
+            );
 
         _this.div.find('#manual-order-items').append(itemRow);
     },
