@@ -3,15 +3,20 @@ package my.myungjin.academyDemo.web.controller;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import my.myungjin.academyDemo.commons.Id;
+import my.myungjin.academyDemo.domain.review.Review;
 import my.myungjin.academyDemo.service.review.ReviewCommentService;
 import my.myungjin.academyDemo.service.review.ReviewService;
 import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.PageRequest;
 import my.myungjin.academyDemo.web.response.AdminReviewResponse;
+import my.myungjin.academyDemo.web.response.ReviewDetailResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -42,6 +47,15 @@ public class ReviewAdminController {
                 .collect(Collectors.toList());
         return OK(
                 new PageImpl<>(result, pageRequest.of(), result.size())
+        );
+    }
+
+    @GetMapping("/review/{id}")
+    @ApiOperation(value = "리뷰 단건(상세) 조회")
+    public Response<ReviewDetailResponse> getReviewDetail(
+            @PathVariable @ApiParam(value = "조회 대상 리뷰 PK") String id){
+        return OK(
+                new ReviewDetailResponse(reviewService.findById(Id.of(Review.class, id)))
         );
     }
 

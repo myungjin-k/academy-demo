@@ -13,7 +13,7 @@ var main = {
     }
 }
 // TODO 리뷰 코멘트 CRUD 프론트 구현
-var reviewList = {
+let reviewList = {
     firstPage: 1,
     lastPage: 5,
     div : $('#div-review-list'),
@@ -41,6 +41,11 @@ var reviewList = {
 
         _this.loadAll();
 
+        _this.div.off('click').on('click', '.reviewLink', function(){
+           const reviewId = $(this).parents('tr').find('.reviewId').text();
+           goReviewDetail(reviewId);
+        });
+
     },
     clearTable : function(){
         $('#reviews').empty();
@@ -65,7 +70,7 @@ var reviewList = {
                     resultData.totalPages
                 );
                 $.each(resultData.content, function(){
-                    console.log(this);
+                    //console.log(this);
                     const review = this;
                     const row = '<tr>'
                         + '<td class="reviewId">' + '<a class="reviewLink" href="" onclick="return false;">' + review.id + '</a>' +'</td>'
@@ -107,7 +112,6 @@ var reviewList = {
                     //console.log(this);
                     const item = this;
                     const row = '<tr>'
-                        + '<input type="hidden" name="id" value="' + item.reviewItemId + '"/>'
                         + '<td class="reviewId">' + '<a class="reviewLink" href="" onclick="return false;">' + item.reviewId + '</a>' +'</td>'
                         + '<td class="itemName">' + item.itemName +'</td>'
                         + '<td class="option">' + item.color + '/' + item.size +'</td>'
@@ -117,11 +121,66 @@ var reviewList = {
                     $('#reviews').append(row);
                 });
             }
-
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
 
+    }
+};
+function goReviewDetail(reviewId){
+    $('.contentDiv').not('#div-review-detail').removeClass('active');
+    $('#div-review-detail').addClass('active').addClass('show');
+
+    $('.contentTab').not('#tab-review-detail').removeClass('active').prop('aria-selected', false);
+    $('#tab-review-detail').show().addClass('active').prop('aria-selected', true);
+
+    reviewDetail.init(reviewId);
+}
+let reviewDetail = {
+    div : $('#div-review-detail'),
+    reviewId : '',
+    init : function(reviewId){
+        const _this = this;
+        _this.reviewId = reviewId;
+        _this.load();
+    },
+    load : function(){
+         const _this = this;
+        $.ajax({
+            type: 'GET',
+            url: '/api/admin/review/' + _this.reviewId,
+            contentType:'application/json; charset=utf-8'
+        }).done(function(response) {
+            var review = response.response;
+            console.log(review);
+            const reviewInfo = _this.div.find('.reviewInfo');
+            reviewInfo.find('#reviewId').text(review.id);
+            reviewInfo.find('#writerUserId').text(review.writerUserId);
+            reviewInfo.find('input[name="writerId"]').val(review.writerId);
+            reviewInfo.find('#itemInfo').text(review.itemInfo);
+            reviewInfo.find('#score').text(review.score);
+            reviewInfo.find('#createAt').text(review.createAt);
+            const content = review.content.replaceAll('\n', '<br/>');
+            reviewInfo.find('#content').text(content);
+
+            const commentInfo = _this.div.find('.commentInfo');
+            if(review.comments.length > 0){
+                $(review.comments).each(function(){
+                    const comment = this;
+
+                    let row = $('<tr />')
+                        .append($('<input type="hidden" name="commentId"/>').val(comment.id))
+                        .append($('<td width="10%" class="adminId"/>').text(comment.writer.adminId))
+                        .append($('<td class="content"/>').text(comment.content))
+                        .append($('<td width="10%" class="createAt"/>').text(comment.createAt));
+
+                    commentInfo.find('#review-comments').append(row);
+                });
+            }
+
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
     }
 };
 main.init();

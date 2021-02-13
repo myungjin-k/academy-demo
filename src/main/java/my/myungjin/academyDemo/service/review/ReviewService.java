@@ -63,7 +63,10 @@ public class ReviewService {
     @Transactional(readOnly = true)
     public Review findById(@Valid Id<Review, String> reviewId){
         return reviewRepository.findById(reviewId.value())
-                .orElseThrow(() -> new NotFoundException(Review.class, reviewId));
+                .map(review -> {
+                    review.setComments(reviewCommentRepository.findAllByReviewId(review.getId()));
+                    return review;
+                }).orElseThrow(() -> new NotFoundException(Review.class, reviewId));
     }
 
 

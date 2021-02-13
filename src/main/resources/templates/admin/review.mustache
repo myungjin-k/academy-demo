@@ -2,14 +2,14 @@
 <div class="container" id="div-review-management" >
     <ul class="nav nav-tabs" id="adminReviewTab" role="tablist">
         <li class="nav-item">
-            <a class="nav-link active" id="tab-review-list" data-toggle="tab" href="#div-review-list" role="tab" aria-controls="div-review-list" aria-selected="true">리뷰조회</a>
+            <a class="nav-link active contentTab" id="tab-review-list" data-toggle="tab" href="#div-review-list" role="tab" aria-controls="div-review-list" aria-selected="true">리뷰조회</a>
         </li>
         <li class="nav-item" >
-            <a class="nav-link" id="tab-review-detail" data-toggle="tab" href="#div-review-detail" role="tab" aria-controls="div-review-detail" aria-selected="false" style="display: none;">리뷰상세</a>
+            <a class="nav-link contentTab" id="tab-review-detail" data-toggle="tab" href="#div-review-detail" role="tab" aria-controls="div-review-detail" aria-selected="false" style="display: none;">리뷰상세</a>
         </li>
     </ul>
     <div class="tab-content" id="adminReviewTabContent">
-        <div class="tab-pane fade show active" id="div-review-list" role="tabpanel" aria-labelledby="tab-review-list">
+        <div class="tab-pane fade show active contentDiv" id="div-review-list" role="tabpanel" aria-labelledby="tab-review-list">
             <div class="pl-5 pt-3 pb-3 mt-3 mb-3 bg-light">
                 <label class="mr-2" for="btn-search-review-id">리뷰ID</label>
                 <input class="mr-5" type="text" name="id" id="input-search-review-id" >
@@ -44,17 +44,20 @@
                 </div>
             </div>
         </div>
-        <div class="tab-pane fade" id="div-review-detail" role="tabpanel" aria-labelledby="tab-review-detail" >
+        <div class="tab-pane fade contentDiv" id="div-review-detail" role="tabpanel" aria-labelledby="tab-review-detail" >
             <div class="p-2" >
-                <h5>리뷰 상세</h5>
-                <div class="mb-3 reviewInfo p-2">
+                <div class="mb-5 reviewInfo p-2">
+                    <h5>리뷰 상세</h5>
                     <div class="row">
                         <div class="col-2">리뷰ID</div>
                         <div class="col"><span id="reviewId"></span></div>
                     </div>
                     <div class="row ">
                         <div class="col-2">작성회원ID</div>
-                        <div class="col"><span id="writerUserId"></span></div>
+                        <div class="col">
+                            <span id="writerUserId"></span>
+                            <input type="hidden" name="writerId" />
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-2">상품정보</div>
@@ -70,27 +73,20 @@
                     </div>
                     <div class="row">
                         <div class="col-2">리뷰내용</div>
-                        <div class="col"><textarea id="content"></textarea></div>
+                        <div class="col"><div id="content"></div></div>
                     </div>
                 </div>
 
                 <div class="p-2 mb-3 commentInfo">
+                    <h5>댓글 목록</h5>
                     <table class="table table-horizontal table-bordered">
-                        &lt;!&ndash;<thead class="thead-strong">
-                    <tr>
-                        <th width="10%">작성관리자ID</th>
-                        <th></th>
-                        <th width="10% ">주문수량</th>
-                        <th width="10% ">상품금액</th>
-                    </tr>
-                    </thead>&ndash;&gt;
                         <tbody id="review-comments">
 
                         </tbody>
                     </table>
                 </div>
-                <h5>댓글 등록</h5>
                 <div class="mb-3 writeComment p-2">
+                    <h5>댓글 등록</h5>
                     <textarea id="new-comment-content" cols="100"></textarea>
                 </div>
             </div>
