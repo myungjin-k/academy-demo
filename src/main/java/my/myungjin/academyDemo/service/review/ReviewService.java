@@ -7,6 +7,7 @@ import my.myungjin.academyDemo.commons.AttachedFile;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.member.Member;
+import my.myungjin.academyDemo.domain.member.MemberRepository;
 import my.myungjin.academyDemo.domain.order.*;
 import my.myungjin.academyDemo.domain.review.Review;
 import my.myungjin.academyDemo.domain.review.ReviewCommentRepository;
@@ -41,6 +42,8 @@ public class ReviewService {
     private final DeliveryItemRepository deliveryItemRepository;
 
     private final ReviewCommentRepository reviewCommentRepository;
+
+    private final MemberRepository memberRepository;
 
     private final S3Client s3Client;
 
@@ -148,6 +151,19 @@ public class ReviewService {
         }
         review.modify(content, score);
         return save(review);
+    }
+
+    @Transactional
+    public Review payReserves(@Valid Id<Review, String> reviewId, @Positive int reserves){
+        return reviewRepository.findById(reviewId.value())
+                .map(review -> {
+                    Member member = review.getMember();
+                    member.addReserves(reserves);
+                    memberRepository.save(member);
+                    review.reservesPaid();
+                    return save(review);
+                }).orElseThrow(() -> new NotFoundException(Review.class, reviewId));
+
     }
 
     private Review save(Review review){

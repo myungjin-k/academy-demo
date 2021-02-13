@@ -46,7 +46,7 @@ public class Review {
     @Column(name = "status", nullable = false, columnDefinition = "number default 1")
     private String content;*/
 
-    @Getter @NotBlank
+    @Getter
     @Column(name = "reserves_paid", nullable = false, columnDefinition = "boolean not null default false")
     private boolean isReservesPaid;
 
@@ -97,5 +97,9 @@ public class Review {
     public void modify(String content, int score){
         this.content = content;
         this.score = score;
+    }
+
+    public void reservesPaid(){
+        this.isReservesPaid = true;
     }
 }

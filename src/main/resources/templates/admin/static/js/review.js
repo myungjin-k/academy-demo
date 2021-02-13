@@ -139,10 +139,27 @@ function goReviewDetail(reviewId){
 let reviewDetail = {
     div : $('#div-review-detail'),
     reviewId : '',
+    isPhotoReview : false,
     init : function(reviewId){
         const _this = this;
         _this.reviewId = reviewId;
         _this.load();
+
+        _this.div.off('click').on('click', '#btn-pay-reserves', function(){
+            if(isPhotoReview){
+                _this.payReserves(1000);
+            } else {
+                _this.payReserves(500);
+            }
+        });
+    },
+    clear : function (){
+        const _this = this;
+        _this.div.find('.commentInfo #review-comments').empty();
+        const reviewInfo = _this.div.find('.reviewInfo');
+        reviewInfo.find('.field').text('');
+        reviewInfo.find('input.field').val('');
+        reviewInfo.find('#reviewImg').prop('src', '');
     },
     load : function(){
          const _this = this;
@@ -152,19 +169,23 @@ let reviewDetail = {
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
             var review = response.response;
-            console.log(review);
+            //console.log(review);
+            _this.clear();
             const reviewInfo = _this.div.find('.reviewInfo');
             reviewInfo.find('#reviewId').text(review.id);
             reviewInfo.find('#writerUserId').text(review.writerUserId);
             reviewInfo.find('input[name="writerId"]').val(review.writerId);
             reviewInfo.find('#itemInfo').text(review.itemInfo);
             reviewInfo.find('#score').text(review.score);
-            const reserveBtn = '<button class="btn btn-sm btn-primary" id="btn-save-points">지급하기</button>';
-            reviewInfo.find('#isReservesPaid').html(review.isReservesPaid ? '지급완료' : reserveBtn);
+            const reserveBtn = '<button class="btn btn-sm btn-primary" id="btn-pay-reserves">지급하기</button>';
+            reviewInfo.find('#isReservesPaid').html(review.reservesPaid ? '지급완료' : reserveBtn);
             reviewInfo.find('#createAt').text(review.createAt);
             const content = review.content.replaceAll('\n', '<br/>');
             reviewInfo.find('#content').text(content);
-
+            if(review.reviewImgUrl != null){
+                reviewInfo.find('#reviewImg').prop('src', review.reviewImgUrl);
+                _this.isPhotoReview = true;
+            }
             const commentInfo = _this.div.find('.commentInfo');
             if(review.comments.length > 0){
                 $(review.comments).each(function(){
@@ -186,6 +207,18 @@ let reviewDetail = {
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
+    },
+    payReserves : function(amount) {
+        const _this = this;
+        $.ajax({
+            type : 'PATCH',
+            url : '/api/admin/review/' + _this.reviewId + '/payReserves?amount=' + amount,
+            contentType : 'application/json; charset=UTF-8'
+        }).done(function(response){
+            console.log(response.response);
+        }).fail(function(error){
+            alert(JSON.stringify(error));
+        })
     }
 };
 main.init();

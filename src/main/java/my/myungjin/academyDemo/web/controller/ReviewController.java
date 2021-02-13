@@ -7,7 +7,6 @@ import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
-import my.myungjin.academyDemo.domain.member.Admin;
 import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.order.OrderItem;
 import my.myungjin.academyDemo.domain.review.Review;
@@ -119,17 +118,6 @@ public class ReviewController {
         );
     }
 
-    @PatchMapping("/admin/review/reserves/{memberId}")
-    @ApiOperation(value = "회원 적립금 업데이트")
-    public Response<Member> updateReserves(
-            @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String memberId,
-            @RequestParam int plus, @RequestParam int minus) {
-        return OK(
-                memberService.updateReserves(Id.of(Member.class, memberId), minus, plus)
-
-        );
-    }
-
     @GetMapping("/mall/review/{reviewId}/comment/list")
     @ApiOperation(value = "리뷰별 코멘트 목록 조회(api key 필요없음)")
     public Response<List<ReviewComment>> findAllCommentsByReview(
@@ -137,35 +125,4 @@ public class ReviewController {
         return OK(reviewCommentService.findAllByReview(Id.of(Review.class, reviewId)));
     }
 
-    @PostMapping("/mall/review/{reviewId}/comment")
-    @ApiOperation(value = "리뷰 코멘트 작성")
-    public Response<ReviewComment> commentReview(
-            @PathVariable @ApiParam(value = "조회 대상 리뷰 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String reviewId,
-            @RequestParam String content,
-            @AuthenticationPrincipal Authentication authentication) {
-        return OK(
-                reviewCommentService.write(
-                        Id.of(Review.class, reviewId),
-                        Id.of(Admin.class, ((User)authentication.getDetails()).getId()),
-                        new ReviewComment(content)
-                )
-        );
-    }
-
-    @PutMapping("/mall/review/comment/{commentId}")
-    @ApiOperation(value = "리뷰 코멘트 수정")
-    public Response<ReviewComment> modifyReviewComment(
-            @PathVariable @ApiParam(value = "조회 대상 리뷰 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String reviewId,
-            @PathVariable @ApiParam(value = "조회 대상 코멘트 PK", example = "c7bb4cb6efcd4f4bb388eafb6fa52fac") String commentId,
-            @RequestParam String content,
-            @AuthenticationPrincipal Authentication authentication) {
-        return OK(
-                reviewCommentService.modifyContent(
-                        Id.of(Review.class, reviewId),
-                        Id.of(ReviewComment.class, commentId),
-                        content,
-                        Id.of(Admin.class, ((User)authentication.getDetails()).getId())
-                )
-        );
-    }
 }

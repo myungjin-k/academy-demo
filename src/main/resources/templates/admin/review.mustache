@@ -50,35 +50,40 @@
                     <h5>리뷰 상세</h5>
                     <div class="row">
                         <div class="col-2">리뷰ID</div>
-                        <div class="col"><span id="reviewId"></span></div>
+                        <div class="col"><span class="field" id="reviewId"></span></div>
                     </div>
                     <div class="row ">
                         <div class="col-2">작성회원ID</div>
                         <div class="col">
-                            <span id="writerUserId"></span>
-                            <input type="hidden" name="writerId" />
+                            <span class="field" id="writerUserId"></span>
+                            <input class="field" type="hidden" name="writerId" />
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-2">상품정보</div>
-                        <div class="col"><span id="itemInfo"></span></div>
+                        <div class="col"><span class="field" id="itemInfo"></span></div>
                     </div>
                     <div class="row">
                         <div class="col-2">별점</div>
-                        <div class="col"><span id="score"></span></div>
+                        <div class="col"><span  class="field" id="score"></span></div>
                     </div>
                     <div class="row">
                         <div class="col-2">작성일시</div>
-                        <div class="col"><span id="createAt"></span></div>
+                        <div class="col"><span class="field" id="createAt"></span></div>
                     </div>
                     <div class="row">
                         <div class="col-2">리뷰내용</div>
-                        <div class="col"><div id="content"></div></div>
+                        <div class="col">
+                            <div class="field" id="content"></div>
+                            <div>
+                                <img id="reviewImg" src=""/>
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-2">적립금지급여부</div>
                         <div class="col">
-                            <span class="mr-3" id="isReservesPaid"></span>
+                            <span class="mr-3 field" id="isReservesPaid"></span>
 
                         </div>
                     </div>
@@ -94,7 +99,7 @@
                 </div>
                 <div class="mb-3 writeComment p-2">
                     <h5>댓글 등록</h5>
-                    <textarea id="new-comment-content" cols="100"></textarea>
+                    <textarea class="field" id="new-comment-content" cols="150"></textarea>
                 </div>
             </div>
         </div>
