@@ -20,6 +20,8 @@ public class ReviewDetailResponse {
 
     private String reviewImgUrl;
 
+    private boolean isReservesPaid;
+
     private LocalDateTime createAt;
 
     private String writerUserId;
@@ -35,6 +37,7 @@ public class ReviewDetailResponse {
         this.content = entity.getContent();
         this.reviewImgUrl = entity.getReviewImg();
         this.score = entity.getScore();
+        this.isReservesPaid = entity.isReservesPaid();
         this.createAt = entity.getCreateAt();
         Member writer = entity.getMember();
         this.writerId = writer.getId();

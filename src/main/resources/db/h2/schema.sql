@@ -203,6 +203,7 @@ CREATE TABLE review (
                           content              varchar(2000) NOT NULL,
                           review_img           varchar(255),
                           status               number default 1,
+                          reserves_paid        boolean NOT NULL DEFAULT false,
                           create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
                           update_at            datetime DEFAULT null,
                           PRIMARY KEY (id),

@@ -159,6 +159,8 @@ let reviewDetail = {
             reviewInfo.find('input[name="writerId"]').val(review.writerId);
             reviewInfo.find('#itemInfo').text(review.itemInfo);
             reviewInfo.find('#score').text(review.score);
+            const reserveBtn = '<button class="btn btn-sm btn-primary" id="btn-save-points">지급하기</button>';
+            reviewInfo.find('#isReservesPaid').html(review.isReservesPaid ? '지급완료' : reserveBtn);
             reviewInfo.find('#createAt').text(review.createAt);
             const content = review.content.replaceAll('\n', '<br/>');
             reviewInfo.find('#content').text(content);
@@ -172,7 +174,10 @@ let reviewDetail = {
                         .append($('<input type="hidden" name="commentId"/>').val(comment.id))
                         .append($('<td width="10%" class="adminId"/>').text(comment.writer.adminId))
                         .append($('<td class="content"/>').text(comment.content))
-                        .append($('<td width="10%" class="createAt"/>').text(comment.createAt));
+                        .append($('<td width="10%" class="createAt"/>').text(comment.createAt))
+                        .append($('<td width="10%" class="btnTd"/>')
+                            .append('<a href="" onclick="return false;" />').text('삭제')
+                        );
 
                     commentInfo.find('#review-comments').append(row);
                 });

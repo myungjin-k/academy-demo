@@ -41,6 +41,15 @@ public class Review {
     @Column(name = "content", nullable = false)
     private String content;
 
+    // TODO 리뷰 상태 정의
+    /*@Getter
+    @Column(name = "status", nullable = false, columnDefinition = "number default 1")
+    private String content;*/
+
+    @Getter @NotBlank
+    @Column(name = "reserves_paid", nullable = false, columnDefinition = "boolean not null default false")
+    private boolean isReservesPaid;
+
     @Getter
     @Column(name = "create_at", insertable = false, updatable = false,
             columnDefinition = "datetime default current_timestamp")
@@ -73,11 +82,12 @@ public class Review {
     private List<ReviewComment> comments;
 
     @Builder
-    public Review(String id, @Size(min = 1, max = 5) int score, String reviewImg, String content) {
+    public Review(String id, @Size(min = 1, max = 5) int score, String reviewImg, String content, boolean isReservesPaid) {
         this.id = id;
         this.score = score;
         this.reviewImg = reviewImg;
         this.content = content;
+        this.isReservesPaid = isReservesPaid;
     }
 
     public Optional<LocalDateTime> getUpdateAt(){
