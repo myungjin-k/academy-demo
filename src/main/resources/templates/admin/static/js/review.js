@@ -1,7 +1,6 @@
 var main = {
     init : function() {
         reviewList.init();
-        alert('!!!');
         /*$('#div-review-list').off('click').on('click', '.reviewLink', function(){
             var reviewId = $(this).text();
             $('#div-review-list').removeClass('active');
@@ -14,7 +13,6 @@ var main = {
     }
 }
 // TODO 리뷰 코멘트 CRUD 프론트 구현
-// TODO html 하단부 로드 안되는 문제 조치
 var reviewList = {
     firstPage: 1,
     lastPage: 5,
@@ -57,24 +55,21 @@ var reviewList = {
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
             var resultData = response.response;
-            console.log(resultData);
+            //console.log(resultData);
             if(resultData.totalElements > 0){
                 $('#pagination-review').setPagination(
-                    page,
+                    _this.currPage,
                     _this.firstPage,
                     Math.min(resultData.totalPages, _this.lastPage),
                     5,
                     resultData.totalPages
                 );
                 $.each(resultData.content, function(){
-                    //console.log(this);
+                    console.log(this);
                     const review = this;
-                    const itemInfo = review.item.itemDisplayName + '['
-                        + review.orderItem.itemOption.color + '/' + review.orderItem.itemOption.color
-                        + ']';
                     const row = '<tr>'
-                        + '<td class="reviewId">' + '<a class="reviewLink" href="" onclick="return false;">' + review.Id + '</a>' +'</td>'
-                        + '<td class="reviewItem">' + itemInfo +'</td>'
+                        + '<td class="reviewId">' + '<a class="reviewLink" href="" onclick="return false;">' + review.id + '</a>' +'</td>'
+                        + '<td class="reviewItem">' + review.itemInfo +'</td>'
                         + '<td class="content">' + review.content.split('\n')[0] +'</td>'
                         + '<td class="score">' + review.score +'</td>'
                         + '<td class="createAt">' + review.createAt +'</td>'

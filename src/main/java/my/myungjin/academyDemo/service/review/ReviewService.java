@@ -15,7 +15,6 @@ import my.myungjin.academyDemo.error.NotFoundException;
 import my.myungjin.academyDemo.error.StatusNotSatisfiedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,8 +48,8 @@ public class ReviewService {
 
 
     @Transactional
-    public Page<Review> findAllDesc(Pageable pageable){
-        return reviewRepository.findAllByOrderByCreateAtDesc(pageable);
+    public List<Review> findAllDesc(){
+        return reviewRepository.findAllByOrderByCreateAtDesc();
     }
 
     @Transactional(readOnly = true)

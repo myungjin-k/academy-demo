@@ -11,7 +11,7 @@ public interface ReviewRepository extends JpaRepository<Review, String> {
 
 
     // 전체 리뷰 조회(최근순)
-    Page<Review> findAllByOrderByCreateAtDesc(Pageable pageable);
+    List<Review> findAllByOrderByCreateAtDesc();
 
     // 회원 PK와 리뷰 PK로 검색
     Optional<Review> findByMemberIdAndId(String memberId, String id);
