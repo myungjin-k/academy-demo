@@ -23,6 +23,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static my.myungjin.academyDemo.web.Response.OK;
@@ -70,35 +71,39 @@ public class ReviewAdminController {
         );
     }
 
+    @GetMapping("/review/{reviewId}/comment/list")
+    @ApiOperation(value = "리뷰별 코멘트 목록 조회")
+    public Response<List<ReviewComment>> findAllCommentsByReview(
+            @PathVariable @ApiParam(value = "조회 대상 리뷰 PK", example = "f23ba30a47194a2c8a3fd2ccadd952a4") String reviewId){
+        return OK(reviewCommentService.findAllByReview(Id.of(Review.class, reviewId)));
+    }
+
     @PostMapping("/review/{reviewId}/comment")
     @ApiOperation(value = "리뷰 코멘트 작성")
     public Response<ReviewComment> commentReview(
             @PathVariable @ApiParam(value = "조회 대상 리뷰 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String reviewId,
-            @RequestParam String content,
+            @RequestBody @ApiParam(value = "코멘트 내용", example = "{'content', : 'comment contents'}") Map<String, String> param,
             @AuthenticationPrincipal Authentication authentication) {
         return OK(
                 reviewCommentService.write(
                         Id.of(Review.class, reviewId),
                         Id.of(Admin.class, ((User)authentication.getDetails()).getId()),
-                        new ReviewComment(content)
+                        new ReviewComment(param.get("content"))
                 )
         );
     }
 
-    /*@PutMapping("/review/comment/{commentId}")
-    @ApiOperation(value = "리뷰 코멘트 수정")
+    @DeleteMapping("/review/{reviewId}/comment/{commentId}")
+    @ApiOperation(value = "리뷰 코멘트 삭제")
     public Response<ReviewComment> modifyReviewComment(
             @PathVariable @ApiParam(value = "조회 대상 리뷰 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String reviewId,
-            @PathVariable @ApiParam(value = "조회 대상 코멘트 PK", example = "c7bb4cb6efcd4f4bb388eafb6fa52fac") String commentId,
-            @RequestParam String content,
-            @AuthenticationPrincipal Authentication authentication) {
+            @PathVariable @ApiParam(value = "조회 대상 코멘트 PK", example = "c7bb4cb6efcd4f4bb388eafb6fa52fac") String commentId) {
         return OK(
-                reviewCommentService.modifyContent(
+                reviewCommentService.delete(
                         Id.of(Review.class, reviewId),
-                        Id.of(ReviewComment.class, commentId),
-                        content,
-                        Id.of(Admin.class, ((User)authentication.getDetails()).getId())
+                        Id.of(ReviewComment.class, commentId)
                 )
         );
-    }*/
+    }
+
 }

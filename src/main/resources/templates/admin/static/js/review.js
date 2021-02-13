@@ -152,6 +152,15 @@ let reviewDetail = {
                 _this.payReserves(500);
             }
         });
+
+        _this.div.find('#btn-save-new-comment').unbind('click').bind('click', function(){
+           _this.saveComment();
+        });
+
+        _this.div.off('click').on('click', '#review-comments .deleteBtn', function(){
+            const commentId = $(this).parents('tr').find('input[name="commentId"]').val();
+           _this.deleteComment(commentId);
+        });
     },
     clear : function (){
         const _this = this;
@@ -160,6 +169,22 @@ let reviewDetail = {
         reviewInfo.find('.field').text('');
         reviewInfo.find('input.field').val('');
         reviewInfo.find('#reviewImg').prop('src', '');
+    },
+    appendComments : function(comments){
+        const _this = this;
+        _this.div.find('.commentInfo #review-comments').empty();
+        $(comments).each(function(){
+            const comment = this;
+            const deleteBtn = $('<a class="deleteBtn" href="" onclick="return false;" />').text('삭제');
+            let row = $('<tr />')
+                .append($('<input type="hidden" name="commentId"/>').val(comment.id))
+                .append($('<td width="10%" class="adminId"/>').text(comment.writer.adminId))
+                .append($('<td class="content"/>').text(comment.content))
+                .append($('<td width="10%" class="createAt"/>').text(comment.createAt))
+                .append($('<td width="10%" class="btnTd"/>').append(deleteBtn));
+
+            _this.div.find('.commentInfo #review-comments').append(row);
+        });
     },
     load : function(){
          const _this = this;
@@ -186,22 +211,8 @@ let reviewDetail = {
                 reviewInfo.find('#reviewImg').prop('src', review.reviewImgUrl);
                 _this.isPhotoReview = true;
             }
-            const commentInfo = _this.div.find('.commentInfo');
             if(review.comments.length > 0){
-                $(review.comments).each(function(){
-                    const comment = this;
-
-                    let row = $('<tr />')
-                        .append($('<input type="hidden" name="commentId"/>').val(comment.id))
-                        .append($('<td width="10%" class="adminId"/>').text(comment.writer.adminId))
-                        .append($('<td class="content"/>').text(comment.content))
-                        .append($('<td width="10%" class="createAt"/>').text(comment.createAt))
-                        .append($('<td width="10%" class="btnTd"/>')
-                            .append('<a href="" onclick="return false;" />').text('삭제')
-                        );
-
-                    commentInfo.find('#review-comments').append(row);
-                });
+                _this.appendComments(review.comments);
             }
 
         }).fail(function (error) {
@@ -218,7 +229,53 @@ let reviewDetail = {
             console.log(response.response);
         }).fail(function(error){
             alert(JSON.stringify(error));
-        })
+            _this.load();
+        });
+    },
+    saveComment : function(){
+        const _this = this;
+        const data = {"content" : _this.div.find('#new-comment-content').val()};
+        //console.log(data);
+        $.ajax({
+            type : 'POST',
+            url : '/api/admin/review/' + _this.reviewId + '/comment',
+            contentType : 'application/json; charset=UTF-8',
+            dataType : 'json',
+            data : JSON.stringify(data)
+        }).done(function(response){
+            //console.log(response.response);
+            _this.loadComment();
+        }).fail(function(error){
+            alert(JSON.stringify(error));
+        });
+    },
+    loadComment : function(){
+        const _this = this;
+        $.ajax({
+            type : 'GET',
+            url : '/api/admin/review/' + _this.reviewId + '/comment/list',
+            contentType : 'application/json; charset=UTF-8'
+        }).done(function(response){
+            //console.log(response.response);
+            const comments = response.response;
+            _this.appendComments(comments);
+            _this.div.find('#new-comment-content').val('');
+        }).fail(function(error){
+            alert(JSON.stringify(error));
+        });
+    },
+    deleteComment : function(commentId){
+        const _this = this;
+        $.ajax({
+            type : 'DELETE',
+            url : '/api/admin/review/' + _this.reviewId + '/comment/' + commentId,
+            contentType : 'application/json; charset=UTF-8'
+        }).done(function(response){
+            console.log(response.response);
+            _this.loadComment();
+        }).fail(function(error){
+            alert(JSON.stringify(error));
+        });
     }
 };
 main.init();
