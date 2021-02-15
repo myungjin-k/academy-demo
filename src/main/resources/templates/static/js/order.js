@@ -11,7 +11,7 @@ var order = {
     userId : '',
     items : [],
     div : $('#div-order'),
-    totalAmount : 0,
+    payAmount : 0,
     init : function(userId, items){
         var _this = this;
         _this.userId = userId;
@@ -28,7 +28,7 @@ var order = {
                 p = usableP;
             $(this).val(p);
             _this.div.find('.amountInfo .usedPoints').text(p);
-            _this.div.find('.amountInfo .totalAmount').text(_this.totalAmount - p);
+            _this.div.find('.amountInfo .payAmount').text(_this.payAmount - p);
         });
 
         _this.div.find('.deliverInfo #useOrdererInfo').change(function(){
@@ -37,7 +37,7 @@ var order = {
         });
 
         _this.div.find('#btn-order-process').unbind().bind('click', function(){
-           _this.save();
+           _this.exec();
         });
     },
     clearForm : function (){
@@ -62,7 +62,7 @@ var order = {
         orderItems.empty();
         var _this = this;
         var totalItemPrice = 0;
-        var totalAmount = 0;
+        var payAmount = 0;
         $(_this.items).each(function(){
            var item = this;
            var tr = $('<tr/>');
@@ -75,12 +75,12 @@ var order = {
                .append($('<td class="price" />').append(oriPrice).append(salePrice))
             orderItems.append(tr);
             totalItemPrice += Number(item.oriPrice);
-            totalAmount += Number(item.salePrice);
+            payAmount += Number(item.salePrice);
         });
         _this.div.find('.amountInfo .totalItemPrice').text(totalItemPrice);
-        _this.div.find('.amountInfo .totalDiscountPrice').text(totalItemPrice - totalAmount);
-        _this.div.find('.amountInfo .totalAmount').text(totalAmount);
-        _this.totalAmount = totalAmount;
+        _this.div.find('.amountInfo .totalDiscountPrice').text(totalItemPrice - payAmount);
+        _this.div.find('.amountInfo .payAmount').text(payAmount);
+        _this.payAmount = payAmount;
     },
     loadOrderInfo : function(){
         var _this = this;
@@ -120,7 +120,7 @@ var order = {
         });
         return itemIds;
     },
-    save : function(){
+    exec : function(){
         var _this = this;
         var form = _this.div.find('#form-save-order');
         var tel = form.find('#orderTel1').val() + '-' + form.find('#orderTel2').val() + '-' + form.find('#orderTel3').val();
@@ -129,8 +129,11 @@ var order = {
         form.find('input[name="receiverTel"]').val(receiverTel);
         var data = $('#form-save-order').serializeObject();
         data['cartItemIds'] = _this.collectItemIds();
-        console.log(data);
-
+        data['payAmount'] = _this.div.find('.payAmount').text();
+        pay.exec(data);
+        return data;
+    },
+    save : function(data){
         $.ajax({
             type: 'POST',
             url: '/api/mall/member/' + _this.userId + '/order',
@@ -164,6 +167,58 @@ function orderer_execDaumPostcode() {
         }
     }).open();
 }
+const pay = {
+    orderInfo : [],
+    payResp : [],
+    exec : function(data){
+        const _this = this;
+        _this.orderInfo = data;
+        window.IMP.init('imp79203240');
+        _this.payResp = _this.request();
+    },
+    request : function(callback){
+        const _this = this;
+        //console.log(_this.orderInfo);
+        IMP.request_pay({
+            PG : 'html5_inicis',
+            pay_method : 'card',
+            name : 'TEST',
+            amount : _this.orderInfo.payAmount,
+            buyer_email : _this.orderInfo.email,
+            buyer_tel : _this.orderInfo.tel
+        }, function(rsp) {
+            if ( rsp.success ) {
+                var msg = '결제가 완료되었습니다.';
+                msg += '고유ID : ' + rsp.imp_uid;
+                msg += '상점 거래ID : ' + rsp.merchant_uid;
+                msg += '결제 금액 : ' + rsp.paid_amount;
+                msg += '카드 승인번호 : ' + rsp.apply_num;
+            } else {
+                var msg = '결제에 실패하였습니다.';
+                msg += '에러내용 : ' + rsp.error_msg;
+            }
+            alert(msg);
+            _this.complete(rsp);
+        });
+    },
+    complete : function(payInfo){
+        const _this = this;
+        console.log(payInfo);
+        $.ajax({
+            type: 'POST',
+            url: '/api/pay/' + payInfo.imp_uid,
+            contentType:'application/json; charset=utf-8'
+        }).done(function(response) {
+            var data = response.response;
+            console.log(data);
+            _this.payResp = data;
+            order.save(_this.orderInfo);
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+    }
+
+};
 
 function receiver_execDaumPostcode() {
     new daum.Postcode({

@@ -1,5 +1,7 @@
 package my.myungjin.academyDemo.web.controller;
 
+import com.siot.IamportRestClient.exception.IamportResponseException;
+import com.siot.IamportRestClient.response.Payment;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -17,7 +19,6 @@ import my.myungjin.academyDemo.service.order.CartService;
 import my.myungjin.academyDemo.service.order.OrderService;
 import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.CartRequest;
-import my.myungjin.academyDemo.web.request.DeliveryRequest;
 import my.myungjin.academyDemo.web.request.OrderRequest;
 import my.myungjin.academyDemo.web.request.PageRequest;
 import my.myungjin.academyDemo.web.response.MemberInformRatingResponse;
@@ -30,6 +31,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -118,13 +120,20 @@ public class OrderController {
         );
     }
 
-    // TODO 결제 API 적용
+    // TODO 결제 엔티티 생성
+    @GetMapping("/pay/{uid}")
+    public Response<Payment> order(
+            @PathVariable @ApiParam(value = "결제 완료 응답 uid", example = "imp_448280090638") String uid) throws IOException, IamportResponseException {
+        return OK(
+                orderService.pay(uid)
+        );
+    }
     // TODO 배송비 조건 적용(70000 이상 구매 시 무료배송)
     @PostMapping("/member/{memberId}/order")
     @ApiOperation(value = "주문 생성")
     public Response<Order> order(
             @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String memberId,
-            @RequestBody OrderRequest orderRequest){
+            @RequestBody OrderRequest orderRequest) throws IOException, IamportResponseException {
         return OK(
                 orderService.ordering(
                         Id.of(Member.class, memberId),

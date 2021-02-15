@@ -1,5 +1,7 @@
 package my.myungjin.academyDemo.service.order;
 
+import com.siot.IamportRestClient.exception.IamportResponseException;
+import com.siot.IamportRestClient.response.Payment;
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.member.Member;
@@ -8,6 +10,7 @@ import my.myungjin.academyDemo.domain.order.*;
 import my.myungjin.academyDemo.domain.review.ReviewRepository;
 import my.myungjin.academyDemo.error.NotFoundException;
 import my.myungjin.academyDemo.error.StatusNotSatisfiedException;
+import my.myungjin.academyDemo.iamport.IamportClient;
 import my.myungjin.academyDemo.util.Util;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,6 +41,8 @@ public class OrderService {
     private final MemberRepository memberRepository;
 
     private final ReviewRepository reviewRepository;
+
+    private final IamportClient iamportClient;
 
     @Transactional(readOnly = true)
     public Order getOrderDetail(@Valid Id<Member, String> memberId, @Valid Id<Order, String> orderId) {
@@ -80,10 +87,15 @@ public class OrderService {
     public Optional<Member> findMemberInfo(@Valid Id<Member, String> memberId){
         return memberRepository.findById(memberId.value());
     }
+
+    public Payment pay(@NotBlank String impUid) throws IOException, IamportResponseException {
+        return iamportClient.paymentByImpUid(impUid).getResponse();
+    }
+
     // TODO 주문 확인 이메일 발송
     @Transactional
     public Order ordering(@Valid Id<Member, String> memberId, @Valid Order newOrder,
-                          @Valid Delivery delivery, List<Id<CartItem, String>> itemIds){
+                          @Valid Delivery delivery, List<Id<CartItem, String>> itemIds) throws IOException, IamportResponseException {
         // 주문
         Order saved = memberRepository.findById(memberId.value())
                 .map(member -> {

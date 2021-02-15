@@ -1,5 +1,6 @@
 package my.myungjin.academyDemo.service.order;
 
+import com.siot.IamportRestClient.exception.IamportResponseException;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.order.CartItem;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,7 +48,7 @@ public class OrderServiceTest {
 
     @Test
     @Order(1)
-    void 주문_생성하기(){
+    void 주문_생성하기() throws IOException, IamportResponseException {
         my.myungjin.academyDemo.domain.order.Order order = my.myungjin.academyDemo.domain.order.Order.builder()
                 .orderName("김명진")
                 .orderTel("010-1234-5678")

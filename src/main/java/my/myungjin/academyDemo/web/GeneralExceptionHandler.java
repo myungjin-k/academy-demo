@@ -1,5 +1,6 @@
 package my.myungjin.academyDemo.web;
 
+import com.siot.IamportRestClient.exception.IamportResponseException;
 import my.myungjin.academyDemo.error.NotFoundException;
 import my.myungjin.academyDemo.error.ServiceRuntimeException;
 import my.myungjin.academyDemo.error.UnauthorizedException;
@@ -49,8 +50,13 @@ public class GeneralExceptionHandler {
             return newResponse(e, HttpStatus.NOT_FOUND);
         if (e instanceof UnauthorizedException)
             return newResponse(e, HttpStatus.UNAUTHORIZED);
-
         log.warn("Unexpected service exception occurred: {}", e.getMessage(), e);
+        return newResponse(e, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(IamportResponseException.class)
+    public ResponseEntity<?> handleServiceRuntimeException(Exception e) {
+        log.warn("Payment service exception occurred: {}", e.getMessage(), e);
         return newResponse(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

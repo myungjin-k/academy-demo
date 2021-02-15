@@ -16,6 +16,10 @@
 			<id>central</id>
 			<url>https://repo1.maven.org/maven2/</url>
 		</repository>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
 	</repositories>
 	<groupId>my.myungjin</groupId>
 	<artifactId>academyDemo</artifactId>
@@ -200,6 +204,13 @@
 			<groupId>org.mariadb.jdbc</groupId>
 			<artifactId>mariadb-java-client</artifactId>
 			<version>2.7.0</version>
+		</dependency>
+
+		<!-- i'amport -->
+		<dependency>
+			<groupId>com.github.iamport</groupId>
+			<artifactId>iamport-rest-client-java</artifactId>
+			<version>0.2.14</version>
 		</dependency>
 	</dependencies>
 

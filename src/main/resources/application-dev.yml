@@ -26,7 +26,7 @@ spring:
     encoding: UTF-8
     cache-duration: PT1H
   profiles:
-    include: mail, cloud
+    include: mail, cloud, payment
 logging:
   level:
     org:

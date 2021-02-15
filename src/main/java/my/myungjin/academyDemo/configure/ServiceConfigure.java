@@ -4,20 +4,30 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.google.gson.GsonBuilder;
+import com.siot.IamportRestClient.Iamport;
 import com.zaxxer.hikari.HikariDataSource;
 import my.myungjin.academyDemo.aws.S3Client;
+import my.myungjin.academyDemo.iamport.IamportClient;
 import my.myungjin.academyDemo.service.mail.MailService;
 import my.myungjin.academyDemo.util.MessageUtil;
 import net.sf.log4jdbc.Log4jdbcProxyDataSource;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.support.MessageSourceAccessor;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import javax.sql.DataSource;
+import java.io.IOException;
 import java.sql.SQLException;
+import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class ServiceConfigure {
@@ -71,5 +81,27 @@ public class ServiceConfigure {
     @Bean
     public MailService mailService(MailConfig mailConfig){
         return new MailService(mailConfig);
+    }
+
+    @Bean
+    public Iamport iamport(){
+        final String API_URL = "https://api.iamport.kr";
+        OkHttpClient client = new OkHttpClient.Builder()
+                .readTimeout(30, TimeUnit.SECONDS)
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(API_URL)
+                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create()))
+                .client(client)
+                .build();
+
+        return retrofit.create(Iamport.class);
+    }
+
+    @Bean
+    public IamportClient iamportClient(Iamport iamport, IamportConfigure iamportConfigure){
+        return new IamportClient(iamportConfigure.getApiKey(), iamportConfigure.getApiSecret(), iamport);
     }
 }
