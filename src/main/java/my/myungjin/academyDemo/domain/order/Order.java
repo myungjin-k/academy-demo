@@ -54,7 +54,6 @@ public class Order {
     @Column(name = "order_tel" , nullable = false)
     private String orderTel;
 
-    @Getter
     @Email
     @Column(name = "order_email")
     private String orderEmail;
@@ -112,6 +111,10 @@ public class Order {
 
     public Optional<LocalDateTime> getUpdateAt(){
         return ofNullable(updateAt);
+    }
+
+    public Optional<String> getOrderEmail(){
+        return ofNullable(orderEmail);
     }
 
     public void addItem(OrderItem item){

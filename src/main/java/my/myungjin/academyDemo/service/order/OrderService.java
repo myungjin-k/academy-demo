@@ -4,6 +4,7 @@ import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.response.Payment;
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
+import my.myungjin.academyDemo.commons.mail.Mail;
 import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.member.MemberRepository;
 import my.myungjin.academyDemo.domain.order.*;
@@ -11,18 +12,27 @@ import my.myungjin.academyDemo.domain.review.ReviewRepository;
 import my.myungjin.academyDemo.error.NotFoundException;
 import my.myungjin.academyDemo.error.StatusNotSatisfiedException;
 import my.myungjin.academyDemo.iamport.IamportClient;
+import my.myungjin.academyDemo.service.mail.MailService;
 import my.myungjin.academyDemo.util.Util;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static java.util.Optional.ofNullable;
 
 @RequiredArgsConstructor
 @Service
@@ -43,6 +53,10 @@ public class OrderService {
     private final ReviewRepository reviewRepository;
 
     private final IamportClient iamportClient;
+
+    private final MailService mailService;
+
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Transactional(readOnly = true)
     public Order getOrderDetail(@Valid Id<Member, String> memberId, @Valid Id<Order, String> orderId) {
@@ -119,9 +133,24 @@ public class OrderService {
         // 배송상품
         saveDeliveryItems(updated.getItems(), d);
         updated.addDelivery(d);
+        // 메일 발송
+        updated.getOrderEmail().ifPresent(s -> this.sendMail(s, updated));
+
         return updated;
     }
-
+    private void sendMail(String email, Order order){
+        Mail mail = Mail.builder()
+                .to(email)
+                .title("[mesmerizin'] 주문하신 상품 내역입니다.")
+                .content(order.toString()).build();
+        try {
+            mailService.sendMail(mail);
+        } catch (MessagingException | UnsupportedEncodingException e){
+            log.warn("Messaging Error ({}) : {}", mail, e.getMessage(), e);
+        } catch (MailException me){
+            log.warn("Mailing Error : {}", me.getMessage(), me);
+        }
+    }
     @Transactional
     public Order modify(@Valid Id<Member, String> memberId, @Valid Id<Order, String> orderId, @Valid Order order) {
         Order o = findById(memberId, orderId);
@@ -129,7 +158,7 @@ public class OrderService {
         if(d.getStatus().getValue() > 1){
             throw new StatusNotSatisfiedException(Order.class, orderId, d.getStatus());
         }
-        o.modify(order.getOrderName(), order.getOrderEmail(), order.getOrderTel(), order.getOrderAddr1(), order.getOrderAddr2());
+        o.modify(order.getOrderName(), order.getOrderEmail().orElse(""), order.getOrderTel(), order.getOrderAddr1(), order.getOrderAddr2());
         return save(o);
     }
 
