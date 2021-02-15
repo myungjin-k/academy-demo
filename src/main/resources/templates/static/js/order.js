@@ -133,8 +133,9 @@ var order = {
         pay.exec(data);
         return data;
     },
-    save : function(data){
+    save : function(data, paymentUid){
         const _this = this;
+        data['paymentUid'] = paymentUid;
         $.ajax({
             type: 'POST',
             url: '/api/mall/member/' + _this.userId + '/order',
@@ -170,14 +171,13 @@ function orderer_execDaumPostcode() {
 }
 const pay = {
     orderInfo : [],
-    payResp : [],
     exec : function(data){
         const _this = this;
         _this.orderInfo = data;
         window.IMP.init('imp79203240');
         _this.payResp = _this.request();
     },
-    request : function(callback){
+    request : function(){
         const _this = this;
         //console.log(_this.orderInfo);
         IMP.request_pay({
@@ -200,22 +200,22 @@ const pay = {
                 msg += '에러내용 : ' + rsp.error_msg;
             }
             alert(msg);
-            _this.complete(rsp);
+            //_this.load(rsp.imp_uid);
+            order.save(_this.orderInfo, rsp.imp_uid);
         });
     },
-    complete : function(payInfo){
-        const _this = this;
+    load : function(uid){
+        let resp = [];
         $.ajax({
             type: 'GET',
-            url: '/api/mall/pay/' + payInfo.imp_uid,
+            url: '/api/mall/pay/' + uid,
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
-            var data = response.response;
-            _this.payResp = data;
-            order.save(_this.orderInfo);
+            resp = response.response;
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
+        return resp;
     }
 
 };

@@ -44,6 +44,8 @@ public class OrderDetailResponse {
 
     private String deliveryMessage;
 
+    private String paymentUid;
+
     public OrderDetailResponse of(Order entity){
         this.orderId = entity.getId();
         this.orderName = entity.getOrderName();
@@ -71,6 +73,7 @@ public class OrderDetailResponse {
         this.deliveryAddr2 = d.getReceiverAddr2();
         this.deliveryTel = d.getReceiverTel();
         this.deliveryMessage = d.getMessage();
+        this.paymentUid = entity.getPaymentUid();
         return this;
     }
 

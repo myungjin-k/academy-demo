@@ -48,6 +48,8 @@ public class OrderRequest {
     // 수기 주문
     private List<CartRequest> items;
 
+    private String paymentUid;
+
     public Order newOrder(){
         return Order.builder()
                 .orderName(name)
@@ -56,6 +58,7 @@ public class OrderRequest {
                 .orderAddr1(addr1)
                 .orderAddr2(addr2)
                 .usedPoints(usedPoints)
+                .paymentUid(paymentUid)
                 .build();
     }
 
@@ -77,6 +80,8 @@ public class OrderRequest {
                 .orderTel(tel)
                 .orderAddr1(addr1)
                 .orderAddr2(addr2)
+                .orderEmail(email)
+                .paymentUid(paymentUid)
                 .build();
     }
 

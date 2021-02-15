@@ -241,6 +241,10 @@ var myOrderDetail = {
 
         return row;
     },
+    // TODO 결제정보 출력
+    loadPaymentInfo : function(uid){
+        console.log(pay.load(uid));
+    },
     load : function (){
         var _this = this;
         $.ajax({
@@ -273,7 +277,7 @@ var myOrderDetail = {
             deliverDiv.find('#receiverTel').text(order.deliveryTel);
             deliverDiv.find('#receiverAddr').text(order.deliveryAddr1 + ', ' + order.deliveryAddr2);
             deliverDiv.find('#message').text(order.deliveryMessage);
-
+            _this.loadPaymentInfo(order.paymentUid);
             if(order.orderStatus === '배송준비중'){
                 const deliverForm = _this.div.find('#form-update-delivery');
                 deliverForm.find('input[name="deliveryId"]').val(order.deliveryId);

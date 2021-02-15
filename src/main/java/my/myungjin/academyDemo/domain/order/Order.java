@@ -68,6 +68,10 @@ public class Order {
     private String orderAddr2;
 
     @Getter
+    @Column(name = "payment_uid")
+    private String paymentUid;
+
+    @Getter
     @Column(name = "create_at", insertable = false, updatable = false,
             columnDefinition = "datetime default current_timestamp")
     private LocalDateTime createAt;
@@ -92,7 +96,9 @@ public class Order {
     private List<Delivery> deliveries = new ArrayList<>();
 
     @Builder
-    public Order(String id, int totalAmount, @Size(min = 1, max = 10) String orderName, String orderEmail, @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$", message = "전화번호는 010-0000-0000 형태여야 합니다.") String orderTel, String orderAddr1, String orderAddr2, int usedPoints) {
+    public Order(String id, int totalAmount, @Size(min = 1, max = 10) String orderName, String orderEmail,
+                 @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$", message = "전화번호는 010-0000-0000 형태여야 합니다.") String orderTel,
+                 String orderAddr1, String orderAddr2, int usedPoints, String paymentUid) {
         this.id = id;
         this.totalAmount = totalAmount;
         this.orderName = orderName;
@@ -101,6 +107,7 @@ public class Order {
         this.orderAddr1 = orderAddr1;
         this.orderAddr2 = orderAddr2;
         this.usedPoints = usedPoints;
+        this.paymentUid = paymentUid;
     }
 
     public Optional<LocalDateTime> getUpdateAt(){
@@ -125,6 +132,4 @@ public class Order {
         this.orderAddr2 = orderAddr2;
         this.updateAt = now();
     }
-
-
 }
