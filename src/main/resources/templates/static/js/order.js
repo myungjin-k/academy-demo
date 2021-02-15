@@ -134,6 +134,7 @@ var order = {
         return data;
     },
     save : function(data){
+        const _this = this;
         $.ajax({
             type: 'POST',
             url: '/api/mall/member/' + _this.userId + '/order',
@@ -182,10 +183,11 @@ const pay = {
         IMP.request_pay({
             PG : 'html5_inicis',
             pay_method : 'card',
-            name : 'TEST',
+            name : 'M:TEST',
             amount : _this.orderInfo.payAmount,
             buyer_email : _this.orderInfo.email,
-            buyer_tel : _this.orderInfo.tel
+            buyer_tel : _this.orderInfo.tel,
+            buyer_name : _this.orderInfo.name
         }, function(rsp) {
             if ( rsp.success ) {
                 var msg = '결제가 완료되었습니다.';
@@ -203,14 +205,12 @@ const pay = {
     },
     complete : function(payInfo){
         const _this = this;
-        console.log(payInfo);
         $.ajax({
-            type: 'POST',
-            url: '/api/pay/' + payInfo.imp_uid,
+            type: 'GET',
+            url: '/api/mall/pay/' + payInfo.imp_uid,
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
             var data = response.response;
-            console.log(data);
             _this.payResp = data;
             order.save(_this.orderInfo);
         }).fail(function (error) {

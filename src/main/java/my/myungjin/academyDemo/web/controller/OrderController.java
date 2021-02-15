@@ -122,7 +122,7 @@ public class OrderController {
 
     // TODO 결제 엔티티 생성
     @GetMapping("/pay/{uid}")
-    public Response<Payment> order(
+    public Response<Payment> pay(
             @PathVariable @ApiParam(value = "결제 완료 응답 uid", example = "imp_448280090638") String uid) throws IOException, IamportResponseException {
         return OK(
                 orderService.pay(uid)
