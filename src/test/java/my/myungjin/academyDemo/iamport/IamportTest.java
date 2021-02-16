@@ -3,12 +3,13 @@ package my.myungjin.academyDemo.iamport;
 import com.google.gson.GsonBuilder;
 import com.siot.IamportRestClient.Iamport;
 import com.siot.IamportRestClient.exception.IamportResponseException;
+import com.siot.IamportRestClient.request.CancelData;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
 import okhttp3.OkHttpClient;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,7 +26,7 @@ import static org.junit.Assert.assertNotNull;
 @SpringBootTest // H2 데이터베이스를 자동으로 실행
 @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class IamportTest {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
@@ -53,7 +54,8 @@ public class IamportTest {
     }
 
     @Test
-    public void testPaymentByImpUid() {
+    @Order(1)
+    public void 결제완료_정보를_조회한다() {
         try {
 
             String test_imp_uid = "imp_448280090638";
@@ -77,7 +79,34 @@ public class IamportTest {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
 
 
+    @Test
+    @Order(2)
+    public void 결제를_취소한다() {
+        try {
+
+            String test_imp_uid = "imp_448280090638";
+            IamportResponse<Payment> payment_response = iamportClient.cancelPaymentByImpUid(new CancelData(test_imp_uid, true));
+
+            assertNotNull(payment_response.getResponse());
+            assertEquals(test_imp_uid, payment_response.getResponse().getImpUid());
+            log.info("Payment Response: {}", payment_response.getMessage());
+        } catch (IamportResponseException e) {
+            System.out.println(e.getMessage());
+
+            switch(e.getHttpStatusCode()) {
+                case 401 :
+                    //TODO
+                    break;
+                case 500 :
+                    //TODO
+                    break;
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 }

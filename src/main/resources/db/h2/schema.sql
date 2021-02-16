@@ -142,6 +142,7 @@ CREATE TABLE order_master (
                       order_addr1          varchar(255),
                       order_addr2          varchar(255),
                       payment_uid          varchar(50),
+                      is_cancelled         boolean default false,
                       create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
                       update_at            datetime DEFAULT null,
                       PRIMARY KEY (id),

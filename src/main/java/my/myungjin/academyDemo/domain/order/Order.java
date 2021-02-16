@@ -71,6 +71,10 @@ public class Order {
     private String paymentUid;
 
     @Getter
+    @Column(name = "is_cancelled")
+    private boolean isCancelled;
+
+    @Getter
     @Column(name = "create_at", insertable = false, updatable = false,
             columnDefinition = "datetime default current_timestamp")
     private LocalDateTime createAt;
@@ -134,5 +138,9 @@ public class Order {
         this.orderAddr1 = orderAddr1;
         this.orderAddr2 = orderAddr2;
         this.updateAt = now();
+    }
+
+    public void cancel(){
+        this.isCancelled = true;
     }
 }

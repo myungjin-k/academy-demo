@@ -55,6 +55,7 @@ public class OrderServiceTest {
                 .orderAddr1("서울시 노원구 공릉로59길 28")
                 .orderAddr2("1-1111")
                 .usedPoints(0)
+                .paymentUid("imp_448280090638")
                 .build();
         Delivery delivery = Delivery.builder()
                 .receiverName("김명진")
@@ -147,5 +148,13 @@ public class OrderServiceTest {
         Delivery delivery = orderService.modify(memberId, orderId, deliveryId, d);
         assertThat(delivery, is(notNullValue()));
         log.info("Updated Delivery: {}", delivery);
+    }
+
+    @Test
+    @Order(7)
+    void 주문_취소하기_회원별_단건() throws IOException, IamportResponseException {
+        my.myungjin.academyDemo.domain.order.Order cancelled = orderService.cancel(memberId, orderId);
+        assertThat(cancelled, is(notNullValue()));
+        log.info("Cancelled Order: {}", cancelled);
     }
 }

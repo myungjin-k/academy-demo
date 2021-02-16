@@ -128,6 +128,7 @@ var myOrderDetail = {
     div : $('#div-my-order-detail'),
     userId : '',
     orderId : '',
+    paymentUid : '',
     init : function(userId, orderId) {
         var _this = this;
         _this.userId = userId;
@@ -153,7 +154,33 @@ var myOrderDetail = {
             itemDetail.init(itemId);
         });
 
-
+        _this.div.find('#btn-cancel-order').unbind('click').bind('click', function(){
+           _this.cancelOrder();
+        });
+    },
+    cancelOrder : function(){
+        pay.cancel(this.paymentUid);
+        $.ajax({
+            type: 'PATCH',
+            url: '/api/mall/member/' + _this.userId + '/order/' + _this.orderId + '/cancel',
+            dataType: 'json',
+            contentType:'application/json; charset=utf-8',
+            data: JSON.stringify(data)
+        }).done(function(response) {
+            var data = response.response;
+            //console.log(data);
+            pay.cancel(data.paymentUid);
+            alert('주문 취소되었습니다.');
+            loadMyOrderDetail(_this.orderId);
+            _this.div.find('.updateDelivery').addClass('d-none');
+            _this.div.find('.deliverInfo').removeClass('d-none');
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+            if(_this.userId === undefined){
+                alert('로그인 후 이용해 주세요.');
+                location.href='/mall/login'
+            }
+        });
     },
     updateDelivery : function(deliveryId){
         const _this = this;
@@ -262,6 +289,7 @@ var myOrderDetail = {
             amountDiv.find('#usedPoints').text(order.usedPoints);
             const payInfo = _this.loadPaymentInfo(order.paymentUid);
             amountDiv.find('.payInfo #payMethod').text(payInfo.pay_method);
+            _this.paymentUid = payInfo.imp_uid;
             const orderDiv = _this.div.find('.orderInfo');
             orderDiv.find('#orderId').text(order.orderId);
             orderDiv.find('#orderDate').text(order.orderDate);
@@ -286,6 +314,8 @@ var myOrderDetail = {
                 deliverForm.find('#receiverAddr2').val(order.deliveryAddr2);
                 deliverForm.find('#message').val(order.deliveryMessage);
                 _this.div.find('#btn-edit-my-delivery').removeClass('d-none');
+            } else {
+                orderDiv.find('#btn-cancel-order').addClass('d-none');
             }
 
         }).fail(function (error) {

@@ -1,6 +1,7 @@
 package my.myungjin.academyDemo.web.controller;
 
 import com.siot.IamportRestClient.exception.IamportResponseException;
+import com.siot.IamportRestClient.request.CancelData;
 import com.siot.IamportRestClient.response.Payment;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -13,6 +14,7 @@ import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.order.CartItem;
 import my.myungjin.academyDemo.domain.order.Delivery;
 import my.myungjin.academyDemo.domain.order.Order;
+import my.myungjin.academyDemo.iamport.IamportClient;
 import my.myungjin.academyDemo.security.User;
 import my.myungjin.academyDemo.service.member.MemberService;
 import my.myungjin.academyDemo.service.order.CartService;
@@ -47,6 +49,8 @@ public class OrderController {
     private final OrderService orderService;
 
     private final MemberService memberService;
+
+    private final IamportClient iamportClient;
 
     @Transactional
     @PostMapping("/member/{id}/cart")
@@ -121,13 +125,13 @@ public class OrderController {
     }
 
     // TODO 결제 엔티티 생성
-    @GetMapping("/pay/{uid}")
+    /*@GetMapping("/pay/{uid}")
     public Response<Payment> pay(
             @PathVariable @ApiParam(value = "결제 완료 응답 uid", example = "imp_448280090638") String uid) throws IOException, IamportResponseException {
         return OK(
-                orderService.pay(uid)
+                iamportClient.paymentByImpUid(uid).getResponse()
         );
-    }
+    }*/
     // TODO 배송비 조건 적용(70000 이상 구매 시 무료배송)
     @PostMapping("/member/{memberId}/order")
     @ApiOperation(value = "주문 생성")
@@ -206,4 +210,25 @@ public class OrderController {
                         request.toDelivery(Id.of(Delivery.class, deliveryId)))
         );
     }
+
+    @Transactional
+    @GetMapping("/member/{memberId}/order/{orderId}/cancel")
+    @ApiOperation(value = "회원별 단건 주문 취소")
+    public Response<Order> cancel(
+            @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String memberId,
+            @PathVariable @ApiParam(value = "조회 대상 주문 PK", example = "03039b4535404247bfee52cfd934c779") String orderId
+    ) throws IOException, IamportResponseException {
+        Order cancelled = orderService.cancel(Id.of(Member.class, memberId), Id.of(Order.class, orderId));
+        iamportClient.cancelPaymentByImpUid(new CancelData(cancelled.getPaymentUid(), true));
+        return OK(cancelled);
+    }
+/*
+    @PostMapping("/pay/{uid}/cancel")
+    @ApiOperation(value = "결제 취소")
+    public Response<Payment> cancel(
+            @PathVariable @ApiParam(value = "결제 완료 응답 uid", example = "imp_448280090638") String uid) throws IOException, IamportResponseException {
+        return OK(
+                iamportClient.cancelPaymentByImpUid(new CancelData(uid, true)).getResponse()
+        );
+    }*/
 }

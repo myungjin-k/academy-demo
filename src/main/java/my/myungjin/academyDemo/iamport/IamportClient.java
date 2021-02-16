@@ -6,6 +6,7 @@ import com.google.gson.JsonSyntaxException;
 import com.siot.IamportRestClient.Iamport;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.request.AuthData;
+import com.siot.IamportRestClient.request.CancelData;
 import com.siot.IamportRestClient.response.AccessToken;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
@@ -56,6 +57,16 @@ public class IamportClient {
                 .append(r.getAmount());
 
         log.info("Iamport Response: {}", sb);
+        return response.body();
+    }
+
+    public IamportResponse<Payment> cancelPaymentByImpUid(CancelData cancelData) throws IamportResponseException, IOException {
+        AccessToken auth = getAuth().getResponse();
+        Call<IamportResponse<Payment>> call = this.iamport.cancel_payment(auth.getToken(), cancelData);
+
+        Response<IamportResponse<Payment>> response = call.execute();
+        if ( !response.isSuccessful() )	throw new IamportResponseException( getExceptionMessage(response), new HttpException(response) );
+
         return response.body();
     }
 

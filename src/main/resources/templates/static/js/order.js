@@ -149,6 +149,7 @@ var order = {
             loadMyOrderDetail(data.id);
         }).fail(function (error) {
             alert(JSON.stringify(error));
+            pay.cancel(paymentUid);
             if(_this.userId === undefined){
                 alert('로그인 후 이용해 주세요.');
                 location.href='/mall/login'

@@ -1,7 +1,6 @@
 package my.myungjin.academyDemo.service.order;
 
 import com.siot.IamportRestClient.exception.IamportResponseException;
-import com.siot.IamportRestClient.response.Payment;
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.member.Member;
@@ -10,7 +9,6 @@ import my.myungjin.academyDemo.domain.order.*;
 import my.myungjin.academyDemo.domain.review.ReviewRepository;
 import my.myungjin.academyDemo.error.NotFoundException;
 import my.myungjin.academyDemo.error.StatusNotSatisfiedException;
-import my.myungjin.academyDemo.iamport.IamportClient;
 import my.myungjin.academyDemo.service.mail.MailService;
 import my.myungjin.academyDemo.util.Util;
 import org.slf4j.Logger;
@@ -23,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
@@ -49,8 +46,6 @@ public class OrderService {
     private final MemberRepository memberRepository;
 
     private final ReviewRepository reviewRepository;
-
-    private final IamportClient iamportClient;
 
     private final MailService mailService;
 
@@ -100,14 +95,10 @@ public class OrderService {
         return memberRepository.findById(memberId.value());
     }
 
-    public Payment pay(@NotBlank String impUid) throws IOException, IamportResponseException {
-        return iamportClient.paymentByImpUid(impUid).getResponse();
-    }
-
     // TODO 주문 확인 이메일 발송
     @Transactional
     public Order ordering(@Valid Id<Member, String> memberId, @Valid Order newOrder,
-                          @Valid Delivery delivery, List<Id<CartItem, String>> itemIds) throws IOException, IamportResponseException {
+                          @Valid Delivery delivery, List<Id<CartItem, String>> itemIds) {
         // 주문
         Order saved = memberRepository.findById(memberId.value())
                 .map(member -> {
@@ -181,6 +172,23 @@ public class OrderService {
         d.modify(delivery.getReceiverName(), delivery.getReceiverTel(),
                 delivery.getReceiverAddr1(), delivery.getReceiverAddr2(), delivery.getMessage());
         return save(d);
+    }
+
+    public Order cancel(@Valid Id<Member, String> memberId, @Valid Id<Order, String> orderId) throws IOException, IamportResponseException {
+
+        Order order = orderRepository.findByMemberIdAndId(memberId.value(), orderId.value())
+                .orElseThrow(() -> new NotFoundException(Order.class, memberId.value(), orderId.value()));
+
+        List<Delivery> deliveries = deliveryRepository.getAllByOrderOrderByCreateAtDesc(order);
+        for(Delivery d : deliveries){
+            if(!DeliveryStatus.PROCESSING.equals(d.getStatus())){
+                throw new IllegalArgumentException("배송정보가 존재합니다. 관리자에게 문의 바랍니다. orderId=" + orderId + "deliveryId=" + d.getId());
+            }
+            d.updateStatus(DeliveryStatus.DELETED);
+            save(d);
+        }
+        order.cancel();
+        return save(order);
     }
 
     private Order saveOrderItems(List<Id<CartItem, String>> itemIds, Order order){
