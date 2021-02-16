@@ -66,7 +66,7 @@ var order = {
         $(_this.items).each(function(){
            var item = this;
            var tr = $('<tr/>');
-           var itemName = item.itemName.replaceAll('\n','<br/> └');
+           var itemName = item.itemName.replace('\n','<br/> └');
            var oriPrice = $('<div class="discount oriPrice"/>').text(item.oriPrice);
            var salePrice = $('<div class="salePrice"/>').text(item.salePrice);
            tr
