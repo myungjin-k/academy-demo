@@ -186,15 +186,9 @@ var myOrderDetail = {
     clear : function(){
         this.div.find('#order-items').empty();
         const amountDiv = this.div.find('.amountInfo');
-        amountDiv.find('#payAmount').text('');
-        amountDiv.find('#orderAmount').text('');
-        amountDiv.find('#discountedAmount').text('');
-        amountDiv.find('#usedPoints').text('');
+        amountDiv.find('span').text('');
         const orderDiv = this.div.find('.orderInfo');
-        orderDiv.find('#orderId').text('');
-        orderDiv.find('#orderDate').text('');
-        orderDiv.find('#orderName').text('');
-        orderDiv.find('#orderStatus').text('');
+        orderDiv.find('span').text('');
         const deliverDiv = this.div.find('.deliverInfo');
         deliverDiv.removeClass('d-none');
         deliverDiv.find('#receiverName').text('');
@@ -241,9 +235,8 @@ var myOrderDetail = {
 
         return row;
     },
-    // TODO 결제정보 출력
     loadPaymentInfo : function(uid){
-        console.log(pay.load(uid));
+        return pay.load(uid);
     },
     load : function (){
         var _this = this;
@@ -267,6 +260,8 @@ var myOrderDetail = {
             amountDiv.find('#orderAmount').text(order.orderAmount);
             amountDiv.find('#discountedAmount').text(order.discountedAmount);
             amountDiv.find('#usedPoints').text(order.usedPoints);
+            const payInfo = _this.loadPaymentInfo(order.paymentUid);
+            amountDiv.find('.payInfo #payMethod').text(payInfo.pay_method);
             const orderDiv = _this.div.find('.orderInfo');
             orderDiv.find('#orderId').text(order.orderId);
             orderDiv.find('#orderDate').text(order.orderDate);
@@ -277,7 +272,7 @@ var myOrderDetail = {
             deliverDiv.find('#receiverTel').text(order.deliveryTel);
             deliverDiv.find('#receiverAddr').text(order.deliveryAddr1 + ', ' + order.deliveryAddr2);
             deliverDiv.find('#message').text(order.deliveryMessage);
-            _this.loadPaymentInfo(order.paymentUid);
+
             if(order.orderStatus === '배송준비중'){
                 const deliverForm = _this.div.find('#form-update-delivery');
                 deliverForm.find('input[name="deliveryId"]').val(order.deliveryId);
