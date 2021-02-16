@@ -3,6 +3,8 @@ package my.myungjin.academyDemo.commons.mail;
 
 import lombok.*;
 
+import java.util.Map;
+
 @Getter
 @ToString
 @NoArgsConstructor
@@ -12,12 +14,15 @@ public class Mail {
 
     private String title;
 
-    private String content;
+    private Map<String, Object> variables;
+
+    private String htmlBody;
 
     @Builder
-    public Mail(String to, String title, String content) {
+    public Mail(String to, String title, Map<String, Object> variables, String htmlBody) {
         this.to = to;
         this.title = title;
-        this.content = content;
+        this.variables = variables;
+        this.htmlBody = htmlBody;
     }
 }

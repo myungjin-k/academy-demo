@@ -4,7 +4,6 @@ import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.response.Payment;
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
-import my.myungjin.academyDemo.commons.mail.Mail;
 import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.member.MemberRepository;
 import my.myungjin.academyDemo.domain.order.*;
@@ -27,12 +26,11 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import static java.util.Optional.ofNullable;
 
 @RequiredArgsConstructor
 @Service
@@ -139,14 +137,24 @@ public class OrderService {
         return updated;
     }
     private void sendMail(String email, Order order){
-        Mail mail = Mail.builder()
+        /*Mail mail = Mail.builder()
                 .to(email)
                 .title("[mesmerizin'] 주문하신 상품 내역입니다.")
-                .content(order.toString()).build();
+                .htmlBody(order.toString()).build();*/
+        String title = "[mesmerizin'] 주문하신 상품 내역입니다.";
+
+        Map<String, Object> emailTemplateModel = new HashMap<>();
+        emailTemplateModel.put("order", order);
+
         try {
-            mailService.sendMail(mail);
+            //mailService.sendMail(mail);
+            mailService.sendMessageUsingThymeleafTemplate(
+                    email,
+                    title,
+                    "orderCompleted.html",
+                    emailTemplateModel);
         } catch (MessagingException | UnsupportedEncodingException e){
-            log.warn("Messaging Error ({}) : {}", mail, e.getMessage(), e);
+            log.warn("Messaging Error : {}", e.getMessage(), e);
         } catch (MailException me){
             log.warn("Mailing Error : {}", me.getMessage(), me);
         }

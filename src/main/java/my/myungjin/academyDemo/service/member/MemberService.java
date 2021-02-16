@@ -78,7 +78,7 @@ public class MemberService {
             Mail mail = Mail.builder()
                     .to(email)
                     .title("[mesmerizin'] 비밀번호 찾기/변경 안내")
-                    .content(
+                    .htmlBody(
                             "<p> 아래 링크에서 비밀번호 변경 가능합니다.</p> " +
                             "<a href='http://"+ address + ":" + getServerPort() +"/mall/changePassword/"+ id + "'>비밀번호 변경하기</a>"
                     ).build();
