@@ -159,17 +159,14 @@ var myOrderDetail = {
         });
     },
     cancelOrder : function(){
-        pay.cancel(this.paymentUid);
+        const _this = this;
         $.ajax({
             type: 'PATCH',
             url: '/api/mall/member/' + _this.userId + '/order/' + _this.orderId + '/cancel',
-            dataType: 'json',
-            contentType:'application/json; charset=utf-8',
-            data: JSON.stringify(data)
+            contentType:'application/json; charset=utf-8'
         }).done(function(response) {
             var data = response.response;
             //console.log(data);
-            pay.cancel(data.paymentUid);
             alert('주문 취소되었습니다.');
             loadMyOrderDetail(_this.orderId);
             _this.div.find('.updateDelivery').addClass('d-none');

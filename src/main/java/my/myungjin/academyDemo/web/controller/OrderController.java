@@ -125,13 +125,13 @@ public class OrderController {
     }
 
     // TODO 결제 엔티티 생성
-    /*@GetMapping("/pay/{uid}")
-    public Response<Payment> pay(
+    @GetMapping("/pay/{uid}")
+    public Response<Payment> getPayInfo(
             @PathVariable @ApiParam(value = "결제 완료 응답 uid", example = "imp_448280090638") String uid) throws IOException, IamportResponseException {
         return OK(
                 iamportClient.paymentByImpUid(uid).getResponse()
         );
-    }*/
+    }
     // TODO 배송비 조건 적용(70000 이상 구매 시 무료배송)
     @PostMapping("/member/{memberId}/order")
     @ApiOperation(value = "주문 생성")
@@ -212,7 +212,7 @@ public class OrderController {
     }
 
     @Transactional
-    @GetMapping("/member/{memberId}/order/{orderId}/cancel")
+    @PatchMapping("/member/{memberId}/order/{orderId}/cancel")
     @ApiOperation(value = "회원별 단건 주문 취소")
     public Response<Order> cancel(
             @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String memberId,

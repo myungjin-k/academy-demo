@@ -4,7 +4,6 @@ import lombok.Getter;
 import my.myungjin.academyDemo.domain.order.Delivery;
 import my.myungjin.academyDemo.domain.order.DeliveryStatus;
 import my.myungjin.academyDemo.domain.order.Order;
-import org.apache.commons.lang3.StringUtils;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -61,11 +60,11 @@ public class OrderDetailResponse {
         this.discountedAmount = discountAmount;
         this.usedPoints = entity.getUsedPoints();
         this.payAmount = this.orderAmount - this.discountedAmount - this.usedPoints;
-        Delivery d = entity.getDeliveries()
+        List<Delivery> deliveries = entity.getDeliveries()
                 .stream()
                 .filter(delivery -> !delivery.getStatus().equals(DeliveryStatus.DELETED))
-                .collect(Collectors.toList())
-                .get(0);
+                .collect(Collectors.toList());
+        Delivery d = deliveries.isEmpty() ? entity.getDeliveries().get(0) : deliveries.get(0);
         this.orderStatus = d.getStatus().getDescription();
         this.deliveryId = d.getId();
         this.deliveryName = d.getReceiverName();

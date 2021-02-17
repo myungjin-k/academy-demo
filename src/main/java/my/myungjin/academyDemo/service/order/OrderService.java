@@ -174,11 +174,14 @@ public class OrderService {
     }
 
     public Order cancel(@Valid Id<Member, String> memberId, @Valid Id<Order, String> orderId) throws IOException, IamportResponseException {
-
         Order order = orderRepository.findByMemberIdAndId(memberId.value(), orderId.value())
-                .orElseThrow(() -> new NotFoundException(Order.class, memberId.value(), orderId.value()));
+                .map(o -> {
+                    o.setItems(orderItemRepository.findAllByOrder(o));
+                    //o.setDeliveries(deliveryRepository.getAllByOrderOrderByCreateAtDesc(o));
+                    return o;
+                }).orElseThrow(() -> new NotFoundException(Order.class, memberId.value(), orderId.value()));
 
-        List<Delivery> deliveries = deliveryRepository.getAllByOrderOrderByCreateAtDesc(order);
+        List<Delivery> deliveries = order.getDeliveries();
         for(Delivery d : deliveries){
             if(!DeliveryStatus.PROCESSING.equals(d.getStatus())){
                 throw new IllegalArgumentException("배송정보가 존재합니다. 관리자에게 문의 바랍니다. orderId=" + orderId + "deliveryId=" + d.getId());

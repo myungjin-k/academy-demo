@@ -1,6 +1,7 @@
 package my.myungjin.academyDemo.web.response;
 
 import lombok.Getter;
+import my.myungjin.academyDemo.domain.order.Delivery;
 import my.myungjin.academyDemo.domain.order.DeliveryStatus;
 import my.myungjin.academyDemo.domain.order.Order;
 
@@ -32,11 +33,13 @@ public class OrderResponse {
         this.abbrItemName = entity.getAbbrOrderItems();
         this.totalAmount = entity.getTotalAmount();
         this.payAmount = this.totalAmount - entity.getUsedPoints();
-        this.status = entity.getDeliveries()
+        List<Delivery> deliveries = entity.getDeliveries()
                 .stream()
                 .filter(delivery -> !delivery.getStatus().equals(DeliveryStatus.DELETED))
-                .collect(Collectors.toList())
-                .get(0).getStatus().getDescription();
+                .collect(Collectors.toList());
+        this.status = deliveries.isEmpty() ?
+                DeliveryStatus.DELETED.getDescription() :
+                deliveries.get(0).getStatus().getDescription();
         this.items = entity.getItems().stream()
                 .map(orderItem -> new OrderItemResponse().of(orderItem))
                 .collect(Collectors.toList());
