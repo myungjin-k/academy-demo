@@ -95,7 +95,6 @@ public class OrderService {
         return memberRepository.findById(memberId.value());
     }
 
-    // TODO 주문 확인 이메일 발송
     @Transactional
     public Order ordering(@Valid Id<Member, String> memberId, @Valid Order newOrder,
                           @Valid Delivery delivery, List<Id<CartItem, String>> itemIds) {
@@ -142,7 +141,7 @@ public class OrderService {
             mailService.sendMessageUsingThymeleafTemplate(
                     email,
                     title,
-                    "orderCompleted.html",
+                    "orderCompleted",
                     emailTemplateModel);
         } catch (MessagingException | UnsupportedEncodingException e){
             log.warn("Messaging Error : {}", e.getMessage(), e);

@@ -54,6 +54,7 @@ public class OrderServiceTest {
                 .orderTel("010-1234-5678")
                 .orderAddr1("서울시 노원구 공릉로59길 28")
                 .orderAddr2("1-1111")
+                .orderEmail("open7894.v2@gmail.com")
                 .usedPoints(0)
                 .paymentUid("imp_448280090638")
                 .build();

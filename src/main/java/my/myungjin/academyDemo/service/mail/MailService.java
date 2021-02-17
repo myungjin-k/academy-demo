@@ -30,6 +30,8 @@ public class MailService {
         thymeleafContext.setVariables(templateModel);
         String htmlBody = thymeleafTemplateEngine.process(templateFileName, thymeleafContext);
 
+        log.info("Mail Template Body: {}", htmlBody);
+
         Mail mail = Mail.builder()
                 .to(to)
                 .title(subject)
@@ -47,5 +49,7 @@ public class MailService {
         helper.setSubject(mail.getTitle());
         helper.setText(mail.getHtmlBody(), true);
         mailSender.send(message);
+
+        log.info("Mail Sent!");
     }
 }

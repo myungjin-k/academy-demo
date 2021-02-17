@@ -4,11 +4,21 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-<p th:text="#{greetings(${recipientName})}"></p>
-<p th:text="${text}"></p>
-<p th:text="#{regards}"></p>
-<p>
-    <em th:text="#{signature(${senderName})}"></em> <br />
-</p>
+<p th:text="${order.id}"></p>
+<p th:text="${order.member.name}"></p>
+<div th:each="item : ${order.items}">
+    <p th:text="${item.itemOption.itemDisplay.itemDisplayName}"></p>
+    <p th:text="${item.itemOption.color}"></p>
+    <p th:text="${item.itemOption.size}"></p>
+    <p th:text="${item.itemOption.itemDisplay.salePrice}"></p>
+    <p th:text="${item.count}"></p>
+    <p th:text="${item.count * item.itemOption.itemDisplay.salePrice}"></p>
+</div>
+
+<p th:text="${order.totalAmount}"></p>
+<p th:text="${order.paymentUid}"></p>
+<p th:text="${order.deliveries[0].receiverName}"></p>
+<p th:text="${order.deliveries[0].receiverTel}"></p>
+<p th:text="${order.deliveries[0].receiverAddr1}"></p>
 </body>
 </html>
