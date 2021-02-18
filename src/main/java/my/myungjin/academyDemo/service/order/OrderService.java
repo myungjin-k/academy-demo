@@ -190,6 +190,7 @@ public class OrderService {
             save(d);
         }
         order.cancel();
+        order.getMember().addReserves(order.getUsedPoints());
         return save(order);
     }
 
