@@ -22,10 +22,17 @@ var order = {
         _this.div.removeClass('d-none');
 
         _this.div.find('.amountInfo .usePoints #usePoints').change(function(){
-            var p =  Number($(this).val());
-            var usableP = Number(_this.div.find('.amountInfo .usablePoints').text());
+            let p =  Number($(this).val());
+            const usableP = Number(_this.div.find('.amountInfo .usablePoints').text());
+            // 적립금 사용가능금액 초과
             if(p > usableP)
                 p = usableP;
+            // 배송비 제외한 총 결제금액 초과
+            const totalPayAmountExShippingFee = Number(_this.div.find('.amountInfo .payAmount').text())
+                - Number(_this.div.find('.amountInfo .shippingFee').text());
+            if(p > totalPayAmountExShippingFee){
+                p = totalPayAmountExShippingFee;
+            }
             $(this).val(p);
             _this.div.find('.amountInfo .usedPoints').text(p);
             _this.div.find('.amountInfo .payAmount').text(_this.payAmount - p);
@@ -79,6 +86,9 @@ var order = {
         });
         _this.div.find('.amountInfo .totalItemPrice').text(totalItemPrice);
         _this.div.find('.amountInfo .totalDiscountPrice').text(totalItemPrice - payAmount);
+        const shippingFee = (payAmount < 70000) ? 2500 : 0;
+        payAmount += shippingFee;
+        _this.div.find('.amountInfo .shippingFee').text(shippingFee);
         _this.div.find('.amountInfo .payAmount').text(payAmount);
         _this.payAmount = payAmount;
     },
