@@ -113,6 +113,11 @@ public class Delivery {
         this.status = status;
     }
 
+    public Delivery checkDelivery(){
+        this.status = DeliveryStatus.CHECKED;
+        return this;
+    }
+
     public void updateInvoice(String invoiceNum){
         this.invoiceNum = invoiceNum;
     }

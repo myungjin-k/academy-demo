@@ -2,6 +2,7 @@ package my.myungjin.academyDemo.domain.order;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,5 +19,8 @@ public interface DeliveryRepository extends JpaRepository<Delivery, String> {
 
     // 주문 엔티티, 특정 배송상태 제외하여 검색
     List<Delivery> findAllByOrderAndStatusIsNot(Order order, DeliveryStatus status);
+
+    // 특정시점 이전에 생성되었고, 특정 배송상태인 배송정보 검색
+    List<Delivery> findByCreateAtBeforeAndStatusIs(LocalDateTime createAt, DeliveryStatus status);
 
 }
