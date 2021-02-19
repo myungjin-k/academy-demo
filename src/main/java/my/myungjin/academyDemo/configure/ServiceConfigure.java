@@ -46,7 +46,8 @@ public class ServiceConfigure {
         HikariDataSource dataSource = (HikariDataSource) factory.build();
         dataSource.setPoolName("TEST_H2_DB");
         dataSource.setMinimumIdle(1);
-        dataSource.setMaximumPoolSize(1);
+        dataSource.setMaxLifetime(180000);
+        dataSource.setMaximumPoolSize(30);
 /*
         return new Log4jdbcProxyDataSource(DataSourceBuilder
                 .create()

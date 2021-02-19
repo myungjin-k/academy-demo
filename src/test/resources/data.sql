@@ -295,3 +295,84 @@ INSERT INTO delivery_item (id, delivery_id, item_id, count) VALUES ('7007fe7a116
 UPDATE order_item SET delivery_item_id = '7007fe7a1168469f969c036fcba06695' WHERE id = 'c7bb4cb6efcd4f4bb388eafb6fa52fac';
 
 INSERT INTO review (id, member_id, item_id, order_item_id, content) VALUES ('43f217fd86c34ce0a305e02b9972a29e', '3a18e633a5db4dbd8aaee218fe447fa4', 'f23ba30a47194a2c8a3fd2ccadd952a4', 'c7bb4cb6efcd4f4bb388eafb6fa52fac', '예뻐요');
+
+
+INSERT INTO order_master (order_email, id, abbr_items_name, member_id, total_amount, order_name, order_tel, order_addr1, order_addr2, create_at) VALUES
+('open7894.v2@gmail.com', '1c787e3c4f6a404194016698d8c760a2','그랜드 핀턱 팬츠 (2color)', '3a18e633a5db4dbd8aaee218fe447fa4', 43000, '명진', '010-1234-5678','XX시 XX구 XX로', '1-1111', dateadd('hour', -3, current_timestamp));
+INSERT INTO order_item (id, ORDER_ID, item_id, count, create_at) VALUES ('c2f7602adc44444fb0824f6be5260a0b', '1c787e3c4f6a404194016698d8c760a2', 'c9402883dbe540e898a417e4884845bf', 1, dateadd('hour', -3, current_timestamp));
+INSERT INTO delivery (id, order_id, STATUS, RECEIVER_NAME, RECEIVER_TEL, RECEIVER_ADDR1, RECEIVER_ADDR2, create_at) VALUES
+('2ea7f983db2e486e9f6483b9d4bc99c0', '1c787e3c4f6a404194016698d8c760a2', 1, '명진', '010-1234-5678','XX시 XX구 XX로', '1-1111', dateadd('hour', -3, current_timestamp));
+INSERT INTO delivery_item (id, delivery_id, item_id, count, create_at) VALUES ('2701a20da18a4f35b870e52cd6c588ac', '2ea7f983db2e486e9f6483b9d4bc99c0', 'c9402883dbe540e898a417e4884845bf', 1, dateadd('hour', -3, current_timestamp));
+UPDATE order_item SET delivery_item_id = '2701a20da18a4f35b870e52cd6c588ac' WHERE id = 'c2f7602adc44444fb0824f6be5260a0b';
+
+INSERT INTO order_master (order_email, id, abbr_items_name, member_id, total_amount, order_name, order_tel, order_addr1, order_addr2, create_at) VALUES
+('open7894.v2@gmail.com', 'd74e0c8f7db24f349196a385bebeaa9c','그랜드 핀턱 팬츠 (2color)', '3a18e633a5db4dbd8aaee218fe447fa4', 43000, '명진', '010-1234-5678','XX시 XX구 XX로', '1-1111', dateadd('hour', -3, current_timestamp));
+INSERT INTO order_item (id, ORDER_ID, item_id, count, create_at) VALUES ('cb64377b68e7417b99ca512bba003492', 'd74e0c8f7db24f349196a385bebeaa9c', 'c9402883dbe540e898a417e4884845bf', 1, dateadd('hour', -3, current_timestamp));
+INSERT INTO delivery (id, order_id, STATUS, RECEIVER_NAME, RECEIVER_TEL, RECEIVER_ADDR1, RECEIVER_ADDR2, create_at) VALUES
+('a50ab45c8f2a4fa7ba9393340d6c1f85', 'd74e0c8f7db24f349196a385bebeaa9c', 1, '명진', '010-1234-5678','XX시 XX구 XX로', '1-1111', dateadd('hour', -3, current_timestamp));
+INSERT INTO delivery_item (id, delivery_id, item_id, count, create_at) VALUES ('1feb0f7f001e451bb0964854f311ef98', 'a50ab45c8f2a4fa7ba9393340d6c1f85', 'c9402883dbe540e898a417e4884845bf', 1, dateadd('hour', -3, current_timestamp));
+UPDATE order_item SET delivery_item_id = '1feb0f7f001e451bb0964854f311ef98' WHERE id = 'cb64377b68e7417b99ca512bba003492';
+
+INSERT INTO order_master (order_email, id, abbr_items_name, member_id, total_amount, order_name, order_tel, order_addr1, order_addr2, create_at) VALUES
+('open7894.v2@gmail.com', '88a88c1c67334924825db1fff2d56279','그랜드 핀턱 팬츠 (2color)', '3a18e633a5db4dbd8aaee218fe447fa4', 43000, '명진', '010-1234-5678','XX시 XX구 XX로', '1-1111', dateadd('hour', -3, current_timestamp));
+INSERT INTO order_item (id, ORDER_ID, item_id, count, create_at) VALUES ('42aeeba0eebc43c384e4827e70631aee', '88a88c1c67334924825db1fff2d56279', 'c9402883dbe540e898a417e4884845bf', 1, dateadd('hour', -3, current_timestamp));
+INSERT INTO delivery (id, order_id, STATUS, RECEIVER_NAME, RECEIVER_TEL, RECEIVER_ADDR1, RECEIVER_ADDR2, create_at) VALUES
+('349e3e49e4704b01b9a36777277c8352', '88a88c1c67334924825db1fff2d56279', 1, '명진', '010-1234-5678','XX시 XX구 XX로', '1-1111', dateadd('hour', -3, current_timestamp));
+INSERT INTO delivery_item (id, delivery_id, item_id, count, create_at) VALUES ('086b8c8016644dc094a5e398f830b8b6', '349e3e49e4704b01b9a36777277c8352', 'c9402883dbe540e898a417e4884845bf', 1, dateadd('hour', -3, current_timestamp));
+UPDATE order_item SET delivery_item_id = '086b8c8016644dc094a5e398f830b8b6' WHERE id = '42aeeba0eebc43c384e4827e70631aee';
+
+INSERT INTO order_master (order_email, id, abbr_items_name, member_id, total_amount, order_name, order_tel, order_addr1, order_addr2, create_at) VALUES
+('open7894.v2@gmail.com', 'e938c8eef4254f4baed023d856aef508','그랜드 핀턱 팬츠 (2color)', '3a18e633a5db4dbd8aaee218fe447fa4', 43000, '명진', '010-1234-5678','XX시 XX구 XX로', '1-1111', dateadd('hour', -3, current_timestamp));
+INSERT INTO order_item (id, ORDER_ID, item_id, count, create_at) VALUES ('8521ffb112334dc894c4e3893cd8001b', 'e938c8eef4254f4baed023d856aef508', 'c9402883dbe540e898a417e4884845bf', 1, dateadd('hour', -3, current_timestamp));
+INSERT INTO delivery (id, order_id, STATUS, RECEIVER_NAME, RECEIVER_TEL, RECEIVER_ADDR1, RECEIVER_ADDR2, create_at) VALUES
+('43b5c2eaef544a54b815a75ab1c4630d', 'e938c8eef4254f4baed023d856aef508', 1, '명진', '010-1234-5678','XX시 XX구 XX로', '1-1111', dateadd('hour', -3, current_timestamp));
+INSERT INTO delivery_item (id, delivery_id, item_id, count, create_at) VALUES ('b72add0ebdc94cbca92f3ef8cf3cb12a', '43b5c2eaef544a54b815a75ab1c4630d', 'c9402883dbe540e898a417e4884845bf', 1, dateadd('hour', -3, current_timestamp));
+UPDATE order_item SET delivery_item_id = 'b72add0ebdc94cbca92f3ef8cf3cb12a' WHERE id = '8521ffb112334dc894c4e3893cd8001b';
+
+INSERT INTO order_master (order_email, id, abbr_items_name, member_id, total_amount, order_name, order_tel, order_addr1, order_addr2, create_at) VALUES
+('open7894.v2@gmail.com', '2f5c5865742344fcb078ade1f3be38fe','그랜드 핀턱 팬츠 (2color)', '3a18e633a5db4dbd8aaee218fe447fa4', 43000, '명진', '010-1234-5678','XX시 XX구 XX로', '1-1111', dateadd('hour', -3, current_timestamp));
+INSERT INTO order_item (id, ORDER_ID, item_id, count, create_at) VALUES ('065ea3f9443b422ca89857854182f7fc', '2f5c5865742344fcb078ade1f3be38fe', 'c9402883dbe540e898a417e4884845bf', 1, dateadd('hour', -3, current_timestamp));
+INSERT INTO delivery (id, order_id, STATUS, RECEIVER_NAME, RECEIVER_TEL, RECEIVER_ADDR1, RECEIVER_ADDR2, create_at) VALUES
+('18de65123bbf4b518b93a34a14ed0b30', '2f5c5865742344fcb078ade1f3be38fe', 1, '명진', '010-1234-5678','XX시 XX구 XX로', '1-1111', dateadd('hour', -3, current_timestamp));
+INSERT INTO delivery_item (id, delivery_id, item_id, count, create_at) VALUES ('2f2a0f5d72e546f9885c470ab302ef38', '18de65123bbf4b518b93a34a14ed0b30', 'c9402883dbe540e898a417e4884845bf', 1, dateadd('hour', -3, current_timestamp));
+UPDATE order_item SET delivery_item_id = '2f2a0f5d72e546f9885c470ab302ef38' WHERE id = '065ea3f9443b422ca89857854182f7fc';
+
+INSERT INTO order_master (order_email, id, abbr_items_name, member_id, total_amount, order_name, order_tel, order_addr1, order_addr2, create_at) VALUES
+('open7894.v2@gmail.com', '1d082677e18943f3a7804327f678008a','그랜드 핀턱 팬츠 (2color)', '3a18e633a5db4dbd8aaee218fe447fa4', 43000, '명진', '010-1234-5678','XX시 XX구 XX로', '1-1111', dateadd('hour', -3, current_timestamp));
+INSERT INTO order_item (id, ORDER_ID, item_id, count, create_at) VALUES ('b633ea73772146609a910ceaf466edd4', '1d082677e18943f3a7804327f678008a', 'c9402883dbe540e898a417e4884845bf', 1, dateadd('hour', -3, current_timestamp));
+INSERT INTO delivery (id, order_id, STATUS, RECEIVER_NAME, RECEIVER_TEL, RECEIVER_ADDR1, RECEIVER_ADDR2, create_at) VALUES
+('17fb2f8199cf42d0b0b8db850876ea3a', '1d082677e18943f3a7804327f678008a', 1, '명진', '010-1234-5678','XX시 XX구 XX로', '1-1111', dateadd('hour', -3, current_timestamp));
+INSERT INTO delivery_item (id, delivery_id, item_id, count, create_at) VALUES ('db1daff8e7ac4c4792e1f63abb80e7c9', '17fb2f8199cf42d0b0b8db850876ea3a', 'c9402883dbe540e898a417e4884845bf', 1, dateadd('hour', -3, current_timestamp));
+UPDATE order_item SET delivery_item_id = 'db1daff8e7ac4c4792e1f63abb80e7c9' WHERE id = 'b633ea73772146609a910ceaf466edd4';
+
+INSERT INTO order_master (order_email, id, abbr_items_name, member_id, total_amount, order_name, order_tel, order_addr1, order_addr2, create_at) VALUES
+('open7894.v2@gmail.com', 'a0d44030f35348afbe5c8861b203535f','그랜드 핀턱 팬츠 (2color)', '3a18e633a5db4dbd8aaee218fe447fa4', 43000, '명진', '010-1234-5678','XX시 XX구 XX로', '1-1111', dateadd('hour', -3, current_timestamp));
+INSERT INTO order_item (id, ORDER_ID, item_id, count, create_at) VALUES ('ee442e0ce2f14e06b38a8d2ed2082434', 'a0d44030f35348afbe5c8861b203535f', 'c9402883dbe540e898a417e4884845bf', 1, dateadd('hour', -3, current_timestamp));
+INSERT INTO delivery (id, order_id, STATUS, RECEIVER_NAME, RECEIVER_TEL, RECEIVER_ADDR1, RECEIVER_ADDR2, create_at) VALUES
+('91974bfe7fb943b58d06e0a9098f2c1d', 'a0d44030f35348afbe5c8861b203535f', 1, '명진', '010-1234-5678','XX시 XX구 XX로', '1-1111', dateadd('hour', -3, current_timestamp));
+INSERT INTO delivery_item (id, delivery_id, item_id, count, create_at) VALUES ('968a8cc4bcb649959c064f436efb8b84', '91974bfe7fb943b58d06e0a9098f2c1d', 'c9402883dbe540e898a417e4884845bf', 1, dateadd('hour', -3, current_timestamp));
+UPDATE order_item SET delivery_item_id = '968a8cc4bcb649959c064f436efb8b84' WHERE id = 'ee442e0ce2f14e06b38a8d2ed2082434';
+
+INSERT INTO order_master (order_email, id, abbr_items_name, member_id, total_amount, order_name, order_tel, order_addr1, order_addr2, create_at) VALUES
+('open7894.v2@gmail.com', 'd0c993bfd3764b56be18f523f655f970','그랜드 핀턱 팬츠 (2color)', '3a18e633a5db4dbd8aaee218fe447fa4', 43000, '명진', '010-1234-5678','XX시 XX구 XX로', '1-1111', dateadd('hour', -3, current_timestamp));
+INSERT INTO order_item (id, ORDER_ID, item_id, count, create_at) VALUES ('1e5d75ca327e4ca8bd9e840c3b055e8f', 'd0c993bfd3764b56be18f523f655f970', 'c9402883dbe540e898a417e4884845bf', 1, dateadd('hour', -3, current_timestamp));
+INSERT INTO delivery (id, order_id, STATUS, RECEIVER_NAME, RECEIVER_TEL, RECEIVER_ADDR1, RECEIVER_ADDR2, create_at) VALUES
+('ddd58d9835fa4e648c04d56dc3b7d80a', 'd0c993bfd3764b56be18f523f655f970', 1, '명진', '010-1234-5678','XX시 XX구 XX로', '1-1111', dateadd('hour', -3, current_timestamp));
+INSERT INTO delivery_item (id, delivery_id, item_id, count, create_at) VALUES ('c8f753c3ea814fea9c61298bfecbb4b7', 'ddd58d9835fa4e648c04d56dc3b7d80a', 'c9402883dbe540e898a417e4884845bf', 1, dateadd('hour', -3, current_timestamp));
+UPDATE order_item SET delivery_item_id = 'c8f753c3ea814fea9c61298bfecbb4b7' WHERE id = '1e5d75ca327e4ca8bd9e840c3b055e8f';
+
+INSERT INTO order_master (order_email, id, abbr_items_name, member_id, total_amount, order_name, order_tel, order_addr1, order_addr2, create_at) VALUES
+('open7894.v2@gmail.com', '474d822e2e3c4abca2b5e3c63f5ce6ec','그랜드 핀턱 팬츠 (2color)', '3a18e633a5db4dbd8aaee218fe447fa4', 43000, '명진', '010-1234-5678','XX시 XX구 XX로', '1-1111', dateadd('hour', -3, current_timestamp));
+INSERT INTO order_item (id, ORDER_ID, item_id, count, create_at) VALUES ('8b64229c99bf4165828e6fcb14f365e9', '474d822e2e3c4abca2b5e3c63f5ce6ec', 'c9402883dbe540e898a417e4884845bf', 1, dateadd('hour', -3, current_timestamp));
+INSERT INTO delivery (id, order_id, STATUS, RECEIVER_NAME, RECEIVER_TEL, RECEIVER_ADDR1, RECEIVER_ADDR2, create_at) VALUES
+('e30eb6a630224300bb42c0c71c7a55bf', '474d822e2e3c4abca2b5e3c63f5ce6ec', 1, '명진', '010-1234-5678','XX시 XX구 XX로', '1-1111', dateadd('hour', -3, current_timestamp));
+INSERT INTO delivery_item (id, delivery_id, item_id, count, create_at) VALUES ('e69b10826ce44be3bdcec5a0060bb83f', 'e30eb6a630224300bb42c0c71c7a55bf', 'c9402883dbe540e898a417e4884845bf', 1, dateadd('hour', -3, current_timestamp));
+UPDATE order_item SET delivery_item_id = 'e69b10826ce44be3bdcec5a0060bb83f' WHERE id = '8b64229c99bf4165828e6fcb14f365e9';
+
+INSERT INTO order_master (order_email, id, abbr_items_name, member_id, total_amount, order_name, order_tel, order_addr1, order_addr2, create_at) VALUES
+('open7894.v2@gmail.com', '49ba26196ba8435dbd1e9ade8fd5263a','그랜드 핀턱 팬츠 (2color)', '3a18e633a5db4dbd8aaee218fe447fa4', 43000, '명진', '010-1234-5678','XX시 XX구 XX로', '1-1111', dateadd('hour', -3, current_timestamp));
+INSERT INTO order_item (id, ORDER_ID, item_id, count, create_at) VALUES ('8f811e5ef62c4eacbe3166bc311a5a43', '49ba26196ba8435dbd1e9ade8fd5263a', 'c9402883dbe540e898a417e4884845bf', 1, dateadd('hour', -3, current_timestamp));
+INSERT INTO delivery (id, order_id, STATUS, RECEIVER_NAME, RECEIVER_TEL, RECEIVER_ADDR1, RECEIVER_ADDR2, create_at) VALUES
+('fddd09b724444c749c3d6e33d923f2f3', '49ba26196ba8435dbd1e9ade8fd5263a', 1, '명진', '010-1234-5678','XX시 XX구 XX로', '1-1111', dateadd('hour', -3, current_timestamp));
+INSERT INTO delivery_item (id, delivery_id, item_id, count, create_at) VALUES ('59628a352b8f46f9ad94c9ca3c9d11bf', 'fddd09b724444c749c3d6e33d923f2f3', 'c9402883dbe540e898a417e4884845bf', 1, dateadd('hour', -3, current_timestamp));
+UPDATE order_item SET delivery_item_id = '59628a352b8f46f9ad94c9ca3c9d11bf' WHERE id = '8f811e5ef62c4eacbe3166bc311a5a43';

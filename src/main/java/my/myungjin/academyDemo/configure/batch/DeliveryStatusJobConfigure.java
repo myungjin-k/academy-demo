@@ -2,20 +2,22 @@ package my.myungjin.academyDemo.configure.batch;
 
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.domain.order.Delivery;
-import my.myungjin.academyDemo.domain.order.DeliveryRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
-import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.data.RepositoryItemReader;
+import org.springframework.batch.item.database.JpaItemWriter;
+import org.springframework.batch.item.database.JpaPagingItemReader;
+import org.springframework.batch.item.database.builder.JpaItemWriterBuilder;
+import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.domain.Sort;
 
-import java.util.Collections;
+import javax.persistence.EntityManagerFactory;
 
 @RequiredArgsConstructor
 @Configuration
@@ -25,9 +27,9 @@ public class DeliveryStatusJobConfigure {
 
     private final StepBuilderFactory stepBuilderFactory;
 
-    private final int chunkSize = 10;
+    private final EntityManagerFactory entityManagerFactory;
 
-    private final DeliveryRepository deliveryRepository;
+    private final int chunkSize = 4;
 
     @Bean
     public Job deliveryStatusJob(){
@@ -49,20 +51,25 @@ public class DeliveryStatusJobConfigure {
 
     @Bean
     @StepScope
-    public RepositoryItemReader<Delivery> deliveryStatusReader(){
-        RepositoryItemReader<Delivery> reader = new RepositoryItemReader<>();
-        reader.setRepository(deliveryRepository);
-        reader.setMethodName("findByCreateAtBeforeAndStatusIs");
-        reader.setSort(Collections.singletonMap("createAt", Sort.Direction.ASC));
-        return reader;
+    public JpaPagingItemReader<Delivery> deliveryStatusReader(){
+        return new JpaPagingItemReaderBuilder<Delivery>()
+                .name("deliveryStatusReader")
+                .entityManagerFactory(entityManagerFactory)
+                .pageSize(chunkSize)
+                .queryString("select d from Delivery d where d.createAt < dateadd('hour', -1, current_timestamp) and d.status = 1")
+                .build();
     }
 
+    @Bean
     public ItemProcessor<Delivery, Delivery> deliveryStatusProcessor(){
         return Delivery::checkDelivery;
     }
 
-    public ItemWriter<Delivery> deliveryStatusWriter(){
-        return deliveryRepository::saveAll;
+    @Bean
+    public JpaItemWriter<Delivery> deliveryStatusWriter(){
+        return new JpaItemWriterBuilder<Delivery>()
+                .entityManagerFactory(entityManagerFactory)
+                .build();
     }
 
 
