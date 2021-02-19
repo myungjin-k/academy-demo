@@ -127,7 +127,7 @@ public class OrderAdminServiceTest {
                 .receiverTel("010-1234-5678")
                 .receiverAddr1("XX시 XX구 XX로")
                 .receiverAddr2("1-1111")
-                .status(DeliveryStatus.PROCESSING)
+                .status(DeliveryStatus.REQUESTED)
                 .build();
 
         List<Id<OrderItem, String>> items = new ArrayList<>();

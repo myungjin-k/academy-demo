@@ -165,7 +165,7 @@ public class OrderAdminService {
         DeliveryItem item = findItem(deliveryId, itemId)
                 .orElseThrow(() -> new NotFoundException(DeliveryItem.class, deliveryId, itemId));
 
-        if(!delivery.getStatus().equals(DeliveryStatus.PROCESSING)){
+        if(!delivery.getStatus().equals(DeliveryStatus.REQUESTED)){
             throw new StatusNotSatisfiedException(DeliveryItem.class, Id.of(DeliveryItem.class, item.getId()), deliveryId, itemId);
         }
 
@@ -182,7 +182,7 @@ public class OrderAdminService {
                                                 @Valid Id<DeliveryItem, String> itemId, int count){
         return findItem(deliveryId, itemId)
                 .map(deliveryItem -> {
-                    if(!deliveryItem.getDelivery().getStatus().equals(DeliveryStatus.PROCESSING)){
+                    if(!deliveryItem.getDelivery().getStatus().equals(DeliveryStatus.REQUESTED)){
                         throw new StatusNotSatisfiedException(DeliveryItem.class, Id.of(DeliveryItem.class, deliveryItem.getId()), deliveryId, itemId);
                     }
                     deliveryItem.modifyCount(count);

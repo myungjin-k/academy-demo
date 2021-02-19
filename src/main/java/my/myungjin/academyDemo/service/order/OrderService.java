@@ -183,7 +183,7 @@ public class OrderService {
 
         List<Delivery> deliveries = order.getDeliveries();
         for(Delivery d : deliveries){
-            if(!DeliveryStatus.PROCESSING.equals(d.getStatus())){
+            if(!DeliveryStatus.REQUESTED.equals(d.getStatus())){
                 throw new IllegalArgumentException("배송정보가 존재합니다. 관리자에게 문의 바랍니다. orderId=" + orderId + "deliveryId=" + d.getId());
             }
             d.updateStatus(DeliveryStatus.DELETED);

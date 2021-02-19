@@ -248,7 +248,7 @@ var orderDetail = {
         _this.div.find('#deliveries').off('click').on('click', '.delete-delivery', function () {
             const deliveryId = $(this).parents('tr').find('input[name="id"]').val();
             const status = $(this).parents('tr').find('.status').text();
-            if(status !== 'PROCESSING')
+            if(status !== 'REQUESTED')
                 alert('이미 발송된 배송정보는 취소할 수 없습니다.');
             else
                 _this.deleteDelivery(deliveryId);
@@ -348,7 +348,7 @@ var orderDetail = {
               let abbrItem = items[0].itemOption.itemDisplay.itemDisplayName;
               if(items.length > 1)
                   abbrItem += '외 ' + String(items.length - 1) + '건';
-              const deleteBtn = (delivery.status !== "PROCESSING") ?
+              const deleteBtn = (delivery.status !== "REQUESTED") ?
                 "" : '<a class="btn btn-sm delete-delivery" href="" onclick="return false;">취소</a>'
               ;
               const row = '<tr>'
@@ -406,7 +406,7 @@ var deliveryDetail = {
         });
 
         _this.div.find('#btn-save-delivery-status').unbind('click').bind('click', function(){
-            if(_this.deliveryStatus !== 'PROCESSING'
+            if(_this.deliveryStatus !== 'REQUESTED'
                 && $(this).parents('.deliveryStatus select[name="status"]').val() === 'DELETED'){
                 alert('상품 발송 이후에는 배송 취소가 불가합니다.');
                 return false;
@@ -433,7 +433,7 @@ var deliveryDetail = {
             if (_this.deliveryStatus === 'DELETED'){
                 alert('삭제된 배송정보입니다.');
                 return false;
-            } else if(_this.deliveryStatus !== 'PROCESSING'){
+            } else if(_this.deliveryStatus !== 'REQUESTED'){
                 alert('상품 발송 이후에는 주소 변경이 불가합니다.');
                 return false;
             } else {
@@ -447,7 +447,7 @@ var deliveryDetail = {
         });
 
         _this.div.find('#btn-save-delivery-item').unbind('click').bind('click', function(){
-            if(_this.deliveryStatus !== 'PROCESSING'){
+            if(_this.deliveryStatus !== 'REQUESTED'){
                 alert('상품 발송 이후에는 배송상품 변경이 불가합니다.');
                 return false;
             } else {
@@ -634,9 +634,9 @@ var deliveryDetail = {
             $.each(resultData.items, function(){
                 const item = this;
                 const itemOption = item.itemOption;
-                const deleteBtn = (resultData.status !== "PROCESSING") ?
+                const deleteBtn = (resultData.status !== "REQUESTED") ?
                     "" : '<a class="btn btn-sm delete-delivery-item" href="" onclick="return false;">삭제</a>';
-                const modifyCnt = (resultData.status !== "PROCESSING") ?
+                const modifyCnt = (resultData.status !== "REQUESTED") ?
                     item.count :
                     '<input name="count" value="' + item.count + '" style="width: 33%;">'
                     + '<a class="btn btn-sm modify-delivery-item-count" href="" onclick="return false;">변경</a>';
@@ -650,7 +650,7 @@ var deliveryDetail = {
                     + '</tr>';
                 deliveryItem.append(row);
             });
-            if(resultData.status === "PROCESSING")
+            if(resultData.status === "REQUESTED")
                 _this.div.find('#div-add-delivery-item').removeClass('d-none');
         }).fail(function (error) {
             alert(JSON.stringify(error));

@@ -63,7 +63,7 @@ public class OrderServiceTest {
                 .receiverTel("010-1234-5678")
                 .receiverAddr1("서울시 노원구 공릉로59길 28")
                 .receiverAddr2("1-1111")
-                .status(DeliveryStatus.PROCESSING)
+                .status(DeliveryStatus.REQUESTED)
                 .build();
 
         List<Id<CartItem, String>> itemIds = Arrays.asList(
@@ -143,7 +143,7 @@ public class OrderServiceTest {
                 .receiverTel("010-1234-5678")
                 .receiverAddr1("서울시 XX구 OOO로 12345678")
                 .receiverAddr2("1-1111")
-                .status(DeliveryStatus.PROCESSING)
+                .status(DeliveryStatus.REQUESTED)
                 .build();
 
         Delivery delivery = orderService.modify(memberId, orderId, deliveryId, d);

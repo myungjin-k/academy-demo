@@ -69,7 +69,7 @@ public class OrderRequest {
                 .receiverAddr1(receiverAddr1)
                 .receiverAddr2(receiverAddr2)
                 .message(message)
-                .status(DeliveryStatus.PROCESSING)
+                .status(DeliveryStatus.REQUESTED)
                 .build();
     }
 
