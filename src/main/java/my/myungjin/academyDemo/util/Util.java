@@ -28,11 +28,9 @@ public class Util {
     }
     public static void main(String[] args) {
 
-        int t = 10;
-        while(t-- > 0){
-            System.out.println(makeQuery());
-        }
-
+        System.out.println(Util.getUUID());
+        System.out.println(Util.getUUID());
+        System.out.println(Util.getUUID());
 
     }
 }

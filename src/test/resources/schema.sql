@@ -160,6 +160,7 @@ CREATE TABLE delivery (
                           message              varchar(255),
                           status               number NOT NULL,
                           invoice_num          varchar(50),
+                          ext_delivery_id      varchar(50),
                           create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
                           update_at            datetime DEFAULT null,
                           PRIMARY KEY (id),
@@ -225,4 +226,17 @@ CREATE TABLE review_comment (
                                 PRIMARY KEY (id),
                                 CONSTRAINT fk_review_comment_to_admin FOREIGN KEY (admin_id) REFERENCES admin (id) ON DELETE CASCADE ON UPDATE RESTRICT,
                                 CONSTRAINT fk_review_comment_to_item_display FOREIGN KEY (review_id) REFERENCES review (id) ON DELETE CASCADE ON UPDATE RESTRICT
+);
+
+DROP TABLE IF EXISTS received_delivery_status CASCADE;
+CREATE TABLE received_delivery_status (
+                                          id                   varchar(50) NOT NULL,
+                                          ext_delivery_id      varchar(50) NOT NULL,
+                                          seq                  number NOT NULL,
+                                          status               number NOT NULL,
+                                          apply_yn             char default 'N',
+                                          create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
+                                          update_at            datetime DEFAULT null,
+                                          PRIMARY KEY (ext_delivery_id, seq),
+                                          CONSTRAINT fk_received_delivery_status_to_delivery FOREIGN KEY (ext_delivery_id) REFERENCES delivery (ext_delivery_id) ON DELETE CASCADE ON UPDATE RESTRICT
 );

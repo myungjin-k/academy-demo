@@ -21,6 +21,6 @@ public interface DeliveryRepository extends JpaRepository<Delivery, String> {
     List<Delivery> findAllByOrderAndStatusIsNot(Order order, DeliveryStatus status);
 
     // 특정시점 이전에 생성되었고, 특정 배송상태인 배송정보 검색
-    List<Delivery> findByCreateAtBeforeAndStatusIs(LocalDateTime createAt, DeliveryStatus status);
+    //List<Delivery> findByCreateAtBeforeAndStatusIs(LocalDateTime createAt, DeliveryStatus status);
 
 }

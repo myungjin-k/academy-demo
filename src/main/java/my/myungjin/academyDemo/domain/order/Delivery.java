@@ -8,6 +8,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +19,12 @@ import static java.util.Optional.ofNullable;
 
 @Entity
 @Table(name = "delivery")
-@ToString(exclude = "items")
+@ToString(exclude = {"items", "receivedDeliveryStatuses"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
-public class Delivery {
+public class Delivery implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id @Getter
     @GeneratedValue(generator = "deliveryId")
@@ -67,6 +70,15 @@ public class Delivery {
 
     @Column(name = "update_at")
     private LocalDateTime updateAt;
+
+    @Getter
+    @Column(name = "ext_delivery_id")
+    private String extDeliveryId;
+
+    @Getter @Setter
+    @JsonBackReference
+    @OneToMany(mappedBy = "delivery", cascade = CascadeType.ALL)
+    private List<ReceivedDeliveryStatus> receivedDeliveryStatuses;
 
     @Getter @Setter
     @JsonBackReference

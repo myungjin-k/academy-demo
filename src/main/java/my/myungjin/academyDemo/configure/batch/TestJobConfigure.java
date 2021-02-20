@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class TestJobConfigure {
 
+    // TODO 베스트 셀러 배치 프로그램 생성
+    // 지난 1일 동안 /  배송완료 주문 / 주문 수량 내림차순으로 조회
     @Bean
     public JobLauncherTestUtils jobLauncherTestUtils() {
         return new JobLauncherTestUtils();

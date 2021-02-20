@@ -1,9 +1,8 @@
 package my.myungjin.academyDemo.configure.batch;
 
 import lombok.RequiredArgsConstructor;
-import my.myungjin.academyDemo.domain.order.Delivery;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+import my.myungjin.academyDemo.domain.order.ReceivedDeliveryStatus;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -19,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.persistence.EntityManagerFactory;
 
+@Slf4j
 @RequiredArgsConstructor
 @Configuration
 public class DeliveryStatusJobConfigure {
@@ -42,7 +42,7 @@ public class DeliveryStatusJobConfigure {
     @Bean
     public Step deliveryStatusJobStep(){
         return stepBuilderFactory.get("deliveryStatusStep")
-                .<Delivery, Delivery> chunk(chunkSize)
+                .<ReceivedDeliveryStatus, ReceivedDeliveryStatus> chunk(chunkSize)
                 .reader(deliveryStatusReader())
                 .processor(deliveryStatusProcessor())
                 .writer(deliveryStatusWriter())
@@ -51,23 +51,28 @@ public class DeliveryStatusJobConfigure {
 
     @Bean
     @StepScope
-    public JpaPagingItemReader<Delivery> deliveryStatusReader(){
-        return new JpaPagingItemReaderBuilder<Delivery>()
+    public JpaPagingItemReader<ReceivedDeliveryStatus> deliveryStatusReader(){
+        return new JpaPagingItemReaderBuilder<ReceivedDeliveryStatus>()
                 .name("deliveryStatusReader")
                 .entityManagerFactory(entityManagerFactory)
                 .pageSize(chunkSize)
-                .queryString("select d from Delivery d where d.createAt < dateadd('hour', -1, current_timestamp) and d.status = 1")
+                .queryString("select d from ReceivedDeliveryStatus d where d.createAt >= dateadd('day', -1, current_timestamp) and d.applyYn = 'N' order by d.createAt")
                 .build();
     }
 
     @Bean
-    public ItemProcessor<Delivery, Delivery> deliveryStatusProcessor(){
-        return Delivery::checkDelivery;
+    public ItemProcessor<ReceivedDeliveryStatus, ReceivedDeliveryStatus> deliveryStatusProcessor(){
+        return receivedDeliveryStatus -> {
+            receivedDeliveryStatus.getDelivery().updateStatus(receivedDeliveryStatus.getStatus());
+            receivedDeliveryStatus.apply();
+            log.info("# ReceivedDeliveryStatus : {}", receivedDeliveryStatus);
+            return receivedDeliveryStatus;
+        };
     }
 
     @Bean
-    public JpaItemWriter<Delivery> deliveryStatusWriter(){
-        return new JpaItemWriterBuilder<Delivery>()
+    public JpaItemWriter<ReceivedDeliveryStatus> deliveryStatusWriter(){
+        return new JpaItemWriterBuilder<ReceivedDeliveryStatus>()
                 .entityManagerFactory(entityManagerFactory)
                 .build();
     }
