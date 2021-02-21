@@ -240,3 +240,14 @@ CREATE TABLE received_delivery_status (
                                           PRIMARY KEY (ext_delivery_id, seq),
                                           CONSTRAINT fk_received_delivery_status_to_delivery FOREIGN KEY (ext_delivery_id) REFERENCES delivery (ext_delivery_id) ON DELETE CASCADE ON UPDATE RESTRICT
 );
+
+
+DROP TABLE IF EXISTS top_seller CASCADE;
+CREATE TABLE top_seller (
+                                          id                   varchar(50) NOT NULL,
+                                          item_id              varchar(50) NOT NULL,
+                                          create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
+                                          update_at            datetime DEFAULT null,
+                                          PRIMARY KEY (id),
+                                          CONSTRAINT fk_top_seller_to_item_display FOREIGN KEY (item_id) REFERENCES item_display (id) ON DELETE CASCADE ON UPDATE RESTRICT
+);

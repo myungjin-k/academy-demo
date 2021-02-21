@@ -25,7 +25,7 @@ public class ReceivedDeliveryStatus {
     @Getter @Setter
     @JsonManagedReference
     @ManyToOne
-    @JoinColumn(name = "ext_delivery_id", referencedColumnName = "ext_delivery_id")
+    @JoinColumn(name = "ext_delivery_id", referencedColumnName = "ext_delivery_id", nullable = false)
     private Delivery delivery;
 
     @Getter

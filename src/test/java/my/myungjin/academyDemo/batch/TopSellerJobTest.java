@@ -1,5 +1,8 @@
 package my.myungjin.academyDemo.batch;
 
+import lombok.extern.slf4j.Slf4j;
+import my.myungjin.academyDemo.domain.order.TopSeller;
+import my.myungjin.academyDemo.domain.order.TopSellerRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.batch.core.BatchStatus;
@@ -11,8 +14,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.junit.Assert.assertEquals;
+import java.time.LocalDate;
+import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
+@Slf4j
 @RunWith(SpringRunner.class)
 @ActiveProfiles("test")
 @SpringBootTest
@@ -22,13 +30,17 @@ public class TopSellerJobTest {
     @Autowired
     private JobLauncherTestUtils jobLauncherTestUtils;
 
+    @Autowired
+    private TopSellerRepository topSellerRepository;
 
     @Test
-    public void 상위_판매_상품을_조회한다() throws Exception{
+    public void 상위_판매_상품을_저장한다() throws Exception{
         JobExecution jobExecution = jobLauncherTestUtils.launchJob();
 
         assertEquals(BatchStatus.COMPLETED, jobExecution.getStatus());
-
+        List<TopSeller> result =  topSellerRepository.findByCreateAtAfter(LocalDate.now().atStartOfDay());
+        assertNotEquals(0, result.size());
+        log.info("Top Sellers: {}", result);
     }
 
 }
