@@ -23,7 +23,7 @@ public class JobScheduler {
 
     private final DeliveryStatusJobConfigure deliveryStatusJobConfigure;
 
-    @Scheduled(initialDelay = 1000, fixedDelay = 3000)
+    @Scheduled(initialDelay = 10000, fixedDelay = 30000)
     public void runJob() {
 
         Map<String, JobParameter> confMap = new HashMap<>();
