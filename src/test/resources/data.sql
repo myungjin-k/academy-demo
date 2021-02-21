@@ -291,7 +291,7 @@ INSERT INTO order_master (order_email, id, abbr_items_name, member_id, total_amo
 INSERT INTO order_item (id, ORDER_ID, item_id, count) VALUES ('c7bb4cb6efcd4f4bb388eafb6fa52fac', 'f6f50475354d49f68916eaf30ea5b266', 'c9402883dbe540e898a417e4884845bf', 1);
 
 INSERT INTO delivery (id, order_id, STATUS, RECEIVER_NAME, RECEIVER_TEL, RECEIVER_ADDR1, RECEIVER_ADDR2, INVOICE_NUM) VALUES ('7cc837baca9d4510b7b9542c6a9213e2', 'f6f50475354d49f68916eaf30ea5b266', 4, '명진', '010-1234-5678','XX시 XX구 XX로', '1-1111', '1234556778');
-INSERT INTO delivery_item (id, delivery_id, item_id, count) VALUES ('7007fe7a1168469f969c036fcba06695', '7cc837baca9d4510b7b9542c6a9213e2', 'c9402883dbe540e898a417e4884845bf', 1);
+INSERT INTO delivery_item (id, delivery_id, item_id, count) VALUES ('7007fe7a1168469f969c036fcba06695', '7cc837baca9d4510b7b9542c6a9213e2', 'c9402883dbe540e898a417e4884845bf', 4);
 UPDATE order_item SET delivery_item_id = '7007fe7a1168469f969c036fcba06695' WHERE id = 'c7bb4cb6efcd4f4bb388eafb6fa52fac';
 
 INSERT INTO review (id, member_id, item_id, order_item_id, content) VALUES ('43f217fd86c34ce0a305e02b9972a29e', '3a18e633a5db4dbd8aaee218fe447fa4', 'f23ba30a47194a2c8a3fd2ccadd952a4', 'c7bb4cb6efcd4f4bb388eafb6fa52fac', '예뻐요');

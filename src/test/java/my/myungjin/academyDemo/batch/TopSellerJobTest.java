@@ -1,6 +1,5 @@
 package my.myungjin.academyDemo.batch;
 
-import my.myungjin.academyDemo.domain.order.ReceivedDeliveryStatusRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.batch.core.BatchStatus;
@@ -17,21 +16,18 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringRunner.class)
 @ActiveProfiles("test")
 @SpringBootTest
-public class DeliveryStatusJobTest {
+public class TopSellerJobTest {
 
-    @Qualifier("getJobLauncherTestUtil1")
+    @Qualifier("getJobLauncherTestUtil2")
     @Autowired
     private JobLauncherTestUtils jobLauncherTestUtils;
 
-    @Autowired
-    private ReceivedDeliveryStatusRepository repository;
 
     @Test
-    public void 배송_상태를_업데이트한다() throws Exception{
+    public void 상위_판매_상품을_조회한다() throws Exception{
         JobExecution jobExecution = jobLauncherTestUtils.launchJob();
 
         assertEquals(BatchStatus.COMPLETED, jobExecution.getStatus());
-        assertEquals(0, repository.findByApplyYnEquals('N').size());
 
     }
 

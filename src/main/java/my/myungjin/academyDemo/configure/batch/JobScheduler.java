@@ -23,8 +23,10 @@ public class JobScheduler {
 
     private final DeliveryStatusJobConfigure deliveryStatusJobConfigure;
 
+    private final TobSellerJobConfigure tobSellerJobConfigure;
+
     @Scheduled(initialDelay = 10000, fixedDelay = 30000)
-    public void runJob() {
+    public void runDeliveryJob() {
 
         Map<String, JobParameter> confMap = new HashMap<>();
         confMap.put("time", new JobParameter(System.currentTimeMillis()));
@@ -39,5 +41,20 @@ public class JobScheduler {
         }
     }
 
+    @Scheduled(initialDelay = 1000, fixedDelay = 1440000)
+    public void runTopSellerJob() {
+
+        Map<String, JobParameter> confMap = new HashMap<>();
+        confMap.put("time", new JobParameter(System.currentTimeMillis()));
+        JobParameters jobParameters = new JobParameters(confMap);
+        try {
+
+            jobLauncher.run(tobSellerJobConfigure.topSellerJob(), jobParameters);
+
+        } catch (JobExecutionAlreadyRunningException | JobInstanceAlreadyCompleteException
+                | JobParametersInvalidException | org.springframework.batch.core.repository.JobRestartException e) {
+            log.error(e.getMessage());
+        }
+    }
 
 }

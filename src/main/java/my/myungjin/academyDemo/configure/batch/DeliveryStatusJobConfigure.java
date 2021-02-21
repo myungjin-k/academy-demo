@@ -13,6 +13,9 @@ import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.database.builder.JpaItemWriterBuilder;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
+import org.springframework.batch.test.JobLauncherTestUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -21,7 +24,7 @@ import javax.persistence.EntityManagerFactory;
 @Slf4j
 @RequiredArgsConstructor
 @Configuration
-public class DeliveryStatusJobConfigure {
+public class DeliveryStatusJobConfigure{
 
     private final JobBuilderFactory jobBuilderFactory;
 
@@ -32,6 +35,18 @@ public class DeliveryStatusJobConfigure {
     private final int chunkSize = 4;
 
     @Bean
+    public JobLauncherTestUtils getJobLauncherTestUtil1() {
+        return new JobLauncherTestUtils() {
+            @Override
+            @Autowired
+            public void setJob(@Qualifier("deliveryStatusJob") Job job) {
+                super.setJob(job);
+            }
+        };
+    }
+
+
+    @Bean(name = "deliveryStatusJob")
     public Job deliveryStatusJob(){
         return jobBuilderFactory.get("deliveryStatusJob")
                 .preventRestart()
