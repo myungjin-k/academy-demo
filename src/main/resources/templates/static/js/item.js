@@ -5,8 +5,8 @@ var main = {
     cateName: 'BEST',
     init : function() {
         var _this = this;
-        _this.loadAllItems(1);
-
+        //_this.loadAllItems(1);
+        _this.loadBestItems();
         $('.itemMenu').click(function(){
             $('.contentDiv').not(_this.div).addClass('d-none');
             _this.div.removeClass('d-none');
@@ -15,7 +15,8 @@ var main = {
             if($(this).hasClass('best')){
                 _this.cateId = '';
                 _this.cateName = 'BEST';
-                _this.loadAllItems(1);
+                _this.loadBestItems();
+                //_this.loadAllItems(1);
             } else {
                 _this.cateId = $(this).find('input[name="id"]').val();
                 _this.cateName = $(this).text();
@@ -64,8 +65,9 @@ var main = {
     makeItemHtml : function(data, page){
         var div = $("#div-thumb");
         //console.log(data.content);
-
-        $.each(data.content, function(){
+        const isPaged = (page > 0) ;
+        const items = isPaged ? data.content : data;
+        $.each(items, function(){
             var item = this;
             var onClick = "loadDetail('"+ item.displayId +"', '"+ item.categoryId +"', '"+ item.categoryName +"'" +
                 ", '"+ item.parentCategoryId +"', '"+ item.parentCategoryName +"');";
@@ -91,10 +93,27 @@ var main = {
         });
         var loadMoreDiv = $("#div-load-more-items");
         loadMoreDiv.empty();
-        if(data.totalPages > page){
-            var button = '<span id = "btn-load-more-items" class="btn btn-lg btn-outline-secondary">Load More</span>';
-            loadMoreDiv.append(button);
+        if(isPaged){
+            if(data.totalPages > page){
+                var button = '<span id = "btn-load-more-items" class="btn btn-lg btn-outline-secondary">Load More</span>';
+                loadMoreDiv.append(button);
+            }
         }
+    },
+    loadBestItems : function (){
+        var _this = this;
+        $.ajax({
+            type: 'GET',
+            url: '/api/mall/item/topSeller',
+            contentType:'application/json; charset=utf-8'
+        }).done(function(response) {
+            //console.log(response.response);
+            _this.makeItemHtml(response.response, 0);
+            $('#title .main').text('BEST');
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+
     },
     loadAllItems : function (page){
         var _this = this;

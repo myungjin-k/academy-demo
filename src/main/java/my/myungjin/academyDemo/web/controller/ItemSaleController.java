@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
 import static my.myungjin.academyDemo.web.Response.OK;
@@ -35,6 +36,18 @@ public class ItemSaleController {
     private final ItemDisplayService itemDisplayService;
 
     private final CommonCodeService commonCodeService;
+
+
+    @GetMapping(path = "/item/topSeller")
+    @ApiOperation(value = "top seller 상품 조회(API 키 필요없음)")
+    public Response<List<ItemDisplayResponse>> topSellerItems(){
+        return OK(
+                itemDisplayService.findTopSellerItems()
+                .stream()
+                .map(item -> new ItemDisplayResponse().of(item))
+                .collect(Collectors.toList())
+        );
+    }
 
     @GetMapping(path = "/item/list")
     @ApiOperation(value = "전시상품 전체 리스트 조회(API 키 필요없음)")

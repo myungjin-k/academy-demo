@@ -7,6 +7,8 @@ import my.myungjin.academyDemo.commons.AttachedFile;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.domain.item.*;
+import my.myungjin.academyDemo.domain.order.TopSeller;
+import my.myungjin.academyDemo.domain.order.TopSellerRepository;
 import my.myungjin.academyDemo.error.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +38,8 @@ public class ItemDisplayService {
 
     private final ItemDisplayOptionRepository itemDisplayOptionRepository;
 
+    private final TopSellerRepository topSellerRepository;
+
     private final S3Client s3Client;
 
     private final Environment environment;
@@ -43,6 +47,14 @@ public class ItemDisplayService {
     private final String S3_BASE_PATH = "/itemDisplay";
 
     private final Logger log = LoggerFactory.getLogger(getClass());
+
+    @Transactional(readOnly = true)
+    public List<ItemDisplay> findTopSellerItems(){
+        return topSellerRepository.findByCreateAtAfter(LocalDate.now().atStartOfDay())
+                .stream()
+                .map(TopSeller::getItem)
+                .collect(Collectors.toList());
+    }
 
     @Transactional(readOnly = true)
     public Page<ItemDisplay> findAll(Pageable pageable){

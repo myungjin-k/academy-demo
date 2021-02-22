@@ -77,7 +77,7 @@ var review = {
                     resultData.totalPages
                 );
                 $.each(resultData.content, function () {
-                    console.log(this);
+                    //console.log(this);
                     const review = this;
                     const listRow = $('<tr class="text-left reviewTitle"/>');
                     const reviewTitle = $('<a class="reviewTitle" href="" onclick="return false;" />')
