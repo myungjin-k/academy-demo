@@ -54,6 +54,8 @@ public class JobScheduler {
         } catch (JobExecutionAlreadyRunningException | JobInstanceAlreadyCompleteException
                 | JobParametersInvalidException | org.springframework.batch.core.repository.JobRestartException e) {
             log.error(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
