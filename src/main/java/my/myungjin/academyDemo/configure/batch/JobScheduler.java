@@ -25,7 +25,7 @@ public class JobScheduler {
 
     private final TobSellerJobConfigure tobSellerJobConfigure;
 
-    @Scheduled(initialDelay = 10000, fixedDelay = 30000)
+    @Scheduled(initialDelay = 10000, fixedDelay = 1800000)
     public void runDeliveryJob() {
 
         Map<String, JobParameter> confMap = new HashMap<>();
@@ -41,7 +41,7 @@ public class JobScheduler {
         }
     }
 
-    @Scheduled(initialDelay = 1000, fixedDelay = 1440000)
+    @Scheduled(initialDelay = 3000, fixedDelay = 86400000)
     public void runTopSellerJob() {
 
         Map<String, JobParameter> confMap = new HashMap<>();

@@ -13,11 +13,11 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, String>, Q
     // 주문 엔티티로 검색
     List<OrderItem> findAllByOrder(Order order);
 
-    @Query(value = "select item.itemOption.itemDisplay.id as itemId, sum(item.count) as saleCount " +
+    /*@Query(value = "select item.itemOption.itemDisplay.id as itemId " +
             "from OrderItem item " +
             "where item.deliveryItem.delivery.status = :status and item.createAt >= :createAt " +
             "group by item.itemOption.itemDisplay " +
-            "order by saleCount"
+            "order by sum(item.count)"
     )
-    List<TopSeller> findTopSellerItems(@Param("status") DeliveryStatus status, @Param("createAt") LocalDateTime createAt);
+    List<TopSeller> findTopSellerItems(@Param("status") DeliveryStatus status, @Param("createAt") LocalDateTime createAt);*/
 }

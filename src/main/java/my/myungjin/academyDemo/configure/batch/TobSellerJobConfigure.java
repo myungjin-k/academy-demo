@@ -36,7 +36,7 @@ public class TobSellerJobConfigure {
 
     private final EntityManagerFactory entityManagerFactory;
 
-    private final int chunkSize = 5;
+    private final int chunkSize = 100000;
 
 
     @Bean

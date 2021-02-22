@@ -15,6 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -36,11 +37,13 @@ public class TopSellerJobTest {
     @Test
     public void 상위_판매_상품을_저장한다() throws Exception{
         JobExecution jobExecution = jobLauncherTestUtils.launchJob();
-
+        LocalDateTime dateTime = LocalDate.now().atStartOfDay();
         assertEquals(BatchStatus.COMPLETED, jobExecution.getStatus());
-        List<TopSeller> result =  topSellerRepository.findByCreateAtAfter(LocalDate.now().atStartOfDay());
+        List<TopSeller> result =  topSellerRepository.findByCreateAtAfter(dateTime);
         assertNotEquals(0, result.size());
-        log.info("Top Sellers: {}", result);
+        for(TopSeller item : result){
+            log.info("Top Seller Item: {}", item.getItem().getItemDisplayName());
+        }
     }
 
 }
