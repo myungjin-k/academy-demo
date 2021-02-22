@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import my.myungjin.academyDemo.domain.order.Delivery;
 import my.myungjin.academyDemo.domain.order.ReceivedDeliveryStatus;
+import my.myungjin.academyDemo.util.Util;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
@@ -17,15 +19,22 @@ import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilde
 import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.persistence.EntityManagerFactory;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Slf4j
-@RequiredArgsConstructor
 @Configuration
+@RequiredArgsConstructor
 public class DeliveryStatusJobConfigure{
+
+    private final String JOB_NAME = "deliveryStatus";
 
     private final JobBuilderFactory jobBuilderFactory;
 
@@ -40,26 +49,27 @@ public class DeliveryStatusJobConfigure{
         return new JobLauncherTestUtils() {
             @Override
             @Autowired
-            public void setJob(@Qualifier("deliveryStatusJob") Job job) {
+            public void setJob(@Qualifier(JOB_NAME + "Job") Job job) {
                 super.setJob(job);
             }
         };
     }
 
 
-    @Bean(name = "deliveryStatusJob")
+    @Bean(name = JOB_NAME + "Job")
     public Job deliveryStatusJob(){
-        return jobBuilderFactory.get("deliveryStatusJob")
+        return jobBuilderFactory.get(JOB_NAME + "Job")
                 .preventRestart()
                 .start(deliveryStatusJobStep())
                 .build();
     }
 
     @Bean
+    @JobScope
     public Step deliveryStatusJobStep(){
-        return stepBuilderFactory.get("deliveryStatusStep")
+        return stepBuilderFactory.get(JOB_NAME + "Step")
                 .<ReceivedDeliveryStatus, Delivery> chunk(chunkSize)
-                .reader(deliveryStatusReader())
+                .reader(deliveryStatusReader(null))
                 .processor(deliveryStatusProcessor())
                 .writer(deliveryStatusWriter())
                 .build();
@@ -67,16 +77,23 @@ public class DeliveryStatusJobConfigure{
 
     @Bean
     @StepScope
-    public JpaPagingItemReader<ReceivedDeliveryStatus> deliveryStatusReader(){
+    public JpaPagingItemReader<ReceivedDeliveryStatus> deliveryStatusReader(
+            @Value("#{jobParameters[createAt]}") String createAt
+    ){
+        Map<String, Object> parameters = new LinkedHashMap<>();
+        parameters.put("createAt", Util.timestampOf(LocalDateTime.parse(createAt, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))));
+        log.info("# createAt: {}", Util.timestampOf(LocalDateTime.parse(createAt, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))));
         return new JpaPagingItemReaderBuilder<ReceivedDeliveryStatus>()
-                .name("deliveryStatusReader")
+                .name(JOB_NAME + "Reader")
                 .entityManagerFactory(entityManagerFactory)
+                .parameterValues(parameters)
                 .pageSize(chunkSize)
-                .queryString("select d from ReceivedDeliveryStatus d where d.createAt >= dateadd('day', -1, current_timestamp) and d.applyYn = 'N' order by d.createAt")
+                .queryString("select d from ReceivedDeliveryStatus d where d.createAt > :createAt and d.applyYn = 'N' order by d.createAt")
                 .build();
     }
 
     @Bean
+    @StepScope
     public ItemProcessor<ReceivedDeliveryStatus, Delivery> deliveryStatusProcessor(){
         return receivedDeliveryStatus -> {
             Delivery delivery = receivedDeliveryStatus.getDelivery();
@@ -89,6 +106,7 @@ public class DeliveryStatusJobConfigure{
     }
 
     @Bean
+    @StepScope
     public JpaItemWriter<Delivery> deliveryStatusWriter(){
         return new JpaItemWriterBuilder<Delivery>()
                 .entityManagerFactory(entityManagerFactory)

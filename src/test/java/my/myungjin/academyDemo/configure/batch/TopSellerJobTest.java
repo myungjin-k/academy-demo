@@ -1,11 +1,14 @@
-package my.myungjin.academyDemo.batch;
+package my.myungjin.academyDemo.configure.batch;
 
 import lombok.extern.slf4j.Slf4j;
 import my.myungjin.academyDemo.domain.order.TopSeller;
 import my.myungjin.academyDemo.domain.order.TopSellerRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.batch.core.*;
+import org.springframework.batch.core.BatchStatus;
+import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

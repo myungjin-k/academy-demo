@@ -2,8 +2,8 @@ package my.myungjin.academyDemo.configure.batch;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
@@ -11,8 +11,9 @@ import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteExcep
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -28,9 +29,10 @@ public class JobScheduler {
     @Scheduled(initialDelay = 10000, fixedDelay = 1800000)
     public void runDeliveryJob() {
 
-        Map<String, JobParameter> confMap = new HashMap<>();
-        confMap.put("time", new JobParameter(System.currentTimeMillis()));
-        JobParameters jobParameters = new JobParameters(confMap);
+        LocalDateTime dateTime = LocalDateTime.now().minusHours(1);
+        JobParameters jobParameters = new JobParametersBuilder()
+                .addString("createAt", dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .toJobParameters();
         try {
 
             jobLauncher.run(deliveryStatusJobConfigure.deliveryStatusJob(), jobParameters);
@@ -44,9 +46,11 @@ public class JobScheduler {
     @Scheduled(initialDelay = 3000, fixedDelay = 86400000)
     public void runTopSellerJob() {
 
-        Map<String, JobParameter> confMap = new HashMap<>();
-        confMap.put("time", new JobParameter(System.currentTimeMillis()));
-        JobParameters jobParameters = new JobParameters(confMap);
+        LocalDateTime dateTime = LocalDate.now().atStartOfDay();
+        JobParameters jobParameters = new JobParametersBuilder()
+                .addString("createAt", dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .toJobParameters();
+
         try {
 
             jobLauncher.run(tobSellerJobConfigure.topSellerJob(), jobParameters);

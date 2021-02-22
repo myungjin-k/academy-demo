@@ -11,7 +11,6 @@ import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
-import org.springframework.batch.item.database.AbstractPagingItemReader;
 import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
@@ -19,23 +18,19 @@ import org.springframework.batch.item.database.orm.JpaNativeQueryProvider;
 import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.persistence.EntityManagerFactory;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import static java.time.format.DateTimeFormatter.ofPattern;
-import static my.myungjin.academyDemo.util.Util.timestampOf;
 
 @Slf4j
 @RequiredArgsConstructor
 @Configuration
 public class TobSellerJobConfigure {
+
+    private final String JOB_NAME = "topSeller";
 
     private final JobBuilderFactory jobBuilderFactory;
 
@@ -45,9 +40,10 @@ public class TobSellerJobConfigure {
 
     private final int chunkSize = 5;
 
+    @Qualifier(JOB_NAME + "JobParameter")
     private final CreateJobParameter createJobParameter;
 
-    @Bean
+    @Bean(JOB_NAME + "JobParameter")
     @JobScope
     public CreateJobParameter jobParameter(){
         return new CreateJobParameter();
@@ -59,7 +55,7 @@ public class TobSellerJobConfigure {
         return new JobLauncherTestUtils() {
             @Override
             @Autowired
-            public void setJob(@Qualifier("topSellerJob") Job job) {
+            public void setJob(@Qualifier(JOB_NAME + "Job") Job job) {
                 super.setJob(job);
             }
         };
@@ -67,7 +63,7 @@ public class TobSellerJobConfigure {
 
     @Bean
     public Job topSellerJob() throws Exception {
-        return jobBuilderFactory.get("topSellerJob")
+        return jobBuilderFactory.get(JOB_NAME + "Job")
                 .preventRestart()
                 .start(topSellerStep())
                 .build();
@@ -76,7 +72,7 @@ public class TobSellerJobConfigure {
     @Bean
     @JobScope
     public Step topSellerStep() throws Exception {
-        return stepBuilderFactory.get("topSellerStep")
+        return stepBuilderFactory.get(JOB_NAME + "Step")
                 .<ItemDisplay, TopSeller> chunk(chunkSize)
                 .reader(topSellerReader())
                 .processor(topSellerProcessor())
@@ -113,7 +109,7 @@ public class TobSellerJobConfigure {
         queryProvider.afterPropertiesSet();
 
         return new JpaPagingItemReaderBuilder<ItemDisplay>()
-                .name("topSellerReader")
+                .name(JOB_NAME + "Reader")
                 .entityManagerFactory(entityManagerFactory)
                 .parameterValues(parameters)
                 .queryProvider(queryProvider)
