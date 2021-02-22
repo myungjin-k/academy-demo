@@ -125,11 +125,6 @@ public class Delivery implements Serializable {
         this.status = status;
     }
 
-    public Delivery checkDelivery(){
-        this.status = DeliveryStatus.CHECKED;
-        return this;
-    }
-
     public void updateInvoice(String invoiceNum){
         this.invoiceNum = invoiceNum;
     }
@@ -137,5 +132,10 @@ public class Delivery implements Serializable {
     public void updateAddress(String addr1, String addr2){
         this.receiverAddr1 = addr1;
         this.receiverAddr2 = addr2;
+    }
+
+    public void addReceivedDeliveryStatus(ReceivedDeliveryStatus status){
+        this.receivedDeliveryStatuses.add(status);
+        status.setDelivery(this);
     }
 }

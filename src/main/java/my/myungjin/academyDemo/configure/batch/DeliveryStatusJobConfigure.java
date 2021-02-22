@@ -2,6 +2,7 @@ package my.myungjin.academyDemo.configure.batch;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import my.myungjin.academyDemo.domain.order.Delivery;
 import my.myungjin.academyDemo.domain.order.ReceivedDeliveryStatus;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -57,7 +58,7 @@ public class DeliveryStatusJobConfigure{
     @Bean
     public Step deliveryStatusJobStep(){
         return stepBuilderFactory.get("deliveryStatusStep")
-                .<ReceivedDeliveryStatus, ReceivedDeliveryStatus> chunk(chunkSize)
+                .<ReceivedDeliveryStatus, Delivery> chunk(chunkSize)
                 .reader(deliveryStatusReader())
                 .processor(deliveryStatusProcessor())
                 .writer(deliveryStatusWriter())
@@ -76,18 +77,20 @@ public class DeliveryStatusJobConfigure{
     }
 
     @Bean
-    public ItemProcessor<ReceivedDeliveryStatus, ReceivedDeliveryStatus> deliveryStatusProcessor(){
+    public ItemProcessor<ReceivedDeliveryStatus, Delivery> deliveryStatusProcessor(){
         return receivedDeliveryStatus -> {
-            receivedDeliveryStatus.getDelivery().updateStatus(receivedDeliveryStatus.getStatus());
+            Delivery delivery = receivedDeliveryStatus.getDelivery();
+            delivery.updateStatus(receivedDeliveryStatus.getStatus());
             receivedDeliveryStatus.apply();
-            log.info("# ReceivedDeliveryStatus : {}", receivedDeliveryStatus);
-            return receivedDeliveryStatus;
+            delivery.addReceivedDeliveryStatus(receivedDeliveryStatus);
+            log.info("# Updated Delivery : (extDeliveryId={}, status={}, applied={})", delivery.getExtDeliveryId(), delivery.getStatus(), receivedDeliveryStatus.getApplyYn());
+            return delivery;
         };
     }
 
     @Bean
-    public JpaItemWriter<ReceivedDeliveryStatus> deliveryStatusWriter(){
-        return new JpaItemWriterBuilder<ReceivedDeliveryStatus>()
+    public JpaItemWriter<Delivery> deliveryStatusWriter(){
+        return new JpaItemWriterBuilder<Delivery>()
                 .entityManagerFactory(entityManagerFactory)
                 .build();
     }
