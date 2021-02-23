@@ -3,6 +3,7 @@ package my.myungjin.academyDemo.batch;
 import lombok.extern.slf4j.Slf4j;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.order.TopSeller;
+import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -14,6 +15,7 @@ import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
 import org.springframework.batch.item.database.orm.JpaNativeQueryProvider;
+import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -58,7 +60,6 @@ public class TopSellerJobConfigure {
     @Bean(JOB_NAME + "JobParameter")
     @JobScope
     public CreateJobParameter jobParameter( @Nullable @Value("#{jobParameters[createAt]}") String createAt){
-        log.info("# CreateJobParameter: {}", createAt);
         return new CreateJobParameter(createAt);
     }
 
@@ -77,14 +78,34 @@ public class TopSellerJobConfigure {
     public Job topSellerJob() throws Exception {
         return jobBuilderFactory.get(JOB_NAME + "Job")
                 .preventRestart()
-                .start(topSellerStep())
+                .start(topSellerStep1())
+                .on("FAILED")
+                .end()
+                .from(topSellerStep1())
+                .on("*")
+                .to(topSellerStep2())
+                .end()
                 .build();
     }
 
     @Bean
-    @JobScope
-    public Step topSellerStep() throws Exception {
-        return stepBuilderFactory.get(JOB_NAME + "Step")
+    //@JobScope
+    public Step topSellerStep1() {
+        return stepBuilderFactory.get(JOB_NAME + "Step1")
+                .tasklet((stepContribution, chunkContext) -> {
+                    if(chunkContext.getStepContext().getJobParameters().get("createAt") == null){
+                        stepContribution.setExitStatus(ExitStatus.FAILED);
+                        log.info("## Job Parameter 'createAt' is null");
+                    }
+                    return RepeatStatus.FINISHED;
+                })
+                .build();
+    }
+
+    @Bean
+    //@JobScope
+    public Step topSellerStep2() throws Exception {
+        return stepBuilderFactory.get(JOB_NAME + "Step2")
                 .<ItemDisplay, TopSeller> chunk(chunkSize)
                 .reader(topSellerReader())
                 .processor(topSellerProcessor())

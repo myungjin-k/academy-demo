@@ -1,9 +1,9 @@
 package my.myungjin.academyDemo.batch;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import my.myungjin.academyDemo.domain.order.Delivery;
 import my.myungjin.academyDemo.domain.order.ReceivedDeliveryStatus;
+import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -15,6 +15,7 @@ import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.database.builder.JpaItemWriterBuilder;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
+import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,7 +23,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.Nullable;
 import javax.persistence.EntityManagerFactory;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -56,7 +56,7 @@ public class DeliveryStatusJobConfigure{
     @Qualifier(JOB_NAME + "JobParameter")
     @Bean(JOB_NAME + "JobParameter")
     @JobScope
-    public CreateJobParameter jobParameter(@Nullable @Value("#{jobParameters[createAt]}") String createAt){
+    public CreateJobParameter jobParameter(@Value("#{jobParameters[createAt]}") String createAt){
         log.info("# CreateJobParameter: {}", createAt);
         return new CreateJobParameter(createAt);
     }
@@ -77,13 +77,32 @@ public class DeliveryStatusJobConfigure{
     public Job deliveryStatusJob(){
         return jobBuilderFactory.get(JOB_NAME + "Job")
                 .preventRestart()
-                .start(deliveryStatusJobStep())
+                .start(deliveryStatusJobStep1())
+                .on("FAILED")
+                .end()
+                .from(deliveryStatusJobStep1())
+                .on("*")
+                .to(deliveryStatusJobStep2())
+                .end()
                 .build();
     }
 
     @Bean
-    @JobScope
-    public Step deliveryStatusJobStep(){
+    //@JobScope
+    public Step deliveryStatusJobStep1() {
+        return stepBuilderFactory.get(JOB_NAME + "Step1")
+                .tasklet((stepContribution, chunkContext) -> {
+                    if(chunkContext.getStepContext().getJobParameters().get("createAt") == null){
+                        stepContribution.setExitStatus(ExitStatus.FAILED);
+                        log.info("## Job Parameter 'createAt' is null");
+                    }
+                    return RepeatStatus.FINISHED;
+                })
+                .build();
+    }
+
+    @Bean
+    public Step deliveryStatusJobStep2(){
         return stepBuilderFactory.get(JOB_NAME + "Step")
                 .<ReceivedDeliveryStatus, Delivery> chunk(chunkSize)
                 .reader(deliveryStatusReader())
