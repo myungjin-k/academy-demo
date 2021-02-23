@@ -69,7 +69,7 @@ public class DeliveryStatusJobConfigure{
     public Step deliveryStatusJobStep(){
         return stepBuilderFactory.get(JOB_NAME + "Step")
                 .<ReceivedDeliveryStatus, Delivery> chunk(chunkSize)
-                .reader(deliveryStatusReader(null))
+                .reader(deliveryStatusReader(""))
                 .processor(deliveryStatusProcessor())
                 .writer(deliveryStatusWriter())
                 .build();
@@ -81,8 +81,8 @@ public class DeliveryStatusJobConfigure{
             @Value("#{jobParameters[createAt]}") String createAt
     ){
         Map<String, Object> parameters = new LinkedHashMap<>();
-        parameters.put("createAt", Util.timestampOf(LocalDateTime.parse(createAt, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))));
-        log.info("# createAt: {}", Util.timestampOf(LocalDateTime.parse(createAt, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))));
+        parameters.put("createAt", LocalDateTime.parse(createAt, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        log.info("# createAt: {}", LocalDateTime.parse(createAt, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         return new JpaPagingItemReaderBuilder<ReceivedDeliveryStatus>()
                 .name(JOB_NAME + "Reader")
                 .entityManagerFactory(entityManagerFactory)
