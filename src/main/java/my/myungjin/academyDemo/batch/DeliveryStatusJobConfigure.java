@@ -1,10 +1,9 @@
-package my.myungjin.academyDemo.configure.batch;
+package my.myungjin.academyDemo.batch;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import my.myungjin.academyDemo.domain.order.Delivery;
 import my.myungjin.academyDemo.domain.order.ReceivedDeliveryStatus;
-import my.myungjin.academyDemo.util.Util;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -23,15 +22,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.annotation.Nullable;
 import javax.persistence.EntityManagerFactory;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Slf4j
 @Configuration
-@RequiredArgsConstructor
 public class DeliveryStatusJobConfigure{
 
     private final String JOB_NAME = "deliveryStatus";
@@ -43,6 +40,26 @@ public class DeliveryStatusJobConfigure{
     private final EntityManagerFactory entityManagerFactory;
 
     private final int chunkSize = 4;
+
+    private final CreateJobParameter jobParameter;
+
+    public DeliveryStatusJobConfigure(JobBuilderFactory jobBuilderFactory,
+                                      StepBuilderFactory stepBuilderFactory,
+                                      EntityManagerFactory entityManagerFactory,
+                                      @Qualifier(JOB_NAME + "JobParameter") CreateJobParameter createJobParameter) {
+        this.jobBuilderFactory = jobBuilderFactory;
+        this.stepBuilderFactory = stepBuilderFactory;
+        this.entityManagerFactory = entityManagerFactory;
+        this.jobParameter = createJobParameter;
+    }
+
+    @Qualifier(JOB_NAME + "JobParameter")
+    @Bean(JOB_NAME + "JobParameter")
+    @JobScope
+    public CreateJobParameter jobParameter(@Nullable @Value("#{jobParameters[createAt]}") String createAt){
+        log.info("# CreateJobParameter: {}", createAt);
+        return new CreateJobParameter(createAt);
+    }
 
     @Bean
     public JobLauncherTestUtils getJobLauncherTestUtil1() {
@@ -69,7 +86,7 @@ public class DeliveryStatusJobConfigure{
     public Step deliveryStatusJobStep(){
         return stepBuilderFactory.get(JOB_NAME + "Step")
                 .<ReceivedDeliveryStatus, Delivery> chunk(chunkSize)
-                .reader(deliveryStatusReader(""))
+                .reader(deliveryStatusReader())
                 .processor(deliveryStatusProcessor())
                 .writer(deliveryStatusWriter())
                 .build();
@@ -77,12 +94,10 @@ public class DeliveryStatusJobConfigure{
 
     @Bean
     @StepScope
-    public JpaPagingItemReader<ReceivedDeliveryStatus> deliveryStatusReader(
-            @Value("#{jobParameters[createAt]}") String createAt
-    ){
+    public JpaPagingItemReader<ReceivedDeliveryStatus> deliveryStatusReader(){
         Map<String, Object> parameters = new LinkedHashMap<>();
-        parameters.put("createAt", LocalDateTime.parse(createAt, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        log.info("# createAt: {}", LocalDateTime.parse(createAt, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        parameters.put("createAt", jobParameter.getCreateAt());
+        log.info("# createAt: {}", parameters.get("createAt"));
         return new JpaPagingItemReaderBuilder<ReceivedDeliveryStatus>()
                 .name(JOB_NAME + "Reader")
                 .entityManagerFactory(entityManagerFactory)
@@ -93,7 +108,6 @@ public class DeliveryStatusJobConfigure{
     }
 
     @Bean
-    @StepScope
     public ItemProcessor<ReceivedDeliveryStatus, Delivery> deliveryStatusProcessor(){
         return receivedDeliveryStatus -> {
             Delivery delivery = receivedDeliveryStatus.getDelivery();
@@ -106,7 +120,6 @@ public class DeliveryStatusJobConfigure{
     }
 
     @Bean
-    @StepScope
     public JpaItemWriter<Delivery> deliveryStatusWriter(){
         return new JpaItemWriterBuilder<Delivery>()
                 .entityManagerFactory(entityManagerFactory)

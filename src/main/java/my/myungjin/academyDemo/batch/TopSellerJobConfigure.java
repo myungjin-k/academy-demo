@@ -1,6 +1,5 @@
-package my.myungjin.academyDemo.configure.batch;
+package my.myungjin.academyDemo.batch;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.order.TopSeller;
@@ -18,17 +17,20 @@ import org.springframework.batch.item.database.orm.JpaNativeQueryProvider;
 import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.annotation.Nullable;
 import javax.persistence.EntityManagerFactory;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static my.myungjin.academyDemo.util.Util.timestampOf;
+
 @Slf4j
-@RequiredArgsConstructor
 @Configuration
-public class TobSellerJobConfigure {
+public class TopSellerJobConfigure {
 
     private final String JOB_NAME = "topSeller";
 
@@ -40,15 +42,25 @@ public class TobSellerJobConfigure {
 
     private final int chunkSize = 5;
 
-    @Qualifier(JOB_NAME + "JobParameter")
-    private final CreateJobParameter createJobParameter;
+    private final CreateJobParameter jobParameter;
 
-    @Bean(JOB_NAME + "JobParameter")
-    @JobScope
-    public CreateJobParameter jobParameter(){
-        return new CreateJobParameter();
+    public TopSellerJobConfigure(JobBuilderFactory jobBuilderFactory,
+                                 StepBuilderFactory stepBuilderFactory,
+                                 EntityManagerFactory entityManagerFactory,
+                                 @Qualifier(JOB_NAME + "JobParameter") CreateJobParameter createJobParameter) {
+        this.jobBuilderFactory = jobBuilderFactory;
+        this.stepBuilderFactory = stepBuilderFactory;
+        this.entityManagerFactory = entityManagerFactory;
+        this.jobParameter = createJobParameter;
     }
 
+    @Qualifier(JOB_NAME + "JobParameter")
+    @Bean(JOB_NAME + "JobParameter")
+    @JobScope
+    public CreateJobParameter jobParameter( @Nullable @Value("#{jobParameters[createAt]}") String createAt){
+        log.info("# CreateJobParameter: {}", createAt);
+        return new CreateJobParameter(createAt);
+    }
 
     @Bean
     public JobLauncherTestUtils getJobLauncherTestUtil2() {
@@ -84,8 +96,8 @@ public class TobSellerJobConfigure {
     @StepScope
     protected JpaPagingItemReader<ItemDisplay> topSellerReader() throws Exception {
         Map<String, Object> parameters = new LinkedHashMap<>();
-        parameters.put("createAt", jobParameter().getCreateAt());
-        log.info("# createAt: {}", jobParameter().getCreateAt());
+        parameters.put("createAt", timestampOf(jobParameter.getCreateAt()));
+        log.info("# createAt: {}", parameters.get("createAt"));
         String query = "select id.*\n" +
                 "  from (\n" +
                 "\t\tselect id.id\n" +
@@ -102,7 +114,7 @@ public class TobSellerJobConfigure {
                 ") t\n" +
                 "right outer join item_display id\n" +
                 "      on id.id = t.id\n";
-        //creating a native query provider as it would be created in configuration
+        //creating a native query provider as it  would be created in configuration
         JpaNativeQueryProvider<ItemDisplay> queryProvider= new JpaNativeQueryProvider<>();
         queryProvider.setSqlQuery(query);
         queryProvider.setEntityClass(ItemDisplay.class);
@@ -119,7 +131,6 @@ public class TobSellerJobConfigure {
     }
 
     @Bean
-    @StepScope
     public ItemProcessor<ItemDisplay, TopSeller> topSellerProcessor(){
         return item -> {
             log.info("# item : {}", item.getItemDisplayName());
@@ -129,7 +140,6 @@ public class TobSellerJobConfigure {
 
 
     @Bean
-    @StepScope
     public JpaItemWriter<TopSeller> topSellerWriter() {
         JpaItemWriter<TopSeller> jpaItemWriter = new JpaItemWriter<>();
         jpaItemWriter.setEntityManagerFactory(entityManagerFactory);
