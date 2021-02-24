@@ -71,8 +71,8 @@ public class Delivery implements Serializable {
     @Column(name = "update_at")
     private LocalDateTime updateAt;
 
-    @Getter
-    @Column(name = "ext_delivery_id")
+    @Getter @Setter
+    @Column(name = "ext_delivery_id", unique = true)
     private String extDeliveryId;
 
     @Getter @Setter
@@ -138,4 +138,5 @@ public class Delivery implements Serializable {
         this.receivedDeliveryStatuses.add(status);
         status.setDelivery(this);
     }
+
 }
