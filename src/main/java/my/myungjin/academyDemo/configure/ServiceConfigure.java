@@ -45,9 +45,7 @@ public class ServiceConfigure {
                 .url("jdbc:h2:mem:test_academy;MODE=MYSQL;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1");
         HikariDataSource dataSource = (HikariDataSource) factory.build();
         dataSource.setPoolName("TEST_H2_DB");
-        dataSource.setMinimumIdle(1);
-        dataSource.setMaxLifetime(180000);
-        dataSource.setMaximumPoolSize(30);
+        dataSource.setMaximumPoolSize(2);
 /*
         return new Log4jdbcProxyDataSource(DataSourceBuilder
                 .create()
