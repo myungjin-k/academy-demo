@@ -64,7 +64,7 @@ DROP TABLE IF EXISTS item_master CASCADE;
 CREATE TABLE item_master (
                              id                   varchar(50) NOT NULL,
                              item_name            varchar(50) NOT NULL,
-                             category_id          varchar(50) NOT NULL,
+                             category_id          varchar(255) NOT NULL,
                              price                int DEFAULT 0,
                              thumbnail            varchar(255),
                              create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
@@ -139,8 +139,11 @@ CREATE TABLE order_master (
                               point_used           int default 0,
                               order_name           varchar(50) NOT NULL,
                               order_tel            varchar(50) NOT NULL,
+                              order_email          varchar(50),
                               order_addr1          varchar(255),
                               order_addr2          varchar(255),
+                              payment_uid          varchar(50),
+                              is_cancelled         boolean default false,
                               create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
                               update_at            datetime DEFAULT null,
                               PRIMARY KEY (id),
@@ -158,9 +161,11 @@ CREATE TABLE delivery (
                           message              varchar(255),
                           status               int NOT NULL,
                           invoice_num          varchar(50),
+                          ext_delivery_id      varchar(50),
                           create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
                           update_at            datetime DEFAULT null,
                           PRIMARY KEY (id),
+                          CONSTRAINT unq_ext_delivery_id UNIQUE (ext_delivery_id),
                           CONSTRAINT fk_delivery_to_order FOREIGN KEY (order_id) REFERENCES order_master (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -203,11 +208,48 @@ CREATE TABLE review (
                         content              varchar(2000) NOT NULL,
                         review_img           varchar(255),
                         status               int default 1,
+                        reserves_paid        boolean NOT NULL DEFAULT false,
                         create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
                         update_at            datetime DEFAULT null,
                         PRIMARY KEY (id),
                         CONSTRAINT fk_review_to_member FOREIGN KEY (member_id) REFERENCES member (id) ON DELETE CASCADE ON UPDATE CASCADE,
                         CONSTRAINT fk_review_to_item_display FOREIGN KEY (item_id) REFERENCES item_display (id) ON DELETE CASCADE ON UPDATE CASCADE,
                         CONSTRAINT fk_review_to_order_item FOREIGN KEY (order_item_id) REFERENCES order_item (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+DROP TABLE IF EXISTS review_comment CASCADE;
+CREATE TABLE review_comment (
+                                id                   varchar(50) NOT NULL,
+                                admin_id             varchar(50) NOT NULL,
+                                review_id            varchar(50) NOT NULL,
+                                content              varchar(2000) NOT NULL,
+                                create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
+                                update_at            datetime DEFAULT null,
+                                PRIMARY KEY (id),
+                                CONSTRAINT fk_review_comment_to_admin FOREIGN KEY (admin_id) REFERENCES admin (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                                CONSTRAINT fk_review_comment_to_item_display FOREIGN KEY (review_id) REFERENCES review (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+DROP TABLE IF EXISTS received_delivery_status CASCADE;
+CREATE TABLE received_delivery_status (
+                                          id                   varchar(50) NOT NULL,
+                                          ext_delivery_id      varchar(50) NOT NULL,
+                                          seq                  int NOT NULL,
+                                          status               int NOT NULL,
+                                          apply_yn             char default 'N',
+                                          create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
+                                          update_at            datetime DEFAULT null,
+                                          PRIMARY KEY (ext_delivery_id, seq),
+                                          CONSTRAINT fk_received_delivery_status_to_delivery FOREIGN KEY (ext_delivery_id) REFERENCES delivery (ext_delivery_id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+DROP TABLE IF EXISTS top_seller CASCADE;
+CREATE TABLE top_seller (
+                            id                   varchar(50) NOT NULL,
+                            item_id              varchar(50) NOT NULL,
+                            create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
+                            update_at            datetime DEFAULT null,
+                            PRIMARY KEY (id),
+                            CONSTRAINT fk_top_seller_to_item_display FOREIGN KEY (item_id) REFERENCES item_display (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 SET FOREIGN_KEY_CHECKS=1;
