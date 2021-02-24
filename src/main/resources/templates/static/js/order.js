@@ -28,7 +28,8 @@ var order = {
             if(p > usableP)
                 p = usableP;
             // 배송비 제외한 총 결제금액 초과
-            const totalPayAmountExShippingFee = Number(_this.div.find('.amountInfo .payAmount').text())
+            const totalPayAmountExShippingFee = Number(_this.div.find('.amountInfo .totalItemPrice').text())
+                - Number(_this.div.find('.amountInfo .totalDiscountPrice').text())
                 - Number(_this.div.find('.amountInfo .shippingFee').text());
             if(p > totalPayAmountExShippingFee){
                 p = totalPayAmountExShippingFee;
