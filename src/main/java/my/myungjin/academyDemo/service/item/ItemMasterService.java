@@ -99,7 +99,7 @@ public class ItemMasterService {
 
     private void deleteThumbnail(String thumbnail){
         try{
-            s3Client.delete(thumbnail, S3_BASE_PATH);
+            s3Client.delete(thumbnail, getServerProfile() + S3_BASE_PATH);
         } catch (AmazonS3Exception e){
             log.warn("Amazon S3 error (key: {}): {}", thumbnail, e.getMessage(), e);
         }

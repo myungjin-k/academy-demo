@@ -155,7 +155,7 @@ public class ItemDisplayService {
 
     private void deleteDetailImage(String detailImage){
         try{
-            s3Client.delete(detailImage, S3_BASE_PATH);
+            s3Client.delete(detailImage, getServerProfile() + S3_BASE_PATH);
         } catch (AmazonS3Exception e){
             log.warn("Amazon S3 error (key: {}): {}", detailImage, e.getMessage(), e);
         }
