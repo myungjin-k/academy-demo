@@ -23,6 +23,8 @@ import javax.mail.MessagingException;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -117,6 +119,7 @@ public class OrderService {
 
         // 배송정보
         delivery.setOrder(updated);
+        delivery.setExtDeliveryId("EXT" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHH24mmssSSS")));
         Delivery d = save(delivery);
         // 배송상품
         saveDeliveryItems(updated.getItems(), d);
@@ -176,8 +179,7 @@ public class OrderService {
     public Order cancel(@Valid Id<Member, String> memberId, @Valid Id<Order, String> orderId) throws IOException, IamportResponseException {
         Order order = orderRepository.findByMemberIdAndId(memberId.value(), orderId.value())
                 .map(o -> {
-                    o.setItems(orderItemRepository.findAllByOrder(o));
-                    //o.setDeliveries(deliveryRepository.getAllByOrderOrderByCreateAtDesc(o));
+                    o.setDeliveries(deliveryRepository.getAllByOrderOrderByCreateAtDesc(o));
                     return o;
                 }).orElseThrow(() -> new NotFoundException(Order.class, memberId.value(), orderId.value()));
 
