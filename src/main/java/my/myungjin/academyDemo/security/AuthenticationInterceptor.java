@@ -21,7 +21,8 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         if(isHome || isPwdChangePage)
             return true;
 
-        if(isAdminPage && !("127.0.0.1".equals(ip) || "14.38.17.145".equals(ip))){
+        if(isAdminPage && !("127.0.0.1".equals(ip) || "14.38.17.145".equals(ip) ||
+                "221.145.101.36".equals(ip) || "222.111.44.12".equals(ip))){
             response.sendRedirect("/mall/index");
             return false;
         }
