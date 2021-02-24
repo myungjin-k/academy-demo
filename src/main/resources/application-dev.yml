@@ -27,6 +27,9 @@ spring:
     cache-duration: PT1H
   profiles:
     include: mail, cloud, payment
+  batch:
+    job:
+      enabled: false
 logging:
   level:
     org:

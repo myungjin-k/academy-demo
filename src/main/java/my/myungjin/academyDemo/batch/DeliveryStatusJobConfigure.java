@@ -57,7 +57,6 @@ public class DeliveryStatusJobConfigure{
     @Bean(JOB_NAME + "JobParameter")
     @JobScope
     public CreateJobParameter jobParameter(@Value("#{jobParameters[createAt]}") String createAt){
-        log.info("# CreateJobParameter: {}", createAt);
         return new CreateJobParameter(createAt);
     }
 
@@ -77,32 +76,12 @@ public class DeliveryStatusJobConfigure{
     public Job deliveryStatusJob(){
         return jobBuilderFactory.get(JOB_NAME + "Job")
                 .preventRestart()
-                .start(deliveryStatusJobStep1())
-                .on("FAILED")
-                .end()
-                .from(deliveryStatusJobStep1())
-                .on("*")
-                .to(deliveryStatusJobStep2())
-                .end()
+                .start(deliveryStatusJobStep())
                 .build();
     }
 
     @Bean
-    //@JobScope
-    public Step deliveryStatusJobStep1() {
-        return stepBuilderFactory.get(JOB_NAME + "Step1")
-                .tasklet((stepContribution, chunkContext) -> {
-                    if(chunkContext.getStepContext().getJobParameters().get("createAt") == null){
-                        stepContribution.setExitStatus(ExitStatus.FAILED);
-                        log.info("## Job Parameter 'createAt' is null");
-                    }
-                    return RepeatStatus.FINISHED;
-                })
-                .build();
-    }
-
-    @Bean
-    public Step deliveryStatusJobStep2(){
+    public Step deliveryStatusJobStep(){
         return stepBuilderFactory.get(JOB_NAME + "Step")
                 .<ReceivedDeliveryStatus, Delivery> chunk(chunkSize)
                 .reader(deliveryStatusReader())
@@ -116,7 +95,7 @@ public class DeliveryStatusJobConfigure{
     public JpaPagingItemReader<ReceivedDeliveryStatus> deliveryStatusReader(){
         Map<String, Object> parameters = new LinkedHashMap<>();
         parameters.put("createAt", jobParameter.getCreateAt());
-        log.info("# createAt: {}", parameters.get("createAt"));
+        log.info("# update delivery status after: {}", parameters.get("createAt"));
         return new JpaPagingItemReaderBuilder<ReceivedDeliveryStatus>()
                 .name(JOB_NAME + "Reader")
                 .entityManagerFactory(entityManagerFactory)

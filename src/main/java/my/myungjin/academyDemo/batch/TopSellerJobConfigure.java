@@ -78,33 +78,13 @@ public class TopSellerJobConfigure {
     public Job topSellerJob() throws Exception {
         return jobBuilderFactory.get(JOB_NAME + "Job")
                 .preventRestart()
-                .start(topSellerStep1())
-                .on("FAILED")
-                .end()
-                .from(topSellerStep1())
-                .on("*")
-                .to(topSellerStep2())
-                .end()
+                .start(topSellerStep())
                 .build();
     }
 
     @Bean
     //@JobScope
-    public Step topSellerStep1() {
-        return stepBuilderFactory.get(JOB_NAME + "Step1")
-                .tasklet((stepContribution, chunkContext) -> {
-                    if(chunkContext.getStepContext().getJobParameters().get("createAt") == null){
-                        stepContribution.setExitStatus(ExitStatus.FAILED);
-                        log.info("## Job Parameter 'createAt' is null");
-                    }
-                    return RepeatStatus.FINISHED;
-                })
-                .build();
-    }
-
-    @Bean
-    //@JobScope
-    public Step topSellerStep2() throws Exception {
+    public Step topSellerStep() throws Exception {
         return stepBuilderFactory.get(JOB_NAME + "Step2")
                 .<ItemDisplay, TopSeller> chunk(chunkSize)
                 .reader(topSellerReader())

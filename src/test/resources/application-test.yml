@@ -14,6 +14,9 @@ spring:
   datasource:
     schema: classpath*:/schema.sql
     data: classpath*:/data.sql
+  batch:
+    job:
+      enabled: false
 logging:
   level:
     org:
