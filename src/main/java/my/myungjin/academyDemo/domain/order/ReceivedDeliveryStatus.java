@@ -50,9 +50,10 @@ public class ReceivedDeliveryStatus {
     private LocalDateTime updateAt;
 
     @Builder
-    public ReceivedDeliveryStatus(Delivery delivery, long seq) {
+    public ReceivedDeliveryStatus(Delivery delivery, long seq, DeliveryStatus status) {
         this.delivery = delivery;
         this.seq = seq;
+        this.status = status;
     }
 
     public Optional<LocalDateTime> getUpdateAt(){
