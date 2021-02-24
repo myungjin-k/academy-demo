@@ -187,7 +187,7 @@ const pay = {
         const _this = this;
         _this.orderInfo = data;
         window.IMP.init('imp79203240');
-        _this.payResp = _this.request();
+        _this.request();
     },
     request : function(){
         const _this = this;
@@ -221,7 +221,8 @@ const pay = {
         $.ajax({
             type: 'GET',
             url: '/api/mall/pay/' + uid,
-            contentType:'application/json; charset=utf-8'
+            contentType:'application/json; charset=utf-8',
+            async: false
         }).done(function(response) {
             resp = response.response;
         }).fail(function (error) {

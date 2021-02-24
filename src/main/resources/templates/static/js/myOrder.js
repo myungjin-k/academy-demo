@@ -259,9 +259,6 @@ var myOrderDetail = {
 
         return row;
     },
-    loadPaymentInfo : function(uid){
-        return pay.load(uid);
-    },
     load : function (){
         var _this = this;
         $.ajax({
@@ -284,9 +281,9 @@ var myOrderDetail = {
             amountDiv.find('#orderAmount').text(order.orderAmount);
             amountDiv.find('#discountedAmount').text(order.discountedAmount);
             amountDiv.find('#usedPoints').text(order.usedPoints);
-            const payInfo = _this.loadPaymentInfo(order.paymentUid);
-            amountDiv.find('.payInfo #payMethod').text(payInfo.pay_method);
-            _this.paymentUid = payInfo.imp_uid;
+            const payInfo = pay.load(order.paymentUid);
+            amountDiv.find('.payInfo #payMethod').text(payInfo.payMethod);
+            _this.paymentUid = order.paymentUid;
             const orderDiv = _this.div.find('.orderInfo');
             orderDiv.find('#orderId').text(order.orderId);
             orderDiv.find('#orderDate').text(order.orderDate);

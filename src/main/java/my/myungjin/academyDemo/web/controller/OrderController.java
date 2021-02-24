@@ -126,6 +126,7 @@ public class OrderController {
 
     // TODO 결제 엔티티 생성
     @GetMapping("/pay/{uid}")
+    @ApiOperation(value = "결제정보 조회")
     public Response<Payment> getPayInfo(
             @PathVariable @ApiParam(value = "결제 완료 응답 uid", example = "imp_448280090638") String uid) throws IOException, IamportResponseException {
         return OK(
