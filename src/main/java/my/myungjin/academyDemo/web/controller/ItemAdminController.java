@@ -196,6 +196,7 @@ public class ItemAdminController {
         );
     }
 
+    // TODO 파일(ex.excel)로 상품정보 batch upload
     // TODO 전시상품 정보 에디터로 등록 고려
     @GetMapping("/itemDisplay/{displayId}")
     @ApiOperation(value = "전시상품 단건 조회")

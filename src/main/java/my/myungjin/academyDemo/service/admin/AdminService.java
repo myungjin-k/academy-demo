@@ -22,7 +22,6 @@ public class AdminService {
 
     @Transactional
     public String login(@NotBlank String adminId, @NotBlank String password){
-        // TODO validation
         return findByAdminId(adminId).map(admin -> {
             admin.login(passwordEncoder, password);
             return admin.getId();

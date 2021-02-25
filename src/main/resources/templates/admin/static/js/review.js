@@ -12,7 +12,6 @@ var main = {
         });*/
     }
 }
-// TODO 리뷰 코멘트 CRUD 프론트 구현
 let reviewList = {
     firstPage: 1,
     lastPage: 5,
