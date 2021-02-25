@@ -15,10 +15,13 @@ var main = {
 let reviewList = {
     firstPage: 1,
     lastPage: 5,
+    currPage: 1,
     div : $('#div-review-list'),
     init : function () {
         var _this = this;
-        _this.div.on('click', '#pagination-review .page-link', function(){
+
+        _this.loadAll();
+        _this.div.on('click', '#pagination-reviews .page-link', function(){
             var link = $(this).text();
             if(link === 'prev'){
                 _this.firstPage = _this.firstPage - 5;
@@ -38,7 +41,6 @@ let reviewList = {
             _this.list(_this.firstPage);
         });*/
 
-        _this.loadAll();
 
         _this.div.off('click').on('click', '.reviewLink', function(){
            const reviewId = $(this).parents('tr').find('.reviewId').text();
@@ -49,7 +51,7 @@ let reviewList = {
     clearTable : function(){
         $('#reviews').empty();
     },
-    loadAll : function (){
+    loadAll : function (page){
         var _this = this;
         this.clearTable();
         $.ajax({
@@ -60,8 +62,9 @@ let reviewList = {
         }).done(function(response) {
             var resultData = response.response;
             //console.log(resultData);
+            _this.currPage = page;
             if(resultData.totalElements > 0){
-                $('#pagination-review').setPagination(
+                $('#pagination-reviews').setPagination(
                     _this.currPage,
                     _this.firstPage,
                     Math.min(resultData.totalPages, _this.lastPage),
@@ -144,8 +147,8 @@ let reviewDetail = {
         _this.reviewId = reviewId;
         _this.load();
 
-        _this.div.find('#btn-pay-reserves').unbind('click').bind('click', function(){
-            if(isPhotoReview){
+        $(document).off('click').on('click', '#btn-pay-reserves', function(){
+            if(_this.isPhotoReview){
                 _this.payReserves(1000);
             } else {
                 _this.payReserves(500);
@@ -225,11 +228,11 @@ let reviewDetail = {
             url : '/api/admin/review/' + _this.reviewId + '/payReserves?amount=' + amount,
             contentType : 'application/json; charset=UTF-8'
         }).done(function(response){
-            console.log(response.response);
+            //console.log(response.response);
         }).fail(function(error){
             alert(JSON.stringify(error));
-            _this.load();
         });
+        _this.load();
     },
     saveComment : function(){
         const _this = this;
