@@ -24,7 +24,7 @@ import static java.util.Optional.ofNullable;
 // TODO 회원정보 조회(관리) 기능
 @Entity
 @Table(name = "member")
-@ToString(exclude = {"cartItems", "orders", "reviews"})
+@ToString(exclude = {"cartItems", "orders", "reviews", "reservesHistories"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
 public class Member{

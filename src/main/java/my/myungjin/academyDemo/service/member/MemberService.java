@@ -5,6 +5,8 @@ import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.commons.mail.Mail;
 import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.member.MemberRepository;
+import my.myungjin.academyDemo.domain.member.ReservesHistory;
+import my.myungjin.academyDemo.domain.member.ReservesHistoryRepository;
 import my.myungjin.academyDemo.error.NotFoundException;
 import my.myungjin.academyDemo.service.mail.MailService;
 import org.slf4j.Logger;
@@ -38,6 +40,8 @@ public class MemberService {
     private final MailService mailService;
 
     private final Environment environment;
+
+    private final ReservesHistoryRepository reservesHistoryRepository;
 
     @Transactional
     public Member join(@Valid Member newMember) {
@@ -133,6 +137,9 @@ public class MemberService {
                 .map(member -> {
                     member.flushReserves(minus);
                     member.addReserves(plus);
+                    ReservesHistory newHistory = new ReservesHistory(-minus + plus);
+                    newHistory.setSeq(reservesHistoryRepository.findByMember(member).size() + 1);
+                    member.addReservesHistory(newHistory);
                     return save(member);
                 }).orElseThrow(() -> new NotFoundException(Member.class, memberId));
     }
