@@ -1,6 +1,7 @@
 package my.myungjin.academyDemo.domain.member;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import my.myungjin.academyDemo.domain.order.CartItem;
 import my.myungjin.academyDemo.domain.order.Order;
@@ -103,6 +104,11 @@ public class Member{
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Review> reviews;
 
+    @Getter
+    @JsonManagedReference
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ReservesHistory> reservesHistories;
+
     @Builder
     public Member(String id, String userId, String password, String name, String email, String tel, String addr1, String addr2,
                   Rating rating, int reserves, int orderAmount, LocalDateTime updateAt) {
@@ -164,5 +170,10 @@ public class Member{
         if(next != null && this.orderAmount > this.rating.getAmount()){
             this.rating = next;
         }
+    }
+
+    public void addReservesHistory(ReservesHistory history){
+        this.reservesHistories.add(history);
+        history.setMember(this);
     }
 }

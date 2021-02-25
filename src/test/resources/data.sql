@@ -381,3 +381,6 @@ UPDATE order_item SET delivery_item_id = '59628a352b8f46f9ad94c9ca3c9d11bf' WHER
 INSERT INTO received_delivery_status (id, ext_delivery_id, seq, status) values ('d22555848ba84718a1d48414a21d371e','EXT001', 1, 2);
 INSERT INTO received_delivery_status (id, ext_delivery_id, seq, status) values ('4918a486e4044bb2acc0edeea7cfcbcf', 'EXT002', 1, 2);
 INSERT INTO received_delivery_status (id, ext_delivery_id, seq, status) values ('51e6c2dd4cef49419d499e6f9d1bb4aa', 'EXT003', 1, 2);
+
+// 적립금 히스토리
+INSERT INTO reserves_history (member_id, seq, amount) values ('3a18e633a5db4dbd8aaee218fe447fa4', 1, 300000);
