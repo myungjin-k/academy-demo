@@ -15,6 +15,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static java.time.LocalDateTime.now;
+
 @Slf4j
 @RequiredArgsConstructor
 @Component
@@ -26,10 +28,12 @@ public class JobScheduler {
 
     private final TopSellerJobConfigure tobSellerJobConfigure;
 
+
+    // TODO 배송상태 수신 로직 구현(ex 파일과 같이 외부에서 입력)
     @Scheduled(initialDelay = 10000, fixedDelay = 1800000)
     public void runDeliveryJob() {
         try {
-            LocalDateTime dateTime = LocalDate.now().atStartOfDay();
+            LocalDateTime dateTime = now().minusMinutes(30);
             JobParameters jobParameters = new JobParametersBuilder()
                     .addString("createAt", dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                     .toJobParameters();

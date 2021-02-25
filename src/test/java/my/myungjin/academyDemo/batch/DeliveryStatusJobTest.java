@@ -35,7 +35,7 @@ public class DeliveryStatusJobTest {
 
     @Test
     public void 배송_상태를_업데이트한다() throws Exception{
-        LocalDateTime dateTime = LocalDateTime.now().minusHours(1);
+        LocalDateTime dateTime = LocalDateTime.now().minusMinutes(30);
         JobParameters jobParameters = new JobParametersBuilder()
                 .addString("createAt", dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .toJobParameters();
