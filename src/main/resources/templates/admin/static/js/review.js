@@ -144,7 +144,7 @@ let reviewDetail = {
         _this.reviewId = reviewId;
         _this.load();
 
-        _this.div.off('click').on('click', '#btn-pay-reserves', function(){
+        _this.div.find('#btn-pay-reserves').unbind('click').bind('click', function(){
             if(isPhotoReview){
                 _this.payReserves(1000);
             } else {
