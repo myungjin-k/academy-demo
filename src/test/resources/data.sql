@@ -383,4 +383,4 @@ INSERT INTO received_delivery_status (id, ext_delivery_id, seq, status) values (
 INSERT INTO received_delivery_status (id, ext_delivery_id, seq, status) values ('51e6c2dd4cef49419d499e6f9d1bb4aa', 'EXT003', 1, 2);
 
 // 적립금 히스토리
-INSERT INTO reserves_history (member_id, seq, amount) values ('3a18e633a5db4dbd8aaee218fe447fa4', 1, 300000);
+INSERT INTO reserves_history (member_id, type, amount) values ('3a18e633a5db4dbd8aaee218fe447fa4', 'ADMIN', 300000);

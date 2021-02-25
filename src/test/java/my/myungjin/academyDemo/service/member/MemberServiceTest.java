@@ -2,12 +2,16 @@ package my.myungjin.academyDemo.service.member;
 
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.member.Member;
+import my.myungjin.academyDemo.domain.member.ReservesHistory;
+import my.myungjin.academyDemo.domain.member.ReservesHistoryRepository;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -23,6 +27,9 @@ public class MemberServiceTest {
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private ReservesHistoryRepository reservesHistoryRepository;
 
     private Id<Member, String> id;
     private String userId;
@@ -151,9 +158,15 @@ public class MemberServiceTest {
 
     @Test
     @Order(9)
-    void 리뷰_적립금_업데이트() {
-        Member member = memberService.updateReserves(id, 0, 1000);
+    void 적립금_수기_지급() {
+        Member member = memberService.updateReserves(
+                Id.of(Member.class, "3a18e633a5db4dbd8aaee218fe447fa4"),
+                0,
+                1000);
         assertThat(member, notNullValue());
         log.info("Member: {}", member);
+
+        List<ReservesHistory> reservesHistories = reservesHistoryRepository.findByMemberOrderByCreateAtDesc(member);
+        log.info("Reserves Histories: {}", reservesHistories);
     }
 }

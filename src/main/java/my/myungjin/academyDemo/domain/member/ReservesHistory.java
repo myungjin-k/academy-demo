@@ -22,13 +22,19 @@ public class ReservesHistory {
     @GenericGenerator(name = "reservesHistoryId", strategy = "my.myungjin.academyDemo.commons.IdGenerator")
     private String id;
 
-    @Getter @Setter
-    @Column(name = "seq", nullable = false)
-    private long seq;
-
     @Getter
     @Column(name = "amount", nullable = false)
     private int amount;
+
+    @Getter
+    @Column(name = "type", nullable = false, updatable = false)
+    @Convert(converter = ReservesTypeConverter.class)
+    private ReservesType type;
+
+    // TODO Id Converter ?
+    @Getter
+    @Column(name = "ref_id")
+    private String refId;
 
     @Getter
     @Column(name = "create_at", insertable = false, updatable = false,
@@ -44,8 +50,11 @@ public class ReservesHistory {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    public ReservesHistory(int amount) {
+    @Builder
+    public ReservesHistory(int amount, ReservesType type, String refId) {
         this.amount = amount;
+        this.type = type;
+        this.refId = refId;
     }
 
     public Optional<LocalDateTime> getUpdateAt(){

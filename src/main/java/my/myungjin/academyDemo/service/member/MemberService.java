@@ -3,10 +3,7 @@ package my.myungjin.academyDemo.service.member;
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.commons.mail.Mail;
-import my.myungjin.academyDemo.domain.member.Member;
-import my.myungjin.academyDemo.domain.member.MemberRepository;
-import my.myungjin.academyDemo.domain.member.ReservesHistory;
-import my.myungjin.academyDemo.domain.member.ReservesHistoryRepository;
+import my.myungjin.academyDemo.domain.member.*;
 import my.myungjin.academyDemo.error.NotFoundException;
 import my.myungjin.academyDemo.service.mail.MailService;
 import org.slf4j.Logger;
@@ -137,8 +134,10 @@ public class MemberService {
                 .map(member -> {
                     member.flushReserves(minus);
                     member.addReserves(plus);
-                    ReservesHistory newHistory = new ReservesHistory(-minus + plus);
-                    newHistory.setSeq(reservesHistoryRepository.findByMember(member).size() + 1);
+                    ReservesHistory newHistory = ReservesHistory.builder()
+                            .amount(-minus + plus)
+                            .type(ReservesType.ADMIN)
+                            .build();
                     member.addReservesHistory(newHistory);
                     return save(member);
                 }).orElseThrow(() -> new NotFoundException(Member.class, memberId));

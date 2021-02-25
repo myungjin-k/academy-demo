@@ -292,3 +292,4 @@ UPDATE order_item SET delivery_item_id = '7007fe7a1168469f969c036fcba06695' WHER
 INSERT INTO review (id, member_id, item_id, order_item_id, content) VALUES ('43f217fd86c34ce0a305e02b9972a29e', '3a18e633a5db4dbd8aaee218fe447fa4', 'f23ba30a47194a2c8a3fd2ccadd952a4', 'c7bb4cb6efcd4f4bb388eafb6fa52fac', '예뻐요');
 INSERT INTO review_comment(id, admin_id, review_id, content) values ('c2859d0c42974981b6a1a04f39f68bb1', '3a18e633a5db4dbd8aaee218fe447fa4', '43f217fd86c34ce0a305e02b9972a29e', '리뷰 감사드립니다. 500원 적립 도와드리겠습니다~!');
 
+INSERT INTO reserves_history (member_id, type, amount) values ('3a18e633a5db4dbd8aaee218fe447fa4', 'ADMIN', 300000);

@@ -3,6 +3,8 @@ package my.myungjin.academyDemo.service.order;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.member.Member;
+import my.myungjin.academyDemo.domain.member.ReservesHistoryRepository;
+import my.myungjin.academyDemo.domain.member.ReservesType;
 import my.myungjin.academyDemo.domain.order.CartItem;
 import my.myungjin.academyDemo.domain.order.Delivery;
 import my.myungjin.academyDemo.domain.order.DeliveryStatus;
@@ -35,6 +37,9 @@ public class OrderServiceTest {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private ReservesHistoryRepository reservesHistoryRepository;
+
     private Id<Member, String> memberId;
 
     private Id<my.myungjin.academyDemo.domain.order.Order, String> orderId;
@@ -54,7 +59,7 @@ public class OrderServiceTest {
                 .orderTel("010-1234-5678")
                 .orderAddr1("서울시 노원구 공릉로59길 28")
                 .orderAddr2("1-1111")
-                .orderEmail("open7894.v2@gmail.com")
+                //.orderEmail("open7894.v2@gmail.com")
                 .usedPoints(0)
                 .paymentUid("imp_448280090638")
                 .build();
@@ -77,6 +82,9 @@ public class OrderServiceTest {
         log.info("Saved Order: {}", saved);
         log.info("Saved Order Item: {}", saved.getItems());
         log.info("Saved Delivery: {}", saved.getDeliveries());
+
+        boolean isReservesHistSaved = reservesHistoryRepository.existsByTypeAndRefId(ReservesType.ORDER, orderId.value());
+        assertThat(isReservesHistSaved, is(true));
     }
 
     @Test
@@ -157,5 +165,8 @@ public class OrderServiceTest {
         my.myungjin.academyDemo.domain.order.Order cancelled = orderService.cancel(memberId, orderId);
         assertThat(cancelled, is(notNullValue()));
         log.info("Cancelled Order: {}", cancelled);
+
+        boolean isReservesHistSaved = reservesHistoryRepository.existsByTypeAndRefId(ReservesType.ORDER_CANCEL, orderId.value());
+        assertThat(isReservesHistSaved, is(true));
     }
 }

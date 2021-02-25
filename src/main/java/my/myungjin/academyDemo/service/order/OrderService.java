@@ -3,8 +3,7 @@ package my.myungjin.academyDemo.service.order;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
-import my.myungjin.academyDemo.domain.member.Member;
-import my.myungjin.academyDemo.domain.member.MemberRepository;
+import my.myungjin.academyDemo.domain.member.*;
 import my.myungjin.academyDemo.domain.order.*;
 import my.myungjin.academyDemo.domain.review.ReviewRepository;
 import my.myungjin.academyDemo.error.NotFoundException;
@@ -48,6 +47,8 @@ public class OrderService {
     private final MemberRepository memberRepository;
 
     private final ReviewRepository reviewRepository;
+
+    private final ReservesHistoryRepository reservesHistoryRepository;
 
     private final MailService mailService;
 
@@ -110,12 +111,20 @@ public class OrderService {
         Order updated = saveOrderItems(itemIds, saved);
         // 적립금 업데이트 + 등급 업데이트
         Member m = updated.getMember();
-        m.flushReserves(updated.getUsedPoints());
-        if(updated.getUsedPoints() == 0){
-            int reserve = (int) (updated.getTotalAmount() * m.getRating().getReserveRatio());
-            m.addReserves(reserve);
+
+        if(!reservesHistoryRepository.existsByTypeAndRefId(ReservesType.ORDER, updated.getId())){
+            int usedPoint = updated.getUsedPoints();
+            if(updated.getUsedPoints() == 0){
+                int reserve = (int) (updated.getTotalAmount() * m.getRating().getReserveRatio());
+                m.addReserves(reserve);
+                m.addReservesHistory(new ReservesHistory(reserve, ReservesType.ORDER, updated.getId()));
+            } else {
+                m.flushReserves(updated.getUsedPoints());
+                m.addReservesHistory(new ReservesHistory(-usedPoint, ReservesType.ORDER_USED, updated.getId()));
+            }
+
+            m.addOrderAmountAndUpdateRating(updated.getTotalAmount() - updated.getUsedPoints());
         }
-        m.addOrderAmountAndUpdateRating(updated.getTotalAmount() - updated.getUsedPoints());
 
         // 배송정보
         delivery.setOrder(updated);
@@ -192,7 +201,27 @@ public class OrderService {
             save(d);
         }
         order.cancel();
-        order.getMember().addReserves(order.getUsedPoints());
+        if(!reservesHistoryRepository.existsByTypeAndRefId(ReservesType.ORDER_CANCEL, order.getId())){
+            int reserves = 0;
+            Member member = order.getMember();
+            if(order.getUsedPoints() > 0){
+                reserves = order.getUsedPoints();
+                member.addReserves(reserves);
+            } else {
+                reserves = -reservesHistoryRepository
+                        .getByTypeAndRefId(ReservesType.ORDER, order.getId())
+                        .getAmount();
+                member.flushReserves(reserves);
+            }
+
+            ReservesHistory newHistory = ReservesHistory.builder()
+                    .amount(reserves)
+                    .type(ReservesType.ORDER_CANCEL)
+                    .refId(order.getId())
+                    .build();
+            newHistory.setMember(member);
+            reservesHistoryRepository.save(newHistory);
+        }
         return save(order);
     }
 

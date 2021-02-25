@@ -6,8 +6,7 @@ import my.myungjin.academyDemo.aws.S3Client;
 import my.myungjin.academyDemo.commons.AttachedFile;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
-import my.myungjin.academyDemo.domain.member.Member;
-import my.myungjin.academyDemo.domain.member.MemberRepository;
+import my.myungjin.academyDemo.domain.member.*;
 import my.myungjin.academyDemo.domain.order.*;
 import my.myungjin.academyDemo.domain.review.Review;
 import my.myungjin.academyDemo.domain.review.ReviewCommentRepository;
@@ -44,6 +43,8 @@ public class ReviewService {
     private final ReviewCommentRepository reviewCommentRepository;
 
     private final MemberRepository memberRepository;
+
+    private final ReservesHistoryRepository reservesHistoryRepository;
 
     private final S3Client s3Client;
 
@@ -157,9 +158,20 @@ public class ReviewService {
     public Review payReserves(@Valid Id<Review, String> reviewId, @Positive int reserves){
         return reviewRepository.findById(reviewId.value())
                 .map(review -> {
+                    if(review.isReservesPaid()){
+                        log.info("Reserves Already Paid: {}", reviewId);
+                        return review;
+                    }
+
                     Member member = review.getMember();
                     member.addReserves(reserves);
-                    memberRepository.save(member);
+                    ReservesHistory newHistory = ReservesHistory.builder()
+                            .amount(reserves)
+                            .type(ReservesType.REVIEW)
+                            .refId(reviewId.value())
+                            .build();
+                    member.addReservesHistory(newHistory);
+
                     review.reservesPaid();
                     return save(review);
                 }).orElseThrow(() -> new NotFoundException(Review.class, reviewId));

@@ -253,12 +253,14 @@ CREATE TABLE top_seller (
 
 DROP TABLE IF EXISTS reserves_history CASCADE;
 CREATE TABLE reserves_history (
+                            id                   varchar(50) NOT NULL,
                             member_id            varchar(50) NOT NULL,
-                            seq                  number NOT NULL,
                             amount               number not null,
+                            type                 varchar(50) NOT NULL,
+                            ref_id               varchar(50),
                             create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
                             update_at            datetime DEFAULT null,
-                            PRIMARY KEY (member_id, seq),
+                            PRIMARY KEY (id),
                             CONSTRAINT fk_reserves_history_to_member FOREIGN KEY (member_id) REFERENCES member (id) ON DELETE CASCADE ON UPDATE RESTRICT
 );
 

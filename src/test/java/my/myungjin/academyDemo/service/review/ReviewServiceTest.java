@@ -3,6 +3,8 @@ package my.myungjin.academyDemo.service.review;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.member.Member;
+import my.myungjin.academyDemo.domain.member.ReservesHistoryRepository;
+import my.myungjin.academyDemo.domain.member.ReservesType;
 import my.myungjin.academyDemo.domain.order.OrderItem;
 import my.myungjin.academyDemo.domain.review.Review;
 import my.myungjin.academyDemo.web.request.PageRequest;
@@ -39,6 +41,9 @@ public class ReviewServiceTest {
 
     @Autowired
     private ReviewService reviewService;
+
+    @Autowired
+    private ReservesHistoryRepository reservesHistoryRepository;
 
     private Id<Member, String> memberId;
 
@@ -120,6 +125,16 @@ public class ReviewServiceTest {
                 toAttachedFile(multipartFile));
         assertThat(updated, is(notNullValue()));
         log.info("Updated CartItem: {}", updated);
+    }
+
+    @Test
+    @Order(5)
+    void 리뷰_적립금_지급하기() {
+        Review review = reviewService.payReserves(reviewId, 1000);
+        assertThat(review, is(notNullValue()));
+        log.info("Reveiew Writer: {}", review.getMember());
+        boolean chk = reservesHistoryRepository.existsByTypeAndRefId(ReservesType.REVIEW, reviewId.value());
+        assertThat(chk, is(true));
     }
 
 }
