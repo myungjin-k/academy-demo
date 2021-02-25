@@ -42,8 +42,6 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    private final MemberService memberService;
-
     private final ReviewCommentService reviewCommentService;
 
     Logger log = LoggerFactory.getLogger(getClass());
