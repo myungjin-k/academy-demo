@@ -1,13 +1,13 @@
 var main = {
     init : function() {
         reviewList.init();
-        /*$('#div-review-list').off('click').on('click', '.reviewLink', function(){
+        /*$('#div-admin-review-list').off('click').on('click', '.reviewLink', function(){
             var reviewId = $(this).text();
-            $('#div-review-list').removeClass('active');
-            $('#div-review-detail').addClass('active').addClass('show');
+            $('#div-admin-review-list').removeClass('active');
+            $('#div-admin-review-detail').addClass('active').addClass('show');
 
-            $('#tab-review-list').removeClass('active').prop('aria-selected', false);
-            $('#tab-review-detail').show().addClass('active').prop('aria-selected', true);
+            $('#tab-admin-review-list').removeClass('active').prop('aria-selected', false);
+            $('#tab-admin-review-detail').show().addClass('active').prop('aria-selected', true);
             reviewDetail.init(reviewId);
         });*/
     }
@@ -16,7 +16,7 @@ let reviewList = {
     firstPage: 1,
     lastPage: 5,
     currPage: 1,
-    div : $('#div-review-list'),
+    div : $('#div-admin-review-list'),
     init : function () {
         var _this = this;
 
@@ -130,16 +130,16 @@ let reviewList = {
     }
 };
 function goReviewDetail(reviewId){
-    $('.contentDiv').not('#div-review-detail').removeClass('active');
-    $('#div-review-detail').addClass('active').addClass('show');
+    $('.contentDiv').not('#div-admin-review-detail').removeClass('active');
+    $('#div-admin-review-detail').addClass('active').addClass('show');
 
-    $('.contentTab').not('#tab-review-detail').removeClass('active').prop('aria-selected', false);
-    $('#tab-review-detail').show().addClass('active').prop('aria-selected', true);
+    $('.contentTab').not('#tab-admin-review-detail').removeClass('active').prop('aria-selected', false);
+    $('#tab-admin-review-detail').show().addClass('active').prop('aria-selected', true);
 
     reviewDetail.init(reviewId);
 }
 let reviewDetail = {
-    div : $('#div-review-detail'),
+    div : $('#div-admin-review-detail'),
     reviewId : '',
     isPhotoReview : false,
     init : function(reviewId){
@@ -147,7 +147,7 @@ let reviewDetail = {
         _this.reviewId = reviewId;
         _this.load();
 
-        $(document).off('click').on('click', '#btn-pay-reserves', function(){
+        _this.div.find('.reviewInfo').off('click').on('click', '#btn-pay-reserves', function(){
             if(_this.isPhotoReview){
                 _this.payReserves(1000);
             } else {
@@ -229,10 +229,10 @@ let reviewDetail = {
             contentType : 'application/json; charset=UTF-8'
         }).done(function(response){
             //console.log(response.response);
+            _this.load();
         }).fail(function(error){
             alert(JSON.stringify(error));
         });
-        _this.load();
     },
     saveComment : function(){
         const _this = this;
