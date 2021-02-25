@@ -33,9 +33,8 @@ public class JobScheduler {
     @Scheduled(initialDelay = 10000, fixedDelay = 1800000)
     public void runDeliveryJob() {
         try {
-            LocalDateTime dateTime = now().minusMinutes(30);
             JobParameters jobParameters = new JobParametersBuilder()
-                    .addString("createAt", dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                    .addString("createAt", now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                     .toJobParameters();
             jobLauncher.run(deliveryStatusJobConfigure.deliveryStatusJob(), jobParameters);
 

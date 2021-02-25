@@ -3,7 +3,6 @@ package my.myungjin.academyDemo.batch;
 import lombok.extern.slf4j.Slf4j;
 import my.myungjin.academyDemo.domain.order.Delivery;
 import my.myungjin.academyDemo.domain.order.ReceivedDeliveryStatus;
-import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -15,7 +14,6 @@ import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.database.builder.JpaItemWriterBuilder;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
-import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,8 +22,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.persistence.EntityManagerFactory;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 @Slf4j
 @Configuration
@@ -93,15 +89,12 @@ public class DeliveryStatusJobConfigure{
     @Bean
     @StepScope
     public JpaPagingItemReader<ReceivedDeliveryStatus> deliveryStatusReader(){
-        Map<String, Object> parameters = new LinkedHashMap<>();
-        parameters.put("createAt", jobParameter.getCreateAt());
-        log.info("# update delivery status after: {}", parameters.get("createAt"));
+        log.info("# delivery job started at: {}", jobParameter.getCreateAt());
         return new JpaPagingItemReaderBuilder<ReceivedDeliveryStatus>()
                 .name(JOB_NAME + "Reader")
                 .entityManagerFactory(entityManagerFactory)
-                .parameterValues(parameters)
                 .pageSize(chunkSize)
-                .queryString("select d from ReceivedDeliveryStatus d where d.createAt > :createAt and d.applyYn = 'N' order by d.createAt")
+                .queryString("select d from ReceivedDeliveryStatus d where d.applyYn = 'N' order by d.createAt")
                 .build();
     }
 
