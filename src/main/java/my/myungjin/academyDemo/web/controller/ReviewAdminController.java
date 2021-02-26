@@ -14,6 +14,7 @@ import my.myungjin.academyDemo.service.review.ReviewCommentService;
 import my.myungjin.academyDemo.service.review.ReviewService;
 import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.PageRequest;
+import my.myungjin.academyDemo.web.request.ReviewSearchRequest;
 import my.myungjin.academyDemo.web.response.AdminReviewResponse;
 import my.myungjin.academyDemo.web.response.ReviewDetailResponse;
 import org.springframework.data.domain.Page;
@@ -50,6 +51,27 @@ public class ReviewAdminController {
                 .collect(Collectors.toList());
         return OK(
                 new PageImpl<>(result, pageRequest.of(), result.size())
+        );
+    }
+
+
+    @GetMapping("/review/search")
+    @ApiOperation(value = "리뷰 검색")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "direction", dataType = "string", paramType = "query", defaultValue = "DESC", value = "정렬 방향"),
+            @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query", defaultValue = "0", value = "페이징 offset"),
+            @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query", defaultValue = "5", value = "조회 갯수")
+    })
+    public Response<Page<AdminReviewResponse>> searchReviews(ReviewSearchRequest request, PageRequest pageRequest){
+        List<Review> result = reviewService.search(request.getReviewId(), request.getWriterUserId());
+        return OK(
+                new PageImpl<>(
+                        result.stream()
+                               .map(AdminReviewResponse::new)
+                               .collect(Collectors.toList()),
+                        pageRequest.of(),
+                        result.size()
+                )
         );
     }
 

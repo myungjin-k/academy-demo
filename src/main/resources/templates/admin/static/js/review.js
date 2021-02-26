@@ -20,19 +20,19 @@ let reviewList = {
     init : function () {
         var _this = this;
 
-        _this.loadAll();
+        _this.search(1);
         _this.div.on('click', '#pagination-reviews .page-link', function(){
             var link = $(this).text();
             if(link === 'prev'){
                 _this.firstPage = _this.firstPage - 5;
                 _this.lastPage = _this.lastPage - 5;
-                _this.list(_this.firstPage);
+                _this.search(_this.firstPage);
             } else if(link === 'next'){
                 _this.firstPage = _this.firstPage + 5;
                 _this.lastPage = _this.lastPage + 5;
-                _this.list(_this.firstPage);
+                _this.search(_this.firstPage);
             } else {
-                _this.list(link);
+                _this.search(link);
             }
         });
         /*_this.div.find('#btn-search-review').click(function (){
@@ -47,9 +47,58 @@ let reviewList = {
            goReviewDetail(reviewId);
         });
 
+        _this.div.find('#div-review-search #btn-search-review').unbind('click').bind('click', function(){
+            _this.search( 1);
+        });
+
     },
     clearTable : function(){
         $('#reviews').empty();
+    },
+    setData: function (resultData){
+        const _this = this;
+        _this.clearTable();
+        $('#pagination-reviews').setPagination(
+            _this.currPage,
+            _this.firstPage,
+            Math.min(resultData.totalPages, _this.lastPage),
+            5,
+            resultData.totalPages
+        );
+        $.each(resultData.content, function(){
+            //console.log(this);
+            const review = this;
+            const row = '<tr>'
+                + '<td class="reviewId">' + '<a class="reviewLink" href="" onclick="return false;">' + review.id + '</a>' +'</td>'
+                + '<td class="reviewItem">' + review.itemInfo +'</td>'
+                + '<td class="content">' + review.content.split('\n')[0] +'</td>'
+                + '<td class="score">' + review.score +'</td>'
+                + '<td class="createAt">' + review.createAt +'</td>'
+                + '</tr>';
+            $('#reviews').append(row);
+        });
+    },
+    search : function (page){
+        const _this = this;
+        const param = {
+            'reviewId' : _this.div.find('#div-review-search input[name="id"]').val(),
+            'writerUserId' : _this.div.find('#div-review-search input[name="userId"]').val()
+        }
+        $.ajax({
+            type: 'GET',
+            url: '/api/admin/review/search?reviewId=' + param.reviewId + '&writerUserId=' + param.writerUserId
+                +'&page='+ page + '&size=' + 5 + '&direction=DESC',
+            contentType:'application/json; charset=utf-8'
+        }).done(function(response) {
+            const resultData = response.response;
+            //console.log(resultData);
+            _this.currPage = page;
+            if(resultData.totalElements > 0){
+                _this.setData(resultData);
+            }
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
     },
     loadAll : function (page){
         var _this = this;
@@ -64,31 +113,14 @@ let reviewList = {
             //console.log(resultData);
             _this.currPage = page;
             if(resultData.totalElements > 0){
-                $('#pagination-reviews').setPagination(
-                    _this.currPage,
-                    _this.firstPage,
-                    Math.min(resultData.totalPages, _this.lastPage),
-                    5,
-                    resultData.totalPages
-                );
-                $.each(resultData.content, function(){
-                    //console.log(this);
-                    const review = this;
-                    const row = '<tr>'
-                        + '<td class="reviewId">' + '<a class="reviewLink" href="" onclick="return false;">' + review.id + '</a>' +'</td>'
-                        + '<td class="reviewItem">' + review.itemInfo +'</td>'
-                        + '<td class="content">' + review.content.split('\n')[0] +'</td>'
-                        + '<td class="score">' + review.score +'</td>'
-                        + '<td class="createAt">' + review.createAt +'</td>'
-                        + '</tr>';
-                    $('#reviews').append(row);
-                });
+                if(resultData.totalElements > 0){
+                    _this.setData(resultData);
+                }
             }
 
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
-
     },
     list : function (page){
         var _this = this;

@@ -15,7 +15,6 @@ import my.myungjin.academyDemo.error.NotFoundException;
 import my.myungjin.academyDemo.error.StatusNotSatisfiedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -180,8 +180,8 @@ public class ReviewService {
     }
 
     @Transactional
-    public Page<Review> search(String reviewId, String writerUserId, Pageable pageable){
-         return reviewRepository.findAll(ReviewPredicate.searchByIdAndWriterUserId(reviewId, writerUserId), pageable);
+    public List<Review> search(String reviewId, String writerUserId){
+         return (ArrayList<Review>) reviewRepository.findAll(ReviewPredicate.searchByIdAndWriterUserId(reviewId, writerUserId));
     }
 
     private Review save(Review review){

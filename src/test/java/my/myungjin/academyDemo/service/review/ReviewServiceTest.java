@@ -141,13 +141,8 @@ public class ReviewServiceTest {
     @Test
     @Order(6)
     void 리뷰_검색하기() {
-        PageRequest pageRequest = new PageRequest();
-        pageRequest.setPage(1);
-        pageRequest.setSize(5);
-        pageRequest.setDirection(Sort.Direction.DESC);
-        Page<Review> results = reviewService.search(null, "mjkim", pageRequest.of());
-        assertThat(results.getTotalElements(), not(0L));
-        log.info("Review Search Results: {}", results.getContent());
-
+        List<Review> results = reviewService.search(null, "mjkim");
+        assertThat(results.size(), not(0));
+        log.info("Review Search Results: {}", results);
     }
 }

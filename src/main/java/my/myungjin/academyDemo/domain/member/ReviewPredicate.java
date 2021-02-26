@@ -8,10 +8,10 @@ public class ReviewPredicate {
     public static Predicate searchByIdAndWriterUserId(String id, String writerUserId){
         QReview review = QReview.review;
         BooleanBuilder builder = new BooleanBuilder();
-        if(id != null){
+        if(!id.isBlank()){
             builder.and(review.id.eq(id));
         }
-        if(writerUserId != null){
+        if(!writerUserId.isBlank()){
             builder.and(review.member.userId.eq(writerUserId));
         }
         return builder;
