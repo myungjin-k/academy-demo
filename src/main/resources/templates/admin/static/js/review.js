@@ -104,66 +104,6 @@ let reviewList = {
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
-    },
-    loadAll : function (page){
-        const _this = this;
-        _this.clearTable();
-        $.ajax({
-            type: 'GET',
-            url: '/api/admin/review/list?&page=1&size=' + 5 + '&direction=DESC',
-            dataType: 'json',
-            contentType:'application/json; charset=utf-8'
-        }).done(function(response) {
-            var resultData = response.response;
-            //console.log(resultData);
-            _this.currPage = page;
-            if(resultData.totalElements > 0){
-                if(resultData.totalElements > 0){
-                    _this.setData(resultData);
-                }
-            }
-
-        }).fail(function (error) {
-            alert(JSON.stringify(error));
-        });
-    },
-    list : function (page){
-        var _this = this;
-        this.clearTable();
-        var param = $('#input-search-review').val();
-        $.ajax({
-            type: 'GET',
-            url: '/api/admin/review/search?reviewId='+ param +'&page=' + page +'&size=' + 5 + '&direction=DESC',
-            dataType: 'json',
-            contentType:'application/json; charset=utf-8'
-        }).done(function(response) {
-            var resultData = response.response;
-            //console.log(resultData);
-            if(resultData.totalElements > 0){
-                $('#pagination-review').setPagination(
-                    page,
-                    _this.firstPage,
-                    Math.min(resultData.totalPages, _this.lastPage),
-                    5,
-                    resultData.totalPages
-                );
-                $.each(resultData.content, function(){
-                    //console.log(this);
-                    const item = this;
-                    const row = '<tr>'
-                        + '<td class="reviewId">' + '<a class="reviewLink" href="" onclick="return false;">' + item.reviewId + '</a>' +'</td>'
-                        + '<td class="itemName">' + item.itemName +'</td>'
-                        + '<td class="option">' + item.color + '/' + item.size +'</td>'
-                        + '<td class="count">' + item.count +'</td>'
-                        + '<td class="deliveryStatus">' + item.deliveryStatus +'</td>'
-                        + '</tr>';
-                    $('#reviews').append(row);
-                });
-            }
-        }).fail(function (error) {
-            alert(JSON.stringify(error));
-        });
-
     }
 };
 function goReviewDetail(reviewId){
