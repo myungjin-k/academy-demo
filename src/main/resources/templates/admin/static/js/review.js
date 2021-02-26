@@ -185,15 +185,14 @@ let reviewDetail = {
         _this.load();
 
         _this.div.find('.reviewInfo').off('click').on('click', '#btn-pay-reserves', function(){
-            if(_this.isPhotoReview){
-                _this.payReserves(1000);
-            } else {
-                _this.payReserves(500);
-            }
+            const amount = _this.isPhotoReview ? 1000 : 500;
+            _this.payReserves(amount);
         });
 
         _this.div.find('#btn-save-new-comment').unbind('click').bind('click', function(){
-           _this.saveComment();
+            const data = {"content" : _this.div.find('#new-comment-content').val()};
+           _this.saveComment(data);
+           _this.loadComment();
         });
 
         _this.div.off('click').on('click', '#review-comments .deleteBtn', function(){
@@ -263,27 +262,29 @@ let reviewDetail = {
         $.ajax({
             type : 'PATCH',
             url : '/api/admin/review/' + _this.reviewId + '/payReserves?amount=' + amount,
-            contentType : 'application/json; charset=UTF-8'
+            contentType : 'application/json; charset=UTF-8',
+            async: false
         }).done(function(response){
             //console.log(response.response);
+            const data = {"content" : "소중한 리뷰 감사드립니다. 적립금 " + amount +"원 지급 도와드리겠습니다~!"};
+            _this.saveComment(data);
             _this.load();
         }).fail(function(error){
             alert(JSON.stringify(error));
         });
     },
-    saveComment : function(){
+    saveComment : function(data){
         const _this = this;
-        const data = {"content" : _this.div.find('#new-comment-content').val()};
         //console.log(data);
         $.ajax({
             type : 'POST',
             url : '/api/admin/review/' + _this.reviewId + '/comment',
             contentType : 'application/json; charset=UTF-8',
             dataType : 'json',
-            data : JSON.stringify(data)
+            data : JSON.stringify(data),
+            async: false
         }).done(function(response){
             //console.log(response.response);
-            _this.loadComment();
         }).fail(function(error){
             alert(JSON.stringify(error));
         });
