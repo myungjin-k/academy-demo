@@ -1,0 +1,109 @@
+{{>admin/layout/header}}
+
+<div class="container" id="div-member-management" >
+    <ul class="nav nav-tabs" id="adminMemberTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active contentTab" id="tab-admin-member-list" data-toggle="tab" href="#div-admin-member-list" role="tab" aria-controls="div-admin-member-list" aria-selected="true">회원조회</a>
+        </li>
+        <li class="nav-item" >
+            <a class="nav-link contentTab" id="tab-admin-member-detail" data-toggle="tab" href="#div-admin-member-detail" role="tab" aria-controls="div-admin-member-detail" aria-selected="false" style="display: none;">회원상세</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="adminMemberTabContent">
+        <div class="tab-pane fade show active contentDiv" id="div-admin-member-list" role="tabpanel" aria-labelledby="tab-admin-member-list">
+            <div class="pl-5 pt-3 pb-3 mt-3 mb-3 bg-light">
+                <label class="mr-2" for="input-search-member-id">회원ID(코드)</label>
+                <input class="mr-5" type="text" name="id" id="input-search-member-name" >
+                <label class="mr-2" for="btn-search-member-user-id">회원쇼핑몰ID</label>
+                <input class="mr-5" type="text" name="userId" id="input-search-member-user-id" >
+                <a class="btn btn-sm btn-primary" id="btn-search-review">검색</a>
+
+            </div>
+            <div class="mb-3">
+                <table class="table table-horizontal table-bordered">
+                    <thead class="thead-strong">
+                    <tr>
+                        <th>회원ID(코드)</th>
+                        <th>회원쇼핑몰ID</th>
+                        <th>이름</th>
+                        <th>가입일시</th>
+                    </tr>
+                    </thead>
+                    <tbody id="members">
+
+                    </tbody>
+                </table>
+                <div>
+                    <ul class="pagination pagination-sm justify-content-center" id="pagination-members" >
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade contentDiv" id="div-admin-member-detail" role="tabpanel" aria-labelledby="tab-admin-member-detail" >
+            <div class="p-2" >
+                <div class="mb-5 memberInfo p-2">
+                    <h5>회원정보 상세</h5>
+                    <div class="row">
+                        <div class="col-2">회원ID</div>
+                        <div class="col"><span class="field" id="memberId"></span></div>
+                    </div>
+                    <div class="row ">
+                        <div class="col-2">회원쇼핑몰ID</div>
+                        <div class="col">
+                            <span class="field" id="userId"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">이름</div>
+                        <div class="col"><span class="field" id="name"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">가입일시</div>
+                        <div class="col"><span class="field" id="createAt"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">이메일</div>
+                        <div class="col"><span class="field" id="email"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">휴대폰</div>
+                        <div class="col"><span class="field" id="tel"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">주소</div>
+                        <div class="col"><span class="field" id="addr1"></span> &nbsp; <span class="field" id="addr2"></span></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-2">등급</div>
+                        <div class="col"><span class="field" id="rating"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">총주문액</div>
+                        <div class="col"><span class="field" id="orderAmount"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">가용적립금</div>
+                        <div class="col"><span class="field" id="reserves"></span></div>
+                    </div>
+                </div>
+
+                <div class="p-2 mb-3 reservesInfo">
+                    <h5>포인트 적립/차감 내역</h5>
+                    <table class="table table-horizontal table-bordered">
+                        <thead>
+                            <th width="10%">작업일시</th>
+                            <th>내용</th>
+                            <th width="30%">비고</th>
+                        </thead>
+                        <tbody id="member-reserves-history">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="static/js/member.js"></script>
+{{>admin/layout/footer}}

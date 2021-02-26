@@ -104,7 +104,7 @@ public class Member{
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Review> reviews;
 
-    @Getter
+    @Getter @Setter
     @JsonManagedReference
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ReservesHistory> reservesHistories;

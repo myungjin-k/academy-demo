@@ -155,7 +155,7 @@ public class MemberServiceTest {
         assertThat(modified, is(notNullValue()));
         log.info("Modified Member: {}", modified);
     }
-
+/*
     @Test
     @Order(9)
     void 적립금_수기_지급() {
@@ -168,5 +168,5 @@ public class MemberServiceTest {
 
         List<ReservesHistory> reservesHistories = reservesHistoryRepository.findByMemberOrderByCreateAtDesc(member);
         log.info("Reserves Histories: {}", reservesHistories);
-    }
+    }*/
 }

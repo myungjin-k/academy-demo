@@ -3,7 +3,8 @@ package my.myungjin.academyDemo.service.member;
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.commons.mail.Mail;
-import my.myungjin.academyDemo.domain.member.*;
+import my.myungjin.academyDemo.domain.member.Member;
+import my.myungjin.academyDemo.domain.member.MemberRepository;
 import my.myungjin.academyDemo.error.NotFoundException;
 import my.myungjin.academyDemo.service.mail.MailService;
 import org.slf4j.Logger;
@@ -37,8 +38,6 @@ public class MemberService {
     private final MailService mailService;
 
     private final Environment environment;
-
-    private final ReservesHistoryRepository reservesHistoryRepository;
 
     @Transactional
     public Member join(@Valid Member newMember) {
@@ -125,22 +124,6 @@ public class MemberService {
             save(ori);
             return ori;
         }).orElseThrow(() -> new NotFoundException(Member.class, id.value()));
-    }
-
-    //TODO 적립금 히스토리
-    @Transactional
-    public Member updateReserves(@Valid Id<Member, String> memberId, int minus, int plus){
-        return memberRepository.findById(memberId.value())
-                .map(member -> {
-                    member.flushReserves(minus);
-                    member.addReserves(plus);
-                    ReservesHistory newHistory = ReservesHistory.builder()
-                            .amount(-minus + plus)
-                            .type(ReservesType.ADMIN)
-                            .build();
-                    member.addReservesHistory(newHistory);
-                    return save(member);
-                }).orElseThrow(() -> new NotFoundException(Member.class, memberId));
     }
 
     private Optional<Member> findByUserId(String userId){
