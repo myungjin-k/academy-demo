@@ -301,7 +301,7 @@ INSERT INTO order_master (order_email, id, abbr_items_name, member_id, total_amo
 ('open7894.v2@gmail.com', '1c787e3c4f6a404194016698d8c760a2','그랜드 핀턱 팬츠 (2color)', '3a18e633a5db4dbd8aaee218fe447fa4', 43000, '명진', '010-1234-5678','XX시 XX구 XX로', '1-1111', dateadd('hour', -3, current_timestamp));
 INSERT INTO order_item (id, ORDER_ID, item_id, count, create_at) VALUES ('c2f7602adc44444fb0824f6be5260a0b', '1c787e3c4f6a404194016698d8c760a2', 'c9402883dbe540e898a417e4884845bf', 1, dateadd('hour', -3, current_timestamp));
 INSERT INTO delivery (id, order_id, STATUS, RECEIVER_NAME, RECEIVER_TEL, RECEIVER_ADDR1, RECEIVER_ADDR2, ext_delivery_id, create_at) VALUES
-('2ea7f983db2e486e9f6483b9d4bc99c0', '1c787e3c4f6a404194016698d8c760a2', 1, '명진', '010-1234-5678','XX시 XX구 XX로', '1-1111', 'EXT001', dateadd('hour', -3, current_timestamp));
+('2ea7f983db2e486e9f6483b9d4bc99c0', '1c787e3c4f6a404194016698d8c760a2', 4, '명진', '010-1234-5678','XX시 XX구 XX로', '1-1111', 'EXT001', dateadd('hour', -3, current_timestamp));
 INSERT INTO delivery_item (id, delivery_id, item_id, count, create_at) VALUES ('2701a20da18a4f35b870e52cd6c588ac', '2ea7f983db2e486e9f6483b9d4bc99c0', 'c9402883dbe540e898a417e4884845bf', 1, dateadd('hour', -3, current_timestamp));
 UPDATE order_item SET delivery_item_id = '2701a20da18a4f35b870e52cd6c588ac' WHERE id = 'c2f7602adc44444fb0824f6be5260a0b';
 
@@ -377,10 +377,13 @@ INSERT INTO delivery (id, order_id, STATUS, RECEIVER_NAME, RECEIVER_TEL, RECEIVE
 INSERT INTO delivery_item (id, delivery_id, item_id, count, create_at) VALUES ('59628a352b8f46f9ad94c9ca3c9d11bf', 'fddd09b724444c749c3d6e33d923f2f3', 'c9402883dbe540e898a417e4884845bf', 1, dateadd('hour', -3, current_timestamp));
 UPDATE order_item SET delivery_item_id = '59628a352b8f46f9ad94c9ca3c9d11bf' WHERE id = '8f811e5ef62c4eacbe3166bc311a5a43';
 
-// 배송정보 수신 데이터
-INSERT INTO received_delivery_status (id, ext_delivery_id, seq, status) values ('d22555848ba84718a1d48414a21d371e','EXT001', 1, 2);
+INSERT INTO received_delivery_status (id, ext_delivery_id, seq, status, apply_yn) values ('d22555848ba84718a1d48414a21d371e','EXT001', 1, 2, 'Y');
+INSERT INTO received_delivery_status (id, ext_delivery_id, seq, status, apply_yn) values ('d22555848ba84718a1d48414a21d371e','EXT001', 2, 3, 'Y');
+INSERT INTO received_delivery_status (id, ext_delivery_id, seq, status, apply_yn) values ('d22555848ba84718a1d48414a21d371e','EXT001', 3, 4, 'Y');
 INSERT INTO received_delivery_status (id, ext_delivery_id, seq, status) values ('4918a486e4044bb2acc0edeea7cfcbcf', 'EXT002', 1, 2);
 INSERT INTO received_delivery_status (id, ext_delivery_id, seq, status) values ('51e6c2dd4cef49419d499e6f9d1bb4aa', 'EXT003', 1, 2);
 
-// 적립금 히스토리
-INSERT INTO reserves_history (member_id, type, amount) values ('3a18e633a5db4dbd8aaee218fe447fa4', 'ADMIN', 300000);
+INSERT INTO reserves_history (id, member_id, type, amount) values ('d6975a643f2440f686079f9e13b220b0','3a18e633a5db4dbd8aaee218fe447fa4', 'ADMIN', 300000);
+INSERT INTO reserves_history (id, member_id, type, amount, ref_id) values ('2560221fcbba422d809fd423b0cfdd12','3a18e633a5db4dbd8aaee218fe447fa4', 'ORDER', 430, '1c787e3c4f6a404194016698d8c760a2');
+
+INSERT INTO review (id, member_id, item_id, order_item_id, content) VALUES ('54ef07aad6864e5488d790dd88708be0', '3a18e633a5db4dbd8aaee218fe447fa4', 'f23ba30a47194a2c8a3fd2ccadd952a4', 'c2f7602adc44444fb0824f6be5260a0b', '만족합니다');

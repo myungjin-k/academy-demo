@@ -3,6 +3,7 @@ package my.myungjin.academyDemo.service.item;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.domain.item.ItemMaster;
+import my.myungjin.academyDemo.service.admin.item.ItemMasterService;
 import my.myungjin.academyDemo.web.request.PageRequest;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.Is;
@@ -15,14 +16,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 import static my.myungjin.academyDemo.commons.AttachedFile.toAttachedFile;

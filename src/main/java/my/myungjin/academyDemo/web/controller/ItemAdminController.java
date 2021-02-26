@@ -10,17 +10,15 @@ import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.item.ItemMaster;
 import my.myungjin.academyDemo.domain.item.ItemStatus;
-import my.myungjin.academyDemo.service.item.ItemDisplayOptionService;
-import my.myungjin.academyDemo.service.item.ItemDisplayService;
-import my.myungjin.academyDemo.service.item.ItemMasterService;
-import my.myungjin.academyDemo.service.item.ItemOptionService;
+import my.myungjin.academyDemo.service.admin.item.ItemDisplayOptionService;
+import my.myungjin.academyDemo.service.admin.item.ItemDisplayService;
+import my.myungjin.academyDemo.service.admin.item.ItemMasterService;
+import my.myungjin.academyDemo.service.admin.item.ItemOptionService;
 import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -264,7 +262,7 @@ public class ItemAdminController {
     })
     public Response<Page<ItemDisplay>> searchMaster(ItemSearchRequest request, PageRequest pageRequest){
         return  OK(
-                itemDisplayService.searchByNameAndCreateAt(request.getItemName(), request.getStart(), request.getEnd(), false, pageRequest.of())
+                itemDisplayService.searchByNameAndCreateAt(request.getItemName(), request.getStart(), request.getEnd(), pageRequest.of())
         );
     }
 

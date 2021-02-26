@@ -10,7 +10,7 @@ import my.myungjin.academyDemo.domain.common.CodeGroup;
 import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.service.admin.CommonCodeService;
-import my.myungjin.academyDemo.service.item.ItemDisplayService;
+import my.myungjin.academyDemo.service.item.ItemService;
 import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.ItemSearchRequest;
 import my.myungjin.academyDemo.web.request.PageRequest;
@@ -33,7 +33,7 @@ import static my.myungjin.academyDemo.web.Response.OK;
 @RestController
 public class ItemSaleController {
 
-    private final ItemDisplayService itemDisplayService;
+    private final ItemService itemService;
 
     private final CommonCodeService commonCodeService;
 
@@ -42,7 +42,7 @@ public class ItemSaleController {
     @ApiOperation(value = "top seller 상품 조회(API 키 필요없음)")
     public Response<List<ItemDisplayResponse>> topSellerItems(){
         return OK(
-                itemDisplayService.findTopSellerItems()
+                itemService.findTopSellerItems()
                 .stream()
                 .map(item -> new ItemDisplayResponse().of(item))
                 .collect(Collectors.toList())
@@ -58,7 +58,7 @@ public class ItemSaleController {
     })
     public Response<Page<ItemDisplayResponse>> allItems(PageRequest pageRequest){
         return OK(
-                itemDisplayService.findAll(pageRequest.of())
+                itemService.findAll(pageRequest.of())
                 .map(itemDisplay -> new ItemDisplayResponse().of(itemDisplay))
         );
     }
@@ -67,7 +67,7 @@ public class ItemSaleController {
     @ApiOperation(value = "전시상품 상세 조회(API 키 필요없음)")
     public Response<ItemDetailResponse> itemDetail(@PathVariable @ApiParam(value = "대상 전시상품 PK", defaultValue = "f23ba30a47194a2c8a3fd2ccadd952a4") String id){
         return OK(
-                new ItemDetailResponse().of(itemDisplayService.findByIdWithOptions(Id.of(ItemDisplay.class, id)))
+                new ItemDetailResponse().of(itemService.findByIdWithOptions(Id.of(ItemDisplay.class, id)))
         );
     }
 
@@ -82,7 +82,7 @@ public class ItemSaleController {
     })
     public Response<Page<ItemDisplay>> searchDisplayItems(ItemSearchRequest request, PageRequest pageRequest){
         return  OK(
-                itemDisplayService.searchByNameAndCreateAt(request.getItemName(), null, null, true, pageRequest.of())
+                itemService.searchByNameAndCreateAt(request.getItemName(), null, null, pageRequest.of())
         );
     }
 
@@ -97,7 +97,7 @@ public class ItemSaleController {
     public Response<Page<ItemDisplayResponse>> searchMaster(@PathVariable @ApiParam(value = "대상 카테고리 PK", defaultValue = "3ebebfeb9fbe4ecfa5935f96ed308854") String categoryId,
                                                     PageRequest pageRequest){
         return  OK(
-                itemDisplayService.findAllByCategoryGroup(Id.of(CommonCode.class, categoryId), pageRequest.of())
+                itemService.findAllByCategoryGroup(Id.of(CommonCode.class, categoryId), pageRequest.of())
                         .map(itemDisplay -> new ItemDisplayResponse().of(itemDisplay))
         );
     }

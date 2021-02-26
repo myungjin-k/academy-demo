@@ -3,8 +3,6 @@ package my.myungjin.academyDemo.service.review;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.member.Member;
-import my.myungjin.academyDemo.domain.member.ReservesHistoryRepository;
-import my.myungjin.academyDemo.domain.member.ReservesType;
 import my.myungjin.academyDemo.domain.order.OrderItem;
 import my.myungjin.academyDemo.domain.review.Review;
 import my.myungjin.academyDemo.web.request.PageRequest;
@@ -13,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
@@ -42,9 +39,6 @@ public class ReviewServiceTest {
 
     @Autowired
     private ReviewService reviewService;
-
-    @Autowired
-    private ReservesHistoryRepository reservesHistoryRepository;
 
     private Id<Member, String> memberId;
 
@@ -128,21 +122,4 @@ public class ReviewServiceTest {
         log.info("Updated CartItem: {}", updated);
     }
 
-    @Test
-    @Order(5)
-    void 리뷰_적립금_지급하기() {
-        Review review = reviewService.payReserves(reviewId, 1000);
-        assertThat(review, is(notNullValue()));
-        log.info("Review Writer: {}", review.getMember());
-        boolean chk = reservesHistoryRepository.existsByTypeAndRefId(ReservesType.REVIEW, reviewId.value());
-        assertThat(chk, is(true));
-    }
-
-    @Test
-    @Order(6)
-    void 리뷰_검색하기() {
-        List<Review> results = reviewService.search(null, null, "REPLIED");
-        //assertThat(results.size(), not(0));
-        log.info("Review Search Results: {}", results);
-    }
 }

@@ -6,11 +6,10 @@ import my.myungjin.academyDemo.aws.S3Client;
 import my.myungjin.academyDemo.commons.AttachedFile;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
-import my.myungjin.academyDemo.domain.member.*;
+import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.order.*;
 import my.myungjin.academyDemo.domain.review.Review;
 import my.myungjin.academyDemo.domain.review.ReviewCommentRepository;
-import my.myungjin.academyDemo.domain.review.ReviewPredicate;
 import my.myungjin.academyDemo.domain.review.ReviewRepository;
 import my.myungjin.academyDemo.error.NotFoundException;
 import my.myungjin.academyDemo.error.StatusNotSatisfiedException;
@@ -23,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -44,19 +42,10 @@ public class ReviewService {
 
     private final ReviewCommentRepository reviewCommentRepository;
 
-    private final MemberRepository memberRepository;
-
-    private final ReservesHistoryRepository reservesHistoryRepository;
-
     private final S3Client s3Client;
 
     private final String S3_BASE_PATH = "review";
 
-
-    @Transactional
-    public List<Review> findAllDesc(){
-        return reviewRepository.findAllByOrderByCreateAtDesc();
-    }
 
     @Transactional(readOnly = true)
     public List<Review> findAllByItem(@Valid Id<ItemDisplay, String> itemId, Pageable pageable){
@@ -156,37 +145,7 @@ public class ReviewService {
         return save(review);
     }
 
-    @Transactional
-    public Review payReserves(@Valid Id<Review, String> reviewId, @Positive int reserves){
-        return reviewRepository.findById(reviewId.value())
-                .map(review -> {
-                    if(review.isReservesPaid()){
-                        log.info("Reserves Already Paid: {}", reviewId);
-                        return review;
-                    }
-
-                    Member member = review.getMember();
-                    member.addReserves(reserves);
-                    ReservesHistory newHistory = ReservesHistory.builder()
-                            .amount(reserves)
-                            .type(ReservesType.REVIEW)
-                            .refId(reviewId.value())
-                            .build();
-                    member.addReservesHistory(newHistory);
-
-                    review.reservesPaid();
-                    return save(review);
-                }).orElseThrow(() -> new NotFoundException(Review.class, reviewId));
-
-    }
-
-    @Transactional
-    public List<Review> search(String reviewId, String writerUserId, String replyStatus){
-         return (ArrayList<Review>) reviewRepository.findAll(ReviewPredicate.searchByIdAndWriterUserId(reviewId, writerUserId, replyStatus));
-    }
-
     private Review save(Review review){
         return reviewRepository.save(review);
     }
-
 }

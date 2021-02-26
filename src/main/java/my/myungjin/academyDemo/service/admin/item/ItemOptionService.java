@@ -1,4 +1,4 @@
-package my.myungjin.academyDemo.service.item;
+package my.myungjin.academyDemo.service.admin.item;
 
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;

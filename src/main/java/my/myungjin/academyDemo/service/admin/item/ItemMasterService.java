@@ -1,4 +1,4 @@
-package my.myungjin.academyDemo.service.item;
+package my.myungjin.academyDemo.service.admin.item;
 
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import lombok.RequiredArgsConstructor;

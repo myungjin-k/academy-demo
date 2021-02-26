@@ -1,4 +1,4 @@
-package my.myungjin.academyDemo.service.item;
+package my.myungjin.academyDemo.service.admin.item;
 
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import lombok.RequiredArgsConstructor;
@@ -48,13 +48,6 @@ public class ItemDisplayService {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    @Transactional(readOnly = true)
-    public List<ItemDisplay> findTopSellerItems(){
-        return topSellerRepository.findByCreateAtAfter(LocalDate.now().atStartOfDay())
-                .stream()
-                .map(TopSeller::getItem)
-                .collect(Collectors.toList());
-    }
 
     @Transactional(readOnly = true)
     public Page<ItemDisplay> findAll(Pageable pageable){
@@ -73,11 +66,6 @@ public class ItemDisplayService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ItemDisplay> findAllByCategoryGroup(@Valid Id<CommonCode, String> categoryId, Pageable pageable){
-        return itemDisplayRepository.findAllByItemMasterCategoryIdOrItemMasterCategoryCodeGroupIdAndStatusEquals(categoryId.value(), categoryId.value(), ItemStatus.ON_SALE, pageable);
-    }
-
-    @Transactional(readOnly = true)
     public Optional<ItemDisplay> findByItemMaster(@Valid Id<ItemMaster, String> itemMasterId){
         return itemDisplayRepository.findByItemMasterId(itemMasterId.value());
     }
@@ -86,17 +74,6 @@ public class ItemDisplayService {
     public ItemDisplay findById(@Valid Id<ItemDisplay, String> itemDisplayId){
         return itemDisplayRepository.findById(itemDisplayId.value())
                 .orElseThrow(() -> new NotFoundException(ItemDisplay.class, itemDisplayId));
-    }
-
-    @Transactional(readOnly = true)
-    public ItemDisplay findByIdWithOptions(@Valid Id<ItemDisplay, String> itemDisplayId){
-        return itemDisplayRepository.findById(itemDisplayId.value())
-                .map(itemDisplay -> {
-                    List<ItemDisplay.ItemDisplayOption> options = itemDisplayOptionRepository.findAllByItemDisplay(itemDisplay);
-                    if(!options.isEmpty())
-                        itemDisplay.setOptions(options);
-                    return itemDisplay;
-                }).orElseThrow(() -> new NotFoundException(ItemDisplay.class, itemDisplayId));
     }
 
     private String getServerProfile(){
@@ -183,8 +160,8 @@ public class ItemDisplayService {
     }
 
     @Transactional
-    public Page<ItemDisplay> searchByNameAndCreateAt(String displayName, LocalDate start, LocalDate end, boolean isFromMall, Pageable pageable){
-        return itemDisplayRepository.findAll(ItemDisplayPredicate.searchByNameAndDate(displayName, start, end, isFromMall), pageable);
+    public Page<ItemDisplay> searchByNameAndCreateAt(String displayName, LocalDate start, LocalDate end, Pageable pageable){
+        return itemDisplayRepository.findAll(ItemDisplayPredicate.searchByNameAndDate(displayName, start, end, false), pageable);
     }
 
     private ItemDisplay getOne(String id){

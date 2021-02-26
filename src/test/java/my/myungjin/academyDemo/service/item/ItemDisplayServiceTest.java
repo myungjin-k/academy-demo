@@ -5,6 +5,7 @@ import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.item.ItemMaster;
 import my.myungjin.academyDemo.domain.item.ItemStatus;
+import my.myungjin.academyDemo.service.admin.item.ItemDisplayService;
 import my.myungjin.academyDemo.web.request.PageRequest;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
@@ -177,7 +178,7 @@ public class ItemDisplayServiceTest {
         request.setPage(0);
         request.setSize(5);
         request.setDirection(Sort.Direction.DESC);
-        Page<ItemDisplay> results = itemDisplayService.searchByNameAndCreateAt("니트", LocalDate.now(), null,  false, request.of());
+        Page<ItemDisplay> results = itemDisplayService.searchByNameAndCreateAt("니트", LocalDate.now(), null, request.of());
 
         assertThat(results.getTotalElements(), is(1L));
         log.info("Result item: {}", results.getContent());

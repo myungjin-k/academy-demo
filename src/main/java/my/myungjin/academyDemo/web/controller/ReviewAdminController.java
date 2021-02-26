@@ -10,8 +10,8 @@ import my.myungjin.academyDemo.domain.member.Admin;
 import my.myungjin.academyDemo.domain.review.Review;
 import my.myungjin.academyDemo.domain.review.ReviewComment;
 import my.myungjin.academyDemo.security.User;
+import my.myungjin.academyDemo.service.admin.ReviewAdminService;
 import my.myungjin.academyDemo.service.review.ReviewCommentService;
-import my.myungjin.academyDemo.service.review.ReviewService;
 import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.PageRequest;
 import my.myungjin.academyDemo.web.request.ReviewSearchRequest;
@@ -36,7 +36,8 @@ public class ReviewAdminController {
 
     private final ReviewCommentService reviewCommentService;
 
-    private final ReviewService reviewService;
+    private final ReviewAdminService reviewAdminService;
+/*
 
     @GetMapping("/review/list")
     @ApiOperation(value = "리뷰 목록 조회")
@@ -53,6 +54,7 @@ public class ReviewAdminController {
                 new PageImpl<>(result, pageRequest.of(), result.size())
         );
     }
+*/
 
 
     @GetMapping("/review/search")
@@ -63,7 +65,7 @@ public class ReviewAdminController {
             @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query", defaultValue = "5", value = "조회 갯수")
     })
     public Response<Page<AdminReviewResponse>> searchReviews(ReviewSearchRequest request, PageRequest pageRequest){
-        List<Review> result = reviewService.search(request.getReviewId(), request.getWriterUserId(), request.getReplyStatus());
+        List<Review> result = reviewAdminService.search(request.getReviewId(), request.getWriterUserId(), request.getReplyStatus());
         return OK(
                 new PageImpl<>(
                         result.stream()
@@ -80,7 +82,7 @@ public class ReviewAdminController {
     public Response<ReviewDetailResponse> getReviewDetail(
             @PathVariable @ApiParam(value = "조회 대상 리뷰 PK") String id){
         return OK(
-                new ReviewDetailResponse(reviewService.findById(Id.of(Review.class, id)))
+                new ReviewDetailResponse(reviewAdminService.findById(Id.of(Review.class, id)))
         );
     }
 
@@ -89,7 +91,7 @@ public class ReviewAdminController {
     public Response<Review> payReviewReserves(
             @PathVariable @ApiParam(value = "조회 대상 리뷰 PK") String id, @RequestParam int amount){
         return OK(
-                reviewService.payReserves(Id.of(Review.class, id), amount)
+                reviewAdminService.payReserves(Id.of(Review.class, id), amount)
         );
     }
 
