@@ -13,4 +13,6 @@ public class ReviewSearchRequest {
 
     private String writerUserId;
 
+    private String replyStatus;
+
 }

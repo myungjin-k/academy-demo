@@ -41,6 +41,9 @@ let reviewList = {
             _this.list(_this.firstPage);
         });*/
 
+        _this.div.find('#btn-load-unreplied-reviews').unbind('click').bind('click', function(){
+            _this.search(1, true);
+        });
 
         _this.div.off('click').on('click', '.reviewLink', function(){
            const reviewId = $(this).parents('tr').find('.reviewId').text();
@@ -48,7 +51,7 @@ let reviewList = {
         });
 
         _this.div.find('#div-review-search #btn-search-review').unbind('click').bind('click', function(){
-            _this.search( 1);
+            _this.search( 1, null);
         });
 
     },
@@ -57,7 +60,6 @@ let reviewList = {
     },
     setData: function (resultData){
         const _this = this;
-        _this.clearTable();
         $('#pagination-reviews').setPagination(
             _this.currPage,
             _this.firstPage,
@@ -78,20 +80,23 @@ let reviewList = {
             $('#reviews').append(row);
         });
     },
-    search : function (page){
+    search : function (page, isUnReplied){
         const _this = this;
+        _this.clearTable();
         const param = {
             'reviewId' : _this.div.find('#div-review-search input[name="id"]').val(),
-            'writerUserId' : _this.div.find('#div-review-search input[name="userId"]').val()
+            'writerUserId' : _this.div.find('#div-review-search input[name="userId"]').val(),
+            'replyStatus' : isUnReplied ? 'UNREPLIED' : ''
         }
         $.ajax({
             type: 'GET',
             url: '/api/admin/review/search?reviewId=' + param.reviewId + '&writerUserId=' + param.writerUserId
-                +'&page='+ page + '&size=' + 5 + '&direction=DESC',
+                + '&replyStatus=' +  param.replyStatus
+                + '&page='+ page + '&size=' + 5 + '&direction=DESC',
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
             const resultData = response.response;
-            //console.log(resultData);
+            console.log(resultData);
             _this.currPage = page;
             if(resultData.totalElements > 0){
                 _this.setData(resultData);
@@ -101,8 +106,8 @@ let reviewList = {
         });
     },
     loadAll : function (page){
-        var _this = this;
-        this.clearTable();
+        const _this = this;
+        _this.clearTable();
         $.ajax({
             type: 'GET',
             url: '/api/admin/review/list?&page=1&size=' + 5 + '&direction=DESC',

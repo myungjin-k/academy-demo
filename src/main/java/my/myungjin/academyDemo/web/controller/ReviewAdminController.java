@@ -63,7 +63,7 @@ public class ReviewAdminController {
             @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query", defaultValue = "5", value = "조회 갯수")
     })
     public Response<Page<AdminReviewResponse>> searchReviews(ReviewSearchRequest request, PageRequest pageRequest){
-        List<Review> result = reviewService.search(request.getReviewId(), request.getWriterUserId());
+        List<Review> result = reviewService.search(request.getReviewId(), request.getWriterUserId(), request.getReplyStatus());
         return OK(
                 new PageImpl<>(
                         result.stream()

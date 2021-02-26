@@ -10,6 +10,7 @@ import my.myungjin.academyDemo.domain.member.*;
 import my.myungjin.academyDemo.domain.order.*;
 import my.myungjin.academyDemo.domain.review.Review;
 import my.myungjin.academyDemo.domain.review.ReviewCommentRepository;
+import my.myungjin.academyDemo.domain.review.ReviewPredicate;
 import my.myungjin.academyDemo.domain.review.ReviewRepository;
 import my.myungjin.academyDemo.error.NotFoundException;
 import my.myungjin.academyDemo.error.StatusNotSatisfiedException;
@@ -180,8 +181,8 @@ public class ReviewService {
     }
 
     @Transactional
-    public List<Review> search(String reviewId, String writerUserId){
-         return (ArrayList<Review>) reviewRepository.findAll(ReviewPredicate.searchByIdAndWriterUserId(reviewId, writerUserId));
+    public List<Review> search(String reviewId, String writerUserId, String replyStatus){
+         return (ArrayList<Review>) reviewRepository.findAll(ReviewPredicate.searchByIdAndWriterUserId(reviewId, writerUserId, replyStatus));
     }
 
     private Review save(Review review){
