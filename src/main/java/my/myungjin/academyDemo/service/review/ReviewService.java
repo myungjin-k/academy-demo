@@ -15,6 +15,7 @@ import my.myungjin.academyDemo.error.NotFoundException;
 import my.myungjin.academyDemo.error.StatusNotSatisfiedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -176,6 +177,11 @@ public class ReviewService {
                     return save(review);
                 }).orElseThrow(() -> new NotFoundException(Review.class, reviewId));
 
+    }
+
+    @Transactional
+    public Page<Review> search(String reviewId, String writerUserId, Pageable pageable){
+         return reviewRepository.findAll(ReviewPredicate.searchByIdAndWriterUserId(reviewId, writerUserId), pageable);
     }
 
     private Review save(Review review){

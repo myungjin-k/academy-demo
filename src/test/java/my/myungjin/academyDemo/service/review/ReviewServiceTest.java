@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
@@ -132,9 +133,21 @@ public class ReviewServiceTest {
     void 리뷰_적립금_지급하기() {
         Review review = reviewService.payReserves(reviewId, 1000);
         assertThat(review, is(notNullValue()));
-        log.info("Reveiew Writer: {}", review.getMember());
+        log.info("Review Writer: {}", review.getMember());
         boolean chk = reservesHistoryRepository.existsByTypeAndRefId(ReservesType.REVIEW, reviewId.value());
         assertThat(chk, is(true));
     }
 
+    @Test
+    @Order(6)
+    void 리뷰_검색하기() {
+        PageRequest pageRequest = new PageRequest();
+        pageRequest.setPage(1);
+        pageRequest.setSize(5);
+        pageRequest.setDirection(Sort.Direction.DESC);
+        Page<Review> results = reviewService.search(null, "mjkim", pageRequest.of());
+        assertThat(results.getTotalElements(), not(0L));
+        log.info("Review Search Results: {}", results.getContent());
+
+    }
 }
