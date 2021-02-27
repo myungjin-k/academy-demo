@@ -88,11 +88,19 @@
                     </div>
                 </div>
 
+
                 <div class="p-2 mb-3 reservesInfo">
                     <h5>포인트 적립/차감 내역</h5>
+                    <div class="div-crud-buttons">
+                        <label for="input-pay-reserves-plus">적립</label>
+                        <input class="text-right" name="plus" id="input-pay-reserves-plus" value="0"/> 원
+                        <label class="ml-1" for="input-pay-reserves-plus">차감</label>
+                        <input class="text-right" name="minus" id="input-pay-reserves-minus" value="0"/> 원
+                        <a class="btn btn-outline-primary ml-2" id="btn-admin-pay-reserves">적립금 수기 지급</a>
+                    </div>
                     <table class="table table-horizontal table-bordered">
                         <thead>
-                            <th width="10%">작업일시</th>
+                            <th width="20%">작업일시</th>
                             <th width="30%">변동내역</th>
                             <th >비고</th>
                         </thead>

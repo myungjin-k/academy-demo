@@ -46,7 +46,11 @@ public class MemberAdminService {
                             .type(ReservesType.ADMIN)
                             .build();
                     member.addReservesHistory(newHistory);
+                    reservesHistoryRepository.save(newHistory);
                     return save(member);
+                }).map(member -> {
+                    member.setReservesHistories(reservesHistoryRepository.findByMemberOrderByCreateAtDesc(member));
+                    return member;
                 }).orElseThrow(() -> new NotFoundException(Member.class, memberId));
     }
 

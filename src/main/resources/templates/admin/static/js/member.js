@@ -110,13 +110,21 @@ let memberDetail = {
         const _this = this;
         _this.memberId = memberId;
         _this.load();
+
+        _this.div.find('.reservesInfo #btn-admin-pay-reserves').click(function(){
+            const plus = _this.div.find('.reservesInfo #input-pay-reserves-plus').val();
+            const minus = _this.div.find('.reservesInfo #input-pay-reserves-minus').val();
+           _this.payReserves(minus, plus);
+        });
     },
     clear : function (){
         const _this = this;
         _this.div.find('.reservesInfo #member-reserves-history').empty();
+        _this.div.find('.reservesInfo input').val(0);
         const memberInfo = _this.div.find('.memberInfo');
         memberInfo.find('.field').text('');
         memberInfo.find('input.field').val('');
+
     },
     load : function(){
         const _this = this;
@@ -126,7 +134,7 @@ let memberDetail = {
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
             var member = response.response;
-            console.log(member);
+            //console.log(member);
             _this.clear();
             const memberInfo = _this.div.find('.memberInfo');
             memberInfo.find('#memberId').text(member.id);
@@ -156,11 +164,28 @@ let memberDetail = {
             let row = $('<tr />')
                 .append($('<input type="hidden" name="reservesId"/>').val(history.id))
                 .append($('<td class="creatAt"/>').text(history.createAt))
-                .append($('<td class="amount"/>').text(history.amount))
+                .append($('<td class="amount text-right"/>').text(history.amount))
                 .append($('<td class="ref"/>').text(history.type + ref));
 
             _this.div.find('.reservesInfo #member-reserves-history').append(row);
         });
     },
+    payReserves : function(minus, plus){
+        const _this = this;
+        const chk = Number(_this.div.find('.memberInfo #reserves').text()) - minus < 0;
+        if(chk){
+            alert('차감 후 적립금이 0원 미만일 수 없습니다.');
+            return false;
+        }
+        $.ajax({
+            type: 'PATCH',
+            url: '/api/admin/member/' + _this.memberId + '/payReserves?minus=' + minus + '&plus=' + plus,
+            contentType:'application/json; charset=utf-8'
+        }).done(function(response) {
+            _this.load();
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+    }
 };
 main.init();

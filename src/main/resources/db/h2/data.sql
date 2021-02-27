@@ -27,6 +27,7 @@ INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('bea264
 
 
 INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount) VALUES ('3a18e633a5db4dbd8aaee218fe447fa4', 'mjkim', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진', 'open7894.v2@gmail.com', '010-1234-5678','XX시 XX구 XX로', '1-1111', 300000, 50000);
+INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount) VALUES ('d408036ed8134e0bb0c3775e3f6dde8f', 'mjkim2', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진2', 'rla_mj@naver.com', '010-1111-1111','XX시 XX구 XX로', '1-1111', 300000, 0);
 
 INSERT INTO admin (id, admin_id, password) VALUES ('3a18e633a5db4dbd8aaee218fe447fa4', 'mjkim', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq');
 

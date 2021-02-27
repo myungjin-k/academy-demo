@@ -15,10 +15,7 @@ import my.myungjin.academyDemo.web.response.AdminMemberDetailResponse;
 import my.myungjin.academyDemo.web.response.AdminMemberListResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -63,13 +60,13 @@ public class MemberAdminController {
         );
     }
 
-    /*@PatchMapping("/member/{id}/payReserves")
+    @PatchMapping("/member/{id}/payReserves")
     @ApiOperation(value = "적립금 수기 지급")
     public Response<Member> payAdminReserves(
             @PathVariable @ApiParam(value = "조회 대상 회원 PK") String id, @RequestParam int minus, @RequestParam int plus){
         return OK(
                 memberAdminService.updateReserves(Id.of(Member.class, id), minus, plus)
         );
-    }*/
+    }
 
 }
