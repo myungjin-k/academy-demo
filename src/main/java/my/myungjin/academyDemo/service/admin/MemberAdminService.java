@@ -21,7 +21,7 @@ public class MemberAdminService {
 
     @Transactional(readOnly = true)
     public List<Member> search(String memberId, String userId){
-        return (ArrayList<Member>) memberRepository.findAll(MemberPredicate.search(memberId, userId));
+        return ((ArrayList<Member>) memberRepository.findAll(MemberPredicate.search(memberId, userId)));
 
     }
 

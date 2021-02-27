@@ -11,12 +11,12 @@
     </ul>
     <div class="tab-content" id="adminMemberTabContent">
         <div class="tab-pane fade show active contentDiv" id="div-admin-member-list" role="tabpanel" aria-labelledby="tab-admin-member-list">
-            <div class="pl-5 pt-3 pb-3 mt-3 mb-3 bg-light">
+            <div class="pl-5 pt-3 pb-3 mt-3 mb-3 bg-light" id="div-member-search">
                 <label class="mr-2" for="input-search-member-id">회원ID(코드)</label>
-                <input class="mr-5" type="text" name="id" id="input-search-member-name" >
-                <label class="mr-2" for="btn-search-member-user-id">회원쇼핑몰ID</label>
+                <input class="mr-5" type="text" name="memberId" id="input-search-member-id" >
+                <label class="mr-2" for="input-search-member-user-id">회원쇼핑몰ID</label>
                 <input class="mr-5" type="text" name="userId" id="input-search-member-user-id" >
-                <a class="btn btn-sm btn-primary" id="btn-search-review">검색</a>
+                <a class="btn btn-sm btn-primary" id="btn-search-member">검색</a>
 
             </div>
             <div class="mb-3">
@@ -26,7 +26,7 @@
                         <th>회원ID(코드)</th>
                         <th>회원쇼핑몰ID</th>
                         <th>이름</th>
-                        <th>가입일시</th>
+                        <th>가입일</th>
                     </tr>
                     </thead>
                     <tbody id="members">
@@ -93,8 +93,8 @@
                     <table class="table table-horizontal table-bordered">
                         <thead>
                             <th width="10%">작업일시</th>
-                            <th>내용</th>
-                            <th width="30%">비고</th>
+                            <th width="30%">변동내역</th>
+                            <th >비고</th>
                         </thead>
                         <tbody id="member-reserves-history">
 

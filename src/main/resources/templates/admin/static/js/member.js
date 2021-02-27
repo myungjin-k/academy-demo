@@ -35,15 +35,15 @@ let memberList = {
                 _this.search(link);
             }
         });
-/*
+
         _this.div.off('click').on('click', '.memberLink', function(){
             const reviewId = $(this).parents('tr').find('.memberId').text();
             goMemberDetail(reviewId);
         });
 
         _this.div.find('#div-member-search #btn-search-member').unbind('click').bind('click', function(){
-            _this.search( 1, null);
-        });*/
+            _this.search( 1);
+        })
 
     },
     clearTable : function(){
@@ -84,7 +84,7 @@ let memberList = {
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
             const resultData = response.response;
-            console.log(resultData);
+            //console.log(resultData);
             _this.currPage = page;
             if(resultData.totalElements > 0){
                 _this.setData(resultData);
@@ -106,7 +106,6 @@ function goMemberDetail(reviewId){
 let memberDetail = {
     div : $('#div-admin-member-detail'),
     memberId : '',
-    isPhotoReview : false,
     init : function(memberId){
         const _this = this;
         _this.memberId = memberId;
@@ -129,7 +128,7 @@ let memberDetail = {
             var member = response.response;
             console.log(member);
             _this.clear();
-            const memberInfo = _this.div.find('.reviewInfo');
+            const memberInfo = _this.div.find('.memberInfo');
             memberInfo.find('#memberId').text(member.id);
             memberInfo.find('#userId').text(member.userId);
             memberInfo.find('#name').text(member.name);
@@ -153,11 +152,12 @@ let memberDetail = {
         const _this = this;
         $(histories).each(function(){
             const history = this;
+            const ref = history.refId !== null ? ': ' + history.refId : '';
             let row = $('<tr />')
                 .append($('<input type="hidden" name="reservesId"/>').val(history.id))
                 .append($('<td class="creatAt"/>').text(history.createAt))
-                .append($('<td class="type"/>').text(history.type))
-                .append($('<td class="ref"/>').text(history.refId));
+                .append($('<td class="amount"/>').text(history.amount))
+                .append($('<td class="ref"/>').text(history.type + ref));
 
             _this.div.find('.reservesInfo #member-reserves-history').append(row);
         });

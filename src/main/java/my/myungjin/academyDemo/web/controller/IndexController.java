@@ -38,7 +38,7 @@ public class IndexController {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    @PostMapping("/mall/imgUpload/test")
+    @PostMapping("/test/upload")
     public String imgUploadTest(@RequestPart MultipartFile imageFile) throws IOException {
         String imageUrl = null;
         AttachedFile attachedImgFile = toAttachedFile(imageFile);
@@ -55,6 +55,25 @@ public class IndexController {
         }
         return imageUrl;
     }
+
+    @DeleteMapping("/test/remove")
+    public String imgRemoveTest(@RequestPart MultipartFile imageFile) throws IOException {
+        String imageUrl = null;
+        AttachedFile attachedImgFile = toAttachedFile(imageFile);
+        assert attachedImgFile != null;
+        String key = attachedImgFile.randomName("test", "jpeg");
+        try {
+            imageUrl = s3Client.upload(attachedImgFile.inputStream(),
+                    attachedImgFile.length(),
+                    key,
+                    attachedImgFile.getContentType(),
+                    null);
+        } catch (AmazonS3Exception e) {
+            log.warn("Amazon S3 error (key: {}): {}", key, e.getMessage(), e);
+        }
+        return imageUrl;
+    }
+
 
     @GetMapping("/mall/index")
     public String main(Model model, @AuthenticationPrincipal Authentication authentication){
@@ -131,6 +150,15 @@ public class IndexController {
         model.addAttribute("isAdmin", true);
         model.addAttribute("deliveryStatus", DeliveryStatus.values());
         return "admin/review";
+    }
+
+    @GetMapping("/admin/memberIndex")
+    public String adminMemberIndex(Model model, @AuthenticationPrincipal Authentication authentication){
+        setItemCategories(model);
+        setLoginUser(model, authentication);
+        model.addAttribute("isAdmin", true);
+        model.addAttribute("deliveryStatus", DeliveryStatus.values());
+        return "admin/member";
     }
 
     private void setItemCategories(Model model){

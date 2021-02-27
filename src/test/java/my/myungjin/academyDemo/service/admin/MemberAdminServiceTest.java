@@ -41,7 +41,7 @@ public class MemberAdminServiceTest {
     @Test
     @Order(1)
     void 회원을_검색한다() {
-        List<Member> results = memberService.search(null, "mjkim");
+        List<Member> results = memberService.search(null, null);
         assertThat(results, is(notNullValue()));
         log.info("Results: {}", results);
     }
