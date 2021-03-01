@@ -18,9 +18,12 @@
  * spring-boot-configuration-processor
    * IntelliJ가 application.yml의 내용을 가이드할 수 있게 한다.
  * Lombok
+
 💡 Resource Handler 설정
+
 💡 프론트 리소스 라이브러리 추가
  * Bootstrap, JQuery
+
 💡 application.yml 작성
  * 포트 설정
 
@@ -41,12 +44,16 @@
 
 💡 샘플용 서비스와 테스트 작성
  * CodeGroup CRUD 구현
+
 💡 스키마 변경
- * common_code table foreign key : on delete restrict -> cascade  
+ * common_code table foreign key : on delete restrict -> cascade
+
 💡 샘플용 컨트롤러 작성
+
 💡 프론트 레이아웃 작성
  * mustache 의존성 추가
  * header / footer 
+
 💡 Resource Location 변경
  * classpath:/static/ -> classpath:/templates/
  * mustache, thymeleaf 등 템플릿들은 /templates 에 둬야 인식하는 듯 하다. (?)
@@ -54,12 +61,14 @@
 ### 2020.11.22
 💡 Id Class 작성
  * 엔티티들의 Id가 모두 UUID String으로 작성되어 구분하기 위해!
-💡 CommonCode 서비스 구현 및 테스트
+
+💡 CommonCode 서비스 구현 및 테스트  
 💡 CommonCode 컨트롤러 및 화면 구현
 
 ### 2020.11.23
 💡 Response, Error Class 작성
  * 컨트롤러 응답
+
 💡 General ExceptionHandler 작성
  * 특정 Exception에 대해 HTTP Response 정의
 
@@ -86,7 +95,7 @@
 
 ### 2020.11.25
 💡 Member Entity Validator 추가
- * @Size, @Pattern
+ * @Size, @Pattern  
 💡 Member Service Validation 추가
  * @Valid
 
@@ -98,12 +107,13 @@
  * disable csrf, header : 개발용
 
 ### 2020.11.26
-💡 공통코드 화면 탭 이벤트 수정
+💡 공통코드 화면 탭 이벤트 수정  
  * 탭 클릭 시 현재 탭만 활성화 : bootstrap 자체 클래스 이용
 
-💡 기본 로그인 Role 을 어드민으로 설정(임시)
-💡 authorization request uri 설정 변경
- * 어드민단 uri는 어드민만, auth 페이지는 누구나, 회원관련 uri는 인증된 요청만 접근가능 
+💡 기본 로그인 Role 을 어드민으로 설정(임시)   
+💡 authorization request uri 설정 변경  
+ * 어드민단 uri는 어드민만, auth 페이지는 누구나, 회원관련 uri는 인증된 요청만 접근가능   
+
 💡 로그인 Interceptor 작성
  * 인증된 세션 정보가 없을 경우 로그인 페이지로 redirect 
 
@@ -153,9 +163,9 @@
  * null 로 insert 하고 데이터가 업데이트되면 시각 입력하도록 
 
 ### 2020.12.02
-💡 Admin, Member : password를 toString에서 제외
-💡 Member 회원정보 조회/수정 서비스 및 테스트 구현
-💡 카테고리별 상품마스터 조회 서비스 및 테스트 구현
+💡 Admin, Member : password를 toString에서 제외  
+💡 Member 회원정보 조회/수정 서비스 및 테스트 구현  
+💡 카테고리별 상품마스터 조회 서비스 및 테스트 구현   
 💡 코드그룹 검색 서비스 및 테스트 구현
  * 조회 파라미터를 유동적으로 넘기기 위해 다이나믹 쿼리 필요
  * QueryDsl 의존성 추가
@@ -179,7 +189,7 @@
 💡 어드민/일반사용자 포트 분리 (?)
 
 ### 2020.12.06
-💡 공통코드 리스트 페이징
+💡 공통코드 리스트 페이징  
 💡 공통코드 리스트 반환 방식 변경
  * 코드그룹 자체를 반환하여 프론트에서 공통코드 리스트 get -> 공통코드 리스트만 반환
 
@@ -188,7 +198,7 @@
  * 만약 그렇다면 홈으로 redirect 하도록
 
 ### 2020.12.07
-💡 기존 상품 컨트롤러 -> 쇼핑몰 상품전시와 어드민 상품관리 컨트롤러로 분리
+💡 기존 상품 컨트롤러 -> 쇼핑몰 상품전시와 어드민 상품관리 컨트롤러로 분리  
 💡 아이템 마스터, 공통코드 @OneToMany, @ManyToOne 관계 설정 중 StackOverflow 발생
  * @OneToMany 필드에 @JsonIgnore 추가로 해결
 
@@ -200,16 +210,16 @@
 💡 상품 전시 서비스 구현 및 테스트
 
 ### 2020.12.10
-💡 상품 마스터 등록 화면 구현
-💡 프론트 pagination 이벤트 및 css 수정
-💡 주소찾기 api 추가
+💡 상품 마스터 등록 화면 구현  
+💡 프론트 pagination 이벤트 및 css 수정  
+💡 주소찾기 api 추가  
 
 💡 상품 마스터 검색 서비스 구현 및 테스트
  * repository가 QuerydslPredicateExecutor 상속, Predicate 클래스 생성하여 다이나믹 쿼리 구현
 
-💡 상품 마스터 수정, 삭제, 검색 컨트롤러 작성
-💡 상품 옵션 CRUD 컨트롤러 작성
-💡 상품 전시 CRUD 컨트롤러 작성
+💡 상품 마스터 수정, 삭제, 검색 컨트롤러 작성  
+💡 상품 옵션 CRUD 컨트롤러 작성  
+💡 상품 전시 CRUD 컨트롤러 작성  
 
 
 ### 2020.12.11
@@ -220,9 +230,10 @@
  * swagger 의존성 추가
  * Swagger2Configure class 생성
  * 인증 403오류 ? WebSecurityConfigure 에서 ignore할 uri에 swagger 추가
-💡 Swagger 2 관련 Annotation 추가 및 value 작성
-💡 /api uri 구분 : rest api uri
-💡 아이템 카테고리 검색 구현(모달)
+
+💡 Swagger 2 관련 Annotation 추가 및 value 작성  
+💡 /api uri 구분 : rest api uri  
+💡 아이템 카테고리 검색 구현(모달)  
 💡 쇼핑몰/어드민 분리 (?)
 
 ### 2020.12.15
@@ -232,18 +243,20 @@
     * swagger model substitute 설정
     * ItemMaster Predicate에서 LocalDate로 받은 데이터를 LocalDateTime으로 변환
 
-💡 uri 정리 : 어드민 관련 (/admin), 쇼핑몰 관련(/mall)
+💡 uri 정리 : 어드민 관련 (/admin), 쇼핑몰 관련(/mall)  
 💡 전시상품 검색 서비스 구현 및 테스트
 
 ### 2020.12.16
 💡 전시상품 옵션을 전시상품 클래스와 함께 작성
- * 전시상태는 ItemStatus Enum으로 관리
-  💡 Lazy Initialization Exception !
+ * 전시상태는 ItemStatus Enum으로 관리  
+
+💡 Lazy Initialization Exception !
  * @JsonIgnore 로 해결
 
 ### 2020.12.17
 💡 Cart 도메인, CRUD 서비스, 컨트롤러 작성 및 테스트
- * 장바구니
+ * 장바구니  
+
 💡 Swagger 에서 로그인 인증도 할 수 있도록 apiKey 및 securitySchemes 설정
 
 ### 2020.12.22
@@ -254,7 +267,7 @@
 💡 주문 생성 서비스, 컨트롤러 구현 및 테스트
 
 ### 2020.12.23
-💡 주문 조회, 수정 서비스, 컨트롤러 구현 및 테스트
+💡 주문 조회, 수정 서비스, 컨트롤러 구현 및 테스트  
 💡 배송상태 Exception 작성
 
 ### 2020.12.24
@@ -268,7 +281,7 @@
 💡 리뷰 서비스 구현 및 테스트
 
 ### 2020.12.28 ~ 29
-💡 배송 컨트롤러 작성
+💡 배송 컨트롤러 작성  
 💡 리뷰 컨트롤러 작성
 
 ### 2020.12.30
@@ -306,11 +319,11 @@
 ### 2020.01.04
 💡 ItemDisplay - Option
  *  양방향 순환 참조 해결 : @JsonManagedReference
- * Response DTO 생성
+ * Response DTO 생성  
 💡 ItemDisplay - Option
 
 ### 2020.01.05
-💡 회원등급 정보, 주문상세 조회 구현 및 테스트
+💡 회원등급 정보, 주문상세 조회 구현 및 테스트  
 💡 property 설정
  * jpa 쿼리 출력 시 formatting
  * 메세지 설정
@@ -323,8 +336,8 @@
 💡 real profile 설정
 
 ### 2020.01.07
-💡 travis 연동
-💡 AWS CodeDeploy 연동
+💡 travis 연동  
+💡 AWS CodeDeploy 연동  
 💡 배포 연습!
 
 ### 2020.01.08
@@ -375,13 +388,13 @@
  * sql이나 db 오류인 듯 해서 rds db를 싹 밀고 테이블과 데이터를 다시 만드니 해결되었다..
 
 ### 2020.01.18
-💡 전시상품 옵션 서비스 구현 및 테스트, 화면구현
+💡 전시상품 옵션 서비스 구현 및 테스트, 화면구현  
 💡 코드그룹 검색, 상품마스터 검색 화면 구현
 
 ### 2020.01.20
-💡 s3 디렉토리 server profile 별로 구분
-💡 쇼핑몰 전시상품 목록 화면 구현
-💡 쇼핑몰 전시상품 상세 화면 레이아웃 구성
+💡 s3 디렉토리 server profile 별로 구분  
+💡 쇼핑몰 전시상품 목록 화면 구현  
+💡 쇼핑몰 전시상품 상세 화면 레이아웃 구성  
 💡 쇼핑몰 페이지에서는 model attribute에 일반사용자의 로그인유저 정보만 저장
 
 ### 2020.01.21
@@ -424,16 +437,16 @@
 💡 리뷰 작성 및 조회 화면 구현
 
 ### 2020.02.08 ~ 10
-💡 화면 버그 수정
+💡 화면 버그 수정  
 💡 상품 상세 - 리뷰목록 화면 구현
 
 ### 2020.02.11
 💡 리뷰 코멘트 도메인, 서비스 생성 및 테스트
 
 ### 2020.02.12
-💡 어드민 리뷰 관리 목록 화면 구현
-💡 어드민 주문 수기등록 화면 구현
-💡 어드민 주문 복사 화면 구현
+💡 어드민 리뷰 관리 목록 화면 구현  
+💡 어드민 주문 수기등록 화면 구현  
+💡 어드민 주문 복사 화면 구현  
 ### 2020.02.13
 💡 어드민 리뷰 관리 - 리뷰 상세 화면 구현
  * 리뷰 적립금 지급
@@ -447,13 +460,14 @@
  * JavaMailSender와 MimeMessage로 회귀...
  * thymeleaf 사용, 메일 템플릿 작성은 보류...
 
-💡 결제api 테스트
+💡 결제api 테스트  
 💡 주문취소 서비스 구현
 
 ### 2020.02.17
-💡 주문완료 메일 발송 서비스 적용
+💡 주문완료 메일 발송 서비스 적용  
 💡 파일업로더 라이브러리만 추가.. ?
  * 리뷰 이미지 멀티 업로드를 위해 추가했으나.. 다시 생각해보니 굳이? 이걸 추가함으로써 DB 스키마 갈아엎는 비용이 더 클 것 같다..
+
 💡 주문생성, 주문취소 결제정보 로드 테스트 및 버그수정
 
 ### 2020.02.18
@@ -477,27 +491,28 @@
  * @Qualifier 추가로 해결
 
 ### 2020.02.23 ~ 24
-💡 JobParameter NullPointerException
+💡 JobParameter NullPointerException  
  * JobScheduler에서 JobParameter를 넘기기 전에 (서버 startup 시) CreateJobParameter가 호출되어서 parameter가 null임... Nullable로 받고 처리했는데 적절하지 않은 듯
  * Job Flow 설정
    * parameter null일 경우 job exit
  * 깔끔한 해결책 : application property에서 spring.batch.job.enabled=false 설정하면 startup 시 Job 실행하지 않는다!
-💡 Test DB pool size 변경
+💡 Test DB pool size 변경  
  * 배치 작업 때문에 1로 했더니 오류가 난다..
 
 
 ### 2020.02.25
-💡 배송상태 Job Parameter 조정
+💡 배송상태 Job Parameter 조정  
  * JobInstance already exists and is not restartable 메세지가 뜨며 실행이 안 됐다
  * 똑같은 Job Parameter를 계속 보내고 있어서 동일한 JobInstance로 인식한 것
 
 💡 적립금 히스토리 도메인 , 서비스 생성 및 테스트
+ * ReviewType Enum으로 적립금 유형 구분
 
 ### 2020.02.26
-💡 어드민 리뷰관리 - 검색 서비스 및 화면 구현
-💡 리뷰, 전시상품 기능을 어드민 서비스로 분리
+💡 어드민 리뷰관리 - 검색 서비스 및 화면 구현  
+💡 리뷰, 전시상품 기능을 어드민 서비스로 분리  
 💡 어드민 회원관리 서비스 구현
 
 ### 2020.02.27
-💡 어드민 회원관리 화면 구현
+💡 어드민 회원관리 화면 구현  
 💡 적립금 히스토리 관련 마이페이지 조회 버그 수정
