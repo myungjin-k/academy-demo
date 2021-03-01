@@ -321,3 +321,183 @@
 ### 2020.01.06
 💡 aws ec2 인스턴스, aws rds (mariaDB) 생성
 💡 real profile 설정
+
+### 2020.01.07
+💡 travis 연동
+💡 AWS CodeDeploy 연동
+💡 배포 연습!
+
+### 2020.01.08
+💡 Dependency Cycle 오류
+ * 순환 참조 ?
+ * Order/Member Controller에서 @AuthenticationPrincipal 로 인증정보에 접근하고 있고, 
+   그 인증정보를 생성하기 위해서는 MemberService를 주입받아야 한다. (MyAuthenticationProvider)
+   그런데 Order/Member Controller 에서 또다시 MemberService를 생성자로 주입받고 있어서 Cycle이 발생한 듯..?
+ * [Circular Dependencies in Spring](https://www.baeldung.com/circular-dependencies-in-spring)
+ * @Lazy를 넣어서 해결했다... (임시방편 ?)
+
+💡 관리자 페이지 접근 제어방법 변경
+ * 접속 서버 포트 -> 접속 IP
+ * 포트 나누는 것에 의문이 생겼다... 한 서버에서 두 포트를 사용하는 게 맞나? 포트를 나누려면 서버 인스턴스를 하나 더 생성해야 하는 것이 아닌가?
+
+💡 AuthenticationInterceptor 분기 변경
+ * 관리자페이지 && 지정 IP 아닐 경우 접근 불가, 쇼핑몰 홈으로
+ * 로그인 페이지 요청이면 그대로 리턴
+ * 관리자페이지 && 로그인정보 없으면 관리자 로그인 페이지로
+ * 쇼핑몰페이지 && 로그인정보 없으면 쇼핑몰 로그인 페이지로
+
+💡 uri path 및 접근권한 변경
+ * 회원가입/아이디,비번찾기/상품조회 는 누구나 접근 가능
+ * 인터셉터에서는 뷰만 확인하도록
+ * 비번찾기 메일 링크 변경
+
+
+### 2020.01.12
+💡 어드민 상품 마스터 & 옵션 관리 화면 구현
+
+### 2020.01.14 - 15
+💡 어드민 상품 옵션 멀티등록 기능 구현
+
+### 2020.01.15
+💡 어드민 상품 전시 화면 구현
+
+### 2020.01.16
+💡 favicon 설정
+
+### 2020.01.17
+💡 클릭 이벤트 중복 ?
+ * unbind().bind()
+ * off().on()
+
+💡 상품마스터 foreign key null 오류
+ * 상품마스터 등록 시 카테고리 id가 null로 삽입되는 현상
+ * 로컬에서는 정상적인데, aws에서만 오류
+ * sql이나 db 오류인 듯 해서 rds db를 싹 밀고 테이블과 데이터를 다시 만드니 해결되었다..
+
+### 2020.01.18
+💡 전시상품 옵션 서비스 구현 및 테스트, 화면구현
+💡 코드그룹 검색, 상품마스터 검색 화면 구현
+
+### 2020.01.20
+💡 s3 디렉토리 server profile 별로 구분
+💡 쇼핑몰 전시상품 목록 화면 구현
+💡 쇼핑몰 전시상품 상세 화면 레이아웃 구성
+💡 쇼핑몰 페이지에서는 model attribute에 일반사용자의 로그인유저 정보만 저장
+
+### 2020.01.21
+💡 쇼핑몰 전시상품 상세 화면 구현
+
+### 2020.01.24
+💡 로그인 후 redirect ?
+
+### 2020.01.25 ~ 26
+💡 장바구니 화면 구현
+
+### 2020.01.26 ~ 27
+💡 주문 생성 및 조회 화면 구현
+
+
+### 2020.01.28
+💡 Mail Service 수정
+ * SocketException : connection reset
+ * Session을 생성하여 Transport로 메일 전송
+
+
+### 2020.01.29 ~ 30
+💡 주문 조회목록, 상세 화면 구현
+
+### 2020.01.31 ~ 02.01
+💡 어드민 주문관리 화면 구현
+ * 주문 조회
+ * 배송정보 조회
+ * 배송정보 추가, 취소, 배송상태 변경 및 송장번호 입력
+
+### 2020.02.02 ~ 04
+💡 어드민 주문관리 화면 구현
+ * 배송상품 추가, 삭제, 수량변경
+
+### 2020.02.04
+💡 쇼핑몰 주문 상세에서 배송정보 변경 기능 구현
+
+
+### 2020.02.06 ~ 07
+💡 리뷰 작성 및 조회 화면 구현
+
+### 2020.02.08 ~ 10
+💡 화면 버그 수정
+💡 상품 상세 - 리뷰목록 화면 구현
+
+### 2020.02.11
+💡 리뷰 코멘트 도메인, 서비스 생성 및 테스트
+
+### 2020.02.12
+💡 어드민 리뷰 관리 목록 화면 구현
+💡 어드민 주문 수기등록 화면 구현
+💡 어드민 주문 복사 화면 구현
+### 2020.02.13
+💡 어드민 리뷰 관리 - 리뷰 상세 화면 구현
+ * 리뷰 적립금 지급
+ * 리뷰 코멘트 작성, 삭제
+### 2020.02.15
+💡 결제 라이브러리 추가
+ * I'amport
+
+### 2020.02.16
+💡 주문완료 메일 발송 설정
+ * JavaMailSender와 MimeMessage로 회귀...
+ * thymeleaf 사용, 메일 템플릿 작성은 보류...
+
+💡 결제api 테스트
+💡 주문취소 서비스 구현
+
+### 2020.02.17
+💡 주문완료 메일 발송 서비스 적용
+💡 파일업로더 라이브러리만 추가.. ?
+ * 리뷰 이미지 멀티 업로드를 위해 추가했으나.. 다시 생각해보니 굳이? 이걸 추가함으로써 DB 스키마 갈아엎는 비용이 더 클 것 같다..
+💡 주문생성, 주문취소 결제정보 로드 테스트 및 버그수정
+
+### 2020.02.18
+💡 배송비 부과 / 적립금 적립&사용&복구 로직 추가
+
+### 2020.02.19 ~ 20
+💡 배송상태 변경 배치 업데이트 구현 및 테스트
+ * Spring Boot Batch 의존성 추가
+ * DeliveryStatusJobConfigure class 추가
+   * job, step (ItemReader, ItemProcssor, ItemWriter)
+ * JobScheduler class 생성
+   * @Scheduled
+
+### 2020.02.21 ~ 22
+💡 Top Seller 배치 구현 및 테스트
+ * TopSellerJobConfigure class 생성
+💡 Job Parameter 생성을 위한 CreateJobParameter 생성 및 JobConfigure에 주입
+ * 조회할 배송정보의 생성일시
+### 2020.02.23
+💡 두 개 이상의 CreateJobParameter bean 생성 시 NoQualified Bean(spring-expected-single-matching-bean-but-found-2) 오류 발생
+ * @Qualifier 추가로 해결
+
+### 2020.02.23 ~ 24
+💡 JobParameter NullPointerException
+ * JobScheduler에서 JobParameter를 넘기기 전에 (서버 startup 시) CreateJobParameter가 호출되어서 parameter가 null임... Nullable로 받고 처리했는데 적절하지 않은 듯
+ * Job Flow 설정
+   * parameter null일 경우 job exit
+ * 깔끔한 해결책 : application property에서 spring.batch.job.enabled=false 설정하면 startup 시 Job 실행하지 않는다!
+💡 Test DB pool size 변경
+ * 배치 작업 때문에 1로 했더니 오류가 난다..
+
+
+### 2020.02.25
+💡 배송상태 Job Parameter 조정
+ * JobInstance already exists and is not restartable 메세지가 뜨며 실행이 안 됐다
+ * 똑같은 Job Parameter를 계속 보내고 있어서 동일한 JobInstance로 인식한 것
+
+💡 적립금 히스토리 도메인 , 서비스 생성 및 테스트
+
+### 2020.02.26
+💡 어드민 리뷰관리 - 검색 서비스 및 화면 구현
+💡 리뷰, 전시상품 기능을 어드민 서비스로 분리
+💡 어드민 회원관리 서비스 구현
+
+### 2020.02.27
+💡 어드민 회원관리 화면 구현
+💡 적립금 히스토리 관련 마이페이지 조회 버그 수정
