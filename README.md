@@ -1,4 +1,4 @@
-## ACADEMY-DEMO : KH Academy Final Project - Reboot!
+## ACADEMY-DEMO : KH Academy Final Project - Reboot! [![Build Status](https://travis-ci.org/myungjin-k/academy-demo.svg?branch=master)](https://travis-ci.org/myungjin-k/academy-demo)
 
 💡 기존 Final Project 와 달라진 점
  * 프레임워크 : Spring 3.1.1 -> Spring Boot 2.3.6
