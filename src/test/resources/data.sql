@@ -387,3 +387,16 @@ INSERT INTO reserves_history (id, member_id, type, amount) values ('d6975a643f24
 INSERT INTO reserves_history (id, member_id, type, amount, ref_id) values ('2560221fcbba422d809fd423b0cfdd12','3a18e633a5db4dbd8aaee218fe447fa4', 'ORDER', 430, '1c787e3c4f6a404194016698d8c760a2');
 
 INSERT INTO review (id, member_id, item_id, order_item_id, content) VALUES ('54ef07aad6864e5488d790dd88708be0', '3a18e633a5db4dbd8aaee218fe447fa4', 'f23ba30a47194a2c8a3fd2ccadd952a4', 'c2f7602adc44444fb0824f6be5260a0b', '만족합니다');
+
+INSERT INTO code_group (id, code, name_eng, name_kor) VALUES ('ce0b9ee00c384a888ff5aad5b32350d1', 'ORDEREXCEL','OrderCol', '엑셀주문컬럼' );
+INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('569fdd821927456fbabeac28156e32ba', '0', 'itemId', '상품ID', 'ce0b9ee00c384a888ff5aad5b32350d1' );
+INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('9eb16818d274481cbcaa15972797068f', '4', 'count', '수량', 'ce0b9ee00c384a888ff5aad5b32350d1' );
+INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('d248036523fc42b78c6f1145adf6fa1e', '5', 'name', '주문자명', 'ce0b9ee00c384a888ff5aad5b32350d1' );
+INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('ffbb229b495449eb83a932ad6d50f86f', '6', 'tel', '주문자연락처', 'ce0b9ee00c384a888ff5aad5b32350d1' );
+INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('388a3e659f8d41ba8133890fef10b856', '7', 'addr1', '주문자주소1', 'ce0b9ee00c384a888ff5aad5b32350d1' );
+INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('57a2cc19db7d4e52af2b75b8fe0937dd', '8', 'addr2', '주문자주소2', 'ce0b9ee00c384a888ff5aad5b32350d1' );
+INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('69fe34c552804cb6bae8dfdd3cd53004', '9', 'receiverName', '수신자명', 'ce0b9ee00c384a888ff5aad5b32350d1' );
+INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('df7922d739d64830aa7782646ec24541', '10', 'receiverTel', '수신자연락처', 'ce0b9ee00c384a888ff5aad5b32350d1' );
+INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('961df1f5df22493aaea7dee8141ace37', '11', 'receiverAddr1', '배송주소1', 'ce0b9ee00c384a888ff5aad5b32350d1' );
+INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('8435d4536f0c432c812904e47b012c8b', '12', 'receiverAddr2', '배송주소2', 'ce0b9ee00c384a888ff5aad5b32350d1' );
+INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('ac553731de5e4f61961a0c016efc120e', '13', 'message', '배송메세지', 'ce0b9ee00c384a888ff5aad5b32350d1' );

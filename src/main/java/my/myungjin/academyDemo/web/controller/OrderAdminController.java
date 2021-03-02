@@ -6,8 +6,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
+import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.order.*;
+import my.myungjin.academyDemo.service.admin.CommonCodeService;
 import my.myungjin.academyDemo.service.admin.OrderAdminService;
 import my.myungjin.academyDemo.service.admin.item.ItemDisplayOptionService;
 import my.myungjin.academyDemo.web.Response;
@@ -35,8 +37,29 @@ public class OrderAdminController {
     
     private final ItemDisplayOptionService itemDisplayOptionService;
 
+    private final CommonCodeService commonCodeService;
+
     @Transactional
-    @PatchMapping("/order/invoice")
+    @PostMapping("/order/excel")
+    @ApiOperation(value = "수기 주문 엑셀 업로드")
+    public Response<List<Order>> uploadOrder(
+            @RequestPart MultipartFile orderFile) throws IOException {
+        List<CommonCode> excelColumns = commonCodeService.findAllCommonCodesByGroupCode("ORDEREXCEL");
+        return OK(
+                new OrderUploadRequest().readOrders(orderFile, excelColumns)
+                        .getOrders()
+                        .stream()
+                        .map(orderRequest -> orderAdminService.excelOrdering(
+                                        orderRequest.newOrder(),
+                                        orderRequest.newDelivery(),
+                                        orderRequest.collectItemsAndCounts())
+                        )
+                        .collect(Collectors.toList())
+        );
+    }
+
+    @Transactional
+    @PatchMapping("/order/invoice/excel")
     @ApiOperation(value = "송장 엑셀 업로드")
     public Response<List<Delivery>> uploadInvoice(
             @RequestPart MultipartFile invoiceFile) throws IOException {

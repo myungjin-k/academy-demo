@@ -1,8 +1,6 @@
 package my.myungjin.academyDemo.web.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.order.CartItem;
 import my.myungjin.academyDemo.domain.order.Delivery;
@@ -13,9 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
 @ToString
 @Getter
+@NoArgsConstructor
 public class OrderRequest {
 
     private String name;
@@ -49,6 +47,27 @@ public class OrderRequest {
     private List<CartRequest> items;
 
     private String paymentUid;
+
+    @Builder
+    public OrderRequest(String name, String email, String tel, String addr1, String addr2, int usedPoints,
+                        String receiverName, String receiverTel, String receiverAddr1, String receiverAddr2,
+                        int status, String message, List<String> cartItemIds, List<CartRequest> items, String paymentUid) {
+        this.name = name;
+        this.email = email;
+        this.tel = tel;
+        this.addr1 = addr1;
+        this.addr2 = addr2;
+        this.usedPoints = usedPoints;
+        this.receiverName = receiverName;
+        this.receiverTel = receiverTel;
+        this.receiverAddr1 = receiverAddr1;
+        this.receiverAddr2 = receiverAddr2;
+        this.status = status;
+        this.message = message;
+        this.cartItemIds = cartItemIds;
+        this.items = items;
+        this.paymentUid = paymentUid;
+    }
 
     public Order newOrder(){
         return Order.builder()
@@ -106,5 +125,9 @@ public class OrderRequest {
     public Map<String, Integer> collectItemsAndCounts(){
         return items.stream()
                 .collect(Collectors.toMap(CartRequest::getItemId, CartRequest::getCount));
+    }
+
+    public void addItem(CartRequest cartItem){
+        items.add(cartItem);
     }
 }

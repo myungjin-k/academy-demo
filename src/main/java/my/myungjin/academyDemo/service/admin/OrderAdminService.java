@@ -48,6 +48,23 @@ public class OrderAdminService {
         return o;
     }
 
+    public Order excelOrdering(@Valid Order newOrder, @Valid Delivery delivery, Map<String, Integer> items){
+        // 주문
+        Order saved = orderRepository.save(newOrder);
+
+        // 주문상품
+        Order updated = saveOrderItems(items, saved);
+
+        // 배송정보
+        delivery.setOrder(updated);
+        Delivery d = save(delivery);
+
+        // 배송상품
+        saveDeliveryItems(updated.getItems(), d);
+        updated.addDelivery(d);
+        return updated;
+    }
+
     @Transactional
     public Order ordering(@Valid Order newOrder, @Valid Delivery delivery, Map<String, Integer> items){
         // 주문
