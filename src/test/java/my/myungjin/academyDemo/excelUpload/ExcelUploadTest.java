@@ -42,7 +42,7 @@ public class ExcelUploadTest {
             XSSFCell cell1 = row.getCell(0);
             XSSFCell cell2 = row.getCell(1);
 
-            log.info("Cell 1 Value: {}, Cell 2 Value: {}", cell1.getRawValue(), cell2.getRawValue());
+            log.info("Cell 1 Value: {}, Cell 2 Value: {}", cell1.getStringCellValue(), cell2.getRawValue());
         }
     }
 

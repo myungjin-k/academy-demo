@@ -197,6 +197,12 @@ public class OrderAdminService {
         return save(d);
     }
 
+    public Delivery uploadInvoice(@Valid Id<Delivery, String> deliveryId, @NotBlank String invoiceNum){
+        Delivery d = findById(deliveryId);
+        d.updateInvoice(invoiceNum);
+        return save(d);
+    }
+
     @Transactional
     public Delivery modifyStatus(@Valid Id<Delivery, String> deliveryId, DeliveryStatus status){
         Delivery d = findById(deliveryId);

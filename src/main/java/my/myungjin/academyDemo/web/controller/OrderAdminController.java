@@ -15,8 +15,11 @@ import my.myungjin.academyDemo.web.request.*;
 import my.myungjin.academyDemo.web.response.AdminOrderListResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -31,6 +34,26 @@ public class OrderAdminController {
     private final OrderAdminService orderAdminService;
     
     private final ItemDisplayOptionService itemDisplayOptionService;
+
+    @Transactional
+    @PatchMapping("/order/invoice")
+    @ApiOperation(value = "송장 엑셀 업로드")
+    public Response<List<Delivery>> uploadInvoice(
+            @RequestPart MultipartFile invoiceFile) throws IOException {
+        return OK(
+                new InvoiceUploadRequest().readInvoices(invoiceFile)
+                .getInvoices()
+                .stream()
+                .map(invoiceRequest ->
+                        orderAdminService.uploadInvoice(
+                            Id.of(Delivery.class, invoiceRequest.getDeliveryId()),
+                            invoiceRequest.getInvoiceNum()
+                        )
+                )
+                .collect(Collectors.toList())
+        );
+    }
+
 
     @GetMapping("/order/search")
     @ApiOperation(value = "주문 검색(주문번호, 등록일)")
