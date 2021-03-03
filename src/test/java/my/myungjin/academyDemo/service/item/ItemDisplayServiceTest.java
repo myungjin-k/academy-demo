@@ -23,12 +23,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.List;
 
 import static my.myungjin.academyDemo.commons.AttachedFile.toAttachedFile;
 import static org.apache.commons.io.IOUtils.toByteArray;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 
 @SpringBootTest // H2 데이터베이스를 자동으로 실행
 @ActiveProfiles("test")
@@ -204,6 +204,24 @@ public class ItemDisplayServiceTest {
         ItemDisplay deleted = itemDisplayService.deleteItemById(itemDisplayId);
         assertThat(deleted, is(notNullValue()));
         log.info("Deleted Display Item: {}", deleted);
+
+    }
+
+    @Test
+    @Order(8)
+    void 전시_상품_할인가_적용하기() {
+        List<Id<ItemDisplay, String>> itemIds = List.of(
+                Id.of(ItemDisplay.class, "f23ba30a47194a2c8a3fd2ccadd952a4"),
+                Id.of(ItemDisplay.class, "6bdbf6eea40b425caae4410895ca4809"),
+                Id.of(ItemDisplay.class, "fd0b906391ac4636b7984ab756006144")
+        );
+        double discountRatio = 0.20;
+        List<ItemDisplay> results = itemDisplayService.discount(itemIds, discountRatio);
+        assertThat(results.size(), is(itemIds.size()));
+        for(ItemDisplay d : results){
+            assertThat(d.getSalePrice(), is((int)(d.getItemMaster().getPrice() * discountRatio)));
+        }
+        log.info("Updated Display Item: {}", results);
 
     }
 }

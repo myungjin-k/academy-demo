@@ -163,6 +163,17 @@ public class ItemDisplayService {
         return itemDisplayRepository.findAll(ItemDisplayPredicate.searchByNameAndDate(displayName, start, end, false), pageable);
     }
 
+    @Transactional
+    public List<ItemDisplay> discount(List<Id<ItemDisplay, String>> itemIds, double ratio){
+        return itemIds.stream()
+                .map(itemId -> {
+                    ItemDisplay item = itemDisplayRepository.findById(itemId.value())
+                            .orElseThrow(() -> new NotFoundException(ItemDisplay.class, itemId));
+                    item.updateSalePrice((int) (item.getItemMaster().getPrice() * ratio));
+                    return save(item);
+                }).collect(Collectors.toList());
+    }
+
     private ItemDisplay getOne(String id){
         return itemDisplayRepository.getOne(id);
     }
