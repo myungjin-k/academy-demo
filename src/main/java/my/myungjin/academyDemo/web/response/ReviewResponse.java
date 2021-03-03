@@ -2,6 +2,7 @@ package my.myungjin.academyDemo.web.response;
 
 import lombok.Getter;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
+import my.myungjin.academyDemo.domain.item.ItemDisplayOption;
 import my.myungjin.academyDemo.domain.review.Review;
 import my.myungjin.academyDemo.domain.review.ReviewComment;
 import org.apache.commons.lang3.StringUtils;

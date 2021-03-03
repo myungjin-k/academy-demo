@@ -2,6 +2,7 @@ package my.myungjin.academyDemo.service.order;
 
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
+import my.myungjin.academyDemo.domain.item.ItemDisplayOption;
 import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.order.CartItem;
 import org.junit.jupiter.api.*;
@@ -31,6 +32,7 @@ public class CartServiceTest {
     private Id<Member, String> memberId;
 
     private Id<ItemDisplayOption, String> itemId;
+
 
     private Id<CartItem, String> cartItemId;
 
