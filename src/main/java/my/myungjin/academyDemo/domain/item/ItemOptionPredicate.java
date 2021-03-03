@@ -5,7 +5,7 @@ import com.querydsl.core.types.Predicate;
 
 public class ItemOptionPredicate {
     public static Predicate search(String masterId, String color, String size){
-        QItemMaster_ItemOption itemOption = QItemMaster_ItemOption.itemOption;
+        QItemOption itemOption = QItemOption.itemOption;
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(itemOption.itemMaster.id.eq(masterId));
         if(color != null){
