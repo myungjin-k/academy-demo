@@ -3,8 +3,7 @@ package my.myungjin.academyDemo.web.request;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
-import my.myungjin.academyDemo.domain.item.ItemMaster;
-import org.apache.commons.lang3.StringUtils;
+import my.myungjin.academyDemo.domain.item.ItemOption;
 
 @ToString
 @Getter
@@ -15,8 +14,8 @@ public class ItemOptionRequest {
 
     private String color;
 
-    public ItemMaster.ItemOption newItemOption(){
-        return ItemMaster.ItemOption.builder()
+    public ItemOption newItemOption(){
+        return ItemOption.builder()
                 .size(size.isBlank() ? "ONE SIZE" : size)
                 .color(color.isBlank() ? "ONE COLOR" : color)
                 .build();

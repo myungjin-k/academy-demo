@@ -6,14 +6,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
 import java.util.List;
-import java.util.Optional;
 
-public interface ItemOptionRepository extends JpaRepository<ItemMaster.ItemOption, String>, QuerydslPredicateExecutor<ItemMaster.ItemOption> {
-
-    // 상품 마스터 엔티티로 검색
-    List<ItemMaster.ItemOption> findAllByItemMaster(ItemMaster itemMaster);
+public interface ItemOptionRepository extends JpaRepository<ItemOption, String>, QuerydslPredicateExecutor<ItemOption> {
 
     // 상품 마스터 엔티티로 검색
-    Page<ItemMaster.ItemOption> findAllByItemMaster(ItemMaster itemMaster, Pageable pageable);
+    List<ItemOption> findAllByItemMaster(ItemMaster itemMaster);
+
+    // 상품 마스터 엔티티로 검색
+    Page<ItemOption> findAllByItemMaster(ItemMaster itemMaster, Pageable pageable);
 
 }

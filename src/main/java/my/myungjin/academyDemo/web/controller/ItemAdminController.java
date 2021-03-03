@@ -7,9 +7,7 @@ import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.common.CommonCode;
-import my.myungjin.academyDemo.domain.item.ItemDisplay;
-import my.myungjin.academyDemo.domain.item.ItemMaster;
-import my.myungjin.academyDemo.domain.item.ItemStatus;
+import my.myungjin.academyDemo.domain.item.*;
 import my.myungjin.academyDemo.service.admin.item.ItemDisplayOptionService;
 import my.myungjin.academyDemo.service.admin.item.ItemDisplayService;
 import my.myungjin.academyDemo.service.admin.item.ItemMasterService;
@@ -126,7 +124,7 @@ public class ItemAdminController {
             @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query", defaultValue = "0", value = "페이징 offset"),
             @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query", defaultValue = "5", value = "조회 갯수")
     })
-    public Response<Page<ItemMaster.ItemOption>> options(
+    public Response<Page<ItemOption>> options(
             @PathVariable @ApiParam(value = "대상 상품 마스터 PK", defaultValue = "8c1cbb792b8d447e9128d53920cf9366") String id,
              PageRequest pageRequest) {
         return OK(
@@ -136,7 +134,7 @@ public class ItemAdminController {
 
     @PostMapping( "/itemMaster/{id}/itemOption")
     @ApiOperation(value = "상품 옵션 등록")
-    public Response<ItemMaster.ItemOption> saveOption(
+    public Response<ItemOption> saveOption(
             @PathVariable @ApiParam(value = "대상 상품 마스터 PK", defaultValue = "8c1cbb792b8d447e9128d53920cf9366") String id,
             @RequestBody ItemOptionRequest request) {
         return OK(
@@ -148,7 +146,7 @@ public class ItemAdminController {
 
     @PostMapping( "/itemMaster/{id}/itemOption/list")
     @ApiOperation(value = "상품 옵션 등록 (리스트)")
-    public Response<List<ItemMaster.ItemOption>> saveOptionList(
+    public Response<List<ItemOption>> saveOptionList(
             @PathVariable @ApiParam(value = "대상 상품 마스터 PK", defaultValue = "8c1cbb792b8d447e9128d53920cf9366") String id,
             @RequestBody List<ItemOptionRequest> request) {
         return OK(
@@ -163,20 +161,20 @@ public class ItemAdminController {
 
     @PutMapping( "/itemOption/{optionId}")
     @ApiOperation(value = "상품 옵션 수정")
-    public Response<ItemMaster.ItemOption> updateOption(
+    public Response<ItemOption> updateOption(
             @PathVariable @ApiParam(value = "대상 상품 옵션 PK", defaultValue = "fb32787a91614b978cb94b0d47d7c676") String optionId,
             @RequestBody ItemOptionRequest request) {
         return OK(
-                itemOptionService.modify(Id.of(ItemMaster.ItemOption.class, optionId), request.getColor(), request.getSize())
+                itemOptionService.modify(Id.of(ItemOption.class, optionId), request.getColor(), request.getSize())
         );
     }
 
     @DeleteMapping("/itemOption/{optionId}")
     @ApiOperation(value = "상품 옵션 삭제")
-    public Response<ItemMaster.ItemOption> deleteOption(
+    public Response<ItemOption> deleteOption(
             @PathVariable @ApiParam(value = "대상 상품 옵션 PK", defaultValue = "fb32787a91614b978cb94b0d47d7c676")  String optionId){
         return OK(
-                itemOptionService.deleteById(Id.of(ItemMaster.ItemOption.class, optionId))
+                itemOptionService.deleteById(Id.of(ItemOption.class, optionId))
         );
     }
 

@@ -30,21 +30,21 @@ public class ItemOptionService {
     private Logger log = LoggerFactory.getLogger(getClass());
 
     @Transactional(readOnly = true)
-    public Page<ItemMaster.ItemOption> findAllByMasterIdWithPage(@Valid Id<ItemMaster, String> itemMasterId, Pageable pageable){
+    public Page<ItemOption> findAllByMasterIdWithPage(@Valid Id<ItemMaster, String> itemMasterId, Pageable pageable){
         return findMaster(itemMasterId)
                 .map(master -> itemOptionRepository.findAllByItemMaster(master, pageable))
                 .orElse(Page.empty());
     }
 
     @Transactional(readOnly = true)
-    public List<ItemMaster.ItemOption> findAllByMasterId(Id<ItemMaster, String> itemMasterId){
+    public List<ItemOption> findAllByMasterId(Id<ItemMaster, String> itemMasterId){
         return findMaster(itemMasterId)
                 .map(itemOptionRepository::findAllByItemMaster)
                 .orElse(emptyList());
     }
 
     @Transactional
-    public List<ItemMaster.ItemOption> addList(@Valid Id<ItemMaster, String> itemMasterId, List<ItemMaster.ItemOption> newOptions){
+    public List<ItemOption> addList(@Valid Id<ItemMaster, String> itemMasterId, List<ItemOption> newOptions){
         ItemMaster master = findMaster(itemMasterId).orElseThrow(() -> new NotFoundException(ItemMaster.class, itemMasterId));
         return newOptions.stream()
                 .filter(newOption -> {
@@ -60,7 +60,7 @@ public class ItemOptionService {
     }
 
     @Transactional
-    public ItemMaster.ItemOption add(@Valid Id<ItemMaster, String> itemMasterId, @Valid ItemMaster.ItemOption newOption){
+    public ItemOption add(@Valid Id<ItemMaster, String> itemMasterId, @Valid ItemOption newOption){
         if(!findAllByColorOrSize(itemMasterId.value(), newOption.getColor(), newOption.getSize()).isEmpty())
             throw new IllegalArgumentException("duplicated option=" + newOption.getColor() + ", " + newOption.getSize());
         return findMaster(itemMasterId)
@@ -71,16 +71,16 @@ public class ItemOptionService {
     }
 
     @Transactional
-    public ItemMaster.ItemOption deleteById(@Valid Id<ItemMaster.ItemOption, String> itemOptionId){
+    public ItemOption deleteById(@Valid Id<ItemOption, String> itemOptionId){
         return findById(itemOptionId)
                 .map(itemOption -> {
                     itemOptionRepository.deleteById(itemOptionId.value());
                     return itemOption;
-                }).orElseThrow(() -> new NotFoundException(ItemMaster.ItemOption.class, itemOptionId));
+                }).orElseThrow(() -> new NotFoundException(ItemOption.class, itemOptionId));
     }
 
     @Transactional
-    public List<ItemMaster.ItemOption> modifyColor(@Valid Id<ItemMaster, String> itemMasterId, @NotBlank String color, @NotBlank String newColor){
+    public List<ItemOption> modifyColor(@Valid Id<ItemMaster, String> itemMasterId, @NotBlank String color, @NotBlank String newColor){
         ItemMaster master = findMaster(itemMasterId)
                 .orElseThrow(() -> new NotFoundException(ItemMaster.class, itemMasterId));
         if(!findAllByColorOrSize(master.getId(), newColor, null).isEmpty())
@@ -93,7 +93,7 @@ public class ItemOptionService {
     }
 
     @Transactional
-    public List<ItemMaster.ItemOption> modifySize(@Valid Id<ItemMaster, String> itemMasterId, @NotBlank String size, @NotBlank String newSize){
+    public List<ItemOption> modifySize(@Valid Id<ItemMaster, String> itemMasterId, @NotBlank String size, @NotBlank String newSize){
         ItemMaster master = findMaster(itemMasterId)
                 .orElseThrow(() -> new NotFoundException(ItemMaster.class, itemMasterId));
         if(!findAllByColorOrSize(master.getId(), newSize, null).isEmpty())
@@ -106,30 +106,30 @@ public class ItemOptionService {
     }
 
     @Transactional
-    public ItemMaster.ItemOption modify(@Valid Id<ItemMaster.ItemOption, String> itemOptionId, @NotBlank String color, @NotBlank String size){
+    public ItemOption modify(@Valid Id<ItemOption, String> itemOptionId, @NotBlank String color, @NotBlank String size){
         return findById(itemOptionId)
                 .map(itemOption -> {
                     if(!findAllByColorOrSize(itemOption.getItemMaster().getId(), color, size).isEmpty())
                         throw new IllegalArgumentException("duplicated option=" + color + ", " + size);
                     itemOption.modify(color, size);
                     return save(itemOption);
-                }).orElseThrow(() -> new NotFoundException(ItemMaster.ItemOption.class, itemOptionId));
+                }).orElseThrow(() -> new NotFoundException(ItemOption.class, itemOptionId));
     }
 
     private Optional<ItemMaster> findMaster(Id<ItemMaster, String> itemMasterId){
         return itemMasterRepository.findById(itemMasterId.value());
     }
 
-    private Optional<ItemMaster.ItemOption> findById(Id<ItemMaster.ItemOption, String> optionId){
+    private Optional<ItemOption> findById(Id<ItemOption, String> optionId){
         return itemOptionRepository.findById(optionId.value());
     }
 
-    private ItemMaster.ItemOption save(ItemMaster.ItemOption itemOption){
+    private ItemOption save(ItemOption itemOption){
         return itemOptionRepository.save(itemOption);
     }
 
-    private List<ItemMaster.ItemOption> findAllByColorOrSize(String masterId, String color, String size){
-        return (List<ItemMaster.ItemOption>) itemOptionRepository.findAll(ItemOptionPredicate.search(masterId, color, size));
+    private List<ItemOption> findAllByColorOrSize(String masterId, String color, String size){
+        return (List<ItemOption>) itemOptionRepository.findAll(ItemOptionPredicate.search(masterId, color, size));
     }
 
 }

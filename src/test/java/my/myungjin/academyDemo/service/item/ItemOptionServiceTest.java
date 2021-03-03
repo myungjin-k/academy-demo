@@ -2,6 +2,7 @@ package my.myungjin.academyDemo.service.item;
 
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.item.ItemMaster;
+import my.myungjin.academyDemo.domain.item.ItemOption;
 import my.myungjin.academyDemo.service.admin.item.ItemOptionService;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
@@ -29,7 +30,7 @@ public class ItemOptionServiceTest {
 
     private Id<ItemMaster, String> itemMasterId;
 
-    private Id<ItemMaster.ItemOption, String> itemOptionId;
+    private Id<ItemOption, String> itemOptionId;
 
     @BeforeAll
     void setup(){
@@ -39,12 +40,12 @@ public class ItemOptionServiceTest {
     @Test
     @Order(1)
     void 상품_옵션_등록하기() {
-        ItemMaster.ItemOption newOption = ItemMaster.ItemOption.builder()
+        ItemOption newOption = ItemOption.builder()
                 .color("마론핑크")
                 .size("S")
                 .build();
-        ItemMaster.ItemOption saved = itemOptionService.add(itemMasterId, newOption);
-        this.itemOptionId = Id.of(ItemMaster.ItemOption.class, saved.getId());
+        ItemOption saved = itemOptionService.add(itemMasterId, newOption);
+        this.itemOptionId = Id.of(ItemOption.class, saved.getId());
         assertThat(saved, is(notNullValue()));
         log.info("Saved Option: {}", saved);
 
@@ -53,7 +54,7 @@ public class ItemOptionServiceTest {
     @Test
     @Order(2)
     void 상품_옵션_마스터별로_조회하기() {
-        List<ItemMaster.ItemOption> options = itemOptionService.findAllByMasterId(itemMasterId);
+        List<ItemOption> options = itemOptionService.findAllByMasterId(itemMasterId);
         assertThat(options.size(), is(5));
         log.info("Found Options: {}", options);
     }
@@ -61,7 +62,7 @@ public class ItemOptionServiceTest {
     @Test
     @Order(3)
     void 상품_옵션_수정하기() {
-        ItemMaster.ItemOption updated = itemOptionService.modify(itemOptionId, "라이트카키", "ONE SIZE");
+        ItemOption updated = itemOptionService.modify(itemOptionId, "라이트카키", "ONE SIZE");
         assertThat(updated, is(notNullValue()));
         log.info("Updated Option: {}", updated);
     }
@@ -69,26 +70,26 @@ public class ItemOptionServiceTest {
     @Test
     @Order(4)
     void 상품_옵션_삭제하기() {
-        ItemMaster.ItemOption deleted = itemOptionService.deleteById(itemOptionId);
+        ItemOption deleted = itemOptionService.deleteById(itemOptionId);
         assertThat(deleted, is(notNullValue()));
         log.info("Deleted Option: {}", deleted);
 
-        List<ItemMaster.ItemOption> options = itemOptionService.findAllByMasterId(itemMasterId);
+        List<ItemOption> options = itemOptionService.findAllByMasterId(itemMasterId);
         assertThat(options.size(), is(4));
     }
     @Test
     @Order(5)
     void 상품_옵션_등록하기_여러개() {
-        ItemMaster.ItemOption newOption1 = ItemMaster.ItemOption.builder()
+        ItemOption newOption1 = ItemOption.builder()
                 .color("블랙")
                 .size("S")
                 .build();
-        ItemMaster.ItemOption newOption2 = ItemMaster.ItemOption.builder()
+        ItemOption newOption2 = ItemOption.builder()
                 .color("블랙")
                 .size("M")
                 .build();
-        List<ItemMaster.ItemOption> newOptions = List.of(newOption1, newOption2);
-        List<ItemMaster.ItemOption> saved = itemOptionService.addList(itemMasterId, newOptions);
+        List<ItemOption> newOptions = List.of(newOption1, newOption2);
+        List<ItemOption> saved = itemOptionService.addList(itemMasterId, newOptions);
         assertThat(saved.size(), is(2));
         log.info("Saved Options: {}", saved);
 

@@ -7,10 +7,7 @@ import my.myungjin.academyDemo.commons.AttachedFile;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.domain.common.CommonCodeRepository;
-import my.myungjin.academyDemo.domain.item.ItemMaster;
-import my.myungjin.academyDemo.domain.item.ItemMasterPredicate;
-import my.myungjin.academyDemo.domain.item.ItemMasterRepository;
-import my.myungjin.academyDemo.domain.item.ItemOptionRepository;
+import my.myungjin.academyDemo.domain.item.*;
 import my.myungjin.academyDemo.error.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -153,7 +150,7 @@ public class ItemMasterService {
         return itemMasterRepository.save(itemMaster);
     }
 
-    private ItemMaster.ItemOption save(ItemMaster.ItemOption itemOption) {
+    private ItemOption save(ItemOption itemOption) {
         return itemOptionRepository.save(itemOption);
     }
 }

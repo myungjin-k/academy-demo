@@ -7,7 +7,6 @@ import my.myungjin.academyDemo.commons.AttachedFile;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.domain.item.*;
-import my.myungjin.academyDemo.domain.order.TopSeller;
 import my.myungjin.academyDemo.domain.order.TopSellerRepository;
 import my.myungjin.academyDemo.error.NotFoundException;
 import org.slf4j.Logger;
@@ -112,12 +111,12 @@ public class ItemDisplayService {
                     ItemDisplay saved = save(newDisplay);
 
                     log.info("Saved Item Display: {}", newDisplay);
-                    saved.setOptions(convertItemOption((List<ItemMaster.ItemOption>) itemMaster.getOptions(), newDisplay));
+                    saved.setOptions(convertItemOption((List<ItemOption>) itemMaster.getOptions(), newDisplay));
                     return saved;
                 }).orElseThrow(() -> new NotFoundException(ItemMaster.class, itemMasterId));
     }
 
-    private List<ItemDisplayOption> convertItemOption(List<ItemMaster.ItemOption> optionList, ItemDisplay itemDisplay){
+    private List<ItemDisplayOption> convertItemOption(List<ItemOption> optionList, ItemDisplay itemDisplay){
         return optionList.stream()
                 .map(itemOption -> {
                     ItemDisplayOption displayOption = ItemDisplayOption.builder()
