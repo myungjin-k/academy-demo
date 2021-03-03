@@ -32,7 +32,7 @@ public class ItemDisplayOptionServiceTest {
 
     private Id<ItemDisplay, String> itemDisplayId;
 
-    private Id<ItemDisplay.ItemDisplayOption, String> itemDisplayOptionId;
+    private Id<ItemDisplayOption, String> itemDisplayOptionId;
 
     @BeforeAll
     void setup(){
@@ -42,13 +42,13 @@ public class ItemDisplayOptionServiceTest {
     @Test
     @Order(1)
     void 상품_옵션_등록하기() {
-        ItemDisplay.ItemDisplayOption newOption = ItemDisplay.ItemDisplayOption.builder()
+        ItemDisplayOption newOption = ItemDisplayOption.builder()
                 .color("마론핑크")
                 .size("S")
                 .status(ItemStatus.ON_SALE)
                 .build();
-        ItemDisplay.ItemDisplayOption saved = itemDisplayOptionService.add(itemDisplayId, newOption);
-        this.itemDisplayOptionId = Id.of(ItemDisplay.ItemDisplayOption.class, saved.getId());
+        ItemDisplayOption saved = itemDisplayOptionService.add(itemDisplayId, newOption);
+        this.itemDisplayOptionId = Id.of(ItemDisplayOption.class, saved.getId());
         assertThat(saved, is(notNullValue()));
         log.info("Saved Option: {}", saved);
 
@@ -57,7 +57,7 @@ public class ItemDisplayOptionServiceTest {
     @Test
     @Order(2)
     void 상품_옵션_마스터별로_조회하기() {
-        List<ItemDisplay.ItemDisplayOption> options = itemDisplayOptionService.findAllByMasterId(itemDisplayId);
+        List<ItemDisplayOption> options = itemDisplayOptionService.findAllByMasterId(itemDisplayId);
         assertThat(options.size(), is(5));
         log.info("Found Options: {}", options);
     }
@@ -65,7 +65,7 @@ public class ItemDisplayOptionServiceTest {
     @Test
     @Order(3)
     void 상품_옵션_수정하기() {
-        ItemDisplay.ItemDisplayOption updated = itemDisplayOptionService.modify(itemDisplayOptionId, "라이트카키", "ONE SIZE", ItemStatus.ON_SALE);
+        ItemDisplayOption updated = itemDisplayOptionService.modify(itemDisplayOptionId, "라이트카키", "ONE SIZE", ItemStatus.ON_SALE);
         assertThat(updated, is(notNullValue()));
         log.info("Updated Option: {}", updated);
     }
@@ -73,11 +73,11 @@ public class ItemDisplayOptionServiceTest {
     @Test
     @Order(4)
     void 상품_옵션_삭제하기() {
-        ItemDisplay.ItemDisplayOption deleted = itemDisplayOptionService.deleteById(itemDisplayOptionId);
+        ItemDisplayOption deleted = itemDisplayOptionService.deleteById(itemDisplayOptionId);
         assertThat(deleted, is(notNullValue()));
         log.info("Deleted Option: {}", deleted);
 
-        List<ItemDisplay.ItemDisplayOption> options = itemDisplayOptionService.findAllByMasterId(itemDisplayId);
+        List<ItemDisplayOption> options = itemDisplayOptionService.findAllByMasterId(itemDisplayId);
         assertThat(options.size(), is(4));
     }
 

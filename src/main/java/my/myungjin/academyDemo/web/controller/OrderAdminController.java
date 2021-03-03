@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
+import my.myungjin.academyDemo.domain.item.ItemDisplayOption;
 import my.myungjin.academyDemo.domain.order.*;
 import my.myungjin.academyDemo.service.admin.CommonCodeService;
 import my.myungjin.academyDemo.service.admin.OrderAdminService;
@@ -195,7 +196,7 @@ public class OrderAdminController {
             @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query", defaultValue = "0", value = "페이징 offset"),
             @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query", defaultValue = "5", value = "조회 갯수")
     })*/
-    public Response<List<ItemDisplay.ItemDisplayOption>> search(@RequestParam String displayId, @RequestParam String itemName){
+    public Response<List<ItemDisplayOption>> search(@RequestParam String displayId, @RequestParam String itemName){
         return OK(itemDisplayOptionService.search(Id.of(ItemDisplay.class, displayId), itemName));
     }
 
@@ -207,7 +208,7 @@ public class OrderAdminController {
         return OK(
                 orderAdminService.addDeliveryItem(
                         Id.of(Delivery.class, request.getDeliveryId()),
-                        Id.of(ItemDisplay.ItemDisplayOption.class, request.getItemId()),
+                        Id.of(ItemDisplayOption.class, request.getItemId()),
                         request.getCount())
                 .orElse(null)
         );

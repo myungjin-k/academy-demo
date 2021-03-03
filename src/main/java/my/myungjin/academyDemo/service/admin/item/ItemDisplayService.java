@@ -117,10 +117,10 @@ public class ItemDisplayService {
                 }).orElseThrow(() -> new NotFoundException(ItemMaster.class, itemMasterId));
     }
 
-    private List<ItemDisplay.ItemDisplayOption> convertItemOption(List<ItemMaster.ItemOption> optionList, ItemDisplay itemDisplay){
+    private List<ItemDisplayOption> convertItemOption(List<ItemMaster.ItemOption> optionList, ItemDisplay itemDisplay){
         return optionList.stream()
                 .map(itemOption -> {
-                    ItemDisplay.ItemDisplayOption displayOption = ItemDisplay.ItemDisplayOption.builder()
+                    ItemDisplayOption displayOption = ItemDisplayOption.builder()
                             .color(itemOption.getColor())
                             .size(itemOption.getSize())
                             .status(ItemStatus.ON_SALE)

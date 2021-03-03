@@ -51,7 +51,7 @@ public class ItemService {
     public ItemDisplay findByIdWithOptions(@Valid Id<ItemDisplay, String> itemDisplayId){
         return itemDisplayRepository.findById(itemDisplayId.value())
                 .map(itemDisplay -> {
-                    List<ItemDisplay.ItemDisplayOption> options = itemDisplayOptionRepository.findAllByItemDisplay(itemDisplay);
+                    List<ItemDisplayOption> options = itemDisplayOptionRepository.findAllByItemDisplay(itemDisplay);
                     if(!options.isEmpty())
                         itemDisplay.setOptions(options);
                     return itemDisplay;

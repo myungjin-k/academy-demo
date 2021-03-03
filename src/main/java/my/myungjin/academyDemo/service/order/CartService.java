@@ -34,7 +34,7 @@ public class CartService {
     }
 
     public CartItem add(@Valid Id<Member, String> memberId, @Valid Id<Member, String> loginUserId,
-                        @Valid Id<ItemDisplay.ItemDisplayOption, String> itemId, @Positive int count){
+                        @Valid Id<ItemDisplayOption, String> itemId, @Positive int count){
         if(!loginUserId.value().equals(memberId.value()))
             throw new IllegalArgumentException("member id must be equal to login user id(member="+ memberId+", loginUser=" +loginUserId +")");
 
@@ -86,9 +86,9 @@ public class CartService {
                 .orElseThrow(() -> new NotFoundException(Member.class, memberId));
     }
 
-    private ItemDisplay.ItemDisplayOption findItem(Id<ItemDisplay.ItemDisplayOption, String> itemId){
+    private ItemDisplayOption findItem(Id<ItemDisplayOption, String> itemId){
         return itemRepository.findById(itemId.value())
-                .orElseThrow(() -> new NotFoundException(ItemDisplay.ItemDisplayOption.class, itemId));
+                .orElseThrow(() -> new NotFoundException(ItemDisplayOption.class, itemId));
     }
 
     private CartItem save(CartItem cartItem){

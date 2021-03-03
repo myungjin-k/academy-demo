@@ -273,7 +273,7 @@ public class ItemAdminController {
             @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query", defaultValue = "0", value = "페이징 offset"),
             @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query", defaultValue = "5", value = "조회 갯수")
     })
-    public Response<Page<ItemDisplay.ItemDisplayOption>> displayOptions(
+    public Response<Page<ItemDisplayOption>> displayOptions(
             @PathVariable @ApiParam(value = "대상 상품 전시 PK", defaultValue = "8c1cbb792b8d447e9128d53920cf9366") String id,
             PageRequest pageRequest) {
         return OK(
@@ -283,20 +283,20 @@ public class ItemAdminController {
 
     @PutMapping( "/itemDisplayOption/{optionId}")
     @ApiOperation(value = "전시 상품 옵션 수정")
-    public Response<ItemDisplay.ItemDisplayOption> updateDisplayOption(
+    public Response<ItemDisplayOption> updateDisplayOption(
             @PathVariable @ApiParam(value = "대상 전시 상품 옵션 PK", defaultValue = "fb32787a91614b978cb94b0d47d7c676") String optionId,
             @RequestBody ItemDisplayOptionRequest request) {
         return OK(
-                itemDisplayOptionService.modify(Id.of(ItemDisplay.ItemDisplayOption.class, optionId), request.getColor(), request.getSize(), ItemStatus.valueOf(request.getStatus()))
+                itemDisplayOptionService.modify(Id.of(ItemDisplayOption.class, optionId), request.getColor(), request.getSize(), ItemStatus.valueOf(request.getStatus()))
         );
     }
 
     @DeleteMapping("/itemDisplayOption/{optionId}")
     @ApiOperation(value = "전시 상품 옵션 삭제")
-    public Response<ItemDisplay.ItemDisplayOption> deleteDisplayOption(
+    public Response<ItemDisplayOption> deleteDisplayOption(
             @PathVariable @ApiParam(value = "대상 전시 상품 옵션 PK", defaultValue = "fb32787a91614b978cb94b0d47d7c676")  String optionId){
         return OK(
-                itemDisplayOptionService.deleteById(Id.of(ItemDisplay.ItemDisplayOption.class, optionId))
+                itemDisplayOptionService.deleteById(Id.of(ItemDisplayOption.class, optionId))
         );
     }
 

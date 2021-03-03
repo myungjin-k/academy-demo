@@ -44,7 +44,7 @@ public class ItemDetailResponse {
         this.description = entity.getDescription();
         this.notice = entity.getNotice();
         this.detailImage = entity.getDetailImage();
-        for(ItemDisplay.ItemDisplayOption option : entity.getOptions()){
+        for(ItemDisplayOption option : entity.getOptions()){
             this.options.add(
                     new ItemOptionResponse(
                         option.getId(),

@@ -30,14 +30,14 @@ public class CartServiceTest {
 
     private Id<Member, String> memberId;
 
-    private Id<ItemDisplay.ItemDisplayOption, String> itemId;
+    private Id<ItemDisplayOption, String> itemId;
 
     private Id<CartItem, String> cartItemId;
 
     @BeforeAll
     void setup(){
         memberId = Id.of(Member.class, "3a18e633a5db4dbd8aaee218fe447fa4");
-        itemId = Id.of(ItemDisplay.ItemDisplayOption.class, "91cc1c18f11e4d018566524b51d8419a");
+        itemId = Id.of(ItemDisplayOption.class, "91cc1c18f11e4d018566524b51d8419a");
     }
 
     @Test

@@ -2,10 +2,7 @@ package my.myungjin.academyDemo.service.admin.item;
 
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
-import my.myungjin.academyDemo.domain.item.ItemDisplay;
-import my.myungjin.academyDemo.domain.item.ItemDisplayOptionRepository;
-import my.myungjin.academyDemo.domain.item.ItemDisplayRepository;
-import my.myungjin.academyDemo.domain.item.ItemStatus;
+import my.myungjin.academyDemo.domain.item.*;
 import my.myungjin.academyDemo.error.NotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,21 +27,21 @@ public class ItemDisplayOptionService {
 
 
     @Transactional(readOnly = true)
-    public Page<ItemDisplay.ItemDisplayOption> findAllByMasterId(Id<ItemDisplay, String> itemDisplayId, Pageable pageable){
+    public Page<ItemDisplayOption> findAllByMasterId(Id<ItemDisplay, String> itemDisplayId, Pageable pageable){
         return findDisplay(itemDisplayId)
                 .map(itemDisplay -> itemDisplayOptionRepository.findAllByItemDisplay(itemDisplay, pageable))
                 .orElse(Page.empty());
     }
 
     @Transactional(readOnly = true)
-    public List<ItemDisplay.ItemDisplayOption> findAllByMasterId(Id<ItemDisplay, String> itemDisplayId){
+    public List<ItemDisplayOption> findAllByMasterId(Id<ItemDisplay, String> itemDisplayId){
         return findDisplay(itemDisplayId)
                 .map(itemDisplayOptionRepository::findAllByItemDisplay)
                 .orElse(emptyList());
     }
 
     @Transactional
-    public ItemDisplay.ItemDisplayOption add(@Valid Id<ItemDisplay, String> itemDisplayId, @Valid ItemDisplay.ItemDisplayOption newOption){
+    public ItemDisplayOption add(@Valid Id<ItemDisplay, String> itemDisplayId, @Valid ItemDisplayOption newOption){
         return findDisplay(itemDisplayId)
                 .map(itemDisplay -> {
                     itemDisplay.addOption(newOption);
@@ -53,26 +50,26 @@ public class ItemDisplayOptionService {
     }
 
     @Transactional
-    public ItemDisplay.ItemDisplayOption deleteById(@Valid Id<ItemDisplay.ItemDisplayOption, String> itemDisplayOptionId){
+    public ItemDisplayOption deleteById(@Valid Id<ItemDisplayOption, String> itemDisplayOptionId){
         return findById(itemDisplayOptionId)
                 .map(itemDisplayOption -> {
                     itemDisplayOptionRepository.deleteById(itemDisplayOptionId.value());
                     return itemDisplayOption;
-                }).orElseThrow(() -> new NotFoundException(ItemDisplay.ItemDisplayOption.class, itemDisplayOptionId));
+                }).orElseThrow(() -> new NotFoundException(ItemDisplayOption.class, itemDisplayOptionId));
     }
 
     @Transactional
-    public ItemDisplay.ItemDisplayOption modify(@Valid Id<ItemDisplay.ItemDisplayOption, String> itemDisplayOptionId,
+    public ItemDisplayOption modify(@Valid Id<ItemDisplayOption, String> itemDisplayOptionId,
                                                 @NotBlank String color, @NotBlank String size, @NotNull ItemStatus status){
         return findById(itemDisplayOptionId)
                 .map(itemDisplayOption -> {
                     itemDisplayOption.modify(color, size, status);
                     return save(itemDisplayOption);
-                }).orElseThrow(() -> new NotFoundException(ItemDisplay.ItemDisplayOption.class, itemDisplayOptionId));
+                }).orElseThrow(() -> new NotFoundException(ItemDisplayOption.class, itemDisplayOptionId));
     }
 
     @Transactional
-    public List<ItemDisplay.ItemDisplayOption> search(Id<ItemDisplay, String> itemDisplayId, String itemName){
+    public List<ItemDisplayOption> search(Id<ItemDisplay, String> itemDisplayId, String itemName){
         return itemDisplayOptionRepository.findAllByItemDisplayIdEqualsOrItemDisplayItemDisplayNameContaining(itemDisplayId.value(), itemName);
     }
 
@@ -80,11 +77,11 @@ public class ItemDisplayOptionService {
         return itemDisplayRepository.findById(itemDisplayId.value());
     }
 
-    private Optional<ItemDisplay.ItemDisplayOption> findById(Id<ItemDisplay.ItemDisplayOption, String> optionId){
+    private Optional<ItemDisplayOption> findById(Id<ItemDisplayOption, String> optionId){
         return itemDisplayOptionRepository.findById(optionId.value());
     }
 
-    private ItemDisplay.ItemDisplayOption save(ItemDisplay.ItemDisplayOption displayOption){
+    private ItemDisplayOption save(ItemDisplayOption displayOption){
         return itemDisplayOptionRepository.save(displayOption);
     }
 

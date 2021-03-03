@@ -64,7 +64,7 @@ public class OrderController {
                         cartService.add(
                             Id.of(Member.class, id),
                             Id.of(Member.class, ((User) authentication.getDetails()).getId()),
-                            Id.of(ItemDisplay.ItemDisplayOption.class, newCartItemRequest.getItemId()),
+                            Id.of(ItemDisplayOption.class, newCartItemRequest.getItemId()),
                             newCartItemRequest.getCount()
                 )).collect(Collectors.toList())
         );

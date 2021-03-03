@@ -29,7 +29,7 @@ public class AdminOrderListResponse {
         this.orderItemId = entity.getId();
         ItemDisplay display = entity.getItemOption().getItemDisplay();
         this.itemName = display.getItemDisplayName();
-        ItemDisplay.ItemDisplayOption option = entity.getItemOption();
+        ItemDisplayOption option = entity.getItemOption();
         this.size = option.getSize();
         this.color = option.getColor();
         this.count = entity.getCount();

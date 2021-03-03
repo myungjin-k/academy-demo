@@ -3,6 +3,7 @@ package my.myungjin.academyDemo.service.admin;
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
+import my.myungjin.academyDemo.domain.item.ItemDisplayOption;
 import my.myungjin.academyDemo.domain.item.ItemDisplayOptionRepository;
 import my.myungjin.academyDemo.domain.order.*;
 import my.myungjin.academyDemo.error.NotFoundException;
@@ -89,7 +90,7 @@ public class OrderAdminService {
             int count = items.get(itemId);
             OrderItem oItem = new OrderItem(Util.getUUID(), items.get(itemId));
             oItem.setItemOption(itemDisplayOptionRepository.findById(itemId)
-                    .orElseThrow(() -> new NotFoundException(ItemDisplay.ItemDisplayOption.class, itemId)));
+                    .orElseThrow(() -> new NotFoundException(ItemDisplayOption.class, itemId)));
             oItem.setOrder(order);
             order.addItem(orderItemRepository.save(oItem));
             totalAmount += oItem.getItemOption().getItemDisplay().getItemMaster().getPrice() * count;
@@ -165,7 +166,7 @@ public class OrderAdminService {
 
     @Transactional
     public Optional<DeliveryItem> addDeliveryItem(@Valid Id<Delivery, String> deliveryId,
-                                                  @Valid Id<ItemDisplay.ItemDisplayOption, String> itemId, int count){
+                                                  @Valid Id<ItemDisplayOption, String> itemId, int count){
         Delivery delivery = deliveryRepository.findById(deliveryId.value())
                 .orElseThrow(() -> new NotFoundException(Delivery.class, deliveryId));
         if(deliveryItemRepository.existsByDeliveryIdAndItemOptionId(deliveryId.value(), itemId.value()))
@@ -233,12 +234,12 @@ public class OrderAdminService {
         d.updateAddress(addr1, addr2);
         return save(d);
     }
-    private void saveItem(DeliveryItem deliveryItem, Id<ItemDisplay.ItemDisplayOption, String> itemId){
+    private void saveItem(DeliveryItem deliveryItem, Id<ItemDisplayOption, String> itemId){
         itemDisplayOptionRepository.findById(itemId.value())
             .map(displayOption -> {
                 deliveryItem.setItemOption(displayOption);
                 return save(deliveryItem);
-            }).orElseThrow(() ->  new NotFoundException(ItemDisplay.ItemDisplayOption.class, itemId));
+            }).orElseThrow(() ->  new NotFoundException(ItemDisplayOption.class, itemId));
     }
 
     private DeliveryItem save(DeliveryItem item){

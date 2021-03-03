@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
+import my.myungjin.academyDemo.domain.item.ItemDisplayOption;
 import my.myungjin.academyDemo.domain.review.Review;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -47,7 +48,7 @@ public class OrderItem {
     //@JsonBackReference
     @ManyToOne
     @JoinColumn(name = "item_id", nullable = false)
-    private ItemDisplay.ItemDisplayOption itemOption;
+    private ItemDisplayOption itemOption;
 
 
     @Setter @Getter

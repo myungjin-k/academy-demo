@@ -49,7 +49,7 @@ public class OrderItemResponse {
         ItemMaster master = display.getItemMaster();
         this.itemPrice = master.getPrice();
         this.thumbnail = master.getThumbnail();
-        ItemDisplay.ItemDisplayOption option = entity.getItemOption();
+        ItemDisplayOption option = entity.getItemOption();
         this.itemOptionId = option.getId();
         this.size = option.getSize();
         this.color = option.getColor();

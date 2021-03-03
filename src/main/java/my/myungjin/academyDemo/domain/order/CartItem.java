@@ -48,7 +48,7 @@ public class CartItem {
     //@JsonBackReference
     @ManyToOne
     @JoinColumn(name = "item_id", nullable = false)
-    private ItemDisplay.ItemDisplayOption itemOption;
+    private ItemDisplayOption itemOption;
 
     public CartItem(int count) {
         this.count = count;
