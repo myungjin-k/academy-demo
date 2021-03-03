@@ -263,3 +263,43 @@ CREATE TABLE reserves_history (
                                   PRIMARY KEY (id),
                                   CONSTRAINT fk_reserves_history_to_member FOREIGN KEY (member_id) REFERENCES member (id) ON DELETE CASCADE ON UPDATE RESTRICT
 );
+
+DROP TABLE IF EXISTS event CASCADE;
+CREATE TABLE event (
+                       seq                  number auto_increment,
+                       name                 varchar(255) not null,
+                       type                 varchar(10) not null,
+                       status               number default 1,
+                       discount_ratio       number default 0,
+                       discount_amount      number default 0,
+                       start_at             datetime not null,
+                       end_at               datetime not null,
+                       create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
+                       update_at            datetime DEFAULT null,
+                       PRIMARY KEY (seq)
+);
+
+
+DROP TABLE IF EXISTS event_item CASCADE;
+CREATE TABLE event_item (
+                            id                   varchar(50) not null,
+                            item_id              varchar(50) not null,
+                            event_seq            number not null,
+                            create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
+                            update_at            datetime DEFAULT null,
+                            PRIMARY KEY (id),
+                            CONSTRAINT fk_event_item_to_item_display FOREIGN KEY (item_id) REFERENCES item_display (id) ON DELETE CASCADE ON UPDATE RESTRICT,
+                            CONSTRAINT fk_event_item_to_event FOREIGN KEY (event_seq) REFERENCES event (seq) ON DELETE CASCADE ON UPDATE RESTRICT
+);
+
+DROP TABLE IF EXISTS item_display_price_history CASCADE;
+CREATE TABLE item_display_price_history (
+                                            id                   varchar(50) not null,
+                                            item_id              varchar(50) not null,
+                                            seq                  number not null,
+                                            sale_price           number not null,
+                                            create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
+                                            update_at            datetime DEFAULT null,
+                                            PRIMARY KEY (id),
+                                            CONSTRAINT fk_item_display_price_history_to_item_display FOREIGN KEY (item_id) REFERENCES item_display (id) ON DELETE CASCADE ON UPDATE RESTRICT
+);

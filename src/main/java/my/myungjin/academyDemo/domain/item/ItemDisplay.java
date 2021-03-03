@@ -11,6 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import static java.time.LocalDateTime.now;
@@ -19,7 +20,7 @@ import static java.util.Optional.ofNullable;
 
 @Entity
 @Table(name = "item_display")
-@ToString(exclude = {"options", "reviews"})
+@ToString(exclude = {"options", "reviews", "histories"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
 public class ItemDisplay {
@@ -92,6 +93,11 @@ public class ItemDisplay {
     @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private Collection<Review> reviews;
 
+    @Getter @Setter
+    @JsonBackReference
+    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ItemDisplayPriceHistory> histories;
+
     @Builder
     public ItemDisplay(String id,
                        @Size(min = 1, max = 50) String itemDisplayName, int salePrice, @Size(min = 1, max = 255) String material, @Size(min = 1, max = 255) String size,
@@ -129,5 +135,9 @@ public class ItemDisplay {
 
     public void updateSalePrice (int newPrice) {
         salePrice = newPrice;
+    }
+
+    public void addHistory(ItemDisplayPriceHistory history){
+        histories.add(history);
     }
 }

@@ -2,9 +2,7 @@ package my.myungjin.academyDemo.service.item;
 
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.common.CommonCode;
-import my.myungjin.academyDemo.domain.item.ItemDisplay;
-import my.myungjin.academyDemo.domain.item.ItemMaster;
-import my.myungjin.academyDemo.domain.item.ItemStatus;
+import my.myungjin.academyDemo.domain.item.*;
 import my.myungjin.academyDemo.service.admin.item.ItemDisplayService;
 import my.myungjin.academyDemo.web.request.PageRequest;
 import org.junit.jupiter.api.*;
@@ -44,6 +42,9 @@ public class ItemDisplayServiceTest {
     private Id<ItemMaster, String> itemMasterId;
 
     private Id<ItemDisplay, String> itemDisplayId;
+
+    @Autowired
+    private ItemDisplayPriceHistoryRepository historyRepository;
 
     @BeforeAll
     void setup(){
@@ -110,7 +111,7 @@ public class ItemDisplayServiceTest {
         assertThat(saved, is(notNullValue()));
         log.info("Saved Display Item: {}", saved);
         log.info("Saved Display Item Options: {}", saved.getOptions());
-
+        //log.info("Saved Display Item Histories: {}", saved.getHistories());
     }
 
     @Test
@@ -180,7 +181,7 @@ public class ItemDisplayServiceTest {
         request.setDirection(Sort.Direction.DESC);
         Page<ItemDisplay> results = itemDisplayService.searchByNameAndCreateAt("니트", LocalDate.now(), null, request.of());
 
-        assertThat(results.getTotalElements(), is(1L));
+        assertThat(results.getTotalElements(), greaterThan(0L));
         log.info("Result item: {}", results.getContent());
     }
 
@@ -219,7 +220,7 @@ public class ItemDisplayServiceTest {
         List<ItemDisplay> results = itemDisplayService.discount(itemIds, discountRatio);
         assertThat(results.size(), is(itemIds.size()));
         for(ItemDisplay d : results){
-            assertThat(d.getSalePrice(), is((int)(d.getItemMaster().getPrice() * discountRatio)));
+            assertThat(d.getSalePrice(), is((int)(d.getItemMaster().getPrice() * (1 - discountRatio))));
         }
         log.info("Updated Display Item: {}", results);
 

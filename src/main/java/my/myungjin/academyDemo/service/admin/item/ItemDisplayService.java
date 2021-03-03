@@ -39,6 +39,8 @@ public class ItemDisplayService {
 
     private final TopSellerRepository topSellerRepository;
 
+    private final ItemDisplayPriceHistoryRepository itemDisplayPriceHistoryRepository;
+
     private final S3Client s3Client;
 
     private final Environment environment;
@@ -110,8 +112,9 @@ public class ItemDisplayService {
                     newDisplay.setItemMaster(itemMaster);
                     ItemDisplay saved = save(newDisplay);
 
-                    log.info("Saved Item Display: {}", newDisplay);
+                    //log.info("Saved Item Display: {}", newDisplay);
                     saved.setOptions(convertItemOption((List<ItemOption>) itemMaster.getOptions(), newDisplay));
+                    saveHistory(saved);
                     return saved;
                 }).orElseThrow(() -> new NotFoundException(ItemMaster.class, itemMasterId));
     }
@@ -165,13 +168,23 @@ public class ItemDisplayService {
 
     @Transactional
     public List<ItemDisplay> discount(List<Id<ItemDisplay, String>> itemIds, double ratio){
-        return itemIds.stream()
+        List<ItemDisplay> results = itemIds.stream()
                 .map(itemId -> {
                     ItemDisplay item = itemDisplayRepository.findById(itemId.value())
                             .orElseThrow(() -> new NotFoundException(ItemDisplay.class, itemId));
-                    item.updateSalePrice((int) (item.getItemMaster().getPrice() * ratio));
+                    item.updateSalePrice((int) (item.getItemMaster().getPrice() * (1 - ratio)));
                     return save(item);
                 }).collect(Collectors.toList());
+        for(ItemDisplay item : results){
+            saveHistory(item);
+        }
+        return results;
+    }
+
+    private void saveHistory(ItemDisplay item){
+        int nextSeq = itemDisplayPriceHistoryRepository.findByItemId(item.getId()).size() + 1;
+        ItemDisplayPriceHistory newHistory = itemDisplayPriceHistoryRepository.save(new ItemDisplayPriceHistory(item.getSalePrice(), item, nextSeq));
+        log.info("New Item History: {}", newHistory);
     }
 
     private ItemDisplay getOne(String id){
