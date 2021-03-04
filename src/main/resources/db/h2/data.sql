@@ -393,3 +393,6 @@ INSERT INTO received_delivery_status (id, ext_delivery_id, seq, status) values (
 INSERT INTO received_delivery_status (id, ext_delivery_id, seq, status) values ('51e6c2dd4cef49419d499e6f9d1bb4aa', 'EXT003', 1, 2);
 
 INSERT INTO reserves_history (member_id, type, amount) values ('3a18e633a5db4dbd8aaee218fe447fa4', 'ADMIN', 300000);
+
+INSERT INTO event (seq, name, type, discount_ratio, start_at, end_at) values (1, '아우터 20% 할인', 'DR', '20', current_date, current_date);
+INSERT INTO event_item (id, event_seq, item_id) values ('02495bd30acb45c5b9b27cd1df5e5c7d', 1, '6bdbf6eea40b425caae4410895ca4809');

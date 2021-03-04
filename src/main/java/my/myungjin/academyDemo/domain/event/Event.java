@@ -33,7 +33,8 @@ public class Event {
     private EventType type;
 
     @Getter
-    @Column(name = "status", nullable = false)
+    @Column(name = "status",
+            columnDefinition = "number default 0")
     @Convert(converter = EventStatusConverter.class)
     private EventStatus status;
 
@@ -46,11 +47,13 @@ public class Event {
     private int amount;
 
     @Getter
-    @Column(name = "start_at")
+    @Column(name = "start_at",
+            columnDefinition = "datetime default current_date")
     private LocalDate startAt;
 
     @Getter
-    @Column(name = "end_at")
+    @Column(name = "end_at",
+            columnDefinition = "datetime default current_date")
     private LocalDate endAt;
 
     @Getter
