@@ -57,7 +57,7 @@ public class Event {
     private LocalDate endAt;
 
     @Getter
-    @Column(name = "create_at",
+    @Column(name = "create_at", insertable = false, updatable = false, nullable = false,
             columnDefinition = "datetime default current_timestamp")
     private LocalDateTime createAt;
 
@@ -70,7 +70,7 @@ public class Event {
     private List<EventItem> items = new ArrayList<>();
 
     @Builder
-    public Event(long seq, String name, EventType type, EventStatus status, int ratio, int amount, LocalDate startAt, LocalDate endAt, LocalDateTime createAt) {
+    public Event(long seq, String name, EventType type, EventStatus status, int ratio, int amount, LocalDate startAt, LocalDate endAt) {
         this.name = name;
         this.seq = seq;
         this.type = type;
@@ -79,7 +79,6 @@ public class Event {
         this.amount = amount;
         this.startAt = startAt;
         this.endAt = endAt;
-        this.createAt = createAt;
     }
 
     public Optional<LocalDateTime> getUpdateAt(){

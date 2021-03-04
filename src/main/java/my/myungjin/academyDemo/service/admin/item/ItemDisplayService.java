@@ -181,6 +181,11 @@ public class ItemDisplayService {
         return results;
     }
 
+    @Transactional(readOnly = true)
+    public Page<ItemDisplay> findAllByCategoryGroup(@Valid Id<CommonCode, String> categoryId, Pageable pageable){
+        return itemDisplayRepository.findAllByItemMasterCategoryIdOrItemMasterCategoryCodeGroupIdAndStatusEquals(categoryId.value(), categoryId.value(), ItemStatus.ON_SALE, pageable);
+    }
+
     private void saveHistory(ItemDisplay item){
         int nextSeq = itemDisplayPriceHistoryRepository.findByItemId(item.getId()).size() + 1;
         ItemDisplayPriceHistory newHistory = itemDisplayPriceHistoryRepository.save(new ItemDisplayPriceHistory(item.getSalePrice(), item, nextSeq));

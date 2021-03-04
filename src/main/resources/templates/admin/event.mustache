@@ -1,0 +1,167 @@
+{{>admin/layout/header}}
+
+<div class="container" id="div-event-management" >
+    <ul class="nav nav-tabs" id="adminMemberTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active contentTab" id="tab-admin-event-list" data-toggle="tab" href="#div-admin-event-list" role="tab" aria-controls="div-admin-event-list" aria-selected="true">이벤트조회</a>
+        </li>
+        <li class="nav-item" >
+            <a class="nav-link contentTab" id="tab-admin-event-new" data-toggle="tab" href="#div-admin-event-new" role="tab" aria-controls="div-admin-event-new" aria-selected="false" style="display: none;">이벤트 등록</a>
+        </li>
+        <li class="nav-item" >
+            <a class="nav-link contentTab" id="tab-admin-event-detail" data-toggle="tab" href="#div-admin-event-detail" role="tab" aria-controls="div-admin-event-detail" aria-selected="false" style="display: none;">이벤트상세</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="adminEventTabContent">
+        <div class="tab-pane fade show active contentDiv" id="div-admin-event-list" role="tabpanel" aria-labelledby="tab-admin-event-list">
+            <div class="pl-5 pt-3 pb-3 mt-3 mb-3 bg-light" id="div-event-search">
+                <!--<label class="mr-2" for="input-search-event-id">회원ID(코드)</label>
+                <input class="mr-5" type="text" name="eventId" id="input-search-event-id" >
+                <label class="mr-2" for="input-search-event-user-id">회원쇼핑몰ID</label>
+                <input class="mr-5" type="text" name="userId" id="input-search-event-user-id" >
+                <a class="btn btn-sm btn-primary" id="btn-search-event">검색</a>-->
+
+            </div>
+            <div class="div-crud-buttons">
+                <a class="btn btn-outline-primary" id="btn-new-event">이벤트 등록</a>
+            </div>
+            <div class="mb-3">
+                <table class="table table-horizontal table-bordered">
+                    <thead class="thead-strong">
+                    <tr>
+                        <th width="10%">이벤트순번</th>
+                        <th>이름</th>
+                        <th width="15%">시작일</th>
+                        <th width="15%">종료일</th>
+                        <th width="10%">상태</th>
+                    </tr>
+                    </thead>
+                    <tbody id="events">
+
+                    </tbody>
+                </table>
+                <div>
+                    <ul class="pagination pagination-sm justify-content-center" id="pagination-events" >
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade contentDiv" id="div-admin-event-detail" role="tabpanel" aria-labelledby="tab-admin-event-detail" >
+            <div class="p-2" >
+                <div class="mb-5 eventInfo p-2">
+                    <h5>이벤트 상세</h5>
+                    <form id="form-save-event">
+                        <div class="row">
+                            <div class="col-2">순번</div>
+                            <div class="col"><input class="field" name="seq" readonly /></div>
+                        </div>
+                        <div class="row ">
+                            <div class="col-2">이벤트명</div>
+                            <div class="col"><input class="field" name="name" /></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-2">이벤트타입</div>
+                            <div class="col">
+                                <select class="field" name="type">
+                                    {{#eventType}}
+                                        <option value={{value}}>{{description}}</option>
+                                    {{/eventType}}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-2">적용사항</div>
+                            <div class="col-3"><label>금액 : </label><input class="field" name="amount" id="discountAmount"/></div>
+                            <div class="col-3"><label>할인비율 : </label><input class="field" name="ratio" id="discountRatio" /> %</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-2">시작일</div>
+                            <div class="col"><input class="field" name="startAt" /></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-2">종료일</div>
+                            <div class="col"><input class="field" name="endAt" /></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-2">상태</div>
+                            <div class="col">
+                                <select class="field" name="status">
+                                    {{#eventStatus}}
+                                        <option value={{name}}>{{description}}</option>
+                                    {{/eventStatus}}
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="row">
+                        <div class="col-2">적용상품
+                            <div class="mt-1"><button class="btn btn-sm btn-outline-primary btn-item-display-modal" data-toggle="modal" data-target="#itemDisplaySearchModal">상품 추가</button></div>
+                        </div>
+                        <div class="col eventItems itemAddList p-2">
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <div class="tab-pane fade contentDiv" id="div-admin-event-new" role="tabpanel" aria-labelledby="tab-admin-event-new" >
+            <div class="p-2" >
+                <div class="mb-5 eventInfo p-2">
+                    <h5>이벤트 등록</h5>
+                    <div class="div-crud-buttons">
+                        <a class="btn btn-outline-primary" id="btn-save-event">저장</a>
+                    </div>
+                    <form id="form-new-event">
+                        <div class="row ">
+                            <div class="col-2">이벤트명</div>
+                            <div class="col"><input class="field" name="name" /></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-2">이벤트타입</div>
+                            <div class="col">
+                                <select class="field" name="type">
+                                    {{#eventType}}
+                                        <option value={{value}}>{{description}}</option>
+                                    {{/eventType}}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-2">적용사항</div>
+                            <div class="col-3"><label>금액 : </label><input class="field" name="amount" id="discountAmount"/></div>
+                            <div class="col-3"><label>할인비율 : </label><input class="field" name="ratio" id="discountRatio" /> %</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-2">시작일</div>
+                            <div class="col"><input class="field" name="startAt" /></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-2">종료일</div>
+                            <div class="col"><input class="field" name="endAt" /></div>
+                        </div>
+                        <!--<div class="row">
+                            <div class="col-2">상태</div>
+                            <div class="col">
+                                <select class="field" name="status">
+                                    {{#eventStatus}}
+                                        <option value={{name}}>{{description}}</option>
+                                    {{/eventStatus}}
+                                </select>
+                            </div>
+                        </div>-->
+                    </form>
+                    <div class="row">
+                        <div class="col-2">적용상품
+                            <div class="mt-1"><button class="btn btn-sm btn-outline-primary btn-item-display-modal" data-toggle="modal" data-target="#itemDisplaySearchModal">상품 추가</button></div>
+                        </div>
+                        <div class="col eventItems itemAddList p-2">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="static/js/event.js"></script>
+{{>admin/layout/footer}}

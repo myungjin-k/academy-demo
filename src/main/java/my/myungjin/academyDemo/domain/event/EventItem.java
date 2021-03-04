@@ -21,10 +21,12 @@ public class EventItem {
     @Id
     @Getter
     @GeneratedValue(generator = "eventItemId")
-    @GenericGenerator(name = "eventItemId", strategy = "my.myungjin.academyDemo.commons.IdGenerator")
+    @GenericGenerator(name = "eventItemId", strategy = "my.myung" +
+            "jin.academyDemo.commons.IdGenerator")
     private String id;
 
     @Getter @Setter
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "event_seq", nullable = false)
     private Event event;

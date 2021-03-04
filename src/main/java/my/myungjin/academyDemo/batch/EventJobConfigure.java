@@ -78,6 +78,7 @@ public class EventJobConfigure {
     @Bean(name = JOB_NAME + "Job")
     public Job eventJob(){
         return jobBuilderFactory.get(JOB_NAME + "Job")
+                //.incrementer(new RunIdIncrementer()) // 동일 파라미터 다시 사용
                 .preventRestart()
                 .start(eventItemJobStep())
                 .next(eventItemHistoryJobStep())

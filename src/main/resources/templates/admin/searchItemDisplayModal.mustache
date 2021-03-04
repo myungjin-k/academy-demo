@@ -1,0 +1,168 @@
+
+<!-- Modal -->
+<div class="modal fade" id="itemDisplaySearchModal" tabindex="-1" aria-labelledby="itemDisplaySearchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="itemDisplaySearchModalLabel">카테고리별 전시상품 조회</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row mb-3">
+                        <div class="col-2"><label for="category" >카테고리</label></div>
+                        <div class="col-2">
+                            <select id="category"></select>
+                        </div>
+                        <div class="col"><button type="button" class="btn btn-primary" id="btn-item-display-search" >검색</button></div>
+                    </div>
+                    <div class="row p-3 ">
+                        <table class="table table-horizontal table-bordered">
+                            <thead class="thead-strong">
+                            <tr>
+                                <th width="5%"><input class="checkAll" type="checkbox" /></th>
+                                <th width="20% ">전시상품ID</th>
+                                <th>상품명</th>
+                            </tr>
+                            </thead>
+                            <tbody id="itemDisplaySearchResult">
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <ul class="pagination pagination-sm justify-content-center" id="pagination-item-display-modal" >
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="btn-append-items" data-dismiss="modal">추가</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var itemDisplaySearchModal = {
+        firstPage: 1,
+        lastPage: 5,
+        currPage: 1,
+        div : $('#itemDisplaySearchModal'),
+        init : function(){
+            var _this = this;
+            _this.loadCategories();
+            _this.clear();
+            _this.div.find("#btn-item-display-search").unbind('click').bind('click', function(){
+                _this.search(1);
+            });
+            _this.div.find('.checkAll').unbind('click').bind('click', function(){
+                if($(this).prop('checked'))
+                    _this.div.find('#itemDisplaySearchResult .check input').prop('checked', true);
+            });
+
+            _this.div.on('click', '#pagination-item-display-modal .page-link', function(){
+                var link = $(this).text();
+                if(link === 'prev'){
+                    _this.firstPage = _this.firstPage - 5;
+                    _this.lastPage = _this.lastPage - 5;
+                    _this.search(_this.firstPage);
+                } else if(link === 'next'){
+                    _this.firstPage = _this.firstPage + 5;
+                    _this.lastPage = _this.lastPage + 5;
+                    _this.search(_this.firstPage);
+                } else {
+                    _this.search(link);
+                }
+            });
+        },
+        clear : function(){
+            this.div.find('.checkAll').prop('checked', false);
+            $('#category').val($('#category option:eq(0)').val());
+            $('#itemDisplaySearchResult').empty();
+        },
+        loadCategories : function(){
+            var _this = this;
+            $.ajax({
+                type: 'GET',
+                url: '/api/admin/commonCode/search?codeGroup=C',
+                dataType: 'json',
+                contentType:'application/json; charset=utf-8'
+            }).done(function(response) {
+                var resultData = response;
+                //console.log(response);
+                const category = _this.div.find('#category');
+                category.empty();
+                if(resultData.length > 0){
+                    $.each(resultData, function(){
+                        const cate = this;
+                       category.append($('<option />').text(cate.nameKor).val(cate.id));
+                    });
+                }
+            }).fail(function (error) {
+                alert(JSON.stringify(error));
+            });
+
+        },
+        appendResult : function(){
+            const _this = this;
+           _this.div.find("#btn-append-items").unbind('click').bind('click', function (e) {
+               $.each(_this.div.find('#itemDisplaySearchResult .itemRow'), function(){
+                  const item = this;
+                  const id = $(this).find('.id').text();
+                  const itemName = $(this).find('.itemName').text();
+                  let eventItemDiv = $('<div class="eventItem mb-1"/>');
+                  eventItemDiv
+                           .append($('<input type="hidden" name="itemId"/>').val(id))
+                           .append($('<button class="btn btn-sm btn-secondary"/>').text(itemName))
+                           .append($('<button class="btn btn-sm deleteBtn"/>').text('X'));
+                  $('.itemAddList').append(eventItemDiv);
+               });
+                $('#itemDisplaySearchModal').modal('hide');
+            })
+        },
+        search : function(page){
+            var _this = this;
+            var id = _this.div.find("#category").val();
+            $.ajax({
+                type: 'GET',
+                url: '/api/admin/itemDisplay/category?id='+ id
+                    + '&page='+ page + '&size=' + 5 + '&direction=DESC',
+                contentType:'application/json; charset=utf-8'
+            }).done(function(response) {
+                var resultData = response.response;
+                //console.log(resultData);
+                _this.currPage = page;
+                const searchResult = _this.div.find('#itemDisplaySearchResult');
+                searchResult.empty();
+                if(resultData.totalElements > 0){
+                    $('#pagination-item-display-modal').setPagination(
+                            _this.currPage,
+                            _this.firstPage,
+                            Math.min(resultData.totalPages, _this.lastPage),
+                            5,
+                            resultData.totalPages
+                    );
+                    $.each(resultData.content, function(){
+                        const item = this;
+                        const row = '<tr class="itemRow" style="cursor: pointer !important;">'
+                                + '<td class="check"><input type="checkbox" /></td>'
+                                + '<td class="id">' + item.id +'</td>'
+                                + '<td class="itemName">' + item.itemDisplayName +'</td>'
+                                + '</tr>';
+                        searchResult.append(row);
+                    });
+                    _this.appendResult();
+                }
+
+            }).fail(function (error) {
+                alert(JSON.stringify(error));
+            });
+        }
+    };
+    $('.btn-item-display-modal').click(function(){
+        itemDisplaySearchModal.init();
+    })
+</script>

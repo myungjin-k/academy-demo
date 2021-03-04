@@ -50,7 +50,6 @@ public class EventJobTest {
                 .type(EventType.DISCOUNT_RATIO)
                 .startAt(LocalDate.of(2021, 3, 3))
                 .endAt(LocalDate.of(2021, 3, 20))
-                .createAt(now())
                 .status(EventStatus.OFF)
                 .build();
         List<Id<ItemDisplay, String>> ids = List.of(

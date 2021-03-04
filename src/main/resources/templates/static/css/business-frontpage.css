@@ -112,3 +112,6 @@ ul {
 .itemInfo img {
   height: 50px;
 }
+input.field, select.field {
+  margin: 0.5rem;
+}
