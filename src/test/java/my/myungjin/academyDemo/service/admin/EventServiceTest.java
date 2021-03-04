@@ -40,7 +40,7 @@ public class EventServiceTest {
                 .startAt(LocalDate.of(2021, 3, 3))
                 .endAt(LocalDate.of(2021, 3, 20))
                 .createAt(now())
-                .status(EventStatus.ON)
+                .status(EventStatus.OFF)
                 .build();
         List<Id<ItemDisplay, String>> ids = List.of(
                 Id.of(ItemDisplay.class, "6bdbf6eea40b425caae4410895ca4809")

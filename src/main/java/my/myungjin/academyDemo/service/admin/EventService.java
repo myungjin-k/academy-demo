@@ -2,17 +2,16 @@ package my.myungjin.academyDemo.service.admin;
 
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
-import my.myungjin.academyDemo.domain.event.Event;
-import my.myungjin.academyDemo.domain.event.EventItem;
-import my.myungjin.academyDemo.domain.event.EventItemRepository;
-import my.myungjin.academyDemo.domain.event.EventRepository;
+import my.myungjin.academyDemo.domain.event.*;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.item.ItemDisplayRepository;
 import my.myungjin.academyDemo.error.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +27,7 @@ public class EventService {
     public Event save(Event newEvent, List<Id<ItemDisplay, String>> itemIds){
         return saveItems(eventRepository.save(newEvent), itemIds);
     }
-    //TODO  매일 신규 활성화 이벤트 조회 -> 연관 아이템 전시가격 수정 및 히스토리 저장
+
     private Event saveItems(Event event, List<Id<ItemDisplay, String>> itemIds){
         for(Id<ItemDisplay, String> itemId : itemIds){
             ItemDisplay item = itemDisplayRepository.findById(itemId.value())
@@ -38,6 +37,13 @@ public class EventService {
             event.addItem(eventItem);
         }
         return event;
+    }
+
+    public List<Event> findOnEvents(){
+        return eventRepository.findByStatusEquals(EventStatus.ON)
+                .stream()
+                .peek(event -> event.setItems(eventItemRepository.findByEventSeq(event.getSeq())))
+                .collect(Collectors.toList());
     }
 
 }

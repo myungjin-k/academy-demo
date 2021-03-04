@@ -61,7 +61,7 @@ public class Event {
     @Column(name = "update_at")
     private LocalDateTime updateAt;
 
-    @Getter
+    @Getter @Setter
     @JsonManagedReference
     @OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<EventItem> items = new ArrayList<>();
@@ -95,5 +95,9 @@ public class Event {
         this.status = status;
         this.startAt = startAt;
         this.endAt = endAt;
+    }
+
+    public void on(){
+        status = EventStatus.ON;
     }
 }

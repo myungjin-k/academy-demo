@@ -59,8 +59,9 @@ public class TopSellerJobConfigure {
     @Qualifier(JOB_NAME + "JobParameter")
     @Bean(JOB_NAME + "JobParameter")
     @JobScope
-    public CreateJobParameter jobParameter( @Nullable @Value("#{jobParameters[createAt]}") String createAt){
-        return new CreateJobParameter(createAt);
+    public CreateJobParameter jobParameter(@Value("#{jobParameters[createAt]}") String createAt,
+                                           @Value("#{jobParameters[today]}") String today){
+        return new CreateJobParameter(createAt, today);
     }
 
     @Bean

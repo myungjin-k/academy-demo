@@ -35,7 +35,6 @@ public class EventItem {
     @JoinColumn(name = "item_id", nullable = false)
     private ItemDisplay item;
 
-
     @Getter
     @Column(name = "create_at", insertable = false, updatable = false,
             columnDefinition = "datetime default current_timestamp")
