@@ -67,7 +67,7 @@ public class JobScheduler {
         }
     }
 
-    @Scheduled(initialDelay = 50000, fixedDelay = 86400000)
+   /* @Scheduled(initialDelay = 50000, fixedDelay = 86400000)
     public void runEventJob() {
 
         JobParameters jobParameters = new JobParametersBuilder()
@@ -85,5 +85,5 @@ public class JobScheduler {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 }
