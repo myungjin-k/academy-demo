@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ItemDisplayRepository extends JpaRepository<ItemDisplay, String>, QuerydslPredicateExecutor<ItemDisplay> {
@@ -15,7 +16,11 @@ public interface ItemDisplayRepository extends JpaRepository<ItemDisplay, String
     // 상품 전시상태로 검색
     Page<ItemDisplay> findAllByStatusEquals(ItemStatus status, Pageable pageable);
 
+    List<ItemDisplay> findAllByStatusEquals(ItemStatus status);
+
     // 상품 대분류, 전시상태로 검색
     Page<ItemDisplay> findAllByItemMasterCategoryIdOrItemMasterCategoryCodeGroupIdAndStatusEquals(String categoryId, String groupId, ItemStatus status, Pageable pageable);
+
+    List<ItemDisplay> findAllByItemMasterCategoryIdContainingOrItemMasterCategoryCodeGroupIdContainingAndStatusEquals(String categoryId, String groupId, ItemStatus status);
 
 }

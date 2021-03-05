@@ -47,7 +47,7 @@ public class EventJobTest {
                 .name("아우터 20% 할인")
                 .amount(0)
                 .ratio(20)
-                .type(EventType.DISCOUNT_RATIO)
+                .type(EventType.DISCOUNT_PRODUCT)
                 .startAt(LocalDate.of(2021, 3, 3))
                 .endAt(LocalDate.of(2021, 3, 20))
                 .status(EventStatus.OFF)

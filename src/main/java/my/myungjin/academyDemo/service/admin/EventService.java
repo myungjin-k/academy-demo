@@ -30,15 +30,39 @@ public class EventService {
         return save(saveItems(saved, itemIds));
     }
 
+    @Transactional
+    public Event modify(Id<Event, Long> eventSeq, Event event, List<Id<ItemDisplay, String>> itemIds){
+        return eventRepository.findById(eventSeq.value())
+                .map(e -> {
+                    e.modify(
+                            event.getName(),
+                            event.getType(),
+                            event.getAmount(),
+                            event.getRatio(),
+                            event.getStatus(),
+                            event.getStartAt(),
+                            event.getEndAt()
+                    );
+                    Event updated = save(e);
+                    deleteAllEventItemsByEventSeq(updated.getSeq());
+                    return saveItems(updated, itemIds);
+                }).orElseThrow(() -> new NotFoundException(Event.class, eventSeq));
+    }
+
     private Event saveItems(Event event, List<Id<ItemDisplay, String>> itemIds){
         for(Id<ItemDisplay, String> itemId : itemIds){
             ItemDisplay item = itemDisplayRepository.findById(itemId.value())
                     .orElseThrow(() -> new NotFoundException(ItemDisplay.class, itemId));
             EventItem newItem = new EventItem(event, item);
-            EventItem eventItem = eventItemRepository.save(newItem);
-            event.addItem(eventItem);
+            eventItemRepository.save(newItem);
         }
+        event.setItems(eventItemRepository.findByEventSeq(event.getSeq()));
         return event;
+    }
+
+    private void deleteAllEventItemsByEventSeq (long seq){
+        List<EventItem> items = eventItemRepository.findByEventSeq(seq);
+        eventItemRepository.deleteAll(items);
     }
 
     @Transactional(readOnly = true)

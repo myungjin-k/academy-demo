@@ -50,6 +50,9 @@
             <div class="p-2" >
                 <div class="mb-5 eventInfo p-2">
                     <h5>이벤트 상세</h5>
+                    <div class="div-crud-buttons">
+                        <a class="btn btn-outline-primary" id="btn-update-event">저장</a>
+                    </div>
                     <form id="form-save-event">
                         <div class="row">
                             <div class="col-2">순번</div>
@@ -68,11 +71,10 @@
                                     {{/eventType}}
                                 </select>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-2">적용사항</div>
-                            <div class="col-3"><label>금액 : </label><input class="field" name="amount" id="discountAmount"/></div>
-                            <div class="col-3"><label>할인비율 : </label><input class="field" name="ratio" id="discountRatio" /> %</div>
+                            <div class="col-8">
+                                <div class="d-none dr"><label>할인비율 : </label><input class="field" name="ratio" id="discountRatio" value="0"/> %</div>
+                                <div class="d-none da"><label>금액 : </label><input class="field" name="amount" id="discountAmount" value="0" /> 원</div>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-2">시작일</div>
@@ -82,22 +84,18 @@
                             <div class="col-2">종료일</div>
                             <div class="col"><input class="field" name="endAt" /></div>
                         </div>
-                        <div class="row">
+<!--                        <div class="row">
                             <div class="col-2">상태</div>
                             <div class="col">
-                                <select class="field" name="status">
-                                    {{#eventStatus}}
-                                        <option value={{name}}>{{description}}</option>
-                                    {{/eventStatus}}
-                                </select>
+                                <span class="field" name="status"></span>
                             </div>
-                        </div>
+                        </div>-->
                     </form>
                     <div class="row">
-                        <div class="col-2">적용상품
-                            <div class="mt-1"><button class="btn btn-sm btn-outline-primary btn-item-display-modal" data-toggle="modal" data-target="#itemDisplaySearchModal">상품 추가</button></div>
-                        </div>
-                        <div class="col eventItems itemAddList p-2">
+                        <div class="col-2">적용상품 </div>
+                        <div class="col">
+                            <div class="ml-2"><button class="btn btn-sm btn-outline-primary btn-item-display-modal" data-toggle="modal" data-target="#itemDisplaySearchModal">상품 추가</button></div>
+                            <div class="eventItems itemAddList p-3" style="overflow-y: scroll; height: 100px;"></div>
                         </div>
                     </div>
                 </div>
@@ -107,30 +105,29 @@
         </div>
         <div class="tab-pane fade contentDiv" id="div-admin-event-new" role="tabpanel" aria-labelledby="tab-admin-event-new" >
             <div class="p-2" >
-                <div class="mb-5 eventInfo p-2">
+                <div class="mb-5 eventInfo p-3">
                     <h5>이벤트 등록</h5>
                     <div class="div-crud-buttons">
                         <a class="btn btn-outline-primary" id="btn-save-event">저장</a>
                     </div>
-                    <form id="form-new-event">
-                        <div class="row ">
+                    <form class="mb-5" id="form-new-event">
+                        <div class="row">
                             <div class="col-2">이벤트명</div>
-                            <div class="col"><input class="field" name="name" /></div>
+                            <div class="col-sm-3"><input class="field" name="name" /></div>
                         </div>
                         <div class="row">
                             <div class="col-2">이벤트타입</div>
-                            <div class="col">
+                            <div class="col-sm-3">
                                 <select class="field" name="type">
                                     {{#eventType}}
                                         <option value={{value}}>{{description}}</option>
                                     {{/eventType}}
                                 </select>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-2">적용사항</div>
-                            <div class="col-3"><label>금액 : </label><input class="field" name="amount" id="discountAmount"/></div>
-                            <div class="col-3"><label>할인비율 : </label><input class="field" name="ratio" id="discountRatio" /> %</div>
+                            <div class="col-sm-3">
+                                <div class="d-none dr"><label>할인비율 : </label><input class="field" name="ratio" id="discountRatio" /> %</div>
+                                <div class="d-none da"><label>금액 : </label><input class="field" name="amount" id="discountAmount"/></div>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-2">시작일</div>
@@ -152,10 +149,10 @@
                         </div>-->
                     </form>
                     <div class="row">
-                        <div class="col-2">적용상품
-                            <div class="mt-1"><button class="btn btn-sm btn-outline-primary btn-item-display-modal" data-toggle="modal" data-target="#itemDisplaySearchModal">상품 추가</button></div>
-                        </div>
-                        <div class="col eventItems itemAddList p-2">
+                        <div class="col-2">적용상품 </div>
+                        <div class="col">
+                            <div class="ml-2"><button class="btn btn-sm btn-outline-primary btn-item-display-modal" data-toggle="modal" data-target="#itemDisplaySearchModal">상품 추가</button></div>
+                            <div class="eventItems itemAddList p-3" style="overflow-y: scroll; height: 100px;"></div>
                         </div>
                     </div>
                 </div>

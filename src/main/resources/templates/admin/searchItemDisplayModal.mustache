@@ -10,15 +10,17 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="container-fluid">
-                    <div class="row mb-3">
-                        <div class="col-2"><label for="category" >카테고리</label></div>
-                        <div class="col-2">
-                            <select id="category"></select>
+                <div class="container-fluid p-3">
+                    <div class="form-group row mb-3 bg-light p-2">
+                        <label class="col-form-label" for="category" >카테고리</label>
+                        <div class="col-sm-3">
+                            <select class="form-control" id="category">
+                                <option value=""></option>
+                            </select>
                         </div>
-                        <div class="col"><button type="button" class="btn btn-primary" id="btn-item-display-search" >검색</button></div>
+                        <div class="col-sm-3"><button type="button" class="btn btn-primary" id="btn-item-display-search" >검색</button></div>
                     </div>
-                    <div class="row p-3 ">
+                    <div class="row">
                         <table class="table table-horizontal table-bordered">
                             <thead class="thead-strong">
                             <tr>
@@ -27,14 +29,10 @@
                                 <th>상품명</th>
                             </tr>
                             </thead>
-                            <tbody id="itemDisplaySearchResult">
+                            <tbody id="itemDisplaySearchResult" style="height: 150px; overflow-y: scroll;">
 
                             </tbody>
                         </table>
-                    </div>
-                    <div>
-                        <ul class="pagination pagination-sm justify-content-center" id="pagination-item-display-modal" >
-                        </ul>
                     </div>
                 </div>
             </div>
@@ -47,40 +45,26 @@
 </div>
 <script>
     var itemDisplaySearchModal = {
-        firstPage: 1,
-        lastPage: 5,
-        currPage: 1,
+        parentDiv: '',
         div : $('#itemDisplaySearchModal'),
-        init : function(){
+        init : function(parentDiv){
             var _this = this;
+            _this.parentDiv = parentDiv;
             _this.loadCategories();
             _this.clear();
             _this.div.find("#btn-item-display-search").unbind('click').bind('click', function(){
-                _this.search(1);
+                _this.search();
             });
             _this.div.find('.checkAll').unbind('click').bind('click', function(){
                 if($(this).prop('checked'))
                     _this.div.find('#itemDisplaySearchResult .check input').prop('checked', true);
-            });
-
-            _this.div.on('click', '#pagination-item-display-modal .page-link', function(){
-                var link = $(this).text();
-                if(link === 'prev'){
-                    _this.firstPage = _this.firstPage - 5;
-                    _this.lastPage = _this.lastPage - 5;
-                    _this.search(_this.firstPage);
-                } else if(link === 'next'){
-                    _this.firstPage = _this.firstPage + 5;
-                    _this.lastPage = _this.lastPage + 5;
-                    _this.search(_this.firstPage);
-                } else {
-                    _this.search(link);
-                }
+                else
+                    _this.div.find('#itemDisplaySearchResult .check input').prop('checked', false);
             });
         },
         clear : function(){
             this.div.find('.checkAll').prop('checked', false);
-            $('#category').val($('#category option:eq(0)').val());
+            $('#category').val('');
             $('#itemDisplaySearchResult').empty();
         },
         loadCategories : function(){
@@ -95,6 +79,7 @@
                 //console.log(response);
                 const category = _this.div.find('#category');
                 category.empty();
+                category.append($('<option />').text('').val(''));
                 if(resultData.length > 0){
                     $.each(resultData, function(){
                         const cate = this;
@@ -110,7 +95,6 @@
             const _this = this;
            _this.div.find("#btn-append-items").unbind('click').bind('click', function (e) {
                $.each(_this.div.find('#itemDisplaySearchResult .itemRow'), function(){
-                  const item = this;
                   const id = $(this).find('.id').text();
                   const itemName = $(this).find('.itemName').text();
                   let eventItemDiv = $('<div class="eventItem mb-1"/>');
@@ -118,51 +102,51 @@
                            .append($('<input type="hidden" name="itemId"/>').val(id))
                            .append($('<button class="btn btn-sm btn-secondary"/>').text(itemName))
                            .append($('<button class="btn btn-sm deleteBtn"/>').text('X'));
-                  $('.itemAddList').append(eventItemDiv);
+                  const itemAddList = _this.parentDiv.find('.itemAddList');
+                  let isExists = false;
+                  $.each(itemAddList.find('.eventItem'), function () {
+                      if($(this).find('input[name="itemId"]').val() === id){
+                          isExists = true;
+                          return false;
+                      }
+                  });
+                  if(!isExists)
+                      _this.parentDiv.find('.itemAddList').append(eventItemDiv);
                });
                 $('#itemDisplaySearchModal').modal('hide');
             })
         },
-        search : function(page){
+        search : function(){
             var _this = this;
             var id = _this.div.find("#category").val();
             $.ajax({
                 type: 'GET',
-                url: '/api/admin/itemDisplay/category?id='+ id
-                    + '&page='+ page + '&size=' + 5 + '&direction=DESC',
+                url: '/api/admin/itemDisplay/category?id='+ id,
                 contentType:'application/json; charset=utf-8'
             }).done(function(response) {
                 var resultData = response.response;
                 //console.log(resultData);
-                _this.currPage = page;
                 const searchResult = _this.div.find('#itemDisplaySearchResult');
                 searchResult.empty();
-                if(resultData.totalElements > 0){
-                    $('#pagination-item-display-modal').setPagination(
-                            _this.currPage,
-                            _this.firstPage,
-                            Math.min(resultData.totalPages, _this.lastPage),
-                            5,
-                            resultData.totalPages
-                    );
-                    $.each(resultData.content, function(){
-                        const item = this;
-                        const row = '<tr class="itemRow" style="cursor: pointer !important;">'
-                                + '<td class="check"><input type="checkbox" /></td>'
-                                + '<td class="id">' + item.id +'</td>'
-                                + '<td class="itemName">' + item.itemDisplayName +'</td>'
-                                + '</tr>';
-                        searchResult.append(row);
-                    });
-                    _this.appendResult();
-                }
-
+                $.each(resultData, function(){
+                    const item = this;
+                    const row = '<tr class="itemRow" style="cursor: pointer !important;">'
+                            + '<td class="check"><input type="checkbox" /></td>'
+                            + '<td class="id">' + item.id +'</td>'
+                            + '<td class="itemName">' + item.itemDisplayName +'</td>'
+                            + '</tr>';
+                    searchResult.append(row);
+                });
+                _this.appendResult();
+                _this.div.find('.checkAll').prop('checked', false);
+                _this.div.find('#itemDisplaySearchResult .check input').prop('checked', false);
             }).fail(function (error) {
                 alert(JSON.stringify(error));
             });
         }
     };
     $('.btn-item-display-modal').click(function(){
-        itemDisplaySearchModal.init();
+        const parentDiv = $(this).parents('.contentDiv');
+        itemDisplaySearchModal.init(parentDiv);
     })
 </script>

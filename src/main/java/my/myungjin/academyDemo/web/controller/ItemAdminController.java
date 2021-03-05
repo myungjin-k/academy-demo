@@ -266,14 +266,9 @@ public class ItemAdminController {
 
     @GetMapping("/itemDisplay/category")
     @ApiOperation(value = "전시상품 검색(카테고리)")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "direction", dataType = "string", paramType = "query", defaultValue = "DESC", value = "정렬 방향"),
-            @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query", defaultValue = "0", value = "페이징 offset"),
-            @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query", defaultValue = "5", value = "조회 갯수")
-    })
-    public Response<Page<ItemDisplay>> searchDisplayByCategory(@RequestParam String id, PageRequest pageRequest){
+    public Response<List<ItemDisplay>> searchDisplayByCategory(@RequestParam String id){
         return  OK(
-                itemDisplayService.findAllByCategoryGroup(Id.of(CommonCode.class, id), pageRequest.of())
+                itemDisplayService.searchByCategoryGroup(id)
         );
     }
 

@@ -2,9 +2,11 @@ package my.myungjin.academyDemo.domain.item;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
 
+@Slf4j
 public class ItemDisplayPredicate {
     public static Predicate searchByNameAndDate(String name, LocalDate start, LocalDate end, boolean isFromMall){
         QItemDisplay itemDisplay = QItemDisplay.itemDisplay;

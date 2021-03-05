@@ -46,14 +46,22 @@ public class EventController {
 
     @GetMapping("/event/{seq}")
     @ApiOperation("이벤트 단건 조회")
-    public Response<EventDetailResponse> findById (
+    public Response<EventDetailResponse> findEventById (
             @PathVariable(name = "seq") @ApiParam(value = "대상 이벤트 PK", defaultValue = "1") long eventSeq){
         return OK(new EventDetailResponse(eventService.findBySeqWithDetail(Id.of(Event.class, eventSeq))));
     }
 
     @PostMapping("/event")
     @ApiOperation("이벤트 등록")
-    public Response<Event> findById (@RequestBody EventRequest request){
+    public Response<Event> createEvent (@RequestBody EventRequest request){
         return OK(eventService.save(request.newEvent(), request.toItemIds()));
+    }
+
+    @PutMapping("/event/{seq}")
+    @ApiOperation("이벤트 수정")
+    public Response<Event> updateEvent (
+            @PathVariable(name = "seq") @ApiParam(value = "대상 이벤트 PK", defaultValue = "1") long eventSeq,
+            @RequestBody EventRequest request){
+        return OK(eventService.modify(Id.of(Event.class, eventSeq), request.newEvent(), request.toItemIds()));
     }
 }

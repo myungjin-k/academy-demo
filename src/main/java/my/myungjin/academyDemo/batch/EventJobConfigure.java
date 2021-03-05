@@ -114,11 +114,10 @@ public class EventJobConfigure {
 
     private Function<EventItem, Integer> f (Event event){
         return eventItem -> {
-            if(EventType.DISCOUNT_RATIO.equals(event.getType())){
+            if(EventType.DISCOUNT_PRODUCT.equals(event.getType())){
                 double ratio = (double) event.getRatio() / 100;
                 return (int) (eventItem.getItem().getSalePrice() * ratio);
-            } else if(EventType.DISCOUNT_AMOUNT.equals(event.getType()))
-                return event.getAmount();
+            }
             return 0;
         };
     }

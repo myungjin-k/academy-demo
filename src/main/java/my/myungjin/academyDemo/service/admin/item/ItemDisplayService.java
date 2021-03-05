@@ -9,6 +9,7 @@ import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.domain.item.*;
 import my.myungjin.academyDemo.domain.order.TopSellerRepository;
 import my.myungjin.academyDemo.error.NotFoundException;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -182,8 +183,11 @@ public class ItemDisplayService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ItemDisplay> findAllByCategoryGroup(@Valid Id<CommonCode, String> categoryId, Pageable pageable){
-        return itemDisplayRepository.findAllByItemMasterCategoryIdOrItemMasterCategoryCodeGroupIdAndStatusEquals(categoryId.value(), categoryId.value(), ItemStatus.ON_SALE, pageable);
+    public List<ItemDisplay> searchByCategoryGroup(String categoryId){
+        categoryId = StringUtils.defaultString(categoryId, "");
+        return itemDisplayRepository
+                .findAllByItemMasterCategoryIdContainingOrItemMasterCategoryCodeGroupIdContainingAndStatusEquals
+                        (categoryId, categoryId, ItemStatus.ON_SALE);
     }
 
     private void saveHistory(ItemDisplay item){

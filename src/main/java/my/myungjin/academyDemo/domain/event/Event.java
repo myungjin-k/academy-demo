@@ -90,9 +90,10 @@ public class Event {
         eventItem.setEvent(this);
     }
 
-    public void modify(String name, EventType type, int amount, EventStatus status, LocalDate startAt, LocalDate endAt){
+    public void modify(String name, EventType type, int amount, int ratio, EventStatus status, LocalDate startAt, LocalDate endAt){
         this.name = name;
         this.type = type;
+        this.ratio = ratio;
         this.amount = amount;
         this.status = status;
         this.startAt = startAt;
