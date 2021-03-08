@@ -3,6 +3,7 @@ package my.myungjin.academyDemo.domain.member;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import my.myungjin.academyDemo.domain.event.Coupon;
 import my.myungjin.academyDemo.domain.order.CartItem;
 import my.myungjin.academyDemo.domain.order.Order;
 import my.myungjin.academyDemo.domain.review.Review;
@@ -21,10 +22,9 @@ import java.util.Optional;
 import static java.time.LocalDateTime.now;
 import static java.util.Optional.ofNullable;
 
-// TODO 회원정보 조회(관리) 기능
 @Entity
 @Table(name = "member")
-@ToString(exclude = {"cartItems", "orders", "reviews", "reservesHistories"})
+@ToString(exclude = {"cartItems", "orders", "reviews", "reservesHistories", "coupons"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
 public class Member{
@@ -108,6 +108,11 @@ public class Member{
     @JsonManagedReference
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ReservesHistory> reservesHistories;
+
+    @Getter @Setter
+    @JsonManagedReference
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Coupon> coupons;
 
     @Builder
     public Member(String id, String userId, String password, String name, String email, String tel, String addr1, String addr2,

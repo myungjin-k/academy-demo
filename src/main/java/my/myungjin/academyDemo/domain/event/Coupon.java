@@ -1,8 +1,9 @@
 package my.myungjin.academyDemo.domain.event;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
-import my.myungjin.academyDemo.domain.item.ItemDisplay;
+import my.myungjin.academyDemo.domain.member.Member;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -12,29 +13,36 @@ import java.util.Optional;
 import static java.util.Optional.ofNullable;
 
 @Entity
-@Table(name = "event_item")
+@Table(name = "coupon")
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
-public class EventItem {
+public class Coupon {
 
     @Id
     @Getter
-    @GeneratedValue(generator = "eventItemId")
-    @GenericGenerator(name = "eventItemId", strategy = "my.myungjin.academyDemo.commons.IdGenerator")
+    @GeneratedValue(generator = "couponId")
+    @GenericGenerator(name = "couponId", strategy = "my.myungjin.academyDemo.commons.IdGenerator")
     private String id;
 
-    @Getter @Setter
-    @JsonBackReference
-    @ManyToOne
+    @Getter
+    @JsonManagedReference
+    @OneToOne
     @JoinColumn(name = "event_seq", nullable = false)
     private Event event;
 
-    @Getter @Setter
-    @JsonBackReference
+    @Getter
     @ManyToOne
-    @JoinColumn(name = "item_id", nullable = false)
-    private ItemDisplay item;
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
+
+    @Getter
+    @Column(name = "used_yn", columnDefinition = "char default 'N'")
+    private char usedYn;
+
+    @Getter
+    @Column(name = "expired_yn", columnDefinition = "char default 'N'")
+    private char expiredYn;
 
     @Getter
     @Column(name = "create_at", insertable = false, updatable = false,
@@ -45,12 +53,21 @@ public class EventItem {
     private LocalDateTime updateAt;
 
     @Builder
-    public EventItem(Event event, ItemDisplay item) {
+    public Coupon(String id, Event event, Member member) {
+        this.id = id;
         this.event = event;
-        this.item = item;
+        this.member = member;
     }
 
     public Optional<LocalDateTime> getUpdateAt(){
         return ofNullable(updateAt);
+    }
+
+    public void use(){
+        usedYn = 'Y';
+    }
+
+    public void expire(){
+        expiredYn = 'Y';
     }
 }

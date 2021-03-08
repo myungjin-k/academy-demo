@@ -1,5 +1,6 @@
 package my.myungjin.academyDemo.domain.event;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
@@ -68,6 +69,11 @@ public class Event {
     @JsonManagedReference
     @OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<EventItem> items = new ArrayList<>();
+
+    @Getter @Setter
+    @JsonBackReference
+    @OneToOne(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Coupon coupon;
 
     @Builder
     public Event(long seq, String name, EventType type, EventStatus status, int ratio, int amount, LocalDate startAt, LocalDate endAt) {

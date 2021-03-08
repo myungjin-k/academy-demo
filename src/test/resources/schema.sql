@@ -304,3 +304,17 @@ CREATE TABLE item_display_price_history (
                                             PRIMARY KEY (id),
                                             CONSTRAINT fk_item_display_price_history_to_item_display FOREIGN KEY (item_id) REFERENCES item_display (id) ON DELETE CASCADE ON UPDATE RESTRICT
 );
+
+DROP TABLE IF EXISTS coupon CASCADE;
+CREATE TABLE coupon (
+                        id                   varchar(50) not null,
+                        event_seq            number not null,
+                        member_id            varchar(50) not null,
+                        used_yn              char default 'N',
+                        expired_yn           char default 'N',
+                        create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
+                        update_at            datetime DEFAULT null,
+                        PRIMARY KEY (id),
+                        CONSTRAINT coupon_to_member FOREIGN KEY (member_id) REFERENCES member (id) ON DELETE CASCADE ON UPDATE RESTRICT,
+                        CONSTRAINT coupon_to_event FOREIGN KEY (event_seq) REFERENCES event (seq) ON DELETE CASCADE ON UPDATE RESTRICT
+);
