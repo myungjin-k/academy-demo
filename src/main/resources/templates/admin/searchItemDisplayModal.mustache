@@ -94,18 +94,19 @@
         appendResult : function(){
             const _this = this;
            _this.div.find("#btn-append-items").unbind('click').bind('click', function (e) {
-               $.each(_this.div.find('#itemDisplaySearchResult .itemRow'), function(){
-                  const id = $(this).find('.id').text();
-                  const itemName = $(this).find('.itemName').text();
+               $.each(_this.div.find('#itemDisplaySearchResult .itemRow input[type="checkbox"]:checked'), function(){
+                  const row = $(this).parents('.itemRow');
+                  const id = row.find('.id').text();
+                  const itemName = row.find('.itemName').text();
                   let eventItemDiv = $('<div class="eventItem mb-1"/>');
                   eventItemDiv
-                           .append($('<input type="hidden" name="itemId"/>').val(id))
-                           .append($('<button class="btn btn-sm btn-secondary"/>').text(itemName))
-                           .append($('<button class="btn btn-sm deleteBtn"/>').text('X'));
+                          .append($('<input type="hidden" name="itemId"/>').val(id))
+                          .append($('<button class="btn btn-sm btn-secondary"/>').text(itemName))
+                          .append($('<button class="btn btn-sm deleteBtn"/>').text('X'));
                   const itemAddList = _this.parentDiv.find('.itemAddList');
                   let isExists = false;
                   $.each(itemAddList.find('.eventItem'), function () {
-                      if($(this).find('input[name="itemId"]').val() === id){
+                      if(row.find('input[name="itemId"]').val() === id){
                           isExists = true;
                           return false;
                       }
