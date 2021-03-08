@@ -8,6 +8,6 @@ public interface ItemDisplayPriceHistoryRepository extends JpaRepository<ItemDis
 
     List<ItemDisplayPriceHistory> findByItemId(String itemId);
 
-    boolean existsByRefAndItemId (String ref, String itemId);
+    List<ItemDisplayPriceHistory> findByItemIdOrderBySeqDesc(String itemId);
 
 }

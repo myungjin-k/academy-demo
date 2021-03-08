@@ -85,12 +85,12 @@ public class ItemDisplay {
 
     @Getter @Setter
     @JsonBackReference
-    @OneToMany(mappedBy = "itemDisplay", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "itemDisplay", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Collection<ItemDisplayOption> options;
 
     @Getter @Setter
     @JsonIgnore
-    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Collection<Review> reviews;
 
     @Getter @Setter
