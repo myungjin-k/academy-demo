@@ -25,13 +25,13 @@ public class EventService {
     private final ItemDisplayRepository itemDisplayRepository;
 
     @Transactional
-    public Event save(Event newEvent, List<Id<ItemDisplay, String>> itemIds){
+    public Event save(@Valid  Event newEvent, List<Id<ItemDisplay, String>> itemIds){
         Event saved = save(newEvent);
         return save(saveItems(saved, itemIds));
     }
 
     @Transactional
-    public Event modify(Id<Event, Long> eventSeq, Event event, List<Id<ItemDisplay, String>> itemIds){
+    public Event modify(@Valid  Id<Event, Long> eventSeq, @Valid Event event, List<Id<ItemDisplay, String>> itemIds){
         return eventRepository.findById(eventSeq.value())
                 .map(e -> {
                     e.modify(
