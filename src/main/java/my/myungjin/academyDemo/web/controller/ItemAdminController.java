@@ -306,12 +306,5 @@ public class ItemAdminController {
         );
     }
 
-    @PatchMapping( "/itemDisplay/discount")
-    @ApiOperation(value = "전시 상품 할인가 적용")
-    public Response<List<ItemDisplay>> discount(@RequestBody DiscountRequest request) {
-        return OK(
-                itemDisplayService.discount(request.convertIds(), request.getDiscountRatio())
-        );
-    }
 
 }
