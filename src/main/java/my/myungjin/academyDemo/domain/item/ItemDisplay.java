@@ -135,6 +135,7 @@ public class ItemDisplay {
 
     public void updateSalePrice (int newPrice) {
         salePrice = newPrice;
+        updateAt = now();
     }
 
     public void addHistory(ItemDisplayPriceHistory history){

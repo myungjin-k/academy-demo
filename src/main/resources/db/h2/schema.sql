@@ -299,6 +299,7 @@ CREATE TABLE item_display_price_history (
                                             item_id              varchar(50) not null,
                                             seq                  number not null,
                                             sale_price           number not null,
+                                            ref                  varchar(255),
                                             create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
                                             update_at            datetime DEFAULT null,
                                             PRIMARY KEY (id),

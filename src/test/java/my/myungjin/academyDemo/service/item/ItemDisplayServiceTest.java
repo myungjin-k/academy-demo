@@ -208,7 +208,7 @@ public class ItemDisplayServiceTest {
 
     }
 
-    @Test
+/*    @Test
     @Order(8)
     void 전시_상품_할인가_적용하기() {
         List<Id<ItemDisplay, String>> itemIds = List.of(
@@ -224,5 +224,5 @@ public class ItemDisplayServiceTest {
         }
         log.info("Updated Display Item: {}", results);
 
-    }
+    }*/
 }

@@ -29,6 +29,10 @@ public class ItemDisplayPriceHistory {
     private int salePrice;
 
     @Getter
+    @Column(name = "ref")
+    private String ref;
+
+    @Getter
     @Column(name = "create_at", insertable = false, updatable = false,
             columnDefinition = "datetime default current_timestamp")
     private LocalDateTime createAt;
@@ -47,10 +51,11 @@ public class ItemDisplayPriceHistory {
     private int seq;
 
     @Builder
-    public ItemDisplayPriceHistory(int salePrice, ItemDisplay itemDisplay, int seq) {
+    public ItemDisplayPriceHistory(int salePrice, ItemDisplay itemDisplay, int seq, String ref) {
         this.salePrice = salePrice;
         this.item = itemDisplay;
         this.seq = seq;
+        this.ref = ref;
     }
 
     public Optional<LocalDateTime> getUpdateAt(){

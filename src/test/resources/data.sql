@@ -400,3 +400,6 @@ INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('df7922
 INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('961df1f5df22493aaea7dee8141ace37', '11', 'receiverAddr1', '배송주소1', 'ce0b9ee00c384a888ff5aad5b32350d1' );
 INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('8435d4536f0c432c812904e47b012c8b', '12', 'receiverAddr2', '배송주소2', 'ce0b9ee00c384a888ff5aad5b32350d1' );
 INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('ac553731de5e4f61961a0c016efc120e', '13', 'message', '배송메세지', 'ce0b9ee00c384a888ff5aad5b32350d1' );
+
+INSERT INTO event (seq, name, type, discount_ratio, start_at, end_at) values (999, 'TEST', 'P', '15', current_date, current_date);
+INSERT INTO event_item (id, event_seq, item_id) values ('02495bd30acb45c5b9b27cd1df5e5c7d', 999, '6bdbf6eea40b425caae4410895ca4809');

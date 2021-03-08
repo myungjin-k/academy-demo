@@ -192,7 +192,7 @@ public class ItemDisplayService {
 
     private void saveHistory(ItemDisplay item){
         int nextSeq = itemDisplayPriceHistoryRepository.findByItemId(item.getId()).size() + 1;
-        ItemDisplayPriceHistory newHistory = itemDisplayPriceHistoryRepository.save(new ItemDisplayPriceHistory(item.getSalePrice(), item, nextSeq));
+        ItemDisplayPriceHistory newHistory = itemDisplayPriceHistoryRepository.save(new ItemDisplayPriceHistory(item.getSalePrice(), item, nextSeq, "ADMIN"));
         log.info("New Item History: {}", newHistory);
     }
 
