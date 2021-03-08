@@ -39,7 +39,7 @@ public class EventRequest {
     public Event newEvent(){
         return Event.builder()
                 .name(name)
-                .status(EventStatus.OFF)
+                .status(EventStatus.of(status))
                 .type(EventType.of(type))
                 .amount(amount)
                 .ratio(ratio)

@@ -230,7 +230,7 @@ let eventDetail = {
             eventInfo.find('input[name="startAt"]').val(event.startAt);
             eventInfo.find('input[name="endAt"]').val(event.endAt);
             eventInfo.find('input[name="createAt"]').val(event.createAt);
-
+            eventInfo.find('select[name="status"]').val(event.status);
             const eventItems = _this.div.find('.eventInfo .eventItems');
             $.each(event.items, function(){
                const item = this;
@@ -258,7 +258,6 @@ let eventDetail = {
         const _this = this;
         let data = $('#form-save-event').serializeObject();
         data['itemStringIds'] = _this.collectItemIds();
-        data['status'] = '0';
         //console.log(data);
         $.ajax({
             type: 'PUT',
@@ -268,7 +267,6 @@ let eventDetail = {
             data: JSON.stringify(data)
         }).done(function(response) {
             var event = response.response;
-            console.log(event);
             alert('저장되었습니다.');
             main.init();
         }).fail(function (error) {
