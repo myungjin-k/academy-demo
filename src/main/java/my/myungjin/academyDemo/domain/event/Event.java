@@ -3,6 +3,8 @@ package my.myungjin.academyDemo.domain.event;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import my.myungjin.academyDemo.domain.member.Rating;
+import my.myungjin.academyDemo.domain.member.RatingSetConverter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -10,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static java.util.Optional.ofNullable;
 
@@ -48,6 +51,15 @@ public class Event {
     private int amount;
 
     @Getter
+    @Column(name = "min_amount")
+    private int minPurchaseAmount;
+
+    @Getter
+    @Column(name = "rating", columnDefinition = "char default 'B,S,G,V'")
+    @Convert(converter = RatingSetConverter.class)
+    private Set<Rating> ratings;
+
+    @Getter
     @Column(name = "start_at",
             columnDefinition = "datetime default current_date")
     private LocalDate startAt;
@@ -76,13 +88,16 @@ public class Event {
     private Coupon coupon;
 
     @Builder
-    public Event(long seq, String name, EventType type, EventStatus status, int ratio, int amount, LocalDate startAt, LocalDate endAt) {
+    public Event(long seq, String name, EventType type, EventStatus status, int ratio, int amount, Set<Rating> ratings,
+                 int minPurchaseAmount, LocalDate startAt, LocalDate endAt) {
         this.name = name;
         this.seq = seq;
         this.type = type;
         this.status = status;
         this.ratio = ratio;
         this.amount = amount;
+        this.ratings = ratings;
+        this.minPurchaseAmount = minPurchaseAmount;
         this.startAt = startAt;
         this.endAt = endAt;
     }
@@ -96,14 +111,16 @@ public class Event {
         eventItem.setEvent(this);
     }
 
-    public void modify(String name, EventType type, int amount, int ratio, EventStatus status, LocalDate startAt, LocalDate endAt){
-        this.name = name;
-        this.type = type;
-        this.ratio = ratio;
-        this.amount = amount;
-        this.status = status;
-        this.startAt = startAt;
-        this.endAt = endAt;
+    public void modify(Event event){
+        this.name = event.getName();
+        this.type = event.getType();
+        this.ratio = event.getRatio();
+        this.amount = event.getAmount();
+        this.minPurchaseAmount = event.getMinPurchaseAmount();
+        this.ratings = event.getRatings();
+        this.status = event.getStatus();
+        this.startAt = event.getStartAt();
+        this.endAt = event.getEndAt();
     }
 
     public void on(){

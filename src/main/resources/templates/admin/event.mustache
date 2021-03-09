@@ -64,16 +64,28 @@
                         </div>
                         <div class="row">
                             <div class="col-2">이벤트타입</div>
-                            <div class="col">
+                            <div class="col-sm-3">
                                 <select class="field" name="type">
                                     {{#eventType}}
                                         <option value={{value}}>{{description}}</option>
                                     {{/eventType}}
                                 </select>
                             </div>
-                            <div class="col-8">
-                                <div class="d-none dr"><label>할인비율 : </label><input class="field" name="ratio" id="discountRatio" value="0"/> %</div>
-                                <div class="d-none da"><label>금액 : </label><input class="field" name="amount" id="discountAmount" value="0" /> 원</div>
+                            <div class="col-sm-4">
+                                <div class="rating d-none">
+                                    <div class="row-cols-sm-1">
+                                        <div>적용대상등급</div>
+                                        {{#rating}}
+                                            <input class="field" type="checkbox" name="rating" value="{{value}}" />
+                                            <label >{{value}}</label>
+                                        {{/rating}}
+                                    </div>
+                                </div>
+                                <div class="d-none dr"><label>할인비율 : </label><input class="field" name="ratio" id="discountRatio" /> %</div>
+                                <div class="d-none da">
+                                    <div><label>금액 : </label><input class="field" name="amount" id="discountAmount"/></div>
+                                    <div><label>최소주문금액 : </label><input class="field" name="minPurchaseAmount" /></div>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -128,9 +140,21 @@
                                     {{/eventType}}
                                 </select>
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-sm-4">
+                                <div class="rating d-none">
+                                    <div class="row-cols-sm-1">
+                                        <div>적용대상등급</div>
+                                        {{#rating}}
+                                            <input class="field" type="checkbox" name="rating" value={{value}} />
+                                            <label >{{value}}</label>
+                                        {{/rating}}
+                                    </div>
+                                </div>
                                 <div class="d-none dr"><label>할인비율 : </label><input class="field" name="ratio" id="discountRatio" /> %</div>
-                                <div class="d-none da"><label>금액 : </label><input class="field" name="amount" id="discountAmount"/></div>
+                                <div class="d-none da">
+                                    <div><label>금액 : </label><input class="field" name="amount" id="discountAmount"/></div>
+                                    <div><label>최소주문금액 : </label><input class="field" name="minPurchaseAmount" /></div>
+                                </div>
                             </div>
                         </div>
                         <div class="row">

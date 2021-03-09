@@ -106,12 +106,15 @@ let newEvent = {
         _this.div.find('.eventInfo select[name="type"]').unbind('change').bind('change', function(){
             const type = $(this).val();
             if(type === 'P'){
+                _this.div.find('.eventInfo .rating').addClass('d-none');
                 _this.div.find('.eventInfo .dr').removeClass('d-none');
                 _this.div.find('.eventInfo .da').addClass('d-none');
             } else if(type === 'C') {
+                _this.div.find('.eventInfo .rating').removeClass('d-none');
                 _this.div.find('.eventInfo .dr').removeClass('d-none');
                 _this.div.find('.eventInfo .da').removeClass('d-none');
             } else {
+                _this.div.find('.eventInfo .rating').addClass('d-none');
                 _this.div.find('.eventInfo .dr').addClass('d-none');
                 _this.div.find('.eventInfo .da').addClass('d-none');
             }
@@ -122,8 +125,19 @@ let newEvent = {
     clear : function (){
         const _this = this;
         const eventInfo = _this.div.find('.eventInfo');
-        eventInfo.find('input.field, select.field').val('');
+        eventInfo.find('input.field, select.field').not('input[name="rating"]').val('');
+        eventInfo.find('input[name="rating"]').prop('checked', false);
         _this.div.find('.eventInfo .eventItems').empty();
+    },
+
+    collectRatings : function(){
+        const _this = this;
+        let ratings = [];
+        $.each(_this.div.find('.eventInfo input[name="rating"]:checked'), function(){
+            //console.log($(this).val());
+            ratings.push($(this).val());
+        });
+        return ratings;
     },
     collectItemIds : function(){
         const _this = this;
@@ -137,6 +151,7 @@ let newEvent = {
         const _this = this;
         let data = $('#form-new-event').serializeObject();
         data['itemStringIds'] = _this.collectItemIds();
+        data['ratings'] = _this.collectRatings();
         //console.log(data);
         $.ajax({
             type: 'POST',
@@ -181,12 +196,15 @@ let eventDetail = {
         _this.div.find('.eventInfo select[name="type"]').unbind('change').bind('change', function(){
             const type = $(this).val();
             if(type === 'P'){
+                _this.div.find('.eventInfo .rating').addClass('d-none');
                 _this.div.find('.eventInfo .dr').removeClass('d-none');
                 _this.div.find('.eventInfo .da').addClass('d-none');
             } else if(type === 'C') {
+                _this.div.find('.eventInfo .rating').removeClass('d-none');
                 _this.div.find('.eventInfo .dr').removeClass('d-none');
                 _this.div.find('.eventInfo .da').removeClass('d-none');
             } else {
+                _this.div.find('.eventInfo .rating').addClass('d-none');
                 _this.div.find('.eventInfo .dr').addClass('d-none');
                 _this.div.find('.eventInfo .da').addClass('d-none');
             }
@@ -198,7 +216,8 @@ let eventDetail = {
     clear : function (){
         const _this = this;
         const eventInfo = _this.div.find('.eventInfo');
-        eventInfo.find('input.field').val('');
+        eventInfo.find('input.field, select.field').not('input[name="rating"]').val('');
+        eventInfo.find('input[name="rating"]').prop('checked', false);
         _this.div.find('.eventInfo .eventItems').empty();
     },
     load : function(){
@@ -214,18 +233,29 @@ let eventDetail = {
             const eventInfo = _this.div.find('.eventInfo');
             eventInfo.find('input[name="seq"]').val(event.seq);
             eventInfo.find('input[name="name"]').val(event.name);
-            eventInfo.find('input[name="type"]').val(event.type);
+            eventInfo.find('select[name="type"]').val(event.type);
             if(event.type === 'P'){
+                _this.div.find('.eventInfo .rating').addClass('d-none');
                 _this.div.find('.eventInfo .dr').removeClass('d-none');
                 _this.div.find('.eventInfo .da').addClass('d-none');
             } else if(event.type === 'C') {
+                _this.div.find('.eventInfo .rating').removeClass('d-none');
                 _this.div.find('.eventInfo .dr').removeClass('d-none');
                 _this.div.find('.eventInfo .da').removeClass('d-none');
+
+                $(event.ratings).each(function(){
+                    const rating = this;
+                    //console.log(rating);
+                    eventInfo.find('input[name="rating"][value="' + rating +'"]').prop('checked', true);
+                });
+
+                eventInfo.find('input[name="minPurchaseAmount"]').val(event.minPurchaseAmount);
+                eventInfo.find('input[name="amount"]').val(event.amount);
             } else {
+                _this.div.find('.eventInfo .rating').addClass('d-none');
                 _this.div.find('.eventInfo .dr').addClass('d-none');
                 _this.div.find('.eventInfo .da').addClass('d-none');
             }
-            eventInfo.find('input[name="amount"]').val(event.amount);
             eventInfo.find('input[name="ratio"]').val(event.ratio);
             eventInfo.find('input[name="startAt"]').val(event.startAt);
             eventInfo.find('input[name="endAt"]').val(event.endAt);
@@ -246,6 +276,15 @@ let eventDetail = {
             alert(JSON.stringify(error));
         });
     },
+    collectRatings : function(){
+        const _this = this;
+        let ratings = [];
+        $.each(_this.div.find('.eventInfo input[name="rating"]:checked'), function(){
+            //console.log($(this).val());
+            ratings.push($(this).val());
+        });
+        return ratings;
+    },
     collectItemIds : function(){
         const _this = this;
         let items = [];
@@ -258,6 +297,7 @@ let eventDetail = {
         const _this = this;
         let data = $('#form-save-event').serializeObject();
         data['itemStringIds'] = _this.collectItemIds();
+        data['ratings'] = _this.collectRatings();
         //console.log(data);
         $.ajax({
             type: 'PUT',

@@ -10,6 +10,7 @@ import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.domain.event.EventStatus;
 import my.myungjin.academyDemo.domain.event.EventType;
 import my.myungjin.academyDemo.domain.item.ItemStatus;
+import my.myungjin.academyDemo.domain.member.Rating;
 import my.myungjin.academyDemo.domain.member.Role;
 import my.myungjin.academyDemo.domain.order.DeliveryStatus;
 import my.myungjin.academyDemo.security.User;
@@ -169,6 +170,7 @@ public class IndexController {
         model.addAttribute("isAdmin", true);
         model.addAttribute("eventType", EventType.values());
         model.addAttribute("eventStatus", EventStatus.values());
+        model.addAttribute("rating", Rating.values());
         return "admin/event";
     }
 

@@ -273,6 +273,8 @@ CREATE TABLE event (
                        status               number default 0,
                        discount_ratio       number default 0,
                        discount_amount      number default 0,
+                       min_amount           number default 0,
+                       rating               varchar(10) default 'B,S,G,V',
                        start_at             datetime DEFAULT CURRENT_TIMESTAMP(),
                        end_at               datetime DEFAULT CURRENT_TIMESTAMP(),
                        create_at            datetime DEFAULT CURRENT_TIMESTAMP(),

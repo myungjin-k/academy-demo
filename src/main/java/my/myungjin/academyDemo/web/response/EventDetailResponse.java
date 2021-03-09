@@ -3,9 +3,11 @@ package my.myungjin.academyDemo.web.response;
 import lombok.Getter;
 import lombok.ToString;
 import my.myungjin.academyDemo.domain.event.Event;
+import my.myungjin.academyDemo.domain.member.Rating;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @ToString
@@ -19,6 +21,10 @@ public class EventDetailResponse {
     private String type;
 
     private int status;
+
+    private Set<String> ratings;
+
+    private int minPurchaseAmount;
 
     private int amount;
 
@@ -37,6 +43,9 @@ public class EventDetailResponse {
         this.name = event.getName();
         this.type = event.getType().getValue();
         this.status = event.getStatus().getValue();
+        this.ratings = event.getRatings().stream()
+                .map(Rating::getValue)
+                .collect(Collectors.toSet());
         this.amount = event.getAmount();
         this.ratio = event.getRatio();
         this.startAt = event.getStartAt().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));

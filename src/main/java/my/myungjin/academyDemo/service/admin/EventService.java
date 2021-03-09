@@ -34,15 +34,7 @@ public class EventService {
     public Event modify(@Valid  Id<Event, Long> eventSeq, @Valid Event event, List<Id<ItemDisplay, String>> itemIds){
         return eventRepository.findById(eventSeq.value())
                 .map(e -> {
-                    e.modify(
-                            event.getName(),
-                            event.getType(),
-                            event.getAmount(),
-                            event.getRatio(),
-                            event.getStatus(),
-                            event.getStartAt(),
-                            event.getEndAt()
-                    );
+                    e.modify(event);
                     Event updated = save(e);
                     deleteAllEventItemsByEventSeq(updated.getSeq());
                     return saveItems(updated, itemIds);

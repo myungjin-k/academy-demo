@@ -8,6 +8,7 @@ import my.myungjin.academyDemo.domain.event.Event;
 import my.myungjin.academyDemo.domain.event.EventStatus;
 import my.myungjin.academyDemo.domain.event.EventType;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
+import my.myungjin.academyDemo.domain.member.Rating;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -26,7 +27,11 @@ public class EventRequest {
 
     private String type;
 
+    private List<String> ratings;
+
     private int amount;
+
+    private int minPurchaseAmount;
 
     private int ratio;
 
@@ -41,6 +46,10 @@ public class EventRequest {
                 .name(name)
                 .status(EventStatus.of(status))
                 .type(EventType.of(type))
+                .ratings(ratings.stream()
+                        .map(Rating::valueOf)
+                        .collect(Collectors.toSet()))
+                .minPurchaseAmount(minPurchaseAmount)
                 .amount(amount)
                 .ratio(ratio)
                 .startAt(LocalDate.parse(startAt, DateTimeFormatter.ofPattern("yyyy.MM.dd")))
