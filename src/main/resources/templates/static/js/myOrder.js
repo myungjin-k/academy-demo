@@ -295,7 +295,7 @@ var myOrderDetail = {
             deliverDiv.find('#receiverAddr').text(order.deliveryAddr1 + ', ' + order.deliveryAddr2);
             deliverDiv.find('#message').text(order.deliveryMessage);
 
-            if(order.orderStatus === '배송준비중'){
+            if(order.orderStatus === '배송준비중' || order.orderStatus === '결제완료'){
                 const deliverForm = _this.div.find('#form-update-delivery');
                 deliverForm.find('input[name="deliveryId"]').val(order.deliveryId);
                 deliverForm.find('#receiverName').val(order.deliveryName);
