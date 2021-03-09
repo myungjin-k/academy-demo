@@ -28,8 +28,6 @@ public class JobScheduler {
 
     private final TopSellerJobConfigure tobSellerJobConfigure;
 
-    private final EventJobConfigure eventJobConfigure;
-
     // TODO 배송상태 수신 로직 구현(ex 파일과 같이 외부에서 입력)
     @Scheduled(initialDelay = 10000, fixedDelay = 1800000)
     public void runDeliveryJob() {
@@ -66,24 +64,4 @@ public class JobScheduler {
             e.printStackTrace();
         }
     }
-
-   /* @Scheduled(initialDelay = 50000, fixedDelay = 86400000)
-    public void runEventJob() {
-
-        JobParameters jobParameters = new JobParametersBuilder()
-                .addString("createAt", now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                .addString("today", LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                .toJobParameters();
-
-        try {
-            log.info("# Job parameter: (today={})", jobParameters.getString("today"));
-            jobLauncher.run(eventJobConfigure.eventJob(), jobParameters);
-
-        } catch (JobExecutionAlreadyRunningException | JobInstanceAlreadyCompleteException
-                | JobParametersInvalidException | org.springframework.batch.core.repository.JobRestartException e) {
-            log.error(e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }*/
 }
