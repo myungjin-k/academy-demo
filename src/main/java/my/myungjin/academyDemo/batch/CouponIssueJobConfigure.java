@@ -38,7 +38,7 @@ public class CouponIssueJobConfigure {
 
     private final EntityManagerFactory entityManagerFactory;
 
-    private final int chunkSize = 5;
+    private final int chunkSize = 100;
 
     private final CreateJobParameter jobParameter;
 
@@ -98,8 +98,10 @@ public class CouponIssueJobConfigure {
         log.info("# createAt: {}", parameters.get("createAt"));
         String query = "select m.id as member_id," +
                 "'N' as expired_yn, " +
-                "'N' as used_yn," +
-                " m.*, e.seq as event_seq, m.*" +
+                "'N' as used_yn, " +
+                "e.seq as event_seq, "+
+                "current_timestamp as create_at, " +
+                "null as update_at" +
                 "  from event e, member m" +
                 "  where e.type = 'C'" +
                 "  and e.status = '1' " +

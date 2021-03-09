@@ -26,8 +26,7 @@ public class Coupon {
     private String id;
 
     @Getter
-    @JsonManagedReference
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "event_seq", nullable = false)
     private Event event;
 

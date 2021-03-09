@@ -82,11 +82,6 @@ public class Event {
     @OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<EventItem> items = new ArrayList<>();
 
-    @Getter @Setter
-    @JsonBackReference
-    @OneToOne(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Coupon coupon;
-
     @Builder
     public Event(long seq, String name, EventType type, EventStatus status, int ratio, int amount, Set<Rating> ratings,
                  int minPurchaseAmount, LocalDate startAt, LocalDate endAt) {

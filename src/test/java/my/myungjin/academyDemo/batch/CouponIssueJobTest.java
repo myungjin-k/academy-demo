@@ -1,7 +1,8 @@
 package my.myungjin.academyDemo.batch;
 
 import lombok.extern.slf4j.Slf4j;
-import my.myungjin.academyDemo.domain.order.ReceivedDeliveryStatusRepository;
+import my.myungjin.academyDemo.domain.event.Coupon;
+import my.myungjin.academyDemo.domain.event.CouponRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.batch.core.BatchStatus;
@@ -17,8 +18,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 @Slf4j
 @RunWith(SpringRunner.class)
@@ -29,6 +32,9 @@ public class CouponIssueJobTest {
     @Qualifier("getJobLauncherTestUtil3")
     @Autowired
     private JobLauncherTestUtils jobLauncherTestUtils;
+
+    @Autowired
+    private CouponRepository couponRepository;
 
     @Test
     public void 쿠폰을_지급한다() throws Exception{
@@ -41,7 +47,11 @@ public class CouponIssueJobTest {
         JobExecution jobExecution = jobLauncherTestUtils.launchJob(jobParameters);
 
         assertEquals(BatchStatus.COMPLETED, jobExecution.getStatus());
-
+        List<Coupon> saved = couponRepository.findByCreateAtAfter(dateTime);
+        assertNotEquals(saved.size(), 0);
+        for(Coupon c : saved){
+            log.info("Saved Coupon: memberId={}, event={}", c.getMember().getId(), c.getEvent());
+        }
     }
 
 }

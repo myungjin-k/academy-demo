@@ -26,7 +26,21 @@ INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('58735a
 INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('bea264233aee48238808a116d1bfd321', 'SIZE03', 'L', '', '3ebebfeb9fbeabcde5935f96ed308854' );
 
 
+
+
+
+
+
 INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount) VALUES ('3a18e633a5db4dbd8aaee218fe447fa4', 'mjkim', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진', 'open7894.v2@gmail.com', '010-1234-5678','XX시 XX구 XX로', '1-1111', 3000, 50000);
+INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount) VALUES ('073de9c852ce44d29dd961d3dcabc63f', 'mjkim2', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진1', 'open7894.v3@gmail.com', '010-1234-5671','XX시 XX구 XX로', '1-1111', 3000, 0);
+INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount) VALUES ('a79ffa46eb13439eb2efd171d6a37ea5', 'mjkim3', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진2', 'open7894.v4@gmail.com', '010-1234-5672','XX시 XX구 XX로', '1-1111', 3000, 0);
+INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount) VALUES ('e41b007eb6b74d5f82fd79b5b3bbbfca', 'mjkim4', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진3', 'open7894.v5@gmail.com', '010-1234-5673','XX시 XX구 XX로', '1-1111', 3000, 0);
+INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount) VALUES ('a6bf02227159405583ec726a242cfd7c', 'mjkim5', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진4', 'open7894.v6@gmail.com', '010-1234-5674','XX시 XX구 XX로', '1-1111', 3000, 0);
+INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount) VALUES ('e20ae92e477e4969968cded01d522d45', 'mjkim6', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진5', 'open7894.v7@gmail.com', '010-1234-5675','XX시 XX구 XX로', '1-1111', 3000, 0);
+INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount) VALUES ('fd1a671f800844b48bc8824af3bfc00f', 'mjkim7', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진6', 'open7894.v8@gmail.com', '010-1234-5676','XX시 XX구 XX로', '1-1111', 3000, 0);
+INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount) VALUES ('df8dfca187ac4d0a9985d2255625b80a', 'mjkim8', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진7', 'open7894.v9@gmail.com', '010-1234-5677','XX시 XX구 XX로', '1-1111', 3000, 0);
+INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount) VALUES ('00bc6f4f3992497aae219b49b8996da7', 'mjkim9', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진8', 'open7894.v10@gmail.com', '010-1234-5670','XX시 XX구 XX로', '1-1111', 3000, 0);
+INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount) VALUES ('29b06db3a5704c389ae6082b04d6b08c', 'mjkim10', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진9', 'open7894.v11@gmail.com', '010-1234-5679','XX시 XX구 XX로', '1-1111', 3000, 0);
 
 INSERT INTO admin (id, admin_id, password) VALUES ('3a18e633a5db4dbd8aaee218fe447fa4', 'mjkim', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq');
 
