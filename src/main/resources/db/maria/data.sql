@@ -293,3 +293,5 @@ INSERT INTO review (id, member_id, item_id, order_item_id, content) VALUES ('43f
 INSERT INTO review_comment(id, admin_id, review_id, content) values ('c2859d0c42974981b6a1a04f39f68bb1', '3a18e633a5db4dbd8aaee218fe447fa4', '43f217fd86c34ce0a305e02b9972a29e', '리뷰 감사드립니다. 500원 적립 도와드리겠습니다~!');
 
 INSERT INTO reserves_history (member_id, type, amount) values ('3a18e633a5db4dbd8aaee218fe447fa4', 'ADMIN', 300000);
+
+INSERT INTO event_item (id, event_seq, item_id) values ('02495bd30acb45c5b9b27cd1df5e5c7d', 1, '844e3e7a49bf481091bf5af9d321489c');
