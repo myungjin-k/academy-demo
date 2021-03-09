@@ -403,3 +403,6 @@ INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('ac5537
 
 INSERT INTO event (seq, name, type, discount_ratio, start_at, end_at) values (999, 'TEST', 'P', '15', current_date, current_date);
 INSERT INTO event_item (id, event_seq, item_id) values ('02495bd30acb45c5b9b27cd1df5e5c7d', 999, '6bdbf6eea40b425caae4410895ca4809');
+
+
+INSERT INTO event (seq, name, type, DISCOUNT_AMOUNT, min_amount, rating, start_at, end_at, status) values (2, 'test', 'C', '3000', '20000', 'B,S', current_date, current_date, 1);

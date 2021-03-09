@@ -53,8 +53,7 @@ public class Coupon {
     private LocalDateTime updateAt;
 
     @Builder
-    public Coupon(String id, Event event, Member member) {
-        this.id = id;
+    public Coupon(Event event, Member member) {
         this.event = event;
         this.member = member;
     }

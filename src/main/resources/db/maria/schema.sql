@@ -271,6 +271,8 @@ CREATE TABLE event (
                        seq                  int auto_increment,
                        name                 varchar(255) not null,
                        type                 varchar(10) not null,
+                       min_amount           int default 0,
+                       rating               varchar(10) default 'B,S,G,V',
                        status               int default 0,
                        discount_ratio       int default 0,
                        discount_amount      int default 0,
