@@ -56,8 +56,7 @@ INSERT INTO item_option (id, color, size, master_id) VALUES ('fb32787b91614b978c
 INSERT INTO item_option (id, color, size, master_id) VALUES ('af412e9968dc4f11a83f9352a251f0aa', '포그그레이', 'S', 'c62bb955f4f94203b31f157fa72deef2');
 INSERT INTO item_option (id, color, size, master_id) VALUES ('af412e9968ec4f11a83f9352a251f0aa', '포그그레이', 'M', 'c62bb955f4f94203b31f157fa72deef2');
 
-INSERT INTO item_display (id, item_id, item_display_name, sale_price, material, size, description, notice, status, detail_image) VALUES
-('f23ba30a47194a2c8a3fd2ccadd952a4', 'c62bb955f4f94203b31f157fa72deef2', '그랜드 핀턱 팬츠 (2color)', 43000, '기모면(오랜 시간 원형 보존을 위해 드라이클리닝을 추천해 드립니다.) ',
+INSERT INTO item_display (id, item_id, item_display_name, sale_price, material, size, description, notice, status, detail_image) VALUES ('f23ba30a47194a2c8a3fd2ccadd952a4', 'c62bb955f4f94203b31f157fa72deef2', '그랜드 핀턱 팬츠 (2color)', 43000, '기모면(오랜 시간 원형 보존을 위해 드라이클리닝을 추천해 드립니다.) ',
  'S(26-27) 허리 33 엉덩이 49.5 허벅지 31.5 밑위 29.5 밑단 20 총길이 92
  M(28-29) 허리 35 엉덩이 50.5 허벅지 32.5 밑위 29.5 밑단 21 총길이 92',
  '데일리하면서도 멋스러운 핏감의 핀턱 팬츠입니다.
@@ -126,7 +125,6 @@ INSERT INTO item_master (id, item_name, category_id, price, thumbnail) VALUES ('
 INSERT INTO item_option (id, size, master_id) VALUES ('97d1a59bc83045ef99c633f4c36ac10c', 'S', 'cc068e14469a4d0a958f8ff072009f04');
 INSERT INTO item_option (id, size, master_id) VALUES ('ca3720d375374d8cb0a11cd867aeb510', 'M', 'cc068e14469a4d0a958f8ff072009f04');
 
-
 INSERT INTO item_display (id, item_id, item_display_name, sale_price, material, size, description, status, detail_image) VALUES
 ('839ebdcc2b2843a6ae681d9cb82c6a7c', 'cc068e14469a4d0a958f8ff072009f04', '로뎀 블랙 팬츠', 35000,
  '면100',
@@ -164,30 +162,37 @@ INSERT INTO item_option (id, color, master_id) VALUES ('d95a3d3508e04688a41b8824
 INSERT INTO item_option (id, color, master_id) VALUES ('3e9032e8a494447ca384156112f2d75f', '스페이스블루', 'abe14fe1e242449886adf0e78088e847');
 
 INSERT INTO item_display (id, item_id, item_display_name, sale_price, material, size, description, status, detail_image) VALUES
-('839ebdcc2b2843a6ae681d9cb82c6a7c', 'cc068e14469a4d0a958f8ff072009f04', '로뎀 블랙 팬츠', 35000,
- '면100',
- 'S(26-27) 허리 32 엉덩이 46 허벅지 26 밑위 29 밑단 15 총길이 86
-M(28-29) 허리 34 엉덩이 47 허벅지 27 밑위 29 밑단 16 총길이 86',
- '경쾌한 기장으로 깔끔한 핏의 블랙 팬츠 입니다.
+('fd0b906391ac4636b7984ab756006144', 'abe14fe1e242449886adf0e78088e847', '마론 라쿤 골지 가디건', 50000,
+ '라쿤30 울30 나일론40',
+ '어깨 39.5 가슴 47 암홀 21 팔통 14.5 소매단 7.5 팔길이 57 총길이 56',
+ '심플하게 착용하기 좋은 라쿤 골지 가디건입니다.
 
-어디든 매치하기 좋은 스탠다드한 일자 핏입니다.
+울과 라쿤 혼방의 라이트한 무게감의 원단으로
+라쿤 소재 특유의 포슬한 헤어감이 느껴집니다.
 
-적당히 슬림하면서도 깔끔하게 일자로 툭 떨어집니다.
+은은한 짜임의 잔잔한 골지 무늬와
+미니멀한 크기의 자개 단추는 깔끔하면서 포인트가 됩니다.
 
-발목이 살짝 드러나는 경쾌한 기장으로
-양말과 함께 코디하기에도 좋고
-부츠와 매치하기도 알맞습니다.
+너무 오버하지도 핏 되지도 않는 베이직한 실루엣으로
+넣어입거나 빼어 입기 모두 좋은 기장감입니다.
 
-딥한 블랙 데님으로
-워싱감이 거의 느껴지지 않아 깔끔하고
-실버 버튼으로 어디든 쉽게 매치 하기 좋답니다.
-여기저기 매치하기 좋아 다양하게 활용하게될 아이템입니다.
+적당한 깊이로 파인 브이넥으로
+모델과 같이 단추를 모두 잠궈 니트처럼 활용하기 좋습니다.
+
+부드러운 라떼빛이 감도는 따뜻한 베이지,
+약간의 붉은빛이 감도는 깊은 브라운,
+그리고 고급스러운 청록빛이 감도는 딥한 블루 색상 준비했습니다.
+세 컬러 모두 베이직하면서도 특별한, 소장가치 있는 색상으로 빠짐없이 추천드립니다.
+
+*소재 특성상 잡실/털빠짐/냄새/까끌거림이 있을 수 있습니다.
 
 COLOR
-워싱감이 적은 블랙 데님
+라떼베이지-부드러운 라떼빛이 감도는 따뜻한 베이지
+시나몬브라운-약간의 붉은빛이 감도는 깊은 브라운
+스페이스블루-고급스러운 청록빛이 감도는 딥한 블루
 
 INFO
-신축성-없음｜촉감-적당함｜계절감-봄/가을', 1 ,
+신축성-있음｜계절감-가을/겨울｜비침- 없음｜촉감-적당함', 1 ,
  'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/dev/itemDisplay/26e6c731-f9ae-4474-af8a-cfea6d3dbd92.jpg');
 
 INSERT INTO item_display_option (id, color, status, display_id) VALUES ('fd0b906391ac4636b7984ab756006144', '라떼베이지', '1', 'fd0b906391ac4636b7984ab756006144');
@@ -197,6 +202,7 @@ INSERT INTO item_master (id, item_name, category_id, price, thumbnail) VALUES ('
 
 INSERT INTO item_option (id, color, master_id) VALUES ('92b0a37bbc0a411ea8363b4c7857d3dd', '모스그린', '2f120d7aa59f464ea35527c2900e6a57');
 INSERT INTO item_option (id, color, master_id) VALUES ('4a4b3309e8d44eaa92ebdbc8a5e358c9', '카라멜브라운', '2f120d7aa59f464ea35527c2900e6a57');
+
 INSERT INTO item_display (id, item_id, item_display_name, sale_price, material, size, description, status, detail_image) VALUES
 ('f9f3f6f31e0c4b889ff5bd020459d014', '2f120d7aa59f464ea35527c2900e6a57', '브론테 바이 문 머플러 (2color)', 54000,
  '영국산 메리노울 100',
@@ -239,8 +245,7 @@ bronte by moon사 원단으로 제작된 머플러입니다.
 COLOR
 모스그린-여러색의 원사가 섞인 오묘한 녹색 빛
 카라멜브라운-은은한 카라멜빛의 깊은 브라운', 1 ,
- 'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/dev/itemDisplay/b7c35a29-a187-4d9e-acb6-31b1e1eb0fa2.jpg');
-
+'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/dev/itemDisplay/b7c35a29-a187-4d9e-acb6-31b1e1eb0fa2.jpg');
 
 INSERT INTO item_display_option (id, color, status, display_id) VALUES ('86987dc60e6041b4a3966709f71ee7e2', '모스그린', '1', 'f9f3f6f31e0c4b889ff5bd020459d014');
 INSERT INTO item_display_option (id, color, status, display_id) VALUES ('651213add24840afb2a4be6657c2b687', '카라멜브라운', '1', 'f9f3f6f31e0c4b889ff5bd020459d014');
@@ -391,7 +396,7 @@ INSERT INTO received_delivery_status (id, ext_delivery_id, seq, status) values (
 INSERT INTO received_delivery_status (id, ext_delivery_id, seq, status) values ('4918a486e4044bb2acc0edeea7cfcbcf', 'EXT002', 1, 2);
 INSERT INTO received_delivery_status (id, ext_delivery_id, seq, status) values ('51e6c2dd4cef49419d499e6f9d1bb4aa', 'EXT003', 1, 2);
 
-INSERT INTO reserves_history (id, member_id, type, amount) values ('574ad41c2df942c2a29d1867bc1b7f98', '3a18e633a5db4dbd8aaee218fe447fa4', 'ADMIN', 300000);
+INSERT INTO reserves_history (member_id, type, amount) values ('3a18e633a5db4dbd8aaee218fe447fa4', 'ADMIN', 300000);
 
 INSERT INTO event (seq, name, type, discount_ratio, start_at, end_at, status) values (1, '아우터 20% 할인', 'P', '20', current_date, current_date, 1);
 INSERT INTO event_item (id, event_seq, item_id) values ('02495bd30acb45c5b9b27cd1df5e5c7d', 1, '6bdbf6eea40b425caae4410895ca4809');
