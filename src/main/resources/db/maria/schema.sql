@@ -272,7 +272,6 @@ CREATE TABLE event (
                        name                 varchar(255) not null,
                        type                 varchar(10) not null,
                        min_amount           int default 0,
-                       rating               varchar(10) default 'B,S,G,V',
                        status               int default 0,
                        discount_ratio       int default 0,
                        discount_amount      int default 0,
@@ -283,6 +282,19 @@ CREATE TABLE event (
                        PRIMARY KEY (seq)
 );
 
+
+DROP TABLE IF EXISTS event_target CASCADE;
+CREATE TABLE event_target (
+                              id                   varchar(50) not null,
+                              event_seq            int not null,
+                              rating               char not null,
+                              create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
+                              update_at            datetime DEFAULT null,
+                              PRIMARY KEY (id),
+                              CONSTRAINT fk_event_target_to_event FOREIGN KEY (event_seq) REFERENCES event (seq) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE INDEX idx_event_target_rating ON event_target(rating);
 
 DROP TABLE IF EXISTS event_item CASCADE;
 CREATE TABLE event_item (
@@ -312,7 +324,7 @@ CREATE TABLE item_display_price_history (
 DROP TABLE IF EXISTS coupon CASCADE;
 CREATE TABLE coupon (
                         id                   varchar(50) not null,
-                        event_seq            int not null,
+                        event_target_id      varchar(50) not null,
                         member_id            varchar(50) not null,
                         used_yn              char default 'N',
                         expired_yn           char default 'N',
@@ -320,7 +332,6 @@ CREATE TABLE coupon (
                         update_at            datetime DEFAULT null,
                         PRIMARY KEY (id),
                         CONSTRAINT coupon_to_member FOREIGN KEY (member_id) REFERENCES member (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                        CONSTRAINT coupon_to_event FOREIGN KEY (event_seq) REFERENCES event (seq) ON DELETE CASCADE ON UPDATE CASCADE
+                        CONSTRAINT coupon_to_event_target FOREIGN KEY (event_target_id) REFERENCES event_target (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
 SET FOREIGN_KEY_CHECKS=1;
