@@ -74,7 +74,7 @@ public class Event {
 
     @Getter @Setter
     @JsonManagedReference
-    @OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<EventTarget> targets = new HashSet<>();
 
     @Builder

@@ -94,7 +94,7 @@ public class CouponIssueJobConfigure {
     @StepScope
     protected JpaPagingItemReader<Coupon> couponIssueReader() throws Exception {
         Map<String, Object> parameters = new LinkedHashMap<>();
-        parameters.put("now", timestampOf(jobParameter.getCreateAt()));
+        parameters.put("now", timestampOf(jobParameter.getToday().atStartOfDay()));
         log.info("# createAt: {}", parameters.get("createAt"));
         String query = "select m.id as member_id," +
                 "'N' as expired_yn," +
@@ -104,7 +104,7 @@ public class CouponIssueJobConfigure {
                 "null as update_at" +
                 "  from event_target e" +
                 "    inner join member m on e.rating = m.rating" +
-                "  where exists(select 1 from event c where c.seq=e.event_seq and c.type = 'C' and c.status=1 and c.start_at <= :now)"
+                "  where exists(select 1 from event c where c.seq=e.event_seq and c.type = 'C' and c.status=1 and c.start_at = :now and c.update_at is null)"
                 ;
         //creating a native query provider as it  would be created in configuration
         JpaNativeQueryProvider<Coupon> queryProvider= new JpaNativeQueryProvider<>();
