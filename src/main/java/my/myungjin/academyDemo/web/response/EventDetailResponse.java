@@ -43,11 +43,13 @@ public class EventDetailResponse {
         this.name = event.getName();
         this.type = event.getType().getValue();
         this.status = event.getStatus().getValue();
-        this.ratings = event.getRatings().stream()
-                .map(Rating::getValue)
+        this.ratings = event.getTargets()
+                .stream()
+                .map(t -> t.getRating().getValue())
                 .collect(Collectors.toSet());
         this.amount = event.getAmount();
         this.ratio = event.getRatio();
+        this.minPurchaseAmount = event.getMinPurchaseAmount();
         this.startAt = event.getStartAt().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
         this.endAt = event.getEndAt().format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
         this.createAt = event.getCreateAt().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));

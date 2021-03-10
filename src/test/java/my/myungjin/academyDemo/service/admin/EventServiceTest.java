@@ -6,6 +6,7 @@ import my.myungjin.academyDemo.domain.event.Event;
 import my.myungjin.academyDemo.domain.event.EventStatus;
 import my.myungjin.academyDemo.domain.event.EventType;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
+import my.myungjin.academyDemo.domain.member.Rating;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,8 +14,10 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
-import static java.time.LocalDateTime.now;
+import static java.util.Collections.emptySet;
+import static org.assertj.core.util.Lists.emptyList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
@@ -31,7 +34,7 @@ public class EventServiceTest {
 
     @Test
     @Order(1)
-    void 이벤트를_등록한다() {
+    void 상품_할인_이벤트를_등록한다() {
         Event newEvent = Event.builder()
                 .name("아우터 20% 할인")
                 .amount(0)
@@ -44,9 +47,29 @@ public class EventServiceTest {
         List<Id<ItemDisplay, String>> ids = List.of(
                 Id.of(ItemDisplay.class, "6bdbf6eea40b425caae4410895ca4809")
         );
-        Event saved = eventService.save(newEvent, ids);
+        Event saved = eventService.save(newEvent, ids, emptySet());
         assertThat(saved, is(notNullValue()));
         log.info("Saved Event: {}", saved);
         log.info("Saved Event Items: {}", saved.getItems());
+    }
+
+
+    @Test
+    @Order(2)
+    void 쿠폰_지급_이벤트를_등록한다() {
+        Event newEvent = Event.builder()
+                .name("BRONZE, SILVER 대상 금액 쿠폰")
+                .amount(0)
+                .ratio(20)
+                .type(EventType.COUPON)
+                .startAt(LocalDate.of(2021, 3, 3))
+                .endAt(LocalDate.of(2021, 3, 20))
+                .status(EventStatus.OFF)
+                .build();
+        Set<Rating> targets = Set.of(Rating.BRONZE, Rating.SILVER);
+        Event saved = eventService.save(newEvent, emptyList(), targets);
+        assertThat(saved, is(notNullValue()));
+        log.info("Saved Event: {}", saved);
+        log.info("Saved Event Targets: {}", saved.getTargets());
     }
 }

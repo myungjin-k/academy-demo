@@ -1,7 +1,5 @@
 package my.myungjin.academyDemo.domain.event;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import my.myungjin.academyDemo.domain.member.Member;
 import org.hibernate.annotations.GenericGenerator;
@@ -27,8 +25,8 @@ public class Coupon {
 
     @Getter
     @ManyToOne
-    @JoinColumn(name = "event_seq", nullable = false)
-    private Event event;
+    @JoinColumn(name = "event_target_id", nullable = false)
+    private EventTarget event;
 
     @Getter
     @ManyToOne
@@ -52,7 +50,7 @@ public class Coupon {
     private LocalDateTime updateAt;
 
     @Builder
-    public Coupon(Event event, Member member) {
+    public Coupon(EventTarget event, Member member) {
         this.event = event;
         this.member = member;
     }

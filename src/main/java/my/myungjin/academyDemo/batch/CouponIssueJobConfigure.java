@@ -97,16 +97,15 @@ public class CouponIssueJobConfigure {
         parameters.put("now", timestampOf(jobParameter.getCreateAt()));
         log.info("# createAt: {}", parameters.get("createAt"));
         String query = "select m.id as member_id," +
-                "'N' as expired_yn, " +
-                "'N' as used_yn, " +
-                "e.seq as event_seq, "+
-                "current_timestamp as create_at, " +
+                "'N' as expired_yn," +
+                "'N' as used_yn," +
+                "e.id as event_target_id,"+
+                "current_timestamp as create_at," +
                 "null as update_at" +
-                "  from event e, member m" +
-                "  where e.type = 'C'" +
-                "  and e.status = '1' " +
-                "  and e.start_at <= :now " +
-                "  and e.rating like '%' || m.rating || '%'";
+                "  from event_target e" +
+                "    inner join member m on e.rating = m.rating" +
+                "  where exists(select 1 from event c where c.seq=e.event_seq and c.type = 'C' and c.status=1 and c.start_at <= :now)"
+                ;
         //creating a native query provider as it  would be created in configuration
         JpaNativeQueryProvider<Coupon> queryProvider= new JpaNativeQueryProvider<>();
         queryProvider.setSqlQuery(query);

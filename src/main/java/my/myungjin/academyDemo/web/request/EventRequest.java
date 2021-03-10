@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @ToString
@@ -41,14 +42,13 @@ public class EventRequest {
 
     private List<String> itemStringIds = new ArrayList<>();
 
+    private List<String> targets = new ArrayList<>();
+
     public Event newEvent(){
         return Event.builder()
                 .name(name)
                 .status(EventStatus.of(status))
                 .type(EventType.of(type))
-                .ratings(ratings.stream()
-                        .map(Rating::valueOf)
-                        .collect(Collectors.toSet()))
                 .minPurchaseAmount(minPurchaseAmount)
                 .amount(amount)
                 .ratio(ratio)
@@ -61,6 +61,12 @@ public class EventRequest {
         return itemStringIds.stream()
                 .map(id -> Id.of(ItemDisplay.class, id))
                 .collect(Collectors.toList());
+    }
+
+    public Set<Rating> toTargets(){
+        return ratings.stream()
+                .map(Rating::valueOf)
+                .collect(Collectors.toSet());
     }
 
 }

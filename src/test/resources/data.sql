@@ -419,4 +419,6 @@ INSERT INTO event (seq, name, type, discount_ratio, start_at, end_at) values (99
 INSERT INTO event_item (id, event_seq, item_id) values ('02495bd30acb45c5b9b27cd1df5e5c7d', 999, '6bdbf6eea40b425caae4410895ca4809');
 
 
-INSERT INTO event (seq, name, type, DISCOUNT_AMOUNT, min_amount, rating, start_at, end_at, status) values (2, 'test', 'C', '3000', '20000', 'B,S', current_date, current_date, 1);
+INSERT INTO event (seq, name, type, DISCOUNT_AMOUNT, min_amount, start_at, end_at, status) values (1000, 'test', 'C', '3000', '20000', current_date, current_date, 1);
+INSERT INTO event_target (id, event_seq, rating) values ( 'e8729ee8a1c64ca68da00e876d0cd828', 1000, 'B' );
+INSERT INTO event_target (id, event_seq, rating) values ( '245e9c2d30ad47d3b5d295a71794b95a', 1000, 'S' );

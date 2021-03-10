@@ -54,7 +54,7 @@ public class EventController {
     @PostMapping("/event")
     @ApiOperation("이벤트 등록")
     public Response<Event> createEvent (@RequestBody EventRequest request){
-        return OK(eventService.save(request.newEvent(), request.toItemIds()));
+        return OK(eventService.save(request.newEvent(), request.toItemIds(), request.toTargets()));
     }
 
     @PutMapping("/event/{seq}")
@@ -62,6 +62,6 @@ public class EventController {
     public Response<Event> updateEvent (
             @PathVariable(name = "seq") @ApiParam(value = "대상 이벤트 PK", defaultValue = "1") long eventSeq,
             @RequestBody EventRequest request){
-        return OK(eventService.modify(Id.of(Event.class, eventSeq), request.newEvent(), request.toItemIds()));
+        return OK(eventService.modify(Id.of(Event.class, eventSeq), request.newEvent(), request.toItemIds(), request.toTargets()));
     }
 }

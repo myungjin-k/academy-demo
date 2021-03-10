@@ -23,6 +23,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 
 import static java.time.LocalDateTime.now;
@@ -55,7 +56,7 @@ public class EventJobTest {
         List<Id<ItemDisplay, String>> ids = List.of(
                 Id.of(ItemDisplay.class, "6bdbf6eea40b425caae4410895ca4809")
         );
-        eventService.save(newEvent, ids);
+        eventService.save(newEvent, ids, Collections.emptySet());
     }
 
     @Test
