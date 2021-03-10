@@ -95,16 +95,16 @@ public class CouponIssueJobConfigure {
     protected JpaPagingItemReader<Coupon> couponIssueReader() throws Exception {
         Map<String, Object> parameters = new LinkedHashMap<>();
         parameters.put("now", timestampOf(jobParameter.getToday().atStartOfDay()));
-        log.info("# createAt: {}", parameters.get("createAt"));
-        String query = "select m.id as member_id," +
-                "'N' as expired_yn," +
-                "'N' as used_yn," +
-                "e.id as event_target_id,"+
-                "current_timestamp as create_at," +
-                "null as update_at" +
-                "  from event_target e" +
-                "    inner join member m on e.rating = m.rating" +
-                "  where exists(select 1 from event c where c.seq=e.event_seq and c.type = 'C' and c.status=1 and c.start_at = :now and c.update_at is null)"
+        String query = "select m.id as member_id,\n" +
+                "       'N' as expired_yn,\n" +
+                "       'N' as used_yn,\n" +
+                "       e.id as event_target_id,\n" +
+                "       current_timestamp as create_at,\n" +
+                "       null as update_at\n" +
+                "from event_target e\n" +
+                "    inner join member m on e.rating = m.rating\n" +
+                "where exists(select 1 from event c where c.seq=e.event_seq and c.type = 'C' and c.status=1 and c.start_at <= :now )\n" +
+                "  and not exists(select 1 from coupon c where c.member_id=m.id and e.id = c.EVENT_TARGET_ID)"
                 ;
         //creating a native query provider as it  would be created in configuration
         JpaNativeQueryProvider<Coupon> queryProvider= new JpaNativeQueryProvider<>();
@@ -125,7 +125,7 @@ public class CouponIssueJobConfigure {
     @Bean
     public ItemProcessor<Coupon, Coupon> couponIssueProcessor(){
         return coupon -> {
-            log.info("# coupon : {}", coupon);
+            log.info("# coupon : memberId={}, eventTargetId={}, eventSeq={}", coupon.getMember().getId(), coupon.getEvent().getId(), coupon.getEvent().getEvent().getSeq());
             return coupon;
         };
     }
