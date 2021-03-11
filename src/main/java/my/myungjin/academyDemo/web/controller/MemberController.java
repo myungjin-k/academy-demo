@@ -10,10 +10,14 @@ import my.myungjin.academyDemo.service.member.MemberService;
 import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.MemberRequest;
 import my.myungjin.academyDemo.web.request.PwChangeRequest;
+import my.myungjin.academyDemo.web.response.CouponSetResponse;
 import my.myungjin.academyDemo.web.response.MemberInfoResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static my.myungjin.academyDemo.web.Response.OK;
 
@@ -73,6 +77,17 @@ public class MemberController {
         Id<Member, String> id = Id.of(Member.class, ((User)authentication.getDetails()).getId());
         return OK(
                 memberService.modify(id, request.toMember(id))
+        );
+    }
+
+    @GetMapping("/member/me/coupon/list")
+    @ApiOperation(value = "회원 보유 쿠폰 조회")
+    public Response<Set<CouponSetResponse>> findMyCoupons(@AuthenticationPrincipal Authentication authentication){
+        return OK(
+                memberService.findMyCoupons(Id.of(Member.class, ((User)authentication.getDetails()).getId()))
+                .stream()
+                .map(CouponSetResponse::new)
+                .collect(Collectors.toSet())
         );
     }
 }

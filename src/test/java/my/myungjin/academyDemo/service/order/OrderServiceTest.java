@@ -2,6 +2,7 @@ package my.myungjin.academyDemo.service.order;
 
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import my.myungjin.academyDemo.commons.Id;
+import my.myungjin.academyDemo.domain.event.Coupon;
 import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.member.ReservesHistoryRepository;
 import my.myungjin.academyDemo.domain.member.ReservesType;
@@ -21,6 +22,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -75,7 +77,8 @@ public class OrderServiceTest {
                 Id.of(CartItem.class, "f4597dfc1ae649a58edcb7921002aca5")
                 //Id.of(CartItem.class, "0a25d9eea6d94a3897e06b33e4bf5b69")
         );
-        my.myungjin.academyDemo.domain.order.Order saved = orderService.ordering(memberId, order, delivery, itemIds);
+        Id<Coupon, String> usedCouponId = Id.of(Coupon.class, "da092516ce1f4201970acca677db333b");
+        my.myungjin.academyDemo.domain.order.Order saved = orderService.ordering(memberId, order, delivery, itemIds, Optional.of(usedCouponId));
         orderId = Id.of(my.myungjin.academyDemo.domain.order.Order.class, saved.getId());
         deliveryId = Id.of(Delivery.class, saved.getDeliveries().get(0).getId());
         assertThat(saved, is(notNullValue()));

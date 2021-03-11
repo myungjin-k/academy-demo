@@ -3,6 +3,8 @@ package my.myungjin.academyDemo.service.order;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
+import my.myungjin.academyDemo.domain.event.Coupon;
+import my.myungjin.academyDemo.domain.event.CouponRepository;
 import my.myungjin.academyDemo.domain.member.*;
 import my.myungjin.academyDemo.domain.order.*;
 import my.myungjin.academyDemo.domain.review.ReviewRepository;
@@ -50,6 +52,8 @@ public class OrderService {
 
     private final ReservesHistoryRepository reservesHistoryRepository;
 
+    private final CouponRepository couponRepository;
+
     private final MailService mailService;
 
     private final Logger log = LoggerFactory.getLogger(getClass());
@@ -95,12 +99,16 @@ public class OrderService {
     }
 
     public Optional<Member> findMemberInfo(@Valid Id<Member, String> memberId){
-        return memberRepository.findById(memberId.value());
+        return memberRepository.findById(memberId.value())
+                .map(member -> {
+                    member.setCoupons(couponRepository.findByMember(member));
+                    return member;
+                });
     }
 
     @Transactional
     public Order ordering(@Valid Id<Member, String> memberId, @Valid Order newOrder,
-                          @Valid Delivery delivery, List<Id<CartItem, String>> itemIds) {
+                          @Valid Delivery delivery, List<Id<CartItem, String>> itemIds,  Optional<Id<Coupon, String>> usedCouponId) {
         // 주문
         Order saved = memberRepository.findById(memberId.value())
                 .map(member -> {
@@ -133,6 +141,17 @@ public class OrderService {
         // 배송상품
         saveDeliveryItems(updated.getItems(), d);
         updated.addDelivery(d);
+
+        // 쿠폰
+        usedCouponId.ifPresentOrElse
+                (couponStringId ->
+                    couponRepository.findById(usedCouponId.get().value())
+                        .map(coupon -> {
+                            coupon.use();
+                            return couponRepository.save(coupon);
+                        }).orElseThrow(() -> new NotFoundException(Coupon.class, usedCouponId)),
+                () -> log.info("Coupon didn't used"));
+
         // 메일 발송
         updated.getOrderEmail().ifPresent(s -> this.sendMail(s, updated));
 

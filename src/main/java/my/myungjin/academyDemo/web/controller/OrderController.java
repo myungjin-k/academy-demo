@@ -9,7 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
-import my.myungjin.academyDemo.domain.item.ItemDisplay;
+import my.myungjin.academyDemo.domain.event.Coupon;
 import my.myungjin.academyDemo.domain.item.ItemDisplayOption;
 import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.order.CartItem;
@@ -24,7 +24,7 @@ import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.CartRequest;
 import my.myungjin.academyDemo.web.request.OrderRequest;
 import my.myungjin.academyDemo.web.request.PageRequest;
-import my.myungjin.academyDemo.web.response.MemberInformRatingResponse;
+import my.myungjin.academyDemo.web.response.MemberRatingInfoResponse;
 import my.myungjin.academyDemo.web.response.OrderDetailResponse;
 import my.myungjin.academyDemo.web.response.OrderInfoResponse;
 import my.myungjin.academyDemo.web.response.OrderResponse;
@@ -36,8 +36,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static java.util.Optional.empty;
 import static my.myungjin.academyDemo.web.Response.OK;
 
 @RequestMapping("/api/mall")
@@ -114,13 +116,13 @@ public class OrderController {
     }
 
 
-    @GetMapping("/member/{memberId}/orderMemberInfo")
+    @GetMapping("/order/orderMemberInfo")
     @ApiOperation(value = "회원정보에서 주문자 정보 로드")
-    public Response<OrderInfoResponse> findOrderMemberInfo(
-            @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String memberId){
+    public Response<OrderInfoResponse> findOrderMemberInfo(@AuthenticationPrincipal Authentication authentication){
         return OK(
                 OrderInfoResponse.of(
-                        orderService.findMemberInfo(Id.of(Member.class, memberId)).orElse(null)
+                        orderService.findMemberInfo(Id.of(Member.class, ((User)authentication.getDetails()).getId()))
+                                .orElse(null)
                 )
         );
     }
@@ -145,17 +147,19 @@ public class OrderController {
                         Id.of(Member.class, memberId),
                         orderRequest.newOrder(),
                         orderRequest.newDelivery(),
-                        orderRequest.collectItems()
+                        orderRequest.collectItems(),
+                        orderRequest.getUsedCouponId().isBlank() ?
+                                empty() : Optional.of(Id.of(Coupon.class, orderRequest.getUsedCouponId()))
                 )
         );
     }
 
     @GetMapping("/member/{memberId}/ratingInfo")
-    @ApiOperation(value = "회원등급 정보(주문내역 페이지)")
-    public Response<MemberInformRatingResponse> ratingInfo(
+    @ApiOperation(value = "회원등급 및 쿠폰보유 정보(주문내역 페이지)")
+    public Response<MemberRatingInfoResponse> ratingInfo(
             @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String memberId){
         return OK(
-                new MemberInformRatingResponse().of(memberService.findMyInfo(Id.of(Member.class, memberId)))
+                new MemberRatingInfoResponse().of(memberService.findMyInfo(Id.of(Member.class, memberId)))
         );
     }
 

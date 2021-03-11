@@ -5,7 +5,7 @@ import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.member.Rating;
 
 @Getter
-public class MemberInformRatingResponse {
+public class MemberRatingInfoResponse {
 
     private String name;
 
@@ -21,7 +21,7 @@ public class MemberInformRatingResponse {
 
     private int reserves;
 
-    public MemberInformRatingResponse of(Member entity){
+    public MemberRatingInfoResponse of(Member entity){
         this.name = entity.getName();
         Rating currRating = entity.getRating();
         this.currRating = currRating.getValue();

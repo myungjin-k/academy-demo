@@ -10,33 +10,58 @@ function newOrder(items) {
 var order = {
     userId : '',
     items : [],
+    coupons : [],
     div : $('#div-order'),
     payAmount : 0,
     init : function(userId, items){
         var _this = this;
         _this.userId = userId;
         _this.items = items;
-        _this.loadOrderInfo();
         _this.setCartItems();
+        _this.loadOrderInfo();
+        _this.loadCoupons();
         $('.contentDiv').not(_this.div).addClass('d-none');
         _this.div.removeClass('d-none');
 
-        _this.div.find('.amountInfo .usePoints #usePoints').change(function(){
+        _this.div.find('.amountInfo .couponBox').unbind('change').bind('change', function(){
+            const id = $(this).val();
+            const c = _this.coupons[id];
+            if(c.couponType === 'AMOUNT') {
+                if(_this.payAmount < c.minAmount){
+                    alert('총 결제금액 ' + c.minAmount + '이상 주문 시 사용 가능한 쿠폰입니다.');
+                    $(this).val('');
+                    return false;
+                }
+                _this.div.find('.amountInfo .couponDiscountPrice').text(c.amount);
+                _this.payAmount -= c.amount;
+                _this.div.find('.amountInfo .payAmount').text(_this.payAmount);
+            } else if(c.couponType === 'RATIO') {
+                const discounted = _this.payAmount * (c.amount / 100);
+                _this.div.find('.amountInfo .couponDiscountPrice').text(discounted);
+                _this.payAmount -= discounted;
+                _this.div.find('.amountInfo .payAmount').text(_this.payAmount);
+            }
+            //console.log(c);
+        });
+
+        _this.div.find('.amountInfo .usePoints #usePoints').unbind('change').bind('change', function(){
             let p =  Number($(this).val());
             const usableP = Number(_this.div.find('.amountInfo .usablePoints').text());
             // 적립금 사용가능금액 초과
             if(p > usableP)
                 p = usableP;
-            // 배송비 제외한 총 결제금액 초과
+            // 배송비, 쿠폰사용금액 제외한 총 결제금액 초과
             const totalPayAmountExShippingFee = Number(_this.div.find('.amountInfo .totalItemPrice').text())
                 - Number(_this.div.find('.amountInfo .totalDiscountPrice').text())
+                - Number(_this.div.find('.amountInfo .couponDiscountPrice').text())
                 - Number(_this.div.find('.amountInfo .shippingFee').text());
-            if(p > totalPayAmountExShippingFee){
-                p = totalPayAmountExShippingFee;
+            if(p >= totalPayAmountExShippingFee){
+                p = totalPayAmountExShippingFee - 1;
             }
             $(this).val(p);
             _this.div.find('.amountInfo .usedPoints').text(p);
-            _this.div.find('.amountInfo .payAmount').text(_this.payAmount - p);
+            _this.payAmount -= p;
+            _this.div.find('.amountInfo .payAmount').text(_this.payAmount);
         });
 
         _this.div.find('.deliverInfo #useOrdererInfo').change(function(){
@@ -51,7 +76,34 @@ var order = {
     clearForm : function (){
         var _this = this;
         _this.div.find('#form-save-order input').val('');
+        _this.div.find('#form-save-order select').empty().append('<option value=""/>');
         _this.div.find('#useOrdererInfo').prop('checked', false);
+    },
+    loadCoupons :  function() {
+        var _this = this;
+        $.ajax({
+            type: 'GET',
+            url: '/api/mall/member/me/coupon/list',
+            contentType:'application/json; charset=utf-8'
+        }).done(function(response) {
+            _this.clearForm();
+            var data = response.response;
+            let couponBox = _this.div.find('.amountInfo .couponBox');
+            $.each(data, function(){
+               const coupon = this;
+               if(coupon.expiredYn === 'N' && coupon.usedYn === 'N'){
+                   _this.coupons[coupon.id] = coupon;
+                   let couponEl = $('<option />').text(this.eventName).val(this.id);
+                   couponBox.append(couponEl);
+               }
+            });
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+            if(_this.userId === undefined){
+                alert('로그인 후 이용해 주세요.');
+                location.href='/mall/login'
+            }
+        });
     },
     copyOrdererInfo : function(){
         var _this = this;
@@ -97,7 +149,7 @@ var order = {
         var _this = this;
         $.ajax({
             type: 'GET',
-            url: '/api/mall/member/' + _this.userId + '/orderMemberInfo',
+            url: '/api/mall/order/orderMemberInfo',
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
             _this.clearForm();

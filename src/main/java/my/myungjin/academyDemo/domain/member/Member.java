@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static java.time.LocalDateTime.now;
 import static java.util.Optional.ofNullable;
@@ -72,7 +73,6 @@ public class Member{
     @Convert(converter = RatingConverter.class)
     private Rating rating;
 
-    // TODO 적립금 히스토리 엔티티
     @Getter
     @Column(name = "reserves", insertable = false, columnDefinition = "number default 0")
     private int reserves;
@@ -112,7 +112,7 @@ public class Member{
     @Getter @Setter
     @JsonManagedReference
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Coupon> coupons;
+    private Set<Coupon> coupons;
 
     @Builder
     public Member(String id, String userId, String password, String name, String email, String tel, String addr1, String addr2,

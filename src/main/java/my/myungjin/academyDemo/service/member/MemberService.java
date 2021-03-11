@@ -3,6 +3,8 @@ package my.myungjin.academyDemo.service.member;
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.commons.mail.Mail;
+import my.myungjin.academyDemo.domain.event.Coupon;
+import my.myungjin.academyDemo.domain.event.CouponRepository;
 import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.member.MemberRepository;
 import my.myungjin.academyDemo.error.NotFoundException;
@@ -22,7 +24,9 @@ import javax.validation.constraints.NotBlank;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Collections;
 import java.util.Optional;
+import java.util.Set;
 
 @Validated
 @RequiredArgsConstructor
@@ -32,6 +36,8 @@ public class MemberService {
     private Logger log = LoggerFactory.getLogger(MemberService.class);
 
     private final MemberRepository memberRepository;
+
+    private final CouponRepository couponRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -113,7 +119,11 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public Member findMyInfo(@Valid Id<Member, String> id){
-        return findById(id.value()).orElseThrow(() -> new IllegalArgumentException("invalid id=" + id));
+        return findById(id.value())
+                .map(member ->{
+                    member.setCoupons(couponRepository.findByMember(member));
+                    return member;
+                }).orElseThrow(() -> new IllegalArgumentException("invalid id=" + id));
     }
 
     @Transactional
@@ -124,6 +134,13 @@ public class MemberService {
             save(ori);
             return ori;
         }).orElseThrow(() -> new NotFoundException(Member.class, id.value()));
+    }
+
+    public Set<Coupon> findMyCoupons(@Valid Id<Member, String> id){
+        return findById(id.value())
+                .map(couponRepository::findByMember)
+                .orElse(Collections.emptySet());
+
     }
 
     private Optional<Member> findByUserId(String userId){

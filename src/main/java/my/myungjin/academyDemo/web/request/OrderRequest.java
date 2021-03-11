@@ -1,6 +1,9 @@
 package my.myungjin.academyDemo.web.request;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.order.CartItem;
 import my.myungjin.academyDemo.domain.order.Delivery;
@@ -48,10 +51,13 @@ public class OrderRequest {
 
     private String paymentUid;
 
+    private String usedCouponId;
+
     @Builder
     public OrderRequest(String name, String email, String tel, String addr1, String addr2, int usedPoints,
                         String receiverName, String receiverTel, String receiverAddr1, String receiverAddr2,
-                        int status, String message, List<String> cartItemIds, List<CartRequest> items, String paymentUid) {
+                        int status, String message, List<String> cartItemIds, List<CartRequest> items, String paymentUid,
+                        String usedCouponId) {
         this.name = name;
         this.email = email;
         this.tel = tel;
@@ -67,6 +73,7 @@ public class OrderRequest {
         this.cartItemIds = cartItemIds;
         this.items = items;
         this.paymentUid = paymentUid;
+        this.usedCouponId = usedCouponId;
     }
 
     public Order newOrder(){
