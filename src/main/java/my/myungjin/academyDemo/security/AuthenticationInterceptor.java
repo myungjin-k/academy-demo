@@ -22,7 +22,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             return true;
 
         if(isAdminPage && !("127.0.0.1".equals(ip) || "14.38.17.145".equals(ip) ||
-                "221.145.101.36".equals(ip) || "222.111.44.12".equals(ip))){
+                "221.145.101.36".equals(ip) || ip.startsWith("222.111.44"))){
             response.sendRedirect("/mall/index");
             return false;
         }
