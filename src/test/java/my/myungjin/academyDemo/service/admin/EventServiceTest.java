@@ -2,9 +2,7 @@ package my.myungjin.academyDemo.service.admin;
 
 import lombok.extern.slf4j.Slf4j;
 import my.myungjin.academyDemo.commons.Id;
-import my.myungjin.academyDemo.domain.event.Event;
-import my.myungjin.academyDemo.domain.event.EventStatus;
-import my.myungjin.academyDemo.domain.event.EventType;
+import my.myungjin.academyDemo.domain.event.*;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.member.Rating;
 import org.junit.jupiter.api.*;
@@ -31,6 +29,9 @@ public class EventServiceTest {
 
     @Autowired
     private EventService eventService;
+
+    @Autowired
+    private CouponRepository couponRepository;
 
     @Test
     @Order(1)
@@ -72,4 +73,13 @@ public class EventServiceTest {
         log.info("Saved Event: {}", saved);
         log.info("Saved Event Targets: {}", saved.getTargets());
     }
+
+    @Test
+    void 테스트() {
+        List<CouponProject> results = couponRepository.test(EventType.COUPON, EventStatus.ON, LocalDate.now());
+        for(CouponProject c : results){
+            log.info("Result: eventSeq={}, userId={}", c.getEvent().getEvent().getSeq(), c.getMember().getUserId());
+        }
+    }
+
 }

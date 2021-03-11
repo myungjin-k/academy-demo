@@ -2,6 +2,8 @@ package my.myungjin.academyDemo.batch;
 
 import lombok.extern.slf4j.Slf4j;
 import my.myungjin.academyDemo.domain.event.Coupon;
+import my.myungjin.academyDemo.domain.event.EventStatus;
+import my.myungjin.academyDemo.domain.event.EventType;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -12,7 +14,6 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
-import org.springframework.batch.item.database.orm.JpaNativeQueryProvider;
 import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -23,8 +24,6 @@ import org.springframework.context.annotation.Configuration;
 import javax.persistence.EntityManagerFactory;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import static my.myungjin.academyDemo.util.Util.timestampOf;
 
 @Slf4j
 @Configuration
@@ -82,7 +81,7 @@ public class CouponIssueJobConfigure {
     @Bean
     //@JobScope
     public Step couponIssueStep() throws Exception {
-        return stepBuilderFactory.get(JOB_NAME + "Step2")
+        return stepBuilderFactory.get(JOB_NAME + "Step")
                 .<Coupon, Coupon> chunk(chunkSize)
                 .reader(couponIssueReader())
                 .processor(couponIssueProcessor())
@@ -94,8 +93,10 @@ public class CouponIssueJobConfigure {
     @StepScope
     protected JpaPagingItemReader<Coupon> couponIssueReader() throws Exception {
         Map<String, Object> parameters = new LinkedHashMap<>();
-        parameters.put("now", timestampOf(jobParameter.getToday().atStartOfDay()));
-        String query = "select m.id as member_id,\n" +
+        parameters.put("now", jobParameter.getToday());
+        parameters.put("type", EventType.COUPON);
+        parameters.put("status", EventStatus.ON);
+        /*String query = "select m.id as member_id,\n" +
                 "       'N' as expired_yn,\n" +
                 "       'N' as used_yn,\n" +
                 "       e.id as event_target_id,\n" +
@@ -112,11 +113,18 @@ public class CouponIssueJobConfigure {
         queryProvider.setEntityClass(Coupon.class);
         queryProvider.afterPropertiesSet();
 
+*/
+        String queryString = String.format("select new %s(et, m) " +
+                "from EventTarget et " +
+                "inner join Member m on m.rating = et.rating " +
+                "left outer join Coupon c on c.member = m and c.event = et " +
+                "where et.event.type = :type and et.event.status = :status and et.event.startAt <= :now " +
+                "and c.event is null", Coupon.class.getName());
         return new JpaPagingItemReaderBuilder<Coupon>()
                 .name(JOB_NAME + "Reader")
                 .entityManagerFactory(entityManagerFactory)
                 .parameterValues(parameters)
-                .queryProvider(queryProvider)
+                .queryString(queryString)
                 .pageSize(chunkSize)
                 .maxItemCount(chunkSize)
                 .build();
@@ -125,7 +133,7 @@ public class CouponIssueJobConfigure {
     @Bean
     public ItemProcessor<Coupon, Coupon> couponIssueProcessor(){
         return coupon -> {
-            log.info("# coupon : memberId={}, eventTargetId={}, eventSeq={}", coupon.getMember().getId(), coupon.getEvent().getId(), coupon.getEvent().getEvent().getSeq());
+            log.info("# Coupon: eventSeq={}, userId={}", coupon.getEvent().getEvent().getSeq(), coupon.getMember().getUserId());
             return coupon;
         };
     }

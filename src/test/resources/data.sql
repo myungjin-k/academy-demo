@@ -31,16 +31,16 @@ INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('bea264
 
 
 
-INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount) VALUES ('3a18e633a5db4dbd8aaee218fe447fa4', 'mjkim', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진', 'open7894.v2@gmail.com', '010-1234-5678','XX시 XX구 XX로', '1-1111', 3000, 50000);
+INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount, create_at) VALUES ('3a18e633a5db4dbd8aaee218fe447fa4', 'mjkim', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진', 'open7894.v2@gmail.com', '010-1234-5678','XX시 XX구 XX로', '1-1111', 3000, 50000, PARSEDATETIME('01/01/2021', 'MM/dd/yyyy'));
 INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount) VALUES ('073de9c852ce44d29dd961d3dcabc63f', 'mjkim2', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진1', 'open7894.v3@gmail.com', '010-1234-5671','XX시 XX구 XX로', '1-1111', 3000, 0);
 INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount) VALUES ('a79ffa46eb13439eb2efd171d6a37ea5', 'mjkim3', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진2', 'open7894.v4@gmail.com', '010-1234-5672','XX시 XX구 XX로', '1-1111', 3000, 0);
-INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount) VALUES ('e41b007eb6b74d5f82fd79b5b3bbbfca', 'mjkim4', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진3', 'open7894.v5@gmail.com', '010-1234-5673','XX시 XX구 XX로', '1-1111', 3000, 0);
-INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount) VALUES ('a6bf02227159405583ec726a242cfd7c', 'mjkim5', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진4', 'open7894.v6@gmail.com', '010-1234-5674','XX시 XX구 XX로', '1-1111', 3000, 0);
-INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount) VALUES ('e20ae92e477e4969968cded01d522d45', 'mjkim6', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진5', 'open7894.v7@gmail.com', '010-1234-5675','XX시 XX구 XX로', '1-1111', 3000, 0);
-INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount) VALUES ('fd1a671f800844b48bc8824af3bfc00f', 'mjkim7', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진6', 'open7894.v8@gmail.com', '010-1234-5676','XX시 XX구 XX로', '1-1111', 3000, 0);
-INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount) VALUES ('df8dfca187ac4d0a9985d2255625b80a', 'mjkim8', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진7', 'open7894.v9@gmail.com', '010-1234-5677','XX시 XX구 XX로', '1-1111', 3000, 0);
-INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount) VALUES ('00bc6f4f3992497aae219b49b8996da7', 'mjkim9', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진8', 'open7894.v10@gmail.com', '010-1234-5670','XX시 XX구 XX로', '1-1111', 3000, 0);
-INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount) VALUES ('29b06db3a5704c389ae6082b04d6b08c', 'mjkim10', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진9', 'open7894.v11@gmail.com', '010-1234-5679','XX시 XX구 XX로', '1-1111', 3000, 0);
+//INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount) VALUES ('e41b007eb6b74d5f82fd79b5b3bbbfca', 'mjkim4', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진3', 'open7894.v5@gmail.com', '010-1234-5673','XX시 XX구 XX로', '1-1111', 3000, 0);
+//INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount) VALUES ('a6bf02227159405583ec726a242cfd7c', 'mjkim5', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진4', 'open7894.v6@gmail.com', '010-1234-5674','XX시 XX구 XX로', '1-1111', 3000, 0);
+//INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount) VALUES ('e20ae92e477e4969968cded01d522d45', 'mjkim6', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진5', 'open7894.v7@gmail.com', '010-1234-5675','XX시 XX구 XX로', '1-1111', 3000, 0);
+//INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount) VALUES ('fd1a671f800844b48bc8824af3bfc00f', 'mjkim7', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진6', 'open7894.v8@gmail.com', '010-1234-5676','XX시 XX구 XX로', '1-1111', 3000, 0);
+//INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount) VALUES ('df8dfca187ac4d0a9985d2255625b80a', 'mjkim8', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진7', 'open7894.v9@gmail.com', '010-1234-5677','XX시 XX구 XX로', '1-1111', 3000, 0);
+//INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount) VALUES ('00bc6f4f3992497aae219b49b8996da7', 'mjkim9', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진8', 'open7894.v10@gmail.com', '010-1234-5670','XX시 XX구 XX로', '1-1111', 3000, 0);
+//INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount) VALUES ('29b06db3a5704c389ae6082b04d6b08c', 'mjkim10', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진9', 'open7894.v11@gmail.com', '010-1234-5679','XX시 XX구 XX로', '1-1111', 3000, 0);
 
 INSERT INTO admin (id, admin_id, password) VALUES ('3a18e633a5db4dbd8aaee218fe447fa4', 'mjkim', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq');
 
@@ -422,3 +422,9 @@ INSERT INTO event_item (id, event_seq, item_id) values ('02495bd30acb45c5b9b27cd
 INSERT INTO event (seq, name, type, DISCOUNT_AMOUNT, min_amount, start_at, end_at, status) values (1000, 'test', 'C', '3000', '20000', current_date, current_date, 1);
 INSERT INTO event_target (id, event_seq, rating) values ( 'e8729ee8a1c64ca68da00e876d0cd828', 1000, 'B' );
 INSERT INTO event_target (id, event_seq, rating) values ( '245e9c2d30ad47d3b5d295a71794b95a', 1000, 'S' );
+
+INSERT INTO event (seq, name, type, DISCOUNT_AMOUNT, min_amount, start_at, end_at, status) values (1001, 'test1', 'C', '10000', '100000', current_date, current_date, 1);
+INSERT INTO event_target (id, event_seq, rating) values ( '2d3b283f45c947c98f9d50c2ae7951bb', 1001, 'B' );
+INSERT INTO event_target (id, event_seq, rating) values ( '9213998693c64018b894e921c87b0a11', 1001, 'S' );
+
+INSERT INTO coupon ( id, event_target_id, member_id, CREATE_AT ) values ('da092516ce1f4201970acca677db333b', '2d3b283f45c947c98f9d50c2ae7951bb', '3a18e633a5db4dbd8aaee218fe447fa4',PARSEDATETIME('01/01/2021', 'MM/dd/yyyy'));
