@@ -32,7 +32,7 @@ public class ReviewResponse {
         this.id = entity.getId();
         String userId = entity.getMember().getUserId();
         this.writerUserId = StringUtils.rightPad(StringUtils.substring(userId, 0, 2), userId.length(), '*');
-        this.reviewImgUrl = entity.getReviewImg();
+        this.reviewImgUrl = entity.getReviewImg().orElse(null);
         ItemDisplayOption option = entity.getOrderItem().getItemOption();
         this.optionInfo = StringUtils.join(option.getColor(), "/", option.getSize());
         this.comments = entity.getComments();

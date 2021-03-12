@@ -35,7 +35,7 @@ public class ReviewDetailResponse {
     public ReviewDetailResponse(Review entity){
         this.id = entity.getId();
         this.content = entity.getContent();
-        this.reviewImgUrl = entity.getReviewImg();
+        this.reviewImgUrl = entity.getReviewImg().orElse(null);
         this.score = entity.getScore();
         this.isReservesPaid = entity.isReservesPaid();
         this.createAt = entity.getCreateAt();

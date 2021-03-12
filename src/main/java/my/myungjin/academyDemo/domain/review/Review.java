@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static java.time.LocalDateTime.now;
 import static java.util.Optional.ofNullable;
 
 @Entity
@@ -33,7 +34,7 @@ public class Review {
     @Column(name = "score", columnDefinition = "number default 1")
     private int score;
 
-    @Getter @Setter
+    @Setter
     @Column(name = "review_img")
     private String reviewImg;
 
@@ -90,6 +91,8 @@ public class Review {
         this.isReservesPaid = isReservesPaid;
     }
 
+    public Optional<String> getReviewImg() { return ofNullable(reviewImg); }
+
     public Optional<LocalDateTime> getUpdateAt(){
         return ofNullable(updateAt);
     }
@@ -97,9 +100,11 @@ public class Review {
     public void modify(String content, int score){
         this.content = content;
         this.score = score;
+        this.updateAt = now();
     }
 
     public void reservesPaid(){
         this.isReservesPaid = true;
+        this.updateAt = now();
     }
 }

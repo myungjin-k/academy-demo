@@ -136,9 +136,7 @@ public class ReviewService {
                 .orElseThrow(() -> new NotFoundException(Review.class, memberId, reviewId));
         String updatedImg = uploadReviewImage(reviewImgFile).orElse(null);
         if(updatedImg != null){
-            if(review.getReviewImg() != null){
-                deleteReviewImage(review.getReviewImg());
-            }
+            review.getReviewImg().ifPresent(this::deleteReviewImage);
             review.setReviewImg(updatedImg);
         }
         review.modify(content, score);
