@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import my.myungjin.academyDemo.domain.qna.Qna;
 import my.myungjin.academyDemo.domain.review.Review;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -20,7 +21,7 @@ import static java.util.Optional.ofNullable;
 
 @Entity
 @Table(name = "item_display")
-@ToString(exclude = {"options", "reviews", "histories"})
+@ToString(exclude = {"options", "reviews", "histories", "qnas"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
 public class ItemDisplay {
@@ -92,6 +93,11 @@ public class ItemDisplay {
     @JsonIgnore
     @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Collection<Review> reviews;
+
+    @Getter @Setter
+    @JsonIgnore
+    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Collection<Qna> qnas;
 
     @Getter @Setter
     @JsonBackReference

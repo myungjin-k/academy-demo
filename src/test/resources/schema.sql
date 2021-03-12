@@ -337,3 +337,21 @@ CREATE TABLE item_display_price_history (
                                             PRIMARY KEY (id),
                                             CONSTRAINT fk_item_display_price_history_to_item_display FOREIGN KEY (item_id) REFERENCES item_display (id) ON DELETE CASCADE ON UPDATE RESTRICT
 );
+
+DROP TABLE IF EXISTS qna CASCADE;
+CREATE TABLE qna (
+                                            seq                  number auto_increment,
+                                            content              varchar(1000) not null,
+                                            writer_id            varchar(50) not null,
+                                            category_id          varchar(50) not null,
+                                            attached_image_url   varchar(255),
+                                            item_id              varchar(50),
+                                            password             varchar(255) not null,
+                                            status               char default 'W',
+                                            create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
+                                            update_at            datetime DEFAULT null,
+                                            PRIMARY KEY (seq),
+                                            CONSTRAINT fk_qna_to_member FOREIGN KEY (writer_id) REFERENCES member (id) ON DELETE CASCADE ON UPDATE RESTRICT,
+                                            CONSTRAINT fk_qna_to_common_code FOREIGN KEY (category_id) REFERENCES common_code (id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+                                            CONSTRAINT fk_qna_to_item_display FOREIGN KEY (item_id) REFERENCES item_display (id) ON DELETE RESTRICT ON UPDATE RESTRICT
+);

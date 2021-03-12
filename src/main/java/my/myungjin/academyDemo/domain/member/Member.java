@@ -6,6 +6,7 @@ import lombok.*;
 import my.myungjin.academyDemo.domain.event.Coupon;
 import my.myungjin.academyDemo.domain.order.CartItem;
 import my.myungjin.academyDemo.domain.order.Order;
+import my.myungjin.academyDemo.domain.qna.Qna;
 import my.myungjin.academyDemo.domain.review.Review;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,7 +26,7 @@ import static java.util.Optional.ofNullable;
 
 @Entity
 @Table(name = "member")
-@ToString(exclude = {"cartItems", "orders", "reviews", "reservesHistories", "coupons"})
+@ToString(exclude = {"cartItems", "orders", "reviews", "reservesHistories", "coupons", "qnas"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(of = "id")
 public class Member{
@@ -103,6 +104,11 @@ public class Member{
     @JsonIgnore
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Review> reviews;
+
+    @Getter
+    @JsonIgnore
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Qna> qnas;
 
     @Getter @Setter
     @JsonManagedReference
