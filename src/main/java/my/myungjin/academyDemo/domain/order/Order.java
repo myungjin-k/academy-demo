@@ -3,6 +3,7 @@ package my.myungjin.academyDemo.domain.order;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import my.myungjin.academyDemo.domain.event.Coupon;
 import my.myungjin.academyDemo.domain.member.Member;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -74,6 +75,12 @@ public class Order {
     @Column(name = "is_cancelled")
     private boolean isCancelled;
 
+    @Setter
+    @OneToOne
+    @JsonManagedReference
+    @JoinColumn(name = "coupon_used")
+    private Coupon coupon;
+
     @Getter
     @Column(name = "create_at", insertable = false, updatable = false,
             columnDefinition = "datetime default current_timestamp")
@@ -116,6 +123,8 @@ public class Order {
     public Optional<LocalDateTime> getUpdateAt(){
         return ofNullable(updateAt);
     }
+
+    public Optional<Coupon> getCoupon() { return ofNullable(coupon); }
 
     public Optional<String> getOrderEmail(){
         return ofNullable(orderEmail);

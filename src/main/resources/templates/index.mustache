@@ -176,7 +176,7 @@
                     <div class="amountInfo">
                         <h5>쿠폰 사용</h5>
                         <div class="useCoupons mb-3">
-                            <select class="couponBox"></select>
+                            <select name="usedCouponId" class="couponBox"></select>
                         </div>
                         <h5>포인트 사용</h5>
                         <div class="usePoints">
@@ -407,6 +407,10 @@
                     <div class="row">
                         <div class="col-2">상품 할인</div>
                         <div class="col"><span id="discountedAmount"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">쿠폰 할인</div>
+                        <div class="col"><span id="couponDiscountedAmount"></span></div>
                     </div>
                     <div class="row">
                         <div class="col-2">포인트 사용</div>

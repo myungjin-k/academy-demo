@@ -280,6 +280,7 @@ var myOrderDetail = {
             amountDiv.find('#payAmount').text(order.payAmount);
             amountDiv.find('#orderAmount').text(order.orderAmount);
             amountDiv.find('#discountedAmount').text(order.discountedAmount);
+            amountDiv.find('#couponDiscountedAmount').text(order.couponDiscountedAmount);
             amountDiv.find('#usedPoints').text(order.usedPoints);
             const payInfo = pay.load(order.paymentUid);
             amountDiv.find('.payInfo #payMethod').text(payInfo.payMethod);

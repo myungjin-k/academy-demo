@@ -121,7 +121,7 @@ public class MemberService {
     public Member findMyInfo(@Valid Id<Member, String> id){
         return findById(id.value())
                 .map(member ->{
-                    member.setCoupons(couponRepository.findByMember(member));
+                    member.setCoupons(couponRepository.findByMemberAndUsedYnAndExpiredYn(member, 'N', 'N'));
                     return member;
                 }).orElseThrow(() -> new IllegalArgumentException("invalid id=" + id));
     }
@@ -136,9 +136,10 @@ public class MemberService {
         }).orElseThrow(() -> new NotFoundException(Member.class, id.value()));
     }
 
+    @Transactional(readOnly = true)
     public Set<Coupon> findMyCoupons(@Valid Id<Member, String> id){
         return findById(id.value())
-                .map(couponRepository::findByMember)
+                .map(member -> couponRepository.findByMemberAndUsedYnAndExpiredYn(member, 'N', 'N'))
                 .orElse(Collections.emptySet());
 
     }

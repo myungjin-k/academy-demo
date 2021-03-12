@@ -24,6 +24,6 @@ public interface CouponRepository extends JpaRepository<Coupon, String> {
 
     List<Coupon> findByCreateAtAfter(LocalDateTime createAt);
 
-    Set<Coupon> findByMember(Member member);
+    Set<Coupon> findByMemberAndUsedYnAndExpiredYn(Member member, char usedYn, char expiredYn);
 
 }

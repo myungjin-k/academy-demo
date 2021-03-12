@@ -1,6 +1,7 @@
 package my.myungjin.academyDemo.web.response;
 
 import lombok.Getter;
+import my.myungjin.academyDemo.domain.event.Event;
 import my.myungjin.academyDemo.domain.order.Delivery;
 import my.myungjin.academyDemo.domain.order.DeliveryStatus;
 import my.myungjin.academyDemo.domain.order.Order;
@@ -26,6 +27,8 @@ public class OrderDetailResponse {
     private int payAmount;
 
     private int discountedAmount;
+
+    private int couponDiscountedAmount;
 
     private int usedPoints;
 
@@ -59,7 +62,17 @@ public class OrderDetailResponse {
         }
         this.discountedAmount = discountAmount;
         this.usedPoints = entity.getUsedPoints();
-        this.payAmount = this.orderAmount - this.discountedAmount - this.usedPoints;
+        int spareAmount = this.orderAmount - this.discountedAmount - this.usedPoints;
+        this.couponDiscountedAmount = entity.getCoupon()
+                .map(coupon -> {
+                    Event e = coupon.getEvent().getEvent();
+                    if(e.getRatio() > 0)
+                        return (int) (spareAmount * (double) (coupon.getEvent().getEvent().getAmount()) / 100);
+                    else if(e.getAmount() > 0)
+                        return e.getAmount();
+                    return 0;
+                }).orElse(0);
+        this.payAmount = spareAmount - this.couponDiscountedAmount;
         List<Delivery> deliveries = entity.getDeliveries()
                 .stream()
                 .filter(delivery -> !delivery.getStatus().equals(DeliveryStatus.DELETED))

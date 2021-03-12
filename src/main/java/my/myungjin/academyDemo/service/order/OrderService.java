@@ -98,10 +98,11 @@ public class OrderService {
         return o;
     }
 
+    @Transactional(readOnly = true)
     public Optional<Member> findMemberInfo(@Valid Id<Member, String> memberId){
         return memberRepository.findById(memberId.value())
                 .map(member -> {
-                    member.setCoupons(couponRepository.findByMember(member));
+                    member.setCoupons(couponRepository.findByMemberAndUsedYnAndExpiredYn(member, 'N', 'N'));
                     return member;
                 });
     }
@@ -148,7 +149,9 @@ public class OrderService {
                     couponRepository.findById(usedCouponId.get().value())
                         .map(coupon -> {
                             coupon.use();
-                            return couponRepository.save(coupon);
+                            Coupon used =  couponRepository.save(coupon);
+                            updated.setCoupon(used);
+                            return used;
                         }).orElseThrow(() -> new NotFoundException(Coupon.class, usedCouponId)),
                 () -> log.info("Coupon didn't used"));
 
@@ -208,6 +211,7 @@ public class OrderService {
         Order order = orderRepository.findByMemberIdAndId(memberId.value(), orderId.value())
                 .map(o -> {
                     o.setDeliveries(deliveryRepository.getAllByOrderOrderByCreateAtDesc(o));
+                    o.setItems(orderItemRepository.findAllByOrder(o));
                     return o;
                 }).orElseThrow(() -> new NotFoundException(Order.class, memberId.value(), orderId.value()));
 
@@ -220,6 +224,7 @@ public class OrderService {
             save(d);
         }
         order.cancel();
+
         if(!reservesHistoryRepository.existsByTypeAndRefId(ReservesType.ORDER_CANCEL, order.getId())){
             int reserves = 0;
             Member member = order.getMember();
@@ -241,6 +246,12 @@ public class OrderService {
             newHistory.setMember(member);
             reservesHistoryRepository.save(newHistory);
         }
+
+        order.getCoupon().ifPresent(coupon -> {
+            coupon.unused();
+            couponRepository.save(coupon);
+        });
+
         return save(order);
     }
 

@@ -143,10 +143,13 @@ CREATE TABLE order_master (
                               order_addr2          varchar(255),
                               payment_uid          varchar(50),
                               is_cancelled         boolean default false,
+                              coupon_used          varchar(50),
                               create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
                               update_at            datetime DEFAULT null,
                               PRIMARY KEY (id),
-                              CONSTRAINT fk_order_to_member FOREIGN KEY (member_id) REFERENCES member (id) ON DELETE CASCADE ON UPDATE RESTRICT
+                              CONSTRAINT fk_order_to_member FOREIGN KEY (member_id) REFERENCES member (id) ON DELETE CASCADE ON UPDATE RESTRICT,
+                              CONSTRAINT fk_order_to_coupon FOREIGN KEY (coupon_used) REFERENCES coupon (id) ON DELETE CASCADE ON UPDATE RESTRICT,
+
 );
 
 DROP TABLE IF EXISTS delivery CASCADE;
