@@ -86,7 +86,6 @@ var order = {
             url: '/api/mall/member/me/coupon/list',
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
-            _this.clearForm();
             var data = response.response;
             let couponBox = _this.div.find('.amountInfo .couponBox');
             $.each(data, function(){
@@ -277,6 +276,20 @@ const pay = {
             async: false
         }).done(function(response) {
             resp = response.response;
+        }).fail(function (error) {
+            alert(JSON.stringify(error));
+        });
+        return resp;
+    },
+    cancel : function(uid) {
+        let resp = [];
+        $.ajax({
+            type: 'POST',
+            url: '/api/mall/pay/' + uid + '/cancel',
+            contentType:'application/json; charset=utf-8'
+        }).done(function(response) {
+            resp = response.response;
+            alert('결제가 취소되었습니다.');
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });

@@ -148,7 +148,7 @@ public class OrderController {
                         orderRequest.newOrder(),
                         orderRequest.newDelivery(),
                         orderRequest.collectItems(),
-                        orderRequest.getUsedCouponId().isBlank() ?
+                        orderRequest.getUsedCouponId().isEmpty() ?
                                 empty() : Optional.of(Id.of(Coupon.class, orderRequest.getUsedCouponId()))
                 )
         );
@@ -228,7 +228,7 @@ public class OrderController {
         iamportClient.cancelPaymentByImpUid(new CancelData(cancelled.getPaymentUid(), true));
         return OK(cancelled);
     }
-/*
+
     @PostMapping("/pay/{uid}/cancel")
     @ApiOperation(value = "결제 취소")
     public Response<Payment> cancel(
@@ -236,5 +236,5 @@ public class OrderController {
         return OK(
                 iamportClient.cancelPaymentByImpUid(new CancelData(uid, true)).getResponse()
         );
-    }*/
+    }
 }
