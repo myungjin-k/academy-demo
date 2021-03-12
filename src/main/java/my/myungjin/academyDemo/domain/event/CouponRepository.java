@@ -26,4 +26,9 @@ public interface CouponRepository extends JpaRepository<Coupon, String> {
 
     Set<Coupon> findByMemberAndUsedYnAndExpiredYn(Member member, char usedYn, char expiredYn);
 
+    Set<Coupon> findByEventEventEndAtBeforeAndExpiredYn(LocalDate endAt, char expiredYn);
+
+    @Query("select c from Coupon c where c.event.event.endAt < :now")
+    Set<Coupon> findExpireTargets(@Param("now") LocalDate now);
+
 }

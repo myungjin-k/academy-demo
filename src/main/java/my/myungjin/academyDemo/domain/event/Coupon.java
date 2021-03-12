@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import static java.time.LocalDateTime.now;
 import static java.util.Optional.ofNullable;
 
 @Entity
@@ -64,13 +65,16 @@ public class Coupon {
 
     public void use(){
         usedYn = 'Y';
+        updateAt = now();
     }
 
     public void unused(){
         usedYn = 'N';
+        updateAt = now();
     }
 
     public void expire(){
         expiredYn = 'Y';
+        updateAt = now();
     }
 }

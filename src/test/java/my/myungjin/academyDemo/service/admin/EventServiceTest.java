@@ -82,4 +82,11 @@ public class EventServiceTest {
         }
     }
 
+    @Test
+    void 테스트2() {
+        Set<Coupon> results = couponRepository.findExpireTargets(LocalDate.now().plusDays(1));
+        for(Coupon c : results){
+            log.info("Result: eventSeq={}, userId={}", c.getEvent().getEvent().getSeq(), c.getMember().getUserId());
+        }
+    }
 }
