@@ -30,6 +30,8 @@ public class JobScheduler {
 
     private final CouponIssueJobConfigure couponIssueJobConfigure;
 
+    private final CouponExpireJobConfigure couponExpireJobConfigure;
+
     // TODO 배송상태 수신 로직 구현(ex 파일과 같이 외부에서 입력)
     @Scheduled(initialDelay = 10000, fixedDelay = 1800000)
     public void runDeliveryJob() {
@@ -80,6 +82,27 @@ public class JobScheduler {
         try {
             log.info("# Job parameter: (today={})", jobParameters.getString("today"));
             jobLauncher.run(couponIssueJobConfigure.couponIssueJob(), jobParameters);
+
+        } catch (JobExecutionAlreadyRunningException | JobInstanceAlreadyCompleteException
+                | JobParametersInvalidException | org.springframework.batch.core.repository.JobRestartException e) {
+            log.error(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void runCouponExpireJob() {
+
+        LocalDateTime dateTime = LocalDate.now().atStartOfDay();
+        JobParameters jobParameters = new JobParametersBuilder()
+                .addString("createAt", dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .addString("today", LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                .toJobParameters();
+
+        try {
+            log.info("# Job parameter: (today={})", jobParameters.getString("today"));
+            jobLauncher.run(couponExpireJobConfigure.couponExpireJob(), jobParameters);
 
         } catch (JobExecutionAlreadyRunningException | JobInstanceAlreadyCompleteException
                 | JobParametersInvalidException | org.springframework.batch.core.repository.JobRestartException e) {
