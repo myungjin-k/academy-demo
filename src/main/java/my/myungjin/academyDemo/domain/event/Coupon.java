@@ -1,5 +1,6 @@
 package my.myungjin.academyDemo.domain.event;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import my.myungjin.academyDemo.domain.member.Member;
 import org.hibernate.annotations.GenericGenerator;
@@ -24,11 +25,13 @@ public class Coupon {
     private String id;
 
     @Getter
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "event_target_id", nullable = false)
     private EventTarget event;
 
     @Getter
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
@@ -61,6 +64,10 @@ public class Coupon {
 
     public void use(){
         usedYn = 'Y';
+    }
+
+    public void unused(){
+        usedYn = 'N';
     }
 
     public void expire(){
