@@ -78,7 +78,7 @@ public class OrderServiceTest {
                 //Id.of(CartItem.class, "0a25d9eea6d94a3897e06b33e4bf5b69")
         );
         Id<Coupon, String> usedCouponId = Id.of(Coupon.class, "da092516ce1f4201970acca677db333b");
-        my.myungjin.academyDemo.domain.order.Order saved = orderService.ordering(memberId, order, delivery, itemIds, Optional.of(usedCouponId));
+        my.myungjin.academyDemo.domain.order.Order saved = orderService.ordering(memberId, order, delivery, itemIds, Optional.empty());
         orderId = Id.of(my.myungjin.academyDemo.domain.order.Order.class, saved.getId());
         deliveryId = Id.of(Delivery.class, saved.getDeliveries().get(0).getId());
         assertThat(saved, is(notNullValue()));

@@ -144,16 +144,16 @@ public class OrderService {
         updated.addDelivery(d);
 
         // 쿠폰
-        usedCouponId.ifPresentOrElse
-                (couponStringId ->
-                    couponRepository.findById(usedCouponId.get().value())
-                        .map(coupon -> {
-                            coupon.use();
-                            Coupon used =  couponRepository.save(coupon);
-                            updated.setCoupon(used);
-                            return used;
-                        }).orElseThrow(() -> new NotFoundException(Coupon.class, usedCouponId)),
-                () -> log.info("Coupon didn't used"));
+
+        usedCouponId.ifPresent(couponId -> {
+            couponRepository.findById(couponId.value())
+                    .map(coupon -> {
+                        coupon.use();
+                        Coupon used =  couponRepository.save(coupon);
+                        updated.setCoupon(used);
+                        return used;
+                    }).orElseThrow(() -> new NotFoundException(Coupon.class, usedCouponId));
+        });
 
         // 메일 발송
         updated.getOrderEmail().ifPresent(s -> this.sendMail(s, updated));
