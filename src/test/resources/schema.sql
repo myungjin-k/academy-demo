@@ -341,12 +341,13 @@ CREATE TABLE item_display_price_history (
 DROP TABLE IF EXISTS qna CASCADE;
 CREATE TABLE qna (
                                             seq                  number auto_increment,
+                                            title                varchar(255) not null,
                                             content              varchar(1000) not null,
                                             writer_id            varchar(50) not null,
                                             category_id          varchar(50) not null,
                                             attached_image_url   varchar(255),
                                             item_id              varchar(50),
-                                            password             varchar(255) not null,
+                                            secret_yn            char default 'N',
                                             status               char default 'W',
                                             create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
                                             update_at            datetime DEFAULT null,

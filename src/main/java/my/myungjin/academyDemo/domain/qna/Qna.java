@@ -23,21 +23,28 @@ public class Qna {
 
     @Getter
     @Id
-    @GeneratedValue(generator = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long seq;
 
-    @Setter
     @Column(name = "attached_image_url")
     private String attachedImgUrl;
+
+    @Getter @NotBlank
+    @Column(name = "title", nullable = false)
+    private String title;
 
     @Getter @NotBlank
     @Column(name = "content", nullable = false)
     private String content;
 
     @Getter
-    @Column(name = "status", insertable = false, columnDefinition = "char default 'W'")
+    @Column(name = "status", insertable = false, columnDefinition = "char default 'W'", nullable = false)
     @Convert(converter = QnaStatusConverter.class)
     private QnaStatus status;
+
+    @Getter
+    @Column(name = "secret_yn", nullable = false, columnDefinition = "char defalut 'N'")
+    private char secretYn;
 
     @Getter
     @Column(name = "create_at", insertable = false, updatable = false,
@@ -50,10 +57,10 @@ public class Qna {
     @Getter @Setter
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
+    @JoinColumn(name = "writer_id", nullable = false)
+    private Member writer;
 
-    @Getter @Setter
+    @Setter
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "item_id")
@@ -71,24 +78,44 @@ public class Qna {
     private List<ReviewComment> comments;*/
 
     @Builder
-    public Qna(String attachedImgUrl, @NotBlank String content, Member member, ItemDisplay item, CommonCode category, QnaStatus status) {
+    public Qna(long seq, String attachedImgUrl, @NotBlank String title, @NotBlank String content, char secretYn,
+               Member writer, ItemDisplay item, CommonCode category, QnaStatus status, LocalDateTime createAt) {
+        this.seq = seq;
         this.attachedImgUrl = attachedImgUrl;
+        this.title = title;
         this.content = content;
-        this.member = member;
+        this.secretYn = secretYn;
+        this.writer = writer;
         this.item = item;
         this.category = category;
         this.status = status;
+        this.createAt = createAt;
+    }
+
+    public Qna empty() {
+        return Qna.builder()
+                .seq(seq)
+                .title(title)
+                .writer(writer)
+                .content("secret post")
+                .secretYn(secretYn)
+                .createAt(createAt)
+                .build();
     }
 
     public Optional<String> getAttachedImgUrl() { return ofNullable(attachedImgUrl); }
+
+    public Optional<ItemDisplay> getItem() { return ofNullable(item); }
 
     public Optional<LocalDateTime> getUpdateAt(){
         return ofNullable(updateAt);
     }
 
-    public void modifyContent(String content, String attachedImgUrl){
+    public void modifyContent(String title, String content, String attachedImgUrl, char secretYn){
+        this.title = title;
         this.content = content;
         this.attachedImgUrl = attachedImgUrl;
+        this.secretYn = secretYn;
         this.updateAt = now();
     }
 
