@@ -108,7 +108,7 @@ public class Member{
     @Getter
     @JsonIgnore
     @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Qna> qnas;
+    private Set<Qna> qnas;
 
     @Getter @Setter
     @JsonManagedReference

@@ -1,8 +1,8 @@
 function goMyPage(){
     //console.log($('#loginUserId').val());
-    myPage.init();
+    myInfo.init();
 }
-var myPage = {
+var myInfo = {
     div : $('#div-member-info'),
     init : function() {
         var _this = this;

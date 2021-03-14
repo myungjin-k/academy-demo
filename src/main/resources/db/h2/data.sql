@@ -406,3 +406,10 @@ INSERT INTO event_target (id, event_seq, rating) values ( '2d3b283f45c947c98f9d5
 INSERT INTO event_target (id, event_seq, rating) values ( '9213998693c64018b894e921c87b0a11', 1001, 'S' );
 
 INSERT INTO coupon ( id, event_target_id, member_id, CREATE_AT ) values ('da092516ce1f4201970acca677db333b', '2d3b283f45c947c98f9d50c2ae7951bb', '3a18e633a5db4dbd8aaee218fe447fa4',PARSEDATETIME('01/01/2021', 'MM/dd/yyyy'));
+
+
+INSERT INTO code_group (id, code, name_eng, name_kor) VALUES ('328d345041524867abc785d2b3f284da', 'Q','QNATYPE', '질문카테고리' );
+INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('fe72f5c7a9a04442ae6d8eb767a8833b', 'Q_ITEM', 'itemQna', '상품문의', '328d345041524867abc785d2b3f284da' );
+INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('5c5b2a2b17e24f07ae647f45cdbda705', 'Q_ORDER', 'orderQna', '주문/배송문의', '328d345041524867abc785d2b3f284da' );
+INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('a3def2595ae7451eb28e580b8c2a60ae', 'Q_ETC', 'etcQna', '기타문의', '328d345041524867abc785d2b3f284da' );
+INSERT INTO qna (seq, title, content, category_id, writer_id, item_id, secret_yn) values ( 1, '상품 문의', '상품 문의입니다.', 'fe72f5c7a9a04442ae6d8eb767a8833b', '3a18e633a5db4dbd8aaee218fe447fa4', 'a8853254ada64200b9821b4dde6b02bb', 'Y' );

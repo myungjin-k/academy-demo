@@ -297,6 +297,33 @@
             </div>
             <!-- // Order -->
             <!-- My Page -->
+            <div class="d-none p-2 contentDiv" id="div-my-page-main" >
+                <h4 class="mb-3">마이페이지</h4>
+                <div class="row mb-3">
+                    <div class="list-group">
+                        <a href="#" class="list-group-item list-group-item-action active" onclick="goMyOrder();"  >
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">주문조회</h5>
+                                <small>ORDER</small>
+                            </div>
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action" onclick="goMyPage();">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">회원정보</h5>
+                                <small class="text-muted">MY INFO</small>
+                            </div>
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action" onclick="goMyQna();">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">문의내역</h5>
+                                <small class="text-muted">QNA</small>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- // My Page -->
+            <!-- My Page -->
             <div class="d-none p-2 contentDiv" id="div-member-info" >
                 <h4 class="mb-3">회원정보</h4>
                 <div class="row mb-3">
@@ -500,5 +527,38 @@
                 </div>
             </div>
             <!-- // Order Detail -->
+            <!-- Qna List -->
+            <div class="d-none p-2 contentDiv" id="div-my-qna-list" >
+                <h4 class="mb-3">문의내역</h4>
+<!--                <div class="p-2 mb-5 bg-light text-secondary memberInfo">
+                    <p><span class="name text-primary"></span>님은 [<span class="currRating text-primary"></span>] 등급이십니다.</p>
+                    <p>구매금액의 <span class="ratio text-primary"></span>%가 포인트로 적립됩니다.</p>
+                    <p>[<span class="nextRating text-primary"></span>]까지 남은 구매금액은 <span class="remainingAmount text-primary"></span>원 입니다.</p>
+
+                    <p>총 주문금액 : <span class="orderedAmount text-dark"></span>원</p>
+                    <p>가용적립금 : <span class="reserves text-dark"></span>원</p>
+                </div>-->
+
+                <div class="mb-3">
+                    <table class="table table-horizontal table-bordered">
+                        <thead class="thead-strong">
+                        <tr>
+                            <th width="10%" >카테고리</th>
+                            <th>제목</th>
+                            <th width="10% ">작성일시</th>
+                            <th width="15%">답변상태</th>
+                        </tr>
+                        </thead>
+                        <tbody id="my-qnas">
+
+                        </tbody>
+                    </table>
+                    <div>
+                        <ul class="pagination pagination-sm justify-content-center" id="pagination-qna" >
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- // Qna List -->
             <!-- // Index Content-->
 {{>layout/footer}}

@@ -14,8 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -91,7 +91,7 @@ public class QnaServiceTest {
     @Order(3)
     void 문의를_조회한다_상태별 (){
 
-        List<Qna> results = qnaService.findByStatus(QnaStatus.WAITING);
+        Set<Qna> results = qnaService.findByStatus(QnaStatus.WAITING);
         assertThat(results.size(), greaterThan(0));
         log.info("Qna Results : {}", results);
 
@@ -118,7 +118,7 @@ public class QnaServiceTest {
         // temp member id
         Id<Member, String> wrongMemberId = Id.of(Member.class, "WRONG");
         try {
-            List<Qna> results = qnaService.findByCategoryWithSecretYn(wrongMemberId, cateId, Optional.of(itemId));
+            Set<Qna> results = qnaService.findByCategoryWithSecretYn(wrongMemberId, cateId, Optional.of(itemId));
             log.info("Qna Results : {}", results);
         } catch (IllegalArgumentException e) {
             log.warn("Qna Search Exception: {}", e.getMessage());

@@ -1,15 +1,18 @@
 package my.myungjin.academyDemo.domain.qna;
 
+import my.myungjin.academyDemo.domain.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface QnaRepository extends JpaRepository<Qna, Long>, QuerydslPredicateExecutor<Qna> {
 
-    List<Qna> findByStatus(QnaStatus status);
+    Set<Qna> findByStatus(QnaStatus status);
 
     Optional<Qna> findByWriterIdAndSeq(String memberId, long seq);
+
+    Set<Qna> findByWriter(Member writer);
 
 }

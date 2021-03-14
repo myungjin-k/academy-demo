@@ -17,8 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -38,13 +38,23 @@ public class QnaService {
     private final AdminRepository adminRepository;
 
     @Transactional(readOnly = true)
-    public List<Qna> findByStatus(QnaStatus status){
+    public Set<Qna> findByStatus(QnaStatus status){
         //return (ArrayList<Qna>) qnaRepository.findAll(QnaPredicate.searchByStatus(status));
         return qnaRepository.findByStatus(status);
     }
 
     @Transactional(readOnly = true)
-    public List<Qna> findByCategoryWithSecretYn(@Valid Id<Member, String> memberId, @Valid Id<CommonCode, String> cateId,
+    public Set<Qna> findByMember(@Valid Id<Member, String> loginMemberId, @Valid Id<Member, String> memberId){
+        //return (ArrayList<Qna>) qnaRepository.findAll(QnaPredicate.searchByStatus(status));
+        if(!loginMemberId.value().equals(memberId.value()))
+            throw new IllegalArgumentException("Login User Id is not equal to Member Id parameter! (logined=" + loginMemberId + ", member=" + memberId + ")");
+        return memberRepository.findById(memberId.value())
+                .map(qnaRepository::findByWriter)
+                .orElseThrow(() -> new NotFoundException(Member.class, memberId));
+    }
+
+    @Transactional(readOnly = true)
+    public Set<Qna> findByCategoryWithSecretYn(@Valid Id<Member, String> memberId, @Valid Id<CommonCode, String> cateId,
                                                 Optional<Id<ItemDisplay, String>> itemId){
         CommonCode cate = findQnaCategory(cateId.value());
         if("Q_ITEM".equals(cate.getCode()) && itemId.isEmpty()){
@@ -62,7 +72,7 @@ public class QnaService {
                     if(!memberId.value().equals(qna.getWriter().getId()))
                         return qna.empty();
                     return qna;
-                }).collect(Collectors.toList());
+                }).collect(Collectors.toSet());
     }
 
     @Transactional(readOnly = true)
