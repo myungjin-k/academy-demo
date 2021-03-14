@@ -2,6 +2,7 @@ package my.myungjin.academyDemo.domain.qna;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
@@ -17,8 +18,9 @@ import static java.util.Optional.ofNullable;
 
 @Entity
 @Table(name = "qna")
-@ToString
+@ToString(exclude = "reply")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode(of = "seq")
 public class Qna {
 
     @Getter
@@ -72,6 +74,11 @@ public class Qna {
     @JoinColumn(name = "category_id", nullable = false)
     private CommonCode category;
 
+    @Getter @Setter
+    @JsonManagedReference
+    @OneToOne(mappedBy = "qna", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private QnaReply reply;
+
 /*    @Getter @Setter
     @JsonBackReference
     @OneToMany(mappedBy = "review", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -111,11 +118,11 @@ public class Qna {
         return ofNullable(updateAt);
     }
 
-    public void modifyContent(String title, String content, String attachedImgUrl, char secretYn){
-        this.title = title;
-        this.content = content;
-        this.attachedImgUrl = attachedImgUrl;
-        this.secretYn = secretYn;
+    public void modifyContent(Qna qna){
+        this.title = qna.getTitle();
+        this.content = qna.getContent();
+        this.attachedImgUrl = qna.getAttachedImgUrl().orElse(null);
+        this.secretYn = qna.getSecretYn();
         this.updateAt = now();
     }
 
@@ -124,8 +131,10 @@ public class Qna {
         this.updateAt = now();
     }
 
-    public void answered(){
+    public void answered(QnaReply reply){
+        reply.setQna(this);
         this.status = QnaStatus.ANSWERED;
+        this.reply = reply;
         this.updateAt = now();
     }
 

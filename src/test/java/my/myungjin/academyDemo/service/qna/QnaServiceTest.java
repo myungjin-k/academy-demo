@@ -4,8 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
+import my.myungjin.academyDemo.domain.member.Admin;
 import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.qna.Qna;
+import my.myungjin.academyDemo.domain.qna.QnaReply;
 import my.myungjin.academyDemo.domain.qna.QnaStatus;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +34,15 @@ public class QnaServiceTest {
 
     private Id<Qna, Long> qnaSeq;
 
+    private Id<Admin, String> adminId;
+
+    private Id<QnaReply, String> replyId;
+
     @BeforeAll
     void setup() {
         memberId = Id.of(Member.class, "3a18e633a5db4dbd8aaee218fe447fa4");
+        adminId = Id.of(Admin.class, "3a18e633a5db4dbd8aaee218fe447fa4");
+
     }
 
     @Test
@@ -115,5 +123,84 @@ public class QnaServiceTest {
         } catch (IllegalArgumentException e) {
             log.warn("Qna Search Exception: {}", e.getMessage());
         }
+    }
+
+
+    @Test
+    @Order(5)
+    void 문의를_수정한다_상품 (){
+
+        // order
+        Id<CommonCode, String> cateId = Id.of(CommonCode.class, "fe72f5c7a9a04442ae6d8eb767a8833b");
+
+        Qna newQna = Qna.builder()
+                .title("[수정] 상품 문의")
+                .content("[수정] test 상품 문의")
+                .secretYn('Y')
+                .build();
+
+        Qna updated = qnaService.modify(memberId, qnaSeq, cateId, newQna);
+
+        assertThat(updated, is(notNullValue()));
+        log.info("Updated Qna : {}", updated);
+
+    }
+
+    @Test
+    @Order(6)
+    void 문의_답글을_등록한다(){
+
+
+        QnaReply newQnaReply = QnaReply.builder()
+                .title("RE: 상품 문의")
+                .content("test 문의 답변")
+                .secretYn('Y')
+                .build();
+
+        QnaReply saved = qnaService.reply(qnaSeq, adminId, newQnaReply);
+
+        assertThat(saved, is(notNullValue()));
+        replyId = Id.of(QnaReply.class, saved.getId());
+        log.info("Saved Qna Reply : {}", saved);
+
+    }
+
+    @Test
+    @Order(7)
+    void 문의_답글을_수정한다(){
+
+
+        QnaReply newQnaReply = QnaReply.builder()
+                .title("RE: [수정] 상품 문의")
+                .content("[수정] test 문의 답변")
+                .secretYn('Y')
+                .build();
+
+        QnaReply updated = qnaService.modify(adminId, qnaSeq, replyId, newQnaReply);
+
+        assertThat(updated, is(notNullValue()));
+        log.info("Updated Qna Reply : {}", updated);
+
+    }
+
+    @Test
+    @Order(8)
+    void 문의_답글을_삭제한다(){
+
+        QnaReply deleted = qnaService.delete(adminId, qnaSeq, replyId);
+
+        assertThat(deleted, is(notNullValue()));
+        log.info("Deleted Qna Reply: {}", deleted);
+
+    }
+
+    @Test
+    @Order(9)
+    void 문의를_삭제한다_상품 (){
+        Qna deleted = qnaService.delete(memberId, qnaSeq);
+
+        assertThat(deleted, is(notNullValue()));
+        log.info("Deleted Qna : {}", deleted);
+
     }
 }
