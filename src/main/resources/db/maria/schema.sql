@@ -130,6 +130,75 @@ CREATE TABLE cart (
                       CONSTRAINT fk_cart_to_item_display_option FOREIGN KEY (item_id) REFERENCES item_display_option (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+DROP TABLE IF EXISTS event CASCADE;
+CREATE TABLE event (
+                       seq                  int auto_increment,
+                       name                 varchar(255) not null,
+                       type                 varchar(10) not null,
+                       min_amount           int default 0,
+                       status               int default 0,
+                       discount_ratio       int default 0,
+                       discount_amount      int default 0,
+                       start_at             datetime DEFAULT CURRENT_TIMESTAMP(),
+                       end_at               datetime DEFAULT CURRENT_TIMESTAMP(),
+                       create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
+                       update_at            datetime DEFAULT null,
+                       PRIMARY KEY (seq)
+);
+
+
+DROP TABLE IF EXISTS event_target CASCADE;
+CREATE TABLE event_target (
+                              id                   varchar(50) not null,
+                              event_seq            int not null,
+                              rating               char not null,
+                              create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
+                              update_at            datetime DEFAULT null,
+                              PRIMARY KEY (id),
+                              CONSTRAINT fk_event_target_to_event FOREIGN KEY (event_seq) REFERENCES event (seq) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE INDEX idx_event_target_rating ON event_target(rating);
+
+DROP TABLE IF EXISTS event_item CASCADE;
+CREATE TABLE event_item (
+                            id                   varchar(50) not null,
+                            item_id              varchar(50) not null,
+                            event_seq            int not null,
+                            create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
+                            update_at            datetime DEFAULT null,
+                            PRIMARY KEY (id),
+                            CONSTRAINT fk_event_item_to_item_display FOREIGN KEY (item_id) REFERENCES item_display (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                            CONSTRAINT fk_event_item_to_event FOREIGN KEY (event_seq) REFERENCES event (seq) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+DROP TABLE IF EXISTS item_display_price_history CASCADE;
+CREATE TABLE item_display_price_history (
+                                            id                   varchar(50) not null,
+                                            item_id              varchar(50) not null,
+                                            seq                  int not null,
+                                            sale_price           int not null,
+                                            ref                  varchar(255),
+                                            create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
+                                            update_at            datetime DEFAULT null,
+                                            PRIMARY KEY (id),
+                                            CONSTRAINT fk_item_display_price_history_to_item_display FOREIGN KEY (item_id) REFERENCES item_display (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+DROP TABLE IF EXISTS coupon CASCADE;
+CREATE TABLE coupon (
+                        id                   varchar(50) not null,
+                        event_target_id      varchar(50) not null,
+                        member_id            varchar(50) not null,
+                        used_yn              char default 'N',
+                        expired_yn           char default 'N',
+                        create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
+                        update_at            datetime DEFAULT null,
+                        PRIMARY KEY (id),
+                        CONSTRAINT coupon_to_member FOREIGN KEY (member_id) REFERENCES member (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                        CONSTRAINT coupon_to_event_target FOREIGN KEY (event_target_id) REFERENCES event_target (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 DROP TABLE IF EXISTS order_master CASCADE;
 CREATE TABLE order_master (
                               id                   varchar(50) NOT NULL,
@@ -266,72 +335,40 @@ CREATE TABLE reserves_history (
                                   CONSTRAINT fk_reserves_history_to_member FOREIGN KEY (member_id) REFERENCES member (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-DROP TABLE IF EXISTS event CASCADE;
-CREATE TABLE event (
-                       seq                  int auto_increment,
-                       name                 varchar(255) not null,
-                       type                 varchar(10) not null,
-                       min_amount           int default 0,
-                       status               int default 0,
-                       discount_ratio       int default 0,
-                       discount_amount      int default 0,
-                       start_at             datetime DEFAULT CURRENT_TIMESTAMP(),
-                       end_at               datetime DEFAULT CURRENT_TIMESTAMP(),
-                       create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
-                       update_at            datetime DEFAULT null,
-                       PRIMARY KEY (seq)
+DROP TABLE IF EXISTS qna CASCADE;
+CREATE TABLE qna (
+                     seq                  int auto_increment,
+                     title                varchar(255) not null,
+                     content              varchar(1000) not null,
+                     writer_id            varchar(50) not null,
+                     category_id          varchar(50) not null,
+                     attached_image_url   varchar(255),
+                     item_id              varchar(50),
+                     secret_yn            char default 'N',
+                     status               char default 'W',
+                     create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
+                     update_at            datetime DEFAULT null,
+                     PRIMARY KEY (seq),
+                     CONSTRAINT fk_qna_to_member FOREIGN KEY (writer_id) REFERENCES member (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                     CONSTRAINT fk_qna_to_common_code FOREIGN KEY (category_id) REFERENCES common_code (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+                     CONSTRAINT fk_qna_to_item_display FOREIGN KEY (item_id) REFERENCES item_display (id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 
-DROP TABLE IF EXISTS event_target CASCADE;
-CREATE TABLE event_target (
-                              id                   varchar(50) not null,
-                              event_seq            int not null,
-                              rating               char not null,
-                              create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
-                              update_at            datetime DEFAULT null,
-                              PRIMARY KEY (id),
-                              CONSTRAINT fk_event_target_to_event FOREIGN KEY (event_seq) REFERENCES event (seq) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE INDEX idx_event_target_rating ON event_target(rating);
-
-DROP TABLE IF EXISTS event_item CASCADE;
-CREATE TABLE event_item (
-                            id                   varchar(50) not null,
-                            item_id              varchar(50) not null,
-                            event_seq            int not null,
-                            create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
-                            update_at            datetime DEFAULT null,
-                            PRIMARY KEY (id),
-                            CONSTRAINT fk_event_item_to_item_display FOREIGN KEY (item_id) REFERENCES item_display (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                            CONSTRAINT fk_event_item_to_event FOREIGN KEY (event_seq) REFERENCES event (seq) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-DROP TABLE IF EXISTS item_display_price_history CASCADE;
-CREATE TABLE item_display_price_history (
-                                            id                   varchar(50) not null,
-                                            item_id              varchar(50) not null,
-                                            seq                  int not null,
-                                            sale_price           int not null,
-                                            ref                  varchar(255),
-                                            create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
-                                            update_at            datetime DEFAULT null,
-                                            PRIMARY KEY (id),
-                                            CONSTRAINT fk_item_display_price_history_to_item_display FOREIGN KEY (item_id) REFERENCES item_display (id) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-DROP TABLE IF EXISTS coupon CASCADE;
-CREATE TABLE coupon (
-                        id                   varchar(50) not null,
-                        event_target_id      varchar(50) not null,
-                        member_id            varchar(50) not null,
-                        used_yn              char default 'N',
-                        expired_yn           char default 'N',
-                        create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
-                        update_at            datetime DEFAULT null,
-                        PRIMARY KEY (id),
-                        CONSTRAINT coupon_to_member FOREIGN KEY (member_id) REFERENCES member (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                        CONSTRAINT coupon_to_event_target FOREIGN KEY (event_target_id) REFERENCES event_target (id) ON DELETE CASCADE ON UPDATE CASCADE
+DROP TABLE IF EXISTS qna_reply CASCADE;
+CREATE TABLE qna_reply (
+                           id                   varchar(50) not null,
+                           title                varchar(255) not null,
+                           content              varchar(1000) not null,
+                           writer_id            varchar(50) not null,
+                           attached_image_url   varchar(255),
+                           secret_yn            char default 'N',
+                           status               char default 'A',
+                           qna_seq              int not null,
+                           create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
+                           update_at            datetime DEFAULT null,
+                           PRIMARY KEY (id),
+                           CONSTRAINT fk_qna_reply_to_qna FOREIGN KEY (qna_seq) REFERENCES qna (seq) ON DELETE CASCADE ON UPDATE CASCADE,
+                           CONSTRAINT fk_qna_to_admin FOREIGN KEY (writer_id) REFERENCES admin (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 SET FOREIGN_KEY_CHECKS=1;

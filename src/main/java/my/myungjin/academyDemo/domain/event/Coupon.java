@@ -38,11 +38,11 @@ public class Coupon {
     private Member member;
 
     @Getter
-    @Column(name = "used_yn", columnDefinition = "char default 'N'")
+    @Column(name = "used_yn", columnDefinition = "char default 'N'", nullable = false)
     private char usedYn;
 
     @Getter
-    @Column(name = "expired_yn", columnDefinition = "char default 'N'")
+    @Column(name = "expired_yn", columnDefinition = "char default 'N'", nullable = false)
     private char expiredYn;
 
     @Getter
@@ -57,6 +57,8 @@ public class Coupon {
     public Coupon(EventTarget event, Member member) {
         this.event = event;
         this.member = member;
+        this.expiredYn = 'N';
+        this.usedYn = 'N';
     }
 
     public Optional<LocalDateTime> getUpdateAt(){
