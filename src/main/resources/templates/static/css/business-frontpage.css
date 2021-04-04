@@ -92,14 +92,16 @@ ul {
 
 #div-item-detail-description {
   width: 100%;
-  height: 700px;
 }
 
 #div-item-detail-description #text-description{
   width: 100%;
-  height: 100%;
-  overflow: visible;
+  min-height: 700px;
+  overflow: hidden;
 }
+#div-item-detail-description #text-description::-webkit-scrollbar {
+   display: none; /* Chrome, Safari, Opera*/
+ }
 
 #div-item-summary {
   line-height: 1rem;
