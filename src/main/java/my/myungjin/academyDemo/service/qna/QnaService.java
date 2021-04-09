@@ -1,6 +1,10 @@
 package my.myungjin.academyDemo.service.qna;
 
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import my.myungjin.academyDemo.aws.S3Client;
+import my.myungjin.academyDemo.commons.AttachedFile;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.domain.common.CommonCodeRepository;
@@ -12,6 +16,7 @@ import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.member.MemberRepository;
 import my.myungjin.academyDemo.domain.qna.*;
 import my.myungjin.academyDemo.error.NotFoundException;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +26,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static java.util.Optional.ofNullable;
+
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class QnaService {
@@ -37,6 +45,12 @@ public class QnaService {
 
     private final AdminRepository adminRepository;
 
+    private final S3Client s3Client;
+
+    private final String S3_BASE_PATH = "/qna";
+
+    private final Environment environment;
+
     @Transactional(readOnly = true)
     public Set<Qna> findByStatus(QnaStatus status){
         //return (ArrayList<Qna>) qnaRepository.findAll(QnaPredicate.searchByStatus(status));
@@ -49,7 +63,7 @@ public class QnaService {
         if(!loginMemberId.value().equals(memberId.value()))
             throw new IllegalArgumentException("Login User Id is not equal to Member Id parameter! (logined=" + loginMemberId + ", member=" + memberId + ")");
         return memberRepository.findById(memberId.value())
-                .map(qnaRepository::findByWriter)
+                .map(member -> qnaRepository.findByWriterAndStatusIsNot(member, QnaStatus.DELETED))
                 .orElseThrow(() -> new NotFoundException(Member.class, memberId));
     }
 
@@ -92,14 +106,53 @@ public class QnaService {
                 }).orElseThrow(() -> new NotFoundException(Qna.class, qnaId));
     }
 
+    private String getServerProfile(){
+        String[] profiles = environment.getActiveProfiles();
+        for(String profile : profiles){
+            if(profile.equals("real"))
+                return profile;
+        }
+        return "dev";
+    }
+
+    private Optional<String> uploadQnaImage(AttachedFile qnaImageFile){
+        String qnaImageUrl = null;
+        if(qnaImageFile != null){
+            String key = qnaImageFile.randomName(getServerProfile() + S3_BASE_PATH, "jpeg");
+            try {
+                qnaImageUrl = s3Client.upload(
+                        qnaImageFile.inputStream(),
+                        qnaImageFile.length(),
+                        key,
+                        qnaImageFile.getContentType(),
+                        null
+                );
+            } catch (AmazonS3Exception e){
+                log.warn("Amazon S3 error (key: {}): {}", key, e.getMessage(), e);
+            }
+        }
+        return ofNullable(qnaImageUrl);
+    }
+
+    private void deleteReviewImage(String qnaImgUrl){
+        try{
+            s3Client.delete(qnaImgUrl, getServerProfile() + S3_BASE_PATH);
+        } catch (AmazonS3Exception e){
+            log.warn("Amazon S3 error (key: {}): {}", qnaImgUrl, e.getMessage(), e);
+        }
+    }
+
     @Transactional
-    public Qna ask(@Valid Id<Member, String> memberId, @Valid Id<CommonCode, String> categoryId,
-                   Optional<Id<ItemDisplay, String>> itemId, @Valid Qna newQuestion){
+    public Qna ask(@Valid Id<Member, String> loginMemberId, @Valid Id<Member, String> memberId, @Valid Id<CommonCode, String> categoryId,
+                   Optional<Id<ItemDisplay, String>> itemId, @Valid Qna newQuestion, AttachedFile qnaImgFile){
+        if(!loginMemberId.value().equals(memberId.value()))
+            throw new IllegalArgumentException("Login User Id is not equal to Member Id parameter! (logined=" + loginMemberId + ", member=" + memberId + ")");
         return memberRepository.findById(memberId.value())
                 .map(member -> {
                     CommonCode cate = findQnaCategory(categoryId.value());
                     newQuestion.setCategory(cate);
                     newQuestion.setWriter(member);
+                    newQuestion.setAttachedImgUrl(uploadQnaImage(qnaImgFile).orElse(null));
                     if(!"Q_ITEM".equals(cate.getCode()))
                         return save(newQuestion);
                     ItemDisplay item = findItem(itemId.map(Id::value).orElse(null));
@@ -109,20 +162,31 @@ public class QnaService {
     }
 
     @Transactional
-    public Qna modify(@Valid Id<Member, String> memberId, @Valid Id<Qna, Long> qnaSeq,
-                      @Valid Id<CommonCode, String> cateId, Qna qna) {
-        return qnaRepository.findByWriterIdAndSeq(memberId.value(), qnaSeq.value())
+    public Qna modify(@Valid Id<Member, String> loginMemberId, @Valid Id<Member, String> memberId, @Valid Id<Qna, Long> qnaSeq,
+                      @Valid Id<CommonCode, String> cateId, Qna qna, AttachedFile qnaImgFile) {
+        if(!loginMemberId.value().equals(memberId.value()))
+            throw new IllegalArgumentException("Login User Id is not equal to Member Id parameter! (logined=" + loginMemberId + ", member=" + memberId + ")");
+        Qna updated = qnaRepository.findByWriterIdAndSeq(memberId.value(), qnaSeq.value())
                 .map(q -> {
                     CommonCode category = findQnaCategory(cateId.value());
+                    String newCateCode = category.getCode();
+                    String cateCode = q.getCategory().getCode();
+                    if("Q_ITEM".equals(cateCode) && !newCateCode.equals(cateCode))
+                        throw new IllegalArgumentException("Can't modify item qna's category! (seq=" + qnaSeq + ", newCateCode=" + newCateCode + ")");
                     q.setCategory(category);
                     q.modifyContent(qna);
+                    q.setAttachedImgUrl(uploadQnaImage(qnaImgFile).orElse(null));
                     return save(q);
                 }).orElseThrow(() -> new NotFoundException(Qna.class, memberId, qnaSeq));
+        deleteReviewImage(qna.getAttachedImgUrl().orElse(null));
+        return updated;
     }
 
 
     @Transactional
-    public Qna delete(@Valid Id<Member, String> memberId, @Valid Id<Qna, Long> qnaSeq) {
+    public Qna delete(@Valid Id<Member, String> loginMemberId, @Valid Id<Member, String> memberId, @Valid Id<Qna, Long> qnaSeq) {
+        if(!loginMemberId.value().equals(memberId.value()))
+            throw new IllegalArgumentException("Login User Id is not equal to Member Id parameter! (logined=" + loginMemberId + ", member=" + memberId + ")");
         return qnaRepository.findByWriterIdAndSeq(memberId.value(), qnaSeq.value())
                 .map(q -> {
                     q.delete();
@@ -143,7 +207,7 @@ public class QnaService {
     }
 
     @Transactional
-    public QnaReply modify(@Valid Id<Admin, String> adminId, @Valid Id<Qna, Long> qnaSeq,
+    public QnaReply modifyReply(@Valid Id<Admin, String> adminId, @Valid Id<Qna, Long> qnaSeq,
                            @Valid Id<QnaReply, String> replyId, QnaReply reply) {
         return qnaReplyRepository.findByQnaSeqAndWriterIdAndId(qnaSeq.value(), adminId.value(), replyId.value())
                 .map(qnaReply -> {
@@ -154,7 +218,7 @@ public class QnaService {
     }
 
     @Transactional
-    public QnaReply delete(@Valid Id<Admin, String> adminId, @Valid Id<Qna, Long> qnaSeq, @Valid Id<QnaReply, String> replyId) {
+    public QnaReply deleteReply(@Valid Id<Admin, String> adminId, @Valid Id<Qna, Long> qnaSeq, @Valid Id<QnaReply, String> replyId) {
         return qnaReplyRepository.findByQnaSeqAndWriterIdAndId(qnaSeq.value(), adminId.value(), replyId.value())
                 .map(q -> {
                     q.delete();

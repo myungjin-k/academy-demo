@@ -13,6 +13,6 @@ public interface QnaRepository extends JpaRepository<Qna, Long>, QuerydslPredica
 
     Optional<Qna> findByWriterIdAndSeq(String memberId, long seq);
 
-    Set<Qna> findByWriter(Member writer);
+    Set<Qna> findByWriterAndStatusIsNot(Member writer, QnaStatus status);
 
 }

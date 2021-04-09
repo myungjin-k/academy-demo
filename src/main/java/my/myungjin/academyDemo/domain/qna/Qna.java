@@ -121,9 +121,12 @@ public class Qna {
     public void modifyContent(Qna qna){
         this.title = qna.getTitle();
         this.content = qna.getContent();
-        this.attachedImgUrl = qna.getAttachedImgUrl().orElse(null);
         this.secretYn = qna.getSecretYn();
         this.updateAt = now();
+    }
+
+    public void setAttachedImgUrl(String url){
+        this.attachedImgUrl = url;
     }
 
     public void delete(){

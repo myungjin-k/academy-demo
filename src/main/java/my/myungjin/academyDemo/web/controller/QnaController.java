@@ -12,18 +12,19 @@ import my.myungjin.academyDemo.security.User;
 import my.myungjin.academyDemo.service.qna.QnaService;
 import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.PageRequest;
+import my.myungjin.academyDemo.web.request.QnaRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static my.myungjin.academyDemo.commons.AttachedFile.toAttachedFile;
 import static my.myungjin.academyDemo.web.Response.OK;
 
 @RequestMapping("/api")
@@ -33,26 +34,8 @@ public class QnaController {
 
     private final QnaService qnaService;
 
-
-/*    @GetMapping("/mall/item/{itemId}/review/list")
-    @ApiOperation(value = "상품별 리뷰 목록 조회(api key 필요없음)")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "direction", dataType = "string", paramType = "query", defaultValue = "DESC", value = "정렬 방향"),
-            @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query", defaultValue = "0", value = "페이징 offset"),
-            @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query", defaultValue = "5", value = "조회 갯수")
-    })
-    public Response<Page<ReviewResponse>> findAllReviewsByItem(
-            @PathVariable @ApiParam(value = "조회 대상 전시상품 PK", example = "f23ba30a47194a2c8a3fd2ccadd952a4") String itemId,
-            PageRequest pageRequest){
-        List<ReviewResponse> reviews = reviewService.findAllByItem(Id.of(ItemDisplay.class, itemId), pageRequest.of())
-                .stream()
-                .map(review -> new ReviewResponse().of(review))
-                .collect(Collectors.toList());
-        return OK(new PageImpl<>(reviews, pageRequest.of(), reviews.size()));
-    }*/
-
     @GetMapping("/mall/member/{id}/qna/list")
-    @ApiOperation(value = "회원별 리뷰 목록 조회")
+    @ApiOperation(value = "회원별 문의 목록 조회")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "direction", dataType = "string", paramType = "query", defaultValue = "DESC", value = "정렬 방향"),
             @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query", defaultValue = "0", value = "페이징 offset"),
@@ -67,46 +50,62 @@ public class QnaController {
                 Id.of(Member.class, id)
         ));
         return OK(new PageImpl<>(results, pageRequest.of(), results.size()));
-
     }
 
-    /*@PostMapping("/mall/member/{memberId}/orderItem/{itemId}/review")
-    @ApiOperation(value = "리뷰 작성")
-    public Response<Review> review(
-            @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String memberId,
-            @PathVariable @ApiParam(value = "조회 대상 주문상품 PK", example = "c7bb4cb6efcd4f4bb388eafb6fa52fac") String itemId,
-            @ModelAttribute ReviewRequest reviewRequest,
-            @RequestPart(required = false) MultipartFile reviewImgFile,
-            @AuthenticationPrincipal Authentication authentication) throws IOException {
+    @PostMapping( "/mall/member/{id}/qna")
+    @ApiOperation(value = "회원별 문의 작성")
+    public Response<Qna> ask(
+            @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String id,
+            @ModelAttribute QnaRequest qnaRequest,
+            @AuthenticationPrincipal Authentication authentication,
+            @RequestPart(required = false) MultipartFile attachedImageFile
+            ) throws IOException {
         return OK(
-                reviewService.write(
-                        Id.of(Member.class, memberId),
-                        Id.of(Member.class, ((User)authentication.getDetails()).getId()),
-                        Id.of(OrderItem.class, itemId),
-                        reviewRequest.newReview(),
-                        toAttachedFile(reviewImgFile)
+                qnaService.ask(
+                        Id.of(Member.class, ((User) authentication.getDetails()).getId()),
+                        Id.of(Member.class, id),
+                        qnaRequest.getCateId(),
+                        qnaRequest.getItemId(),
+                        qnaRequest.newQna(),
+                        toAttachedFile(attachedImageFile)
                 )
         );
-    }*/
+    }
 
-   /* @PutMapping("/mall/member/{memberId}/review/{reviewId}")
-    @ApiOperation(value = "리뷰 수정")
-    public Response<Review> modifyReview(
+    @PutMapping("/mall/member/{memberId}/qna/{qnaId}")
+    @ApiOperation(value = "회원별 문의 수정")
+    public Response<Qna> modify(
             @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String memberId,
-            @PathVariable @ApiParam(value = "조회 대상 리뷰 PK", example = "c7bb4cb6efcd4f4bb388eafb6fa52fac") String reviewId,
-            @ModelAttribute ReviewRequest reviewRequest,
-            @RequestPart(required = false) MultipartFile reviewImgFile,
-            @AuthenticationPrincipal Authentication authentication) throws IOException {
+            @PathVariable @ApiParam(value = "조회 대상 문의 PK", example = "1") Long qnaId,
+            @ModelAttribute QnaRequest qnaRequest,
+            @AuthenticationPrincipal Authentication authentication,
+            @RequestPart(required = false) MultipartFile attachedImageFile
+    ) throws IOException {
         return OK(
-                reviewService.modify(
+                qnaService.modify(
+                        Id.of(Member.class, ((User) authentication.getDetails()).getId()),
                         Id.of(Member.class, memberId),
-                        Id.of(Member.class, ((User)authentication.getDetails()).getId()),
-                        Id.of(Review.class, reviewId),
-                        reviewRequest.getContent(),
-                        reviewRequest.getScore(),
-                        toAttachedFile(reviewImgFile)
+                        Id.of(Qna.class, qnaId),
+                        qnaRequest.getCateId(),
+                        qnaRequest.toEntity(qnaId),
+                        toAttachedFile(attachedImageFile)
                 )
         );
-    }*/
+    }
 
+    @DeleteMapping("/mall/member/{memberId}/qna/{qnaId}")
+    @ApiOperation(value = "회원별 문의 삭제")
+    public Response<Qna> delete(
+            @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String memberId,
+            @PathVariable @ApiParam(value = "조회 대상 문의 PK", example = "1") Long qnaId,
+            @AuthenticationPrincipal Authentication authentication
+    ){
+        return OK(
+                qnaService.delete(
+                        Id.of(Member.class, ((User) authentication.getDetails()).getId()),
+                        Id.of(Member.class, memberId),
+                        Id.of(Qna.class, qnaId)
+                )
+        );
+    }
 }

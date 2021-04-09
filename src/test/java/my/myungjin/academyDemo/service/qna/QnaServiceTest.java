@@ -12,11 +12,19 @@ import my.myungjin.academyDemo.domain.qna.QnaStatus;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Optional;
 import java.util.Set;
 
+import static my.myungjin.academyDemo.commons.AttachedFile.toAttachedFile;
+import static org.apache.commons.io.IOUtils.toByteArray;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -59,7 +67,7 @@ public class QnaServiceTest {
                 .secretYn('Y')
                 .build();
 
-        Qna saved = qnaService.ask(memberId, cateId, Optional.of(itemId), newQna);
+        Qna saved = qnaService.ask(memberId, memberId, cateId, Optional.of(itemId), newQna, null);
 
         assertThat(saved, is(notNullValue()));
         qnaSeq = Id.of(Qna.class, saved.getSeq());
@@ -69,10 +77,14 @@ public class QnaServiceTest {
 
     @Test
     @Order(2)
-    void 문의를_등록한다_주문 (){
+    void 문의를_등록한다_주문 () throws IOException {
 
         // order
         Id<CommonCode, String> cateId = Id.of(CommonCode.class, "5c5b2a2b17e24f07ae647f45cdbda705");
+
+        File file = new ClassPathResource("/qna.jpg").getFile(); // 컴파일 된 파일이어야 함
+        MultipartFile multipartFile =
+                new MockMultipartFile("file", file.getName(), "image/jpeg", toByteArray(new FileInputStream(file)));
 
         Qna newQna = Qna.builder()
                 .title("배송 문의")
@@ -80,7 +92,7 @@ public class QnaServiceTest {
                 .secretYn('Y')
                 .build();
 
-        Qna saved = qnaService.ask(memberId, cateId, Optional.empty(), newQna);
+        Qna saved = qnaService.ask(memberId, memberId, cateId, Optional.empty(), newQna, toAttachedFile(multipartFile));
 
         assertThat(saved, is(notNullValue()));
         qnaSeq = Id.of(Qna.class, saved.getSeq());
@@ -139,7 +151,7 @@ public class QnaServiceTest {
                 .secretYn('Y')
                 .build();
 
-        Qna updated = qnaService.modify(memberId, qnaSeq, cateId, newQna);
+        Qna updated = qnaService.modify(memberId, memberId, qnaSeq, cateId, newQna, null);
 
         assertThat(updated, is(notNullValue()));
         log.info("Updated Qna : {}", updated);
@@ -149,7 +161,6 @@ public class QnaServiceTest {
     @Test
     @Order(6)
     void 문의_답글을_등록한다(){
-
 
         QnaReply newQnaReply = QnaReply.builder()
                 .title("RE: 상품 문의")
@@ -169,14 +180,13 @@ public class QnaServiceTest {
     @Order(7)
     void 문의_답글을_수정한다(){
 
-
         QnaReply newQnaReply = QnaReply.builder()
                 .title("RE: [수정] 상품 문의")
                 .content("[수정] test 문의 답변")
                 .secretYn('Y')
                 .build();
 
-        QnaReply updated = qnaService.modify(adminId, qnaSeq, replyId, newQnaReply);
+        QnaReply updated = qnaService.modifyReply(adminId, qnaSeq, replyId, newQnaReply);
 
         assertThat(updated, is(notNullValue()));
         log.info("Updated Qna Reply : {}", updated);
@@ -187,7 +197,7 @@ public class QnaServiceTest {
     @Order(8)
     void 문의_답글을_삭제한다(){
 
-        QnaReply deleted = qnaService.delete(adminId, qnaSeq, replyId);
+        QnaReply deleted = qnaService.deleteReply(adminId, qnaSeq, replyId);
 
         assertThat(deleted, is(notNullValue()));
         log.info("Deleted Qna Reply: {}", deleted);
@@ -197,7 +207,7 @@ public class QnaServiceTest {
     @Test
     @Order(9)
     void 문의를_삭제한다_상품 (){
-        Qna deleted = qnaService.delete(memberId, qnaSeq);
+        Qna deleted = qnaService.delete(memberId, memberId, qnaSeq);
 
         assertThat(deleted, is(notNullValue()));
         log.info("Deleted Qna : {}", deleted);
