@@ -15,6 +15,7 @@ import my.myungjin.academyDemo.error.NotFoundException;
 import my.myungjin.academyDemo.error.StatusNotSatisfiedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,7 +45,9 @@ public class ReviewService {
 
     private final S3Client s3Client;
 
-    private final String S3_BASE_PATH = "review";
+    private final String S3_BASE_PATH = "/review";
+
+    private final Environment environment;
 
 
     @Transactional(readOnly = true)
@@ -72,10 +75,18 @@ public class ReviewService {
                 .orElseThrow(() -> new NotFoundException(Review.class, memberId, itemId));
     }
 
+    private String getServerProfile(){
+        for(String profile : environment.getActiveProfiles()){
+            if("real".equals(profile))
+                return profile;
+        }
+        return "dev";
+    }
+
     private Optional<String> uploadReviewImage(AttachedFile reviewImageFile) {
         String reviewImageUrl = null;
         if (reviewImageFile != null) {
-            String key = reviewImageFile.randomName(S3_BASE_PATH, "jpeg");
+            String key = reviewImageFile.randomName(getServerProfile() + S3_BASE_PATH, "jpeg");
             try {
                 reviewImageUrl = s3Client.upload(reviewImageFile.inputStream(),
                         reviewImageFile.length(),
@@ -91,7 +102,7 @@ public class ReviewService {
 
     private void deleteReviewImage(String reviewImage){
         try{
-            s3Client.delete(reviewImage, S3_BASE_PATH);
+            s3Client.delete(reviewImage, getServerProfile() + S3_BASE_PATH);
         } catch (AmazonS3Exception e){
             log.warn("Amazon S3 error (key: {}): {}", reviewImage, e.getMessage(), e);
         }
