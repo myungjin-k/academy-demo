@@ -201,6 +201,7 @@ public class QnaService {
                     Qna qna = findById(qnaSeq.value()).orElseThrow(() -> new NotFoundException(Qna.class, qnaSeq));
                     newReply.setQna(qna);
                     newReply.setWriter(admin);
+                    qna.answered(newReply);
                     return save(newReply);
                 })
                 .orElseThrow(() -> new NotFoundException(Admin.class, adminId));

@@ -6,8 +6,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
+import my.myungjin.academyDemo.domain.member.Admin;
 import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.qna.Qna;
+import my.myungjin.academyDemo.domain.qna.QnaReply;
 import my.myungjin.academyDemo.security.User;
 import my.myungjin.academyDemo.service.qna.QnaService;
 import my.myungjin.academyDemo.web.Response;
@@ -105,6 +107,23 @@ public class QnaController {
                         Id.of(Member.class, ((User) authentication.getDetails()).getId()),
                         Id.of(Member.class, memberId),
                         Id.of(Qna.class, qnaId)
+                )
+        );
+    }
+
+    @PostMapping( "/admin/qna/{id}/reply")
+    @ApiOperation(value = "관리자 문의 답변 작성")
+    public Response<QnaReply> reply(
+            @PathVariable @ApiParam(value = "조회 대상 문의 PK", example = "1") Long id,
+            @ModelAttribute QnaRequest qnaRequest,
+            @RequestPart(required = false) MultipartFile attachedImageFile,
+            @AuthenticationPrincipal Authentication authentication
+    ) throws IOException {
+        return OK(
+                qnaService.reply(
+                        Id.of(Qna.class, id),
+                        Id.of(Admin.class, ((User) authentication.getDetails()).getId()),
+                        qnaRequest.newReply()
                 )
         );
     }

@@ -5,6 +5,7 @@ import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.common.CommonCode;
 import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.qna.Qna;
+import my.myungjin.academyDemo.domain.qna.QnaReply;
 import my.myungjin.academyDemo.domain.qna.QnaStatus;
 
 import java.util.Optional;
@@ -41,10 +42,19 @@ public class QnaRequest {
 
     public Qna toEntity(Long seq){
         return Qna.builder()
+                .seq(seq)
                 .title(title)
                 .content(content)
                 .attachedImgUrl(attachedImgUrl)
                 .status(QnaStatus.WAITING)
+                .secretYn(secretYn)
+                .build();
+    }
+
+    public QnaReply newReply(){
+        return QnaReply.builder()
+                .title(title)
+                .content(content)
                 .secretYn(secretYn)
                 .build();
     }

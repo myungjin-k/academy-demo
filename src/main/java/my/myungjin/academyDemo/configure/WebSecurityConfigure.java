@@ -36,7 +36,7 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public MyAuthenticationProvider authenticationProvider(@Lazy MemberService memberService, @Lazy AdminService adminService) {
+    public MyAuthenticationProvider authenticationProvider(MemberService memberService, AdminService adminService) {
         return new MyAuthenticationProvider(memberService, adminService);
     }
 
@@ -85,7 +85,7 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/mall/find/**").permitAll()
                 .antMatchers("/api/mall/item/**").permitAll()
                 .antMatchers("/api/mall/member/password").permitAll()
-                .antMatchers("/api/mall/member/**").authenticated()
+                .antMatchers("/api/mall/member/**").hasRole(Role.MEMBER.name())
                 .antMatchers("/api/admin/**").hasRole(Role.ADMIN.name())
                 //.accessDecisionManager(accessDecisionManager())
                 .anyRequest().permitAll()
