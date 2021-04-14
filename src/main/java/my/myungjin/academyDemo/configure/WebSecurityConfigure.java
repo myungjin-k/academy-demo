@@ -2,12 +2,12 @@ package my.myungjin.academyDemo.configure;
 
 import my.myungjin.academyDemo.domain.member.Role;
 import my.myungjin.academyDemo.security.MyAuthenticationProvider;
+import my.myungjin.academyDemo.security.User;
 import my.myungjin.academyDemo.service.admin.AdminService;
 import my.myungjin.academyDemo.service.member.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -92,8 +92,14 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .disable()
-                .logout().logoutSuccessUrl("/")
-                .and()
+                .logout(logout -> logout.logoutSuccessHandler((request, response, authentication) -> {
+                    Role role = ((User)(authentication.getDetails())).getRole();
+                    if(role.equals(Role.ADMIN)){
+                        response.sendRedirect("/admin/login");
+                    } else {
+                        response.sendRedirect("/");
+                    }
+                }))
                 .sessionManagement()
                 .maximumSessions(1) /* session 허용 갯수 */
                 .expiredSessionStrategy(sessionInformationExpiredEvent -> {
