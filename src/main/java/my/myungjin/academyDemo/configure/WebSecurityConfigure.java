@@ -8,6 +8,7 @@ import my.myungjin.academyDemo.service.member.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -36,7 +37,7 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public MyAuthenticationProvider authenticationProvider(MemberService memberService, AdminService adminService) {
+    public MyAuthenticationProvider authenticationProvider(@Lazy MemberService memberService, @Lazy AdminService adminService) {
         return new MyAuthenticationProvider(memberService, adminService);
     }
 
