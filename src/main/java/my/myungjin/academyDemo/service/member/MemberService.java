@@ -48,8 +48,7 @@ public class MemberService {
     @Transactional
     public Member join(@Valid Member newMember) {
         newMember.encryptPassword(passwordEncoder);
-        Member saved = save(newMember);
-        return findById(saved.getId()).orElse(newMember);
+        return save(newMember);
     }
 
     @Transactional
