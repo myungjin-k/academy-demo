@@ -31,13 +31,8 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
                 "/swagger-ui.html", "/swagger-resources", "/webjars/**", "/swagger/**");
     }
 
-    @Autowired
-    public void configureAuthentication(AuthenticationManagerBuilder builder, MyAuthenticationProvider authenticationProvider) {
-        builder.authenticationProvider(authenticationProvider);
-    }
-
     @Bean
-    public MyAuthenticationProvider authenticationProvider(@Lazy MemberService memberService, @Lazy AdminService adminService) {
+    public MyAuthenticationProvider authenticationProvider(MemberService memberService, AdminService adminService) {
         return new MyAuthenticationProvider(memberService, adminService);
     }
 
