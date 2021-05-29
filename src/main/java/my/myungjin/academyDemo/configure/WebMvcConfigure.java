@@ -18,6 +18,8 @@ import java.time.format.DateTimeFormatter;
 public class WebMvcConfigure implements WebMvcConfigurer {
 //    private final String baseApiPath = "api";
 
+    private final AuthenticationInterceptor authenticationInterceptor;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/**/*.css", "/**/*.html", "/**/*.js", "/**/*.png", "/**/*.mustache", "/**/*.ico")
@@ -40,14 +42,14 @@ public class WebMvcConfigure implements WebMvcConfigurer {
 
     }
 
-    @Bean
+    /*@Bean
     public AuthenticationInterceptor authenticationInterceptor(){
         return new AuthenticationInterceptor();
-    }
+    }*/
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(authenticationInterceptor())
+        registry.addInterceptor(authenticationInterceptor)
                 .addPathPatterns("/")
                 .addPathPatterns("/mall/**")
                 .addPathPatterns("/admin/**")

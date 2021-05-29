@@ -1,12 +1,14 @@
 package my.myungjin.academyDemo.security;
 
 import org.springframework.security.core.context.SecurityContextImpl;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+@Component
 public class AuthenticationInterceptor implements HandlerInterceptor {
 
     @Override
