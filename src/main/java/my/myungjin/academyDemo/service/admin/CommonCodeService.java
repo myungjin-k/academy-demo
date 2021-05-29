@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.common.*;
 import my.myungjin.academyDemo.error.NotFoundException;
-import org.aspectj.apache.bcel.classfile.Code;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -132,6 +131,11 @@ public class CommonCodeService {
         return findGroupByCode(code)
                 .map(commonCodeRepository::findAllByCodeGroup)
                 .orElseThrow(() -> new NotFoundException(CodeGroup.class, code));
+    }
+
+    @Transactional(readOnly = true)
+    public List<CommonCode> findAllCommonCodesByGroupCodeAndNameKor(@NotBlank String code, @NotBlank String nameKor){
+        return commonCodeRepository.findAllByCodeGroupCodeStartsWithAndNameKorContaining(code, nameKor);
     }
 
     private CodeGroup saveGroup(CodeGroup codeGroup){

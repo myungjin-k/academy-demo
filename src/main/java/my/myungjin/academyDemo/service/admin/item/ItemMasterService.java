@@ -138,7 +138,7 @@ public class ItemMasterService {
 
     @Transactional(readOnly = true)
     public List<CommonCode> searchCategoryByNameKor(@NotBlank String nameKor){
-        return commonCodeRepository.searchByGroupCodeAndNameKor("C", nameKor);
+        return commonCodeRepository.findAllByCodeGroupCodeStartsWithAndNameKorContaining("C", nameKor);
     }
 
     private ItemMaster getOne(String id){

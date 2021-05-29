@@ -149,11 +149,20 @@ public class CommonCodeServiceTest {
     void 코드그룹_검색하기(){
 
         List<CodeGroup> results = (ArrayList<CodeGroup>) commonService.search("C", null, null);
-        MatcherAssert.assertThat(results.size(), is(3));
+        MatcherAssert.assertThat(results.size(), is(4));
     }
+
 
     @Test
     @Order(9)
+    void 공통코드_검색하기_코드그룹과_코드명으로(){
+        List<CommonCode> commonCodes = commonService.findAllCommonCodesByGroupCodeAndNameKor("C", "니트");
+        MatcherAssert.assertThat(commonCodes, is(notNullValue()));
+        log.info("Read CommonCodes: {}", commonCodes);
+    }
+
+    @Test
+    @Order(10)
     void 공통코드_조회하기_페이징(){
         PageRequest pageRequest = PageRequest.of(0, 5);
         Page<CommonCode> page = commonService.findAllCommonCodeByGroupIdWithPage(
@@ -165,7 +174,7 @@ public class CommonCodeServiceTest {
         log.info("Result: {}", list);
     }
     @Test
-    @Order(10)
+    @Order(11)
     void 코드그룹_삭제하기(){
         String deleted = commonService.removeGroup(groupId);
         MatcherAssert.assertThat(deleted, is(notNullValue()));
