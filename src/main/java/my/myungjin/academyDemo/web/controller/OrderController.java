@@ -10,7 +10,6 @@ import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.event.Coupon;
-import my.myungjin.academyDemo.domain.item.ItemDisplayOption;
 import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.order.CartItem;
 import my.myungjin.academyDemo.domain.order.Delivery;
@@ -37,7 +36,6 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static java.util.Optional.empty;
 import static my.myungjin.academyDemo.web.Response.OK;
@@ -55,21 +53,16 @@ public class OrderController {
 
     private final IamportClient iamportClient;
 
-    @Transactional
     @PostMapping("/member/{id}/cart")
     @ApiOperation(value = "장바구니 추가 (리스트)")
     public Response<List<CartItem>> addCart(
             @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String id,
             @RequestBody List<CartRequest> requestList, @AuthenticationPrincipal Authentication authentication){
         return OK(
-                requestList.stream()
-                .map(newCartItemRequest ->
-                        cartService.add(
-                            Id.of(Member.class, id),
-                            Id.of(Member.class, ((User) authentication.getDetails()).getId()),
-                            Id.of(ItemDisplayOption.class, newCartItemRequest.getItemId()),
-                            newCartItemRequest.getCount()
-                )).collect(Collectors.toList())
+                cartService.addItems(
+                        Id.of(Member.class, id),
+                        Id.of(Member.class, ((User) authentication.getDetails()).getId()),
+                        requestList)
         );
     }
 
@@ -141,7 +134,7 @@ public class OrderController {
     @ApiOperation(value = "주문 생성")
     public Response<Order> order(
             @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String memberId,
-            @RequestBody OrderRequest orderRequest) throws IOException, IamportResponseException {
+            @RequestBody OrderRequest orderRequest) {
         return OK(
                 orderService.ordering(
                         Id.of(Member.class, memberId),

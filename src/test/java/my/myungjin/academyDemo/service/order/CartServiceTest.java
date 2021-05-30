@@ -1,10 +1,11 @@
 package my.myungjin.academyDemo.service.order;
 
 import my.myungjin.academyDemo.commons.Id;
-import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.item.ItemDisplayOption;
 import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.order.CartItem;
+import my.myungjin.academyDemo.error.NotFoundException;
+import my.myungjin.academyDemo.web.request.CartRequest;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -33,6 +36,8 @@ public class CartServiceTest {
 
     private Id<ItemDisplayOption, String> itemId;
 
+    private Id<ItemDisplayOption, String> itemId2;
+
 
     private Id<CartItem, String> cartItemId;
 
@@ -40,15 +45,30 @@ public class CartServiceTest {
     void setup(){
         memberId = Id.of(Member.class, "3a18e633a5db4dbd8aaee218fe447fa4");
         itemId = Id.of(ItemDisplayOption.class, "91cc1c18f11e4d018566524b51d8419a");
+        itemId2 = Id.of(ItemDisplayOption.class, "invalid");
     }
 
     @Test
     @Order(1)
     void 장바구니_추가하기() {
-        CartItem added = cartService.add(memberId, memberId, itemId, 2);
-        cartItemId = Id.of(CartItem.class, added.getId());
-        assertThat(added, is(notNullValue()));
-        log.info("Added Item: {}", added);
+        List<CartRequest> requestList = Arrays.asList(
+                new CartRequest(itemId.value(), 2)
+                //new CartRequest(itemId2.value(), 100) // 트랜잭션 확인용
+        );
+
+        List<CartItem> added = new ArrayList<>();
+        try {
+            added = cartService.addItems(memberId, memberId, requestList);
+        } catch (NotFoundException e){
+            log.warn(e.getMessage());
+        } finally {
+            cartItemId = Id.of(CartItem.class, added.get(0).getId());
+            assertThat(added, is(notNullValue()));
+
+            cartService.findByMember(memberId, memberId).forEach(
+                item -> log.info("Cart Item: {}, count: {}", item.getItemOption().getId(), item.getCount())
+            );
+        }
     }
 
     @Test
@@ -72,10 +92,13 @@ public class CartServiceTest {
     @Test
     @Order(4)
     void 장바구니_추가하기_아이템_중복() {
-        CartItem added = cartService.add(memberId, memberId, itemId, 2);
-        cartItemId = Id.of(CartItem.class, added.getId());
+        List<CartRequest> requestList = Arrays.asList(
+                new CartRequest(itemId.value(), 2)
+        );
+
+        List<CartItem> added = cartService.addItems(memberId, memberId, requestList);
         assertThat(added, is(notNullValue()));
-        assertThat(added.getCount(), is(12));
+        assertThat(added.get(0).getCount(), is(12));
         log.info("Added Item: {}", added);
     }
 

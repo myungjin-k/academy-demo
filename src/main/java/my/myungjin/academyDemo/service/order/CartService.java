@@ -2,7 +2,6 @@ package my.myungjin.academyDemo.service.order;
 
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
-import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.item.ItemDisplayOption;
 import my.myungjin.academyDemo.domain.item.ItemDisplayOptionRepository;
 import my.myungjin.academyDemo.domain.member.Member;
@@ -10,12 +9,14 @@ import my.myungjin.academyDemo.domain.member.MemberRepository;
 import my.myungjin.academyDemo.domain.order.CartItem;
 import my.myungjin.academyDemo.domain.order.CartRepository;
 import my.myungjin.academyDemo.error.NotFoundException;
+import my.myungjin.academyDemo.web.request.CartRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -34,11 +35,18 @@ public class CartService {
         return cartRepository.findAllByMember(findMember(memberId));
     }
 
-    public CartItem add(@Valid Id<Member, String> memberId, @Valid Id<Member, String> loginUserId,
-                        @Valid Id<ItemDisplayOption, String> itemId, @Positive int count){
+    @Transactional
+    public List<CartItem> addItems(@Valid Id<Member, String> memberId, @Valid Id<Member, String> loginUserId,
+                                   List<CartRequest> items) {
         if(!loginUserId.value().equals(memberId.value()))
             throw new IllegalArgumentException("member id must be equal to login user id(member="+ memberId+", loginUser=" +loginUserId +")");
 
+        return items.stream()
+                .map(item -> add(memberId, Id.of(ItemDisplayOption.class, item.getItemId()), item.getCount()))
+                .collect(Collectors.toList());
+    }
+
+    public CartItem add(Id<Member, String> memberId, @Valid Id<ItemDisplayOption, String> itemId, @Positive int count){
         CartItem cartItem = cartRepository.getByItemOptionId(itemId.value());
         if(cartItem != null){
             cartItem.modify(cartItem.getCount() + count);
