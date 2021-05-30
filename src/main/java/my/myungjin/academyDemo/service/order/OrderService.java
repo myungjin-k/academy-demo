@@ -117,31 +117,31 @@ public class OrderService {
                     return save(newOrder);
                 }).orElseThrow(() ->  new NotFoundException(Member.class, memberId));
         // 주문상품
-        Order updated = saveOrderItems(itemIds, saved);
+        saveOrderItems(itemIds, saved);
         // 적립금 업데이트 + 등급 업데이트
-        Member m = updated.getMember();
+        Member m = saved.getMember();
 
-        if(!reservesHistoryRepository.existsByTypeAndRefId(ReservesType.ORDER, updated.getId())){
-            int usedPoint = updated.getUsedPoints();
-            if(updated.getUsedPoints() == 0){
-                int reserve = (int) (updated.getTotalAmount() * m.getRating().getReserveRatio());
+        if(!reservesHistoryRepository.existsByTypeAndRefId(ReservesType.ORDER, saved.getId())){
+            int usedPoint = saved.getUsedPoints();
+            if(saved.getUsedPoints() == 0){
+                int reserve = (int) (saved.getTotalAmount() * m.getRating().getReserveRatio());
                 m.addReserves(reserve);
-                m.addReservesHistory(new ReservesHistory(reserve, ReservesType.ORDER, updated.getId()));
+                m.addReservesHistory(new ReservesHistory(reserve, ReservesType.ORDER, saved.getId()));
             } else {
-                m.flushReserves(updated.getUsedPoints());
-                m.addReservesHistory(new ReservesHistory(-usedPoint, ReservesType.ORDER_USED, updated.getId()));
+                m.flushReserves(saved.getUsedPoints());
+                m.addReservesHistory(new ReservesHistory(-usedPoint, ReservesType.ORDER_USED, saved.getId()));
             }
 
-            m.addOrderAmountAndUpdateRating(updated.getTotalAmount() - updated.getUsedPoints());
+            m.addOrderAmountAndUpdateRating(saved.getTotalAmount() - saved.getUsedPoints());
         }
 
         // 배송정보
-        delivery.setOrder(updated);
+        delivery.setOrder(saved);
         delivery.setExtDeliveryId("EXT" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHH24mmssSSS")));
         Delivery d = save(delivery);
         // 배송상품
-        saveDeliveryItems(updated.getItems(), d);
-        updated.addDelivery(d);
+        saveDeliveryItems(saved.getItems(), d);
+        saved.addDelivery(d);
 
         // 쿠폰
 
@@ -150,15 +150,15 @@ public class OrderService {
                     .map(coupon -> {
                         coupon.use();
                         Coupon used =  couponRepository.save(coupon);
-                        updated.setCoupon(used);
+                        saved.setCoupon(used);
                         return used;
                     }).orElseThrow(() -> new NotFoundException(Coupon.class, usedCouponId));
         });
 
         // 메일 발송
-        updated.getOrderEmail().ifPresent(s -> this.sendMail(s, updated));
+        saved.getOrderEmail().ifPresent(s -> this.sendMail(s, saved));
 
-        return updated;
+        return saved;
     }
     private void sendMail(String email, Order order){
         /*Mail mail = Mail.builder()
@@ -170,19 +170,25 @@ public class OrderService {
         Map<String, Object> emailTemplateModel = new HashMap<>();
         emailTemplateModel.put("order", order);
 
-        try {
-            //mailService.sendMail(mail);
-            mailService.sendMessageUsingThymeleafTemplate(
-                    email,
-                    title,
-                    "orderCompleted",
-                    emailTemplateModel);
-        } catch (MessagingException | UnsupportedEncodingException e){
-            log.warn("Messaging Error : {}", e.getMessage(), e);
-        } catch (MailException me){
-            log.warn("Mailing Error : {}", me.getMessage(), me);
+        int retryCnt = 5;
+        boolean success = true;
+        while(retryCnt > 0){
+            try {
+                //mailService.sendMail(mail);
+                mailService.sendMessageUsingThymeleafTemplate(
+                        email,
+                        title,
+                        "orderCompleted",
+                        emailTemplateModel);
+            } catch (MessagingException | UnsupportedEncodingException | MailException e){
+                log.warn("Mailing Error : {}", e.getMessage(), e);
+                success = false;
+                retryCnt--;
+            }
+            if(success) break;
         }
     }
+
     @Transactional
     public Order modify(@Valid Id<Member, String> memberId, @Valid Id<Order, String> orderId, @Valid Order order) {
         Order o = findById(memberId, orderId);
@@ -255,7 +261,7 @@ public class OrderService {
         return save(order);
     }
 
-    private Order saveOrderItems(List<Id<CartItem, String>> itemIds, Order order){
+    private void saveOrderItems(List<Id<CartItem, String>> itemIds, Order order){
         List<CartItem> items = itemIds.stream()
                 .map(itemId -> cartRepository.findById(itemId.value())
                                 .orElseThrow(() -> new NotFoundException(CartItem.class, itemId)))
@@ -276,7 +282,7 @@ public class OrderService {
             abbrOrderItems.append("外 ").append(items.size() - 1).append("건");
         order.setAbbrOrderItems(abbrOrderItems.toString());
         deleteCartItems(items);
-        return order;
+        //return order;
     }
 
     private void saveDeliveryItems(List<OrderItem> orderItems, Delivery delivery){
