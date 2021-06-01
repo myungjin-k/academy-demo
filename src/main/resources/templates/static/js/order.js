@@ -59,7 +59,7 @@ var order = {
             if(p >= totalPayAmount){
                 p = totalPayAmount;
                 if(shippingFee === 0)
-                    p -= 1;
+                    p -= 100;
             }
             $(this).val(p);
             _this.div.find('.amountInfo .usedPoints').text(p);
@@ -192,6 +192,9 @@ var order = {
         form.find('input[name="tel"]').val(tel);
         var receiverTel = form.find('#receiverTel1').val() + '-' + form.find('#receiverTel2').val() + '-' + form.find('#receiverTel3').val();
         form.find('input[name="receiverTel"]').val(receiverTel);
+
+        form.find('input[name="itemDiscounted"]').val(Number(_this.div.find('.amountInfo .totalDiscountPrice').text()));
+        form.find('input[name="couponDiscounted"]').val(Number(_this.div.find('.amountInfo .couponDiscountPrice').text()));
         var data = $('#form-save-order').serializeObject();
         data['cartItemIds'] = _this.collectItemIds();
         data['payAmount'] = _this.div.find('.payAmount').text();

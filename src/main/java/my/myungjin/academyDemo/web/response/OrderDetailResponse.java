@@ -56,23 +56,10 @@ public class OrderDetailResponse {
                 .map(orderItem -> new OrderItemResponse().of(orderItem))
                 .collect(Collectors.toList());
         this.orderAmount = entity.getTotalAmount();
-        int discountAmount = 0;
-        for(OrderItemResponse item : items){
-            discountAmount += (item.getItemPrice() - item.getSalePrice()) * item.getCount();
-        }
-        this.discountedAmount = discountAmount;
+        this.discountedAmount = entity.getItemDiscounted();
         this.usedPoints = entity.getUsedPoints();
-        int spareAmount = this.orderAmount - this.discountedAmount - this.usedPoints;
-        this.couponDiscountedAmount = entity.getCoupon()
-                .map(coupon -> {
-                    Event e = coupon.getEvent().getEvent();
-                    if(e.getRatio() > 0)
-                        return (int) (spareAmount * (double) (coupon.getEvent().getEvent().getAmount()) / 100);
-                    else if(e.getAmount() > 0)
-                        return e.getAmount();
-                    return 0;
-                }).orElse(0);
-        this.payAmount = spareAmount - this.couponDiscountedAmount;
+        this.couponDiscountedAmount = entity.getCouponDiscounted();
+        this.payAmount = this.orderAmount - (this.couponDiscountedAmount + this.discountedAmount + this.usedPoints);
         List<Delivery> deliveries = entity.getDeliveries()
                 .stream()
                 .filter(delivery -> !delivery.getStatus().equals(DeliveryStatus.DELETED))

@@ -75,6 +75,14 @@ public class Order {
     @Column(name = "is_cancelled")
     private boolean isCancelled;
 
+    @Getter
+    @Column(name = "item_discounted")
+    private int itemDiscounted;
+
+    @Getter
+    @Column(name = "coupon_discounted")
+    private int couponDiscounted;
+
     @Setter
     @OneToOne
     @JsonManagedReference
