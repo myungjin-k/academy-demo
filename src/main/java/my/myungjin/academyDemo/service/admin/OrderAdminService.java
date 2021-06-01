@@ -2,7 +2,6 @@ package my.myungjin.academyDemo.service.admin;
 
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
-import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.item.ItemDisplayOption;
 import my.myungjin.academyDemo.domain.item.ItemDisplayOptionRepository;
 import my.myungjin.academyDemo.domain.order.*;
@@ -112,7 +111,7 @@ public class OrderAdminService {
             dItem.setItemOption(item.getItemOption());
             dItem.setOrderItem(item);
             delivery.addItem(dItem);
-            item.setDeliveryItem(save(dItem));
+            //item.setDeliveryItem(save(dItem));
         }
     }
 
@@ -172,8 +171,15 @@ public class OrderAdminService {
         if(deliveryItemRepository.existsByDeliveryIdAndItemOptionId(deliveryId.value(), itemId.value()))
             return Optional.empty();
         DeliveryItem item = new DeliveryItem(count);
-        delivery.addItem(item);
+
+        orderItemRepository.findAllByOrder(delivery.getOrder())
+                .stream()
+                .filter(oItem -> itemId.value().equals(oItem.getItemOption().getId()))
+                .findFirst().ifPresent(item::setOrderItem);
+
+        item.setDelivery(delivery);
         saveItem(item, itemId);
+        delivery.addItem(item);
         return Optional.of(item);
     }
 
@@ -188,7 +194,8 @@ public class OrderAdminService {
         }
 
         delivery.getItems().remove(item);
-        item.setDelivery(null);
+        //item.setDelivery(null);
+        //item.getOrderItem().setDeliveryItem(null);
 
         deliveryItemRepository.delete(item);
 

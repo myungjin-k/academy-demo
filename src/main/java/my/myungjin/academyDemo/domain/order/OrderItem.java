@@ -3,13 +3,13 @@ package my.myungjin.academyDemo.domain.order;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
-import my.myungjin.academyDemo.domain.item.ItemDisplay;
 import my.myungjin.academyDemo.domain.item.ItemDisplayOption;
 import my.myungjin.academyDemo.domain.review.Review;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static java.util.Optional.ofNullable;
@@ -53,9 +53,9 @@ public class OrderItem {
 
     @Setter @Getter
     @JsonManagedReference
-    @OneToOne
-    @JoinColumn(name = "delivery_item_id")
-    private DeliveryItem deliveryItem;
+    @OneToMany(mappedBy = "orderItem", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+    //@JoinColumn(name = "delivery_item_id")
+    private List<DeliveryItem> deliveryItems;
 
     @Setter @Getter
     @JsonManagedReference
@@ -71,4 +71,9 @@ public class OrderItem {
         return ofNullable(updateAt);
     }
 
+    public Optional<DeliveryItem> getLatestDeliveryItem(){
+        return deliveryItems.stream()
+                .filter(deliveryItem -> !DeliveryStatus.DELETED.equals(deliveryItem.getDelivery().getStatus()))
+                .reduce((deliveryItem, deliveryItem2) -> deliveryItem.getDelivery().getCreateAt().isAfter(deliveryItem2.getCreateAt()) ? deliveryItem : deliveryItem2);
+    }
 }

@@ -34,7 +34,7 @@ public class AdminOrderListResponse {
         this.size = option.getSize();
         this.color = option.getColor();
         this.count = entity.getCount();
-        Optional<DeliveryItem> deliveryItem = Optional.ofNullable(entity.getDeliveryItem());
+        Optional<DeliveryItem> deliveryItem = entity.getLatestDeliveryItem();
         this.deliveryStatus = deliveryItem.map(d -> d.getDelivery().getStatus().getDescription()).orElse("");
         return this;
     }

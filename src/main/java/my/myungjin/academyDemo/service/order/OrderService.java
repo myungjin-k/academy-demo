@@ -84,14 +84,13 @@ public class OrderService {
 
     private Order getItems(@Valid Id<Member, String> memberId, @Valid Order o){
         for(OrderItem item : o.getItems()){
-            List<DeliveryItem> deliveryItems = deliveryItemRepository
-                    .findAllByDeliveryOrderAndItemOptionIdAndDeliveryStatusNotOrderByCreateAtDesc(item.getOrder(), item.getItemOption().getId(), DeliveryStatus.DELETED);
-            if(deliveryItems.isEmpty())
+            /*List<DeliveryItem> deliveryItems = deliveryItemRepository
+                    .findAllByDeliveryOrderAndItemOptionIdAndDeliveryStatusNotOrderByCreateAtDesc(item.getOrder(), item.getItemOption().getId(), DeliveryStatus.DELETED);*/
+            DeliveryItem latestDItem = item.getLatestDeliveryItem().orElse(null);
+            if(latestDItem == null)
                 continue;
 
-            DeliveryItem dItem = deliveryItems.get(0);
-            item.setDeliveryItem(dItem);
-            if(!dItem.getDelivery().getStatus().equals(DeliveryStatus.DELIVERED))
+            if(!latestDItem.getDelivery().getStatus().equals(DeliveryStatus.DELIVERED))
                 continue;
             item.setReview(reviewRepository.findByOrderItemIdAndMemberId(item.getId(), memberId.value()).orElse(null));
         }
@@ -192,9 +191,9 @@ public class OrderService {
     @Transactional
     public Order modify(@Valid Id<Member, String> memberId, @Valid Id<Order, String> orderId, @Valid Order order) {
         Order o = findById(memberId, orderId);
-        Delivery d = deliveryRepository.getByOrderMemberIdAndOrderId(memberId.value(), orderId.value());
-        if(d.getStatus().getValue() > 1){
-            throw new StatusNotSatisfiedException(Order.class, orderId, d.getStatus());
+        List<Delivery> d = deliveryRepository.getAllByOrderOrderByCreateAtDesc(o);
+        if(d.get(0).getStatus().getValue() > 1){
+            throw new StatusNotSatisfiedException(Order.class, orderId, d.get(0).getStatus());
         }
         o.modify(order.getOrderName(), order.getOrderEmail().orElse(""), order.getOrderTel(), order.getOrderAddr1(), order.getOrderAddr2());
         return save(o);
@@ -224,12 +223,13 @@ public class OrderService {
         List<Delivery> deliveries = order.getDeliveries();
         for(Delivery d : deliveries){
             if(!DeliveryStatus.REQUESTED.equals(d.getStatus())){
-                throw new IllegalArgumentException("배송정보가 존재합니다. 관리자에게 문의 바랍니다. orderId=" + orderId + "deliveryId=" + d.getId());
+                throw new IllegalArgumentException("발송된 배송정보가 존재합니다. 관리자에게 문의 바랍니다. orderId=" + orderId + "deliveryId=" + d.getId());
             }
             d.updateStatus(DeliveryStatus.DELETED);
-            save(d);
+            //save(d);
         }
         order.cancel();
+        save(order);
 
         if(!reservesHistoryRepository.existsByTypeAndRefId(ReservesType.ORDER_CANCEL, order.getId())){
             int reserves = 0;
@@ -258,7 +258,7 @@ public class OrderService {
             couponRepository.save(coupon);
         });
 
-        return save(order);
+        return order;
     }
 
     private void saveOrderItems(List<Id<CartItem, String>> itemIds, Order order){
@@ -291,7 +291,7 @@ public class OrderService {
             dItem.setItemOption(item.getItemOption());
             dItem.setOrderItem(item);
             delivery.addItem(dItem);
-            item.setDeliveryItem(save(dItem));
+            //item.setDeliveryItem(save(dItem));
         }
     }
 
