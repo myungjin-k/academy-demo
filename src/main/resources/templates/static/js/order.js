@@ -51,12 +51,15 @@ var order = {
             if(p > usableP)
                 p = usableP;
             // 배송비, 쿠폰사용금액 제외한 총 결제금액 초과
-            const totalPayAmountExShippingFee = Number(_this.div.find('.amountInfo .totalItemPrice').text())
+            const shippingFee = Number(_this.div.find('.amountInfo .shippingFee').text())
+            const totalPayAmount = Number(_this.div.find('.amountInfo .payAmount').text())
                 - Number(_this.div.find('.amountInfo .totalDiscountPrice').text())
                 - Number(_this.div.find('.amountInfo .couponDiscountPrice').text())
-                - Number(_this.div.find('.amountInfo .shippingFee').text());
-            if(p >= totalPayAmountExShippingFee){
-                p = totalPayAmountExShippingFee - 1;
+                - shippingFee;
+            if(p >= totalPayAmount){
+                p = totalPayAmount;
+                if(shippingFee === 0)
+                    p -= 1;
             }
             $(this).val(p);
             _this.div.find('.amountInfo .usedPoints').text(p);

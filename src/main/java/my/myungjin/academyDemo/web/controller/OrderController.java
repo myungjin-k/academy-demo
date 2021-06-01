@@ -141,7 +141,7 @@ public class OrderController {
                         orderRequest.newOrder(),
                         orderRequest.newDelivery(),
                         orderRequest.collectItems(),
-                        orderRequest.getUsedCouponId() == null ?
+                        orderRequest.getUsedCouponId().isEmpty() ?
                                 empty() : Optional.of(Id.of(Coupon.class, orderRequest.getUsedCouponId()))
                 )
         );
