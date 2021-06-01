@@ -73,18 +73,17 @@ public class OrderDetailResponse {
                     return 0;
                 }).orElse(0);
         this.payAmount = spareAmount - this.couponDiscountedAmount;
-        List<Delivery> deliveries = entity.getDeliveries()
-                .stream()
-                .filter(delivery -> !delivery.getStatus().equals(DeliveryStatus.DELETED))
-                .collect(Collectors.toList());
-        Delivery d = deliveries.isEmpty() ? entity.getDeliveries().get(0) : deliveries.get(0);
-        this.orderStatus = d.getStatus().getDescription();
-        this.deliveryId = d.getId();
-        this.deliveryName = d.getReceiverName();
-        this.deliveryAddr1 = d.getReceiverAddr1();
-        this.deliveryAddr2 = d.getReceiverAddr2();
-        this.deliveryTel = d.getReceiverTel();
-        this.deliveryMessage = d.getMessage();
+        Delivery d = entity.getLatestDelivery();
+        //Delivery d = deliveries.isEmpty() ? entity.getDeliveries().get(0) : deliveries.;
+        if(d != null){
+            this.orderStatus = d.getStatus().getDescription();
+            this.deliveryId = d.getId();
+            this.deliveryName = d.getReceiverName();
+            this.deliveryAddr1 = d.getReceiverAddr1();
+            this.deliveryAddr2 = d.getReceiverAddr2();
+            this.deliveryTel = d.getReceiverTel();
+            this.deliveryMessage = d.getMessage();
+        }
         this.paymentUid = entity.getPaymentUid();
         return this;
     }

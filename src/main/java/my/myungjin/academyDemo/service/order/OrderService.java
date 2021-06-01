@@ -191,10 +191,13 @@ public class OrderService {
     @Transactional
     public Order modify(@Valid Id<Member, String> memberId, @Valid Id<Order, String> orderId, @Valid Order order) {
         Order o = findById(memberId, orderId);
-        List<Delivery> d = deliveryRepository.getAllByOrderOrderByCreateAtDesc(o);
-        if(d.get(0).getStatus().getValue() > 1){
-            throw new StatusNotSatisfiedException(Order.class, orderId, d.get(0).getStatus());
+        List<Delivery> requestedDeliveries = o.getDeliveriesByStatus(DeliveryStatus.REQUESTED);
+        //List<Delivery> d = deliveryRepository.getAllByOrderOrderByCreateAtDesc(o);
+
+        if(requestedDeliveries.isEmpty()){
+            throw new StatusNotSatisfiedException(Order.class, orderId, o.getLatestDelivery().getStatus());
         }
+
         o.modify(order.getOrderName(), order.getOrderEmail().orElse(""), order.getOrderTel(), order.getOrderAddr1(), order.getOrderAddr2());
         return save(o);
     }
@@ -202,14 +205,21 @@ public class OrderService {
     @Transactional
     public Delivery modify(@Valid Id<Member, String> memberId, @Valid Id<Order, String> orderId,
                            @Valid Id<Delivery, String> deliveryId, @Valid Delivery delivery) {
-        Delivery d = deliveryRepository.findByOrderMemberIdAndOrderIdAndId(memberId.value(), orderId.value(), deliveryId.value())
-                .orElseThrow(() -> new NotFoundException(Delivery.class, memberId, orderId, deliveryId));
-        if(d.getStatus().getValue() > 1){
-            throw new StatusNotSatisfiedException(Delivery.class, deliveryId, d.getStatus());
+        //Delivery d = deliveryRepository.findByOrderMemberIdAndOrderIdAndId(memberId.value(), orderId.value(), deliveryId.value())
+        //        .orElseThrow(() -> new NotFoundException(Delivery.class, memberId, orderId, deliveryId));
+        Order o = findById(memberId, orderId);
+
+        List<Delivery> requestedDeliveries = o.getDeliveriesByStatus(DeliveryStatus.REQUESTED);
+        if(requestedDeliveries.isEmpty()){
+            throw new StatusNotSatisfiedException(Order.class, orderId, o.getLatestDelivery().getStatus());
         }
-        d.modify(delivery.getReceiverName(), delivery.getReceiverTel(),
-                delivery.getReceiverAddr1(), delivery.getReceiverAddr2(), delivery.getMessage());
-        return save(d);
+
+        for(Delivery d : requestedDeliveries){
+            d.modify(delivery.getReceiverName(), delivery.getReceiverTel(),
+                    delivery.getReceiverAddr1(), delivery.getReceiverAddr2(), delivery.getMessage());
+            save(d);
+        }
+        return o.getLatestDelivery();
     }
 
     public Order cancel(@Valid Id<Member, String> memberId, @Valid Id<Order, String> orderId) throws IOException, IamportResponseException {

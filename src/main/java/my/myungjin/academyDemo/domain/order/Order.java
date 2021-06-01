@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static java.time.LocalDateTime.now;
 import static java.util.Optional.ofNullable;
@@ -151,5 +152,20 @@ public class Order {
 
     public void cancel(){
         this.isCancelled = true;
+    }
+
+    public Delivery getLatestDelivery(){
+            return deliveries.stream()
+                    .filter(delivery -> (isCancelled && delivery.getStatus().equals(DeliveryStatus.DELETED))
+                                || (!isCancelled && !delivery.getStatus().equals(DeliveryStatus.DELETED)))
+                    .reduce((delivery, delivery2) -> delivery.getCreateAt().isAfter(delivery.getCreateAt()) ? delivery : delivery2)
+                    .orElse(null);
+    }
+
+
+    public List<Delivery> getDeliveriesByStatus(DeliveryStatus status){
+        return deliveries.stream()
+                .filter(delivery -> status.equals(delivery.getStatus()))
+                .collect(Collectors.toList());
     }
 }
