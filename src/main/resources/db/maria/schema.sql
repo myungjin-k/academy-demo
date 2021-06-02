@@ -38,6 +38,7 @@ CREATE TABLE member (
                         rating          char DEFAULT 'B',
                         order_amount    int default 0,
                         reserves        int DEFAULT 0,
+
                         create_at       datetime DEFAULT CURRENT_TIMESTAMP(),
                         update_at       datetime DEFAULT null,
                         PRIMARY KEY (id),

@@ -9,6 +9,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,7 +56,7 @@ public class OrderItem {
     @JsonManagedReference
     @OneToMany(mappedBy = "orderItem", fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     //@JoinColumn(name = "delivery_item_id")
-    private List<DeliveryItem> deliveryItems;
+    private List<DeliveryItem> deliveryItems = new ArrayList<>();
 
     @Setter @Getter
     @JsonManagedReference
