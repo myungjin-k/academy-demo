@@ -33,13 +33,8 @@ public class OrderResponse {
         this.abbrItemName = entity.getAbbrOrderItems();
         this.totalAmount = entity.getTotalAmount();
         this.payAmount = this.totalAmount - entity.getUsedPoints();
-        List<Delivery> deliveries = entity.getDeliveries()
-                .stream()
-                .filter(delivery -> !delivery.getStatus().equals(DeliveryStatus.DELETED))
-                .collect(Collectors.toList());
-        this.status = deliveries.isEmpty() ?
-                DeliveryStatus.DELETED.getDescription() :
-                deliveries.get(0).getStatus().getDescription();
+        Delivery latestDelivery = entity.getLatestDelivery();
+        this.status = latestDelivery.getStatus().getDescription();
         this.items = entity.getItems().stream()
                 .map(orderItem -> new OrderItemResponse().of(orderItem))
                 .collect(Collectors.toList());
