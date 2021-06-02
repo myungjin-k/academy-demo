@@ -32,7 +32,7 @@ public class OrderResponse {
         this.orderDate = entity.getCreateAt().format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
         this.abbrItemName = entity.getAbbrOrderItems();
         this.totalAmount = entity.getTotalAmount();
-        this.payAmount = this.totalAmount - entity.getUsedPoints();
+        this.payAmount = this.totalAmount - entity.getUsedPoints() - entity.getCouponDiscounted() - entity.getItemDiscounted();
         List<Delivery> deliveries = entity.getDeliveries()
                 .stream()
                 .filter(delivery -> !delivery.getStatus().equals(DeliveryStatus.DELETED))

@@ -17,6 +17,7 @@ var order = {
     itemDiscounted : 0,
     pointUsed : 0,
     payAmount : 0,
+    shippingFee : 0,
     init : function(userId, items){
         var _this = this;
         _this.userId = userId;
@@ -61,7 +62,7 @@ var order = {
             const couponDiscounted = Number(_this.div.find('.amountInfo .couponDiscountPrice').text());
             const totalPayAmountExShippingFee = _this.orderAmount
                 - _this.couponDiscounted
-                - Number(_this.div.find('.amountInfo .shippingFee').text());
+                - _this.shippingFee;
             /*Number(_this.div.find('.amountInfo .totalItemPrice').text())
             - Number(_this.div.find('.amountInfo .totalDiscountPrice').text())
             - couponDiscounted
@@ -155,6 +156,7 @@ var order = {
         orderAmount += shippingFee;
         _this.div.find('.amountInfo .shippingFee').text(shippingFee);
         _this.div.find('.amountInfo .payAmount').text(orderAmount);
+        _this.shippingFee = shippingFee;
         _this.payAmount = orderAmount;
         _this.orderAmount = orderAmount;
     },
@@ -204,11 +206,12 @@ var order = {
         var receiverTel = form.find('#receiverTel1').val() + '-' + form.find('#receiverTel2').val() + '-' + form.find('#receiverTel3').val();
         form.find('input[name="receiverTel"]').val(receiverTel);
 
-        form.find('input[name="itemDiscounted"]').val(Number(_this.div.find('.amountInfo .totalDiscountPrice').text()));
-        form.find('input[name="couponDiscounted"]').val(Number(_this.div.find('.amountInfo .couponDiscountPrice').text()));
         var data = $('#form-save-order').serializeObject();
         data['cartItemIds'] = _this.collectItemIds();
-        data['payAmount'] = _this.div.find('.payAmount').text();
+        data['payAmount'] = _this.payAmount;
+        data['totalAmount'] = _this.orderAmount + _this.itemDiscounted;
+        data['itemDiscounted'] = _this.itemDiscounted;
+        data['couponDiscounted'] = _this.couponDiscounted;
         pay.exec(data);
         return data;
     },

@@ -43,6 +43,12 @@ public class OrderRequest {
 
     private String message;
 
+    private int totalAmount;
+
+    private int itemDiscounted;
+
+    private int couponDiscounted;
+
     // 일반 주문
     private List<String> cartItemIds;
 
@@ -57,7 +63,7 @@ public class OrderRequest {
     public OrderRequest(String name, String email, String tel, String addr1, String addr2, int usedPoints,
                         String receiverName, String receiverTel, String receiverAddr1, String receiverAddr2,
                         int status, String message, List<String> cartItemIds, List<CartRequest> items, String paymentUid,
-                        String usedCouponId) {
+                        String usedCouponId, int totalAmount, int couponDiscounted, int itemDiscounted) {
         this.name = name;
         this.email = email;
         this.tel = tel;
@@ -74,6 +80,9 @@ public class OrderRequest {
         this.items = items;
         this.paymentUid = paymentUid;
         this.usedCouponId = usedCouponId;
+        this.totalAmount = totalAmount;
+        this.couponDiscounted = couponDiscounted;
+        this.itemDiscounted = itemDiscounted;
     }
 
     public Order newOrder(){
@@ -85,6 +94,9 @@ public class OrderRequest {
                 .orderAddr2(addr2)
                 .usedPoints(usedPoints)
                 .paymentUid(paymentUid)
+                .totalAmount(totalAmount)
+                .itemDiscounted(itemDiscounted)
+                .couponDiscounted(couponDiscounted)
                 .build();
     }
 
