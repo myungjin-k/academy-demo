@@ -12,7 +12,12 @@ var order = {
     items : [],
     coupons : [],
     div : $('#div-order'),
+    orderAmount : 0,
+    couponDiscounted : 0,
+    itemDiscounted : 0,
+    pointUsed : 0,
     payAmount : 0,
+    shippingFee : 0,
     init : function(userId, items){
         var _this = this;
         _this.userId = userId;
@@ -24,23 +29,26 @@ var order = {
         _this.div.removeClass('d-none');
 
         _this.div.find('.amountInfo .couponBox').unbind('change').bind('change', function(){
+            const payAmount = _this.orderAmount - _this.pointUsed;
             const id = $(this).val();
-            const c = _this.coupons[id];
+            let c = _this.coupons[id];
+            if(c === undefined)
+                c = {couponType: ''};
+            let discounted = 0;
             if(c.couponType === 'AMOUNT') {
-                if(_this.payAmount < c.minAmount){
+                if(payAmount < c.minAmount){
                     alert('총 결제금액 ' + c.minAmount + '이상 주문 시 사용 가능한 쿠폰입니다.');
                     $(this).val('');
                     return false;
                 }
-                _this.div.find('.amountInfo .couponDiscountPrice').text(c.amount);
-                _this.payAmount -= c.amount;
-                _this.div.find('.amountInfo .payAmount').text(_this.payAmount);
+                discounted = c.amount;
             } else if(c.couponType === 'RATIO') {
-                const discounted = _this.payAmount * (c.amount / 100);
-                _this.div.find('.amountInfo .couponDiscountPrice').text(discounted);
-                _this.payAmount -= discounted;
-                _this.div.find('.amountInfo .payAmount').text(_this.payAmount);
+                discounted = payAmount * (c.amount / 100);
             }
+            _this.div.find('.amountInfo .couponDiscountPrice').text(discounted);
+            _this.couponDiscounted = discounted;
+            _this.payAmount = payAmount - _this.couponDiscounted;
+            _this.div.find('.amountInfo .payAmount').text(_this.payAmount);
             //console.log(c);
         });
 
@@ -51,16 +59,21 @@ var order = {
             if(p > usableP)
                 p = usableP;
             // 배송비, 쿠폰사용금액 제외한 총 결제금액 초과
-            const totalPayAmountExShippingFee = Number(_this.div.find('.amountInfo .totalItemPrice').text())
-                - Number(_this.div.find('.amountInfo .totalDiscountPrice').text())
-                - Number(_this.div.find('.amountInfo .couponDiscountPrice').text())
-                - Number(_this.div.find('.amountInfo .shippingFee').text());
+            const couponDiscounted = Number(_this.div.find('.amountInfo .couponDiscountPrice').text());
+            const totalPayAmountExShippingFee = _this.orderAmount
+                - _this.couponDiscounted
+                - _this.shippingFee;
+            /*Number(_this.div.find('.amountInfo .totalItemPrice').text())
+            - Number(_this.div.find('.amountInfo .totalDiscountPrice').text())
+            - couponDiscounted
+            - Number(_this.div.find('.amountInfo .shippingFee').text());*/
             if(p >= totalPayAmountExShippingFee){
                 p = totalPayAmountExShippingFee - 1;
             }
             $(this).val(p);
             _this.div.find('.amountInfo .usedPoints').text(p);
-            _this.payAmount -= p;
+            _this.pointUsed = p;
+            _this.payAmount = _this.orderAmount - _this.couponDiscounted - _this.pointUsed;
             _this.div.find('.amountInfo .payAmount').text(_this.payAmount);
         });
 
@@ -121,7 +134,7 @@ var order = {
         orderItems.empty();
         var _this = this;
         var totalItemPrice = 0;
-        var payAmount = 0;
+        var orderAmount = 0;
         $(_this.items).each(function(){
            var item = this;
            var tr = $('<tr/>');
@@ -134,15 +147,18 @@ var order = {
                .append($('<td class="price" />').append(oriPrice).append(salePrice))
             orderItems.append(tr);
             totalItemPrice += Number(item.oriPrice);
-            payAmount += Number(item.salePrice);
+            orderAmount += Number(item.salePrice);
         });
         _this.div.find('.amountInfo .totalItemPrice').text(totalItemPrice);
-        _this.div.find('.amountInfo .totalDiscountPrice').text(totalItemPrice - payAmount);
-        const shippingFee = (payAmount < 70000) ? 2500 : 0;
-        payAmount += shippingFee;
+        _this.itemDiscounted = totalItemPrice - orderAmount;
+        _this.div.find('.amountInfo .totalDiscountPrice').text(_this.itemDiscounted);
+        const shippingFee = (orderAmount < 70000) ? 2500 : 0;
+        orderAmount += shippingFee;
         _this.div.find('.amountInfo .shippingFee').text(shippingFee);
-        _this.div.find('.amountInfo .payAmount').text(payAmount);
-        _this.payAmount = payAmount;
+        _this.div.find('.amountInfo .payAmount').text(orderAmount);
+        _this.shippingFee = shippingFee;
+        _this.payAmount = orderAmount;
+        _this.orderAmount = orderAmount;
     },
     loadOrderInfo : function(){
         var _this = this;
@@ -189,9 +205,13 @@ var order = {
         form.find('input[name="tel"]').val(tel);
         var receiverTel = form.find('#receiverTel1').val() + '-' + form.find('#receiverTel2').val() + '-' + form.find('#receiverTel3').val();
         form.find('input[name="receiverTel"]').val(receiverTel);
+
         var data = $('#form-save-order').serializeObject();
         data['cartItemIds'] = _this.collectItemIds();
-        data['payAmount'] = _this.div.find('.payAmount').text();
+        data['payAmount'] = _this.payAmount;
+        data['totalAmount'] = _this.orderAmount + _this.itemDiscounted;
+        data['itemDiscounted'] = _this.itemDiscounted;
+        data['couponDiscounted'] = _this.couponDiscounted;
         pay.exec(data);
         return data;
     },

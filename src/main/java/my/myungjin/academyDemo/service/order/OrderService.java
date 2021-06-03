@@ -277,15 +277,12 @@ public class OrderService {
                                 .orElseThrow(() -> new NotFoundException(CartItem.class, itemId)))
                 .collect(Collectors.toList());
 
-        int totalAmount = 0;
         for(CartItem item : items){
             OrderItem oItem = new OrderItem(Util.getUUID(), item.getCount());
             oItem.setItemOption(item.getItemOption());
             oItem.setOrder(order);
             order.addItem(save(oItem));
-            totalAmount += oItem.getItemOption().getItemDisplay().getItemMaster().getPrice() * item.getCount();
         }
-        order.setTotalAmount(totalAmount);
         StringBuilder abbrOrderItems = new StringBuilder();
         abbrOrderItems.append( items.get(0).getItemOption().getItemDisplay().getItemDisplayName());
         if(items.size() > 1)

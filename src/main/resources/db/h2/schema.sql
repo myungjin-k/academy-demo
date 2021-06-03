@@ -200,6 +200,8 @@ CREATE TABLE order_master (
                               payment_uid          varchar(50),
                               is_cancelled         boolean default false,
                               coupon_used          varchar(50),
+                              coupon_discounted    number default 0,
+                              item_discounted      number default 0,
                               create_at            datetime DEFAULT CURRENT_TIMESTAMP(),
                               update_at            datetime DEFAULT null,
                               PRIMARY KEY (id),

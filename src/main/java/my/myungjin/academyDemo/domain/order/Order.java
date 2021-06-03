@@ -76,6 +76,14 @@ public class Order {
     @Column(name = "is_cancelled")
     private boolean isCancelled;
 
+    @Getter
+    @Column(name = "item_discounted")
+    private int itemDiscounted;
+
+    @Getter
+    @Column(name = "coupon_discounted")
+    private int couponDiscounted;
+
     @Setter
     @OneToOne
     @JsonManagedReference
@@ -109,7 +117,7 @@ public class Order {
     @Builder
     public Order(String id, int totalAmount, @Size(min = 1, max = 10) String orderName, String orderEmail,
                  @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$", message = "전화번호는 010-0000-0000 형태여야 합니다.") String orderTel,
-                 String orderAddr1, String orderAddr2, int usedPoints, String paymentUid) {
+                 String orderAddr1, String orderAddr2, int usedPoints, String paymentUid, int itemDiscounted, int couponDiscounted) {
         this.id = id;
         this.totalAmount = totalAmount;
         this.orderName = orderName;
@@ -119,6 +127,8 @@ public class Order {
         this.orderAddr2 = orderAddr2;
         this.usedPoints = usedPoints;
         this.paymentUid = paymentUid;
+        this.itemDiscounted = itemDiscounted;
+        this.couponDiscounted = couponDiscounted;
     }
 
     public Optional<LocalDateTime> getUpdateAt(){

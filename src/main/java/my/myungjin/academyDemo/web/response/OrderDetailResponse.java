@@ -56,12 +56,10 @@ public class OrderDetailResponse {
                 .map(orderItem -> new OrderItemResponse().of(orderItem))
                 .collect(Collectors.toList());
         this.orderAmount = entity.getTotalAmount();
-        int discountAmount = 0;
-        for(OrderItemResponse item : items){
-            discountAmount += (item.getItemPrice() - item.getSalePrice()) * item.getCount();
-        }
-        this.discountedAmount = discountAmount;
+        this.discountedAmount = entity.getItemDiscounted();
         this.usedPoints = entity.getUsedPoints();
+        this.couponDiscountedAmount = entity.getCouponDiscounted();
+        this.payAmount = this.orderAmount - (this.couponDiscountedAmount + this.discountedAmount + this.usedPoints);
         int spareAmount = this.orderAmount - this.discountedAmount - this.usedPoints;
         this.couponDiscountedAmount = entity.getCoupon()
                 .map(coupon -> {
