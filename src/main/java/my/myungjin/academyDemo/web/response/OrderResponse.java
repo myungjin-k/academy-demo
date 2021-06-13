@@ -34,7 +34,6 @@ public class OrderResponse {
         this.abbrItemName = entity.getAbbrOrderItems();
         this.totalAmount = entity.getTotalAmount();
         this.payAmount = this.totalAmount - entity.getUsedPoints() - entity.getCouponDiscounted() - entity.getItemDiscounted();
-        log.info("Delivery Info: {}", entity.getDeliveries());
         Delivery latestDelivery = entity.getLatestDelivery();
         this.status = latestDelivery.getStatus().getDescription();
         this.items = entity.getItems().stream()
