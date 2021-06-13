@@ -60,17 +60,6 @@ public class OrderDetailResponse {
         this.usedPoints = entity.getUsedPoints();
         this.couponDiscountedAmount = entity.getCouponDiscounted();
         this.payAmount = this.orderAmount - (this.couponDiscountedAmount + this.discountedAmount + this.usedPoints);
-        int spareAmount = this.orderAmount - this.discountedAmount - this.usedPoints;
-        this.couponDiscountedAmount = entity.getCoupon()
-                .map(coupon -> {
-                    Event e = coupon.getEvent().getEvent();
-                    if(e.getRatio() > 0)
-                        return (int) (spareAmount * (double) (coupon.getEvent().getEvent().getAmount()) / 100);
-                    else if(e.getAmount() > 0)
-                        return e.getAmount();
-                    return 0;
-                }).orElse(0);
-        this.payAmount = spareAmount - this.couponDiscountedAmount;
         Delivery d = entity.getLatestDelivery();
         //Delivery d = deliveries.isEmpty() ? entity.getDeliveries().get(0) : deliveries.;
         if(d != null){
