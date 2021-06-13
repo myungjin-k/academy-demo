@@ -1,8 +1,8 @@
 package my.myungjin.academyDemo.web.response;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import my.myungjin.academyDemo.domain.order.Delivery;
-import my.myungjin.academyDemo.domain.order.DeliveryStatus;
 import my.myungjin.academyDemo.domain.order.Order;
 
 import java.time.format.DateTimeFormatter;
@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Getter
 public class OrderResponse {
 
@@ -33,6 +34,7 @@ public class OrderResponse {
         this.abbrItemName = entity.getAbbrOrderItems();
         this.totalAmount = entity.getTotalAmount();
         this.payAmount = this.totalAmount - entity.getUsedPoints() - entity.getCouponDiscounted() - entity.getItemDiscounted();
+        log.info("Delivery Info: {}", entity.getDeliveries());
         Delivery latestDelivery = entity.getLatestDelivery();
         this.status = latestDelivery.getStatus().getDescription();
         this.items = entity.getItems().stream()
