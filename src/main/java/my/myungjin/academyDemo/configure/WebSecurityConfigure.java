@@ -1,6 +1,9 @@
 package my.myungjin.academyDemo.configure;
 
+import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.domain.member.Role;
+import my.myungjin.academyDemo.security.EntryPointUnauthorizedHandler;
+import my.myungjin.academyDemo.security.MyAccessDeniedHandler;
 import my.myungjin.academyDemo.security.MyAuthenticationProvider;
 import my.myungjin.academyDemo.security.User;
 import my.myungjin.academyDemo.service.admin.AdminService;
@@ -22,7 +25,12 @@ import javax.servlet.http.HttpServletResponse;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
+
+    private final EntryPointUnauthorizedHandler unauthorizedHandler;
+
+    private final MyAccessDeniedHandler accessDeniedHandler;
 
     @Override
     public void configure(WebSecurity web) {
@@ -67,14 +75,14 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
                 // 개발 옵션
                 .headers()
                 .disable()
-                //.exceptionHandling()
-                //.accessDeniedHandler(accessDeniedHandler)
-                //.authenticationEntryPoint(unauthorizedHandler)
+                .exceptionHandling()
+                .accessDeniedHandler(accessDeniedHandler)
+                .authenticationEntryPoint(unauthorizedHandler)
                 //.and()
                 // No session will be created or used by spring security
                 //.sessionManagement()
                 //.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                //.and()
+                .and()
                 .authorizeRequests()
                 .antMatchers("/auth").permitAll()
                 .antMatchers("/api/mall/join").permitAll()
