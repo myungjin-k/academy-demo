@@ -15,6 +15,7 @@ import my.myungjin.academyDemo.domain.order.CartItem;
 import my.myungjin.academyDemo.domain.order.Delivery;
 import my.myungjin.academyDemo.domain.order.Order;
 import my.myungjin.academyDemo.iamport.IamportClient;
+import my.myungjin.academyDemo.security.MyAuthentication;
 import my.myungjin.academyDemo.security.User;
 import my.myungjin.academyDemo.service.member.MemberService;
 import my.myungjin.academyDemo.service.order.CartService;
@@ -57,11 +58,11 @@ public class OrderController {
     @ApiOperation(value = "장바구니 추가 (리스트)")
     public Response<List<CartItem>> addCart(
             @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String id,
-            @RequestBody List<CartRequest> requestList, @AuthenticationPrincipal Authentication authentication){
+            @RequestBody List<CartRequest> requestList, @AuthenticationPrincipal MyAuthentication authentication){
         return OK(
                 cartService.addItems(
                         Id.of(Member.class, id),
-                        Id.of(Member.class, ((User) authentication.getDetails()).getId()),
+                        Id.of(Member.class, authentication.id),
                         requestList)
         );
     }
@@ -70,10 +71,10 @@ public class OrderController {
     @ApiOperation(value = "장바구니 리스트 조회")
     public Response<List<CartItem>> cart(
             @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String id,
-            @AuthenticationPrincipal Authentication authentication
+            @AuthenticationPrincipal MyAuthentication authentication
     ){
       return OK(
-              cartService.findByMember(Id.of(Member.class, id), Id.of(Member.class, ((User)authentication.getDetails()).getId()))
+              cartService.findByMember(Id.of(Member.class, id), Id.of(Member.class, authentication.id))
       );
     }
 
@@ -82,11 +83,11 @@ public class OrderController {
     public Response<CartItem> modifyCartItemCount(
             @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String id,
             @PathVariable @ApiParam(value = "대상 장바구니 상품 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String itemId,
-            @RequestParam int count, @AuthenticationPrincipal Authentication authentication){
+            @RequestParam int count, @AuthenticationPrincipal MyAuthentication authentication){
         return OK(
                 cartService.modify(
                         Id.of(Member.class, id),
-                        Id.of(Member.class, ((User)authentication.getDetails()).getId()),
+                        Id.of(Member.class, authentication.id),
                         Id.of(CartItem.class, itemId),
                         count
                 )
@@ -98,11 +99,11 @@ public class OrderController {
     public Response<CartItem> deleteCartItem(
             @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String id,
             @PathVariable @ApiParam(value = "대상 장바구니 상품 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String itemId,
-            @AuthenticationPrincipal Authentication authentication){
+            @AuthenticationPrincipal MyAuthentication authentication){
         return OK(
                 cartService.delete(
                         Id.of(Member.class, id),
-                        Id.of(Member.class, ((User)authentication.getDetails()).getId()),
+                        Id.of(Member.class, authentication.id),
                         Id.of(CartItem.class, itemId)
                 )
         );
@@ -111,10 +112,10 @@ public class OrderController {
 
     @GetMapping("/order/orderMemberInfo")
     @ApiOperation(value = "회원정보에서 주문자 정보 로드")
-    public Response<OrderInfoResponse> findOrderMemberInfo(@AuthenticationPrincipal Authentication authentication){
+    public Response<OrderInfoResponse> findOrderMemberInfo(@AuthenticationPrincipal MyAuthentication authentication){
         return OK(
                 OrderInfoResponse.of(
-                        orderService.findMemberInfo(Id.of(Member.class, ((User)authentication.getDetails()).getId()))
+                        orderService.findMemberInfo(Id.of(Member.class, authentication.id))
                                 .orElse(null)
                 )
         );

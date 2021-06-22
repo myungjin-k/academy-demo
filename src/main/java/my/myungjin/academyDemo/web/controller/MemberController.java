@@ -5,14 +5,13 @@ import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.member.Member;
-import my.myungjin.academyDemo.security.User;
+import my.myungjin.academyDemo.security.MyAuthentication;
 import my.myungjin.academyDemo.service.member.MemberService;
 import my.myungjin.academyDemo.web.Response;
 import my.myungjin.academyDemo.web.request.MemberRequest;
 import my.myungjin.academyDemo.web.request.PwChangeRequest;
 import my.myungjin.academyDemo.web.response.CouponSetResponse;
 import my.myungjin.academyDemo.web.response.MemberInfoResponse;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -64,27 +63,26 @@ public class MemberController {
 
     @GetMapping("/member/me")
     @ApiOperation(value = "회원 정보 조회")
-    public Response<MemberInfoResponse> getMyInfo(@AuthenticationPrincipal Authentication authentication){
+    public Response<MemberInfoResponse> getMyInfo(@AuthenticationPrincipal MyAuthentication authentication){
         return OK(
-                new MemberInfoResponse(memberService.findMyInfo(Id.of(Member.class, ((User)authentication.getDetails()).getId())))
+                new MemberInfoResponse(memberService.findMyInfo(Id.of(Member.class, authentication.id)))
         );
     }
 
     @PutMapping("/member/me")
     @ApiOperation(value = "회원 정보 수정")
-    public Response<Member> modifyMyInfo(@AuthenticationPrincipal Authentication authentication,
+    public Response<Member> modifyMyInfo(@AuthenticationPrincipal MyAuthentication authentication,
                                            @RequestBody MemberRequest request){
-        Id<Member, String> id = Id.of(Member.class, ((User)authentication.getDetails()).getId());
         return OK(
-                memberService.modify(id, request.toMember(id))
+                memberService.modify(Id.of(Member.class, authentication.id), request.toMember(Id.of(Member.class, authentication.id)))
         );
     }
 
     @GetMapping("/member/me/coupon/list")
     @ApiOperation(value = "회원 보유 쿠폰 조회")
-    public Response<Set<CouponSetResponse>> findMyCoupons(@AuthenticationPrincipal Authentication authentication){
+    public Response<Set<CouponSetResponse>> findMyCoupons(@AuthenticationPrincipal MyAuthentication authentication){
         return OK(
-                memberService.findMyCoupons(Id.of(Member.class, ((User)authentication.getDetails()).getId()))
+                memberService.findMyCoupons(Id.of(Member.class, authentication.id))
                 .stream()
                 .map(CouponSetResponse::new)
                 .collect(Collectors.toSet())

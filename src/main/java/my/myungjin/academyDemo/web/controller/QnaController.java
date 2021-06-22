@@ -10,6 +10,7 @@ import my.myungjin.academyDemo.domain.member.Admin;
 import my.myungjin.academyDemo.domain.member.Member;
 import my.myungjin.academyDemo.domain.qna.Qna;
 import my.myungjin.academyDemo.domain.qna.QnaReply;
+import my.myungjin.academyDemo.security.MyAuthentication;
 import my.myungjin.academyDemo.security.User;
 import my.myungjin.academyDemo.service.qna.QnaService;
 import my.myungjin.academyDemo.web.Response;
@@ -45,10 +46,10 @@ public class QnaController {
     })
     public Response<Page<Qna>> findMyQnas(
             @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String id,
-            @AuthenticationPrincipal Authentication authentication,
+            @AuthenticationPrincipal MyAuthentication authentication,
             PageRequest pageRequest){
         List<Qna> results = new ArrayList<>(qnaService.findByMember(
-                Id.of(Member.class, ((User) authentication.getDetails()).getId()),
+                Id.of(Member.class, authentication.id),
                 Id.of(Member.class, id)
         ));
         return OK(new PageImpl<>(results, pageRequest.of(), results.size()));
@@ -59,12 +60,12 @@ public class QnaController {
     public Response<Qna> ask(
             @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String id,
             @ModelAttribute QnaRequest qnaRequest,
-            @AuthenticationPrincipal Authentication authentication,
+            @AuthenticationPrincipal MyAuthentication authentication,
             @RequestPart(required = false) MultipartFile attachedImageFile
             ) throws IOException {
         return OK(
                 qnaService.ask(
-                        Id.of(Member.class, ((User) authentication.getDetails()).getId()),
+                        Id.of(Member.class, authentication.id),
                         Id.of(Member.class, id),
                         qnaRequest.getCateId(),
                         qnaRequest.getItemId(),
@@ -80,12 +81,12 @@ public class QnaController {
             @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String memberId,
             @PathVariable @ApiParam(value = "조회 대상 문의 PK", example = "1") Long qnaId,
             @ModelAttribute QnaRequest qnaRequest,
-            @AuthenticationPrincipal Authentication authentication,
+            @AuthenticationPrincipal MyAuthentication authentication,
             @RequestPart(required = false) MultipartFile attachedImageFile
     ) throws IOException {
         return OK(
                 qnaService.modify(
-                        Id.of(Member.class, ((User) authentication.getDetails()).getId()),
+                        Id.of(Member.class, authentication.id),
                         Id.of(Member.class, memberId),
                         Id.of(Qna.class, qnaId),
                         qnaRequest.getCateId(),
@@ -100,11 +101,11 @@ public class QnaController {
     public Response<Qna> delete(
             @PathVariable @ApiParam(value = "조회 대상 회원 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String memberId,
             @PathVariable @ApiParam(value = "조회 대상 문의 PK", example = "1") Long qnaId,
-            @AuthenticationPrincipal Authentication authentication
+            @AuthenticationPrincipal MyAuthentication authentication
     ){
         return OK(
                 qnaService.delete(
-                        Id.of(Member.class, ((User) authentication.getDetails()).getId()),
+                        Id.of(Member.class, authentication.id),
                         Id.of(Member.class, memberId),
                         Id.of(Qna.class, qnaId)
                 )
@@ -117,12 +118,12 @@ public class QnaController {
             @PathVariable @ApiParam(value = "조회 대상 문의 PK", example = "1") Long id,
             @ModelAttribute QnaRequest qnaRequest,
             @RequestPart(required = false) MultipartFile attachedImageFile,
-            @AuthenticationPrincipal Authentication authentication
+            @AuthenticationPrincipal MyAuthentication authentication
     ) throws IOException {
         return OK(
                 qnaService.reply(
                         Id.of(Qna.class, id),
-                        Id.of(Admin.class, ((User) authentication.getDetails()).getId()),
+                        Id.of(Admin.class, authentication.id),
                         qnaRequest.newReply()
                 )
         );

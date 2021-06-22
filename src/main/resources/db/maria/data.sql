@@ -28,7 +28,7 @@ INSERT INTO common_code (id, code, name_eng, name_kor, group_id) VALUES ('bea264
 
 INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount) VALUES ('3a18e633a5db4dbd8aaee218fe447fa4', 'mjkim', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진', 'open7894.v2@gmail.com', '010-1234-5678','XX시 XX구 XX로', '1-1111', 300000, 50000);
 
-INSERT INTO admin (id, admin_id, password) VALUES ('3a18e633a5db4dbd8aaee218fe447fa4', 'mjkim', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq');
+INSERT INTO admin (id, admin_id, password) VALUES ('3a28e633a5db4dbd8aaee218fe447fa4', 'mjkim', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq');
 
 INSERT INTO item_master (id, item_name, category_id, price, thumbnail) VALUES ('8c1cbb792b8d447e9128d53920cf9366', '[R택] 보더 알파카 니트', '44e94265588b428e8e01bbc23dfc0f7e', 72000, 'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/dev/itemMaster/4101950c-b655-49ce-b235-a482ce7a1773.jpg');
 
@@ -290,7 +290,7 @@ INSERT INTO delivery_item (id, delivery_id, item_id, count) VALUES ('7007fe7a116
 UPDATE order_item SET delivery_item_id = '7007fe7a1168469f969c036fcba06695' WHERE id = 'c7bb4cb6efcd4f4bb388eafb6fa52fac';
 
 INSERT INTO review (id, member_id, item_id, order_item_id, content) VALUES ('43f217fd86c34ce0a305e02b9972a29e', '3a18e633a5db4dbd8aaee218fe447fa4', 'f23ba30a47194a2c8a3fd2ccadd952a4', 'c7bb4cb6efcd4f4bb388eafb6fa52fac', '예뻐요');
-INSERT INTO review_comment(id, admin_id, review_id, content) values ('c2859d0c42974981b6a1a04f39f68bb1', '3a18e633a5db4dbd8aaee218fe447fa4', '43f217fd86c34ce0a305e02b9972a29e', '리뷰 감사드립니다. 500원 적립 도와드리겠습니다~!');
+INSERT INTO review_comment(id, admin_id, review_id, content) values ('c2859d0c42974981b6a1a04f39f68bb1', '3a28e633a5db4dbd8aaee218fe447fa4', '43f217fd86c34ce0a305e02b9972a29e', '리뷰 감사드립니다. 500원 적립 도와드리겠습니다~!');
 
 INSERT INTO reserves_history (member_id, type, amount) values ('3a18e633a5db4dbd8aaee218fe447fa4', 'ADMIN', 300000);
 

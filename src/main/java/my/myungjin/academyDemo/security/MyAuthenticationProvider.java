@@ -29,12 +29,12 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
         return processUserAuthentication(token);
     }
 
-    private Authentication processUserAuthentication(MyAuthenticationToken token){
+    private Authentication processUserAuthentication(MyAuthenticationToken requested){
         try {
             User user = User.builder()
-                    .userId(token.getPrincipal())
-                    .password(String.valueOf(token.getCredentials()))
-                    .role(token.getType())
+                    .userId(requested.getPrincipal().toString())
+                    .password(String.valueOf(requested.getCredentials()))
+                    .role(requested.getType())
                     .build();
 
             if(user.getRole().equals(Role.ADMIN)){
@@ -43,7 +43,10 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
                 user.setId(memberService.login(user.getUserId(), user.getPassword()));
             }
 
-            MyAuthenticationToken authenticated = new MyAuthenticationToken(user.getUserId(), user.getPassword(), createAuthorityList(user.getRole().getValue()));
+            MyAuthenticationToken authenticated =
+                    new MyAuthenticationToken(new MyAuthentication(user.getId(), user.getUserId(), user.getRole()),
+                            null,
+                            createAuthorityList(user.getRole().getValue()));
             authenticated.setDetails(user);
             return authenticated;
         } catch (NotFoundException e) {

@@ -3,9 +3,10 @@ package my.myungjin.academyDemo.security;
 import lombok.*;
 import my.myungjin.academyDemo.domain.member.Role;
 
+@EqualsAndHashCode(of = {"id", "role"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class User {
+public class User{
 
     @Setter
     private String id;

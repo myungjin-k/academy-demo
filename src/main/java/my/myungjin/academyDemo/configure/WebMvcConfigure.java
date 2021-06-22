@@ -3,7 +3,6 @@ package my.myungjin.academyDemo.configure;
 
 import lombok.RequiredArgsConstructor;
 import my.myungjin.academyDemo.security.AuthenticationInterceptor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
@@ -42,10 +41,7 @@ public class WebMvcConfigure implements WebMvcConfigurer {
 
     }
 
-    /*@Bean
-    public AuthenticationInterceptor authenticationInterceptor(){
-        return new AuthenticationInterceptor();
-    }*/
+
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -55,6 +51,7 @@ public class WebMvcConfigure implements WebMvcConfigurer {
                 .addPathPatterns("/admin/**")
         ;
     }
+
 
     @Override
     public void addFormatters(FormatterRegistry registry) {

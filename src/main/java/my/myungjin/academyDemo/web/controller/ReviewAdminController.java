@@ -9,7 +9,7 @@ import my.myungjin.academyDemo.commons.Id;
 import my.myungjin.academyDemo.domain.member.Admin;
 import my.myungjin.academyDemo.domain.review.Review;
 import my.myungjin.academyDemo.domain.review.ReviewComment;
-import my.myungjin.academyDemo.security.User;
+import my.myungjin.academyDemo.security.MyAuthentication;
 import my.myungjin.academyDemo.service.admin.ReviewAdminService;
 import my.myungjin.academyDemo.service.review.ReviewCommentService;
 import my.myungjin.academyDemo.web.Response;
@@ -19,7 +19,6 @@ import my.myungjin.academyDemo.web.response.AdminReviewResponse;
 import my.myungjin.academyDemo.web.response.ReviewDetailResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -107,11 +106,11 @@ public class ReviewAdminController {
     public Response<ReviewComment> commentReview(
             @PathVariable @ApiParam(value = "조회 대상 리뷰 PK", example = "3a18e633a5db4dbd8aaee218fe447fa4") String reviewId,
             @RequestBody @ApiParam(value = "코멘트 내용", example = "{'content', : 'comment contents'}") Map<String, String> param,
-            @AuthenticationPrincipal Authentication authentication) {
+            @AuthenticationPrincipal MyAuthentication authentication) {
         return OK(
                 reviewCommentService.write(
                         Id.of(Review.class, reviewId),
-                        Id.of(Admin.class, ((User)authentication.getDetails()).getId()),
+                        Id.of(Admin.class, authentication.id),
                         new ReviewComment(param.get("content"))
                 )
         );

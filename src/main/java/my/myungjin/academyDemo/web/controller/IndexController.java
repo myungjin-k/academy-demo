@@ -13,12 +13,14 @@ import my.myungjin.academyDemo.domain.item.ItemStatus;
 import my.myungjin.academyDemo.domain.member.Rating;
 import my.myungjin.academyDemo.domain.member.Role;
 import my.myungjin.academyDemo.domain.order.DeliveryStatus;
+import my.myungjin.academyDemo.security.MyAuthentication;
 import my.myungjin.academyDemo.security.User;
 import my.myungjin.academyDemo.service.admin.CommonCodeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -40,6 +42,8 @@ public class IndexController {
     private final S3Client s3Client;
 
     private final Logger log = LoggerFactory.getLogger(getClass());
+
+    private final SessionRegistry sessionRegistry;
 
     @PostMapping("/test/upload")
     public String imgUploadTest(@RequestPart MultipartFile imageFile) throws IOException {
@@ -79,13 +83,14 @@ public class IndexController {
 
 
     @GetMapping("/mall/index")
-    public String main(Model model, @AuthenticationPrincipal Authentication authentication){
+    public String main(Model model, @AuthenticationPrincipal MyAuthentication authentication){
         setItemCategories(model);
-        if(authentication != null) {
-            User loginUser = (User) authentication.getDetails();
-            if(Role.MEMBER.equals(loginUser.getRole()))
-                model.addAttribute("loginUser", loginUser);
-        }
+
+        List<Object> temp = sessionRegistry.getAllPrincipals();
+        if(authentication != null && Role.MEMBER.equals(authentication.role))
+        setLoginUser(model, authentication);
+        /*if(authentication != null && Role.MEMBER.equals(authentication.role))
+            setLoginUser(model, authentication);*/
         return "index";
     }
 
@@ -106,13 +111,10 @@ public class IndexController {
     }
 
     @GetMapping("/mall/myPage")
-    public String myPageIndex(Model model, @AuthenticationPrincipal Authentication authentication){
+    public String myPageIndex(Model model, @AuthenticationPrincipal MyAuthentication authentication){
         setItemCategories(model);
-        if(authentication != null){
-            User loginUser = (User) authentication.getDetails();
-            if(Role.MEMBER.equals(loginUser.getRole()))
-                model.addAttribute("loginUser", loginUser);
-        }
+        if(authentication != null && Role.MEMBER.equals(authentication.role))
+            setLoginUser(model, authentication);
         return "mypage";
     }
 
@@ -122,56 +124,67 @@ public class IndexController {
     }
 
     @GetMapping("/admin/codeIndex")
-    public String adminCodeIndex(Model model, @AuthenticationPrincipal Authentication authentication){
-        setLoginUser(model, authentication);
+    public String adminCodeIndex(Model model, @AuthenticationPrincipal MyAuthentication authentication){
+        if(authentication != null)
+            setLoginUser(model, authentication);
         model.addAttribute("isAdmin", true);
         return "admin/code";
     }
 
     @GetMapping("/admin/itemIndex")
-    public String adminItemIndex(Model model, @AuthenticationPrincipal Authentication authentication){
+    public String adminItemIndex(Model model, @AuthenticationPrincipal MyAuthentication authentication){
         setItemCategories(model);
-        setLoginUser(model, authentication);
+        if(authentication != null)
+            setLoginUser(model, authentication);
         model.addAttribute("isAdmin", true);
         model.addAttribute("itemStatus", ItemStatus.values());
         return "admin/item";
     }
 
     @GetMapping("/admin/orderIndex")
-    public String adminOrderIndex(Model model, @AuthenticationPrincipal Authentication authentication){
+    public String adminOrderIndex(Model model, @AuthenticationPrincipal MyAuthentication authentication){
         setItemCategories(model);
-        setLoginUser(model, authentication);
+        if(authentication != null)
+            setLoginUser(model, authentication);
         model.addAttribute("isAdmin", true);
         model.addAttribute("deliveryStatus", DeliveryStatus.values());
         return "admin/order";
     }
 
     @GetMapping("/admin/reviewIndex")
-    public String adminReviewIndex(Model model, @AuthenticationPrincipal Authentication authentication){
+    public String adminReviewIndex(Model model, @AuthenticationPrincipal MyAuthentication authentication){
         setItemCategories(model);
-        setLoginUser(model, authentication);
+        if(authentication != null)
+            setLoginUser(model, authentication);
         model.addAttribute("isAdmin", true);
         model.addAttribute("deliveryStatus", DeliveryStatus.values());
         return "admin/review";
     }
 
     @GetMapping("/admin/memberIndex")
-    public String adminMemberIndex(Model model, @AuthenticationPrincipal Authentication authentication){
+    public String adminMemberIndex(Model model, @AuthenticationPrincipal MyAuthentication authentication){
         setItemCategories(model);
-        setLoginUser(model, authentication);
+        if(authentication != null)
+            setLoginUser(model, authentication);
         model.addAttribute("isAdmin", true);
         return "admin/member";
     }
 
     @GetMapping("/admin/eventIndex")
-    public String adminEventIndex(Model model, @AuthenticationPrincipal Authentication authentication){
+    public String adminEventIndex(Model model, @AuthenticationPrincipal MyAuthentication authentication){
         //setItemCategories(model);
-        setLoginUser(model, authentication);
+        if(authentication != null)
+            setLoginUser(model, authentication);
         model.addAttribute("isAdmin", true);
         model.addAttribute("eventType", EventType.values());
         model.addAttribute("eventStatus", EventStatus.values());
         model.addAttribute("rating", Rating.values());
         return "admin/event";
+    }
+
+    @GetMapping("/duplicate-session")
+    public String duplicateSession(){
+        return "duplicateSession";
     }
 
     private void setItemCategories(Model model){
@@ -180,11 +193,8 @@ public class IndexController {
         model.addAttribute("items", itemCategories);
     }
 
-    private void setLoginUser(Model model, @AuthenticationPrincipal Authentication authentication){
-        if(authentication != null){
-            User loginUser = (User) authentication.getDetails();
-            model.addAttribute("loginUser", loginUser);
-        }
+    private void setLoginUser(Model model, @AuthenticationPrincipal MyAuthentication authentication){
+        model.addAttribute("loginUser", authentication);
     }
 }
 

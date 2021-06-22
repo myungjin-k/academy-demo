@@ -1,28 +1,34 @@
 package my.myungjin.academyDemo.configure;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import my.myungjin.academyDemo.domain.member.Role;
-import my.myungjin.academyDemo.security.EntryPointUnauthorizedHandler;
-import my.myungjin.academyDemo.security.MyAccessDeniedHandler;
-import my.myungjin.academyDemo.security.MyAuthenticationProvider;
-import my.myungjin.academyDemo.security.User;
+import my.myungjin.academyDemo.security.*;
 import my.myungjin.academyDemo.service.admin.AdminService;
 import my.myungjin.academyDemo.service.member.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.DefaultRedirectStrategy;
+import org.springframework.security.web.RedirectStrategy;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -40,6 +46,18 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
+    public SessionRegistry mySessionRegistry() {
+        return new SessionRegistryImpl();
+    }
+/*
+
+    @Bean
+    public MyAuthenticationFilter authenticationFilter() {
+        return new MyAuthenticationFilter(mySessionRegistry());
+    }
+*/
+
+    @Bean
     public MyAuthenticationProvider authenticationProvider(MemberService memberService, AdminService adminService) {
         return new MyAuthenticationProvider(memberService, adminService);
     }
@@ -48,6 +66,11 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Autowired
+    public void configureAuthentication(AuthenticationManagerBuilder builder, MyAuthenticationProvider authenticationProvider) {
+        builder.authenticationProvider(authenticationProvider);
     }
 
     @Bean
@@ -63,6 +86,16 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
         decisionVoters.add(new WebExpressionVoter());
         // 모든 voter가 승인해야 해야한다.
         return new UnanimousBased(decisionVoters);
+    }*/
+
+    @Bean
+    public ServletListenerRegistrationBean<HttpSessionEventPublisher> httpSessionEventPublisher() {
+        return new ServletListenerRegistrationBean<HttpSessionEventPublisher>(new HttpSessionEventPublisher());
+    }
+
+    /*@Bean
+    public MyAuthenticationSuccessHandler authenticationSuccessHandler() {
+        return new MyAuthenticationSuccessHandler(mySessionRegistry());
     }*/
 
     @Override
@@ -91,21 +124,37 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/mall/member/password").permitAll()
                 .antMatchers("/api/mall/member/**").hasRole(Role.MEMBER.name())
                 .antMatchers("/api/admin/**").hasRole(Role.ADMIN.name())
+                .antMatchers("/admin/login").permitAll()
+                .antMatchers("/admin/**").hasRole(Role.ADMIN.name())
                 //.accessDecisionManager(accessDecisionManager())
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
                 .disable()
-                .logout(logout -> logout.logoutSuccessHandler((request, response, authentication) -> {
-                    Role role = ((User)(authentication.getDetails())).getRole();
-                    if(role.equals(Role.ADMIN)){
-                        response.sendRedirect("/admin/login");
-                    } else {
-                        response.sendRedirect("/");
-                    }
-                }))
+                /*.loginPage("/mall/login")
+                .loginPage("/admin/login")
+                //.loginProcessingUrl("/auth")
+                .successHandler((request, response, authentication) -> {
+                    HttpSession session = request.getSession(false);
+                    mySessionRegistry().registerNewSession(session.getId(), authentication.getPrincipal());
+                    Role role  = ((MyAuthentication) authentication.getPrincipal()).role;
+                    String redirectUri = String.valueOf(authentication.getDetails());
+
+                    RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+                    redirectStrategy.sendRedirect(request, response,
+                            redirectUri != null ? redirectUri :
+                                role == Role.ADMIN ? "/admin/codeIndex" : "/");
+                })
+                .and()*/
+                .logout()
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true) /*로그아웃시 세션 제거*/
+                .deleteCookies("JSESSIONID") /*쿠키 제거*/
+                .clearAuthentication(true) /*권한정보 제거*/
+                .and()
                 .sessionManagement()
                 .maximumSessions(1) /* session 허용 갯수 */
+
                 .expiredSessionStrategy(sessionInformationExpiredEvent -> {
                     String requestUri = sessionInformationExpiredEvent.getRequest().getRequestURI();
                     HttpServletResponse response = sessionInformationExpiredEvent.getResponse();
@@ -115,8 +164,11 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
                         response.sendRedirect("/admin/login");
                     }
                 })
+                .sessionRegistry(mySessionRegistry())
                 .maxSessionsPreventsLogin(true)
+
         ;
+ //       http.addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
 

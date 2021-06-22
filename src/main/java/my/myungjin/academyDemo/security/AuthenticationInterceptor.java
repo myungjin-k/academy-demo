@@ -1,5 +1,6 @@
 package my.myungjin.academyDemo.security;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+@Slf4j
 @Component
 public class AuthenticationInterceptor implements HandlerInterceptor {
 
@@ -37,7 +39,6 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession();
         SecurityContextImpl securityContext = (SecurityContextImpl) session.getAttribute("SPRING_SECURITY_CONTEXT");
         if(securityContext != null && securityContext.getAuthentication().isAuthenticated()) {
-            session.setMaxInactiveInterval(30 * 60);
             return true;
         } else {
             if(uri.equals("/mall/login") || uri.equals("/admin/login"))

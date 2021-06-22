@@ -38,7 +38,7 @@ public class ReviewCommentServiceTest {
     @BeforeAll
     void setup(){
         reviewId = Id.of(Review.class, "43f217fd86c34ce0a305e02b9972a29e");
-        adminId = Id.of(Admin.class, "3a18e633a5db4dbd8aaee218fe447fa4");
+        adminId = Id.of(Admin.class, "3a28e633a5db4dbd8aaee218fe447fa4");
     }
 
 

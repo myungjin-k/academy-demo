@@ -42,7 +42,7 @@ INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reser
 //INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount) VALUES ('00bc6f4f3992497aae219b49b8996da7', 'mjkim9', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진8', 'open7894.v10@gmail.com', '010-1234-5670','XX시 XX구 XX로', '1-1111', 3000, 0);
 //INSERT INTO member (id, user_id, password, name, email, tel, addr1, addr2, reserves, order_amount) VALUES ('29b06db3a5704c389ae6082b04d6b08c', 'mjkim10', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq', '명진9', 'open7894.v11@gmail.com', '010-1234-5679','XX시 XX구 XX로', '1-1111', 3000, 0);
 
-INSERT INTO admin (id, admin_id, password) VALUES ('3a18e633a5db4dbd8aaee218fe447fa4', 'mjkim', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq');
+INSERT INTO admin (id, admin_id, password) VALUES ('3a28e633a5db4dbd8aaee218fe447fa4', 'mjkim', '$2a$10$DDspWXEeR0OuJio7QfKQJukEC55JyHwkoUl/j2Zn64XLhuXoxNkKq');
 
 INSERT INTO item_master (id, item_name, category_id, price, thumbnail) VALUES ('8c1cbb792b8d447e9128d53920cf9366', '[R택] 보더 알파카 니트', '44e94265588b428e8e01bbc23dfc0f7e', 72000, 'https://myungjin-mall.s3.ap-northeast-2.amazonaws.com/dev/itemMaster/4101950c-b655-49ce-b235-a482ce7a1773.jpg');
 

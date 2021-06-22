@@ -39,8 +39,8 @@ public class MyAuthenticationToken extends AbstractAuthenticationToken {
     }
 
     @Override
-    public String getPrincipal() {
-        return principal.toString();
+    public Object getPrincipal() {
+        return principal;
     }
 
     public Role getType() {
