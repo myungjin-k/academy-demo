@@ -124,7 +124,8 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/mall/member/password").permitAll()
                 .antMatchers("/api/mall/member/**").hasRole(Role.MEMBER.name())
                 .antMatchers("/api/admin/**").hasRole(Role.ADMIN.name())
-                .antMatchers("/admin/login").permitAll()
+                .antMatchers("/admin/login")
+                    .access("hasIpAddress('127.0.0.1') or hasIpAddress('14.38.17.145') or hasIpAddress('221.145.101.36')")
                 .antMatchers("/admin/**").hasRole(Role.ADMIN.name())
                 //.accessDecisionManager(accessDecisionManager())
                 .anyRequest().permitAll()
@@ -153,8 +154,8 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
                 .clearAuthentication(true) /*권한정보 제거*/
                 .and()
                 .sessionManagement()
-                .maximumSessions(1) /* session 허용 갯수 */
-
+                .sessionFixation().migrateSession()
+                .maximumSessions(2) /* session 허용 갯수 */
                 .expiredSessionStrategy(sessionInformationExpiredEvent -> {
                     String requestUri = sessionInformationExpiredEvent.getRequest().getRequestURI();
                     HttpServletResponse response = sessionInformationExpiredEvent.getResponse();

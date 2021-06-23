@@ -1,5 +1,9 @@
 server:
   port: 7060
+  servlet:
+    session:
+      timeout: 30m
+      tracking-modes: cookie
 spring:
   application:
     name: academy_demo

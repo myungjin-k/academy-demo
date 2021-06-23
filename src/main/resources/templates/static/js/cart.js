@@ -11,9 +11,10 @@ function addCart(userId, itemList){
         alert('옵션을 확인해 주세요.');
         return false;
     } else {
+        const uri = '/api/mall/member/'+ userId +'/cart';
         $.ajax({
             type: 'POST',
-            url: '/api/mall/member/'+ userId +'/cart',
+            url: uri,
             dataType: 'json',
             contentType:'application/json; charset=utf-8',
             data: JSON.stringify(itemList)
@@ -21,12 +22,12 @@ function addCart(userId, itemList){
             //console.log(response);
             cart.init(userId);
         }).fail(function (error) {
-            alert(JSON.stringify(error));
             if(userId === undefined){
                 alert('로그인 후 이용해 주세요.');
-                location.href='/mall/login'
-                return false;
+            } else {
+                alert('오류가 발생했습니다. 관리자에게 문의하십시오. \n' + error.message );
             }
+            location.href='/mall/login';
         });
     }
 }
@@ -82,9 +83,10 @@ var cart = {
     },
     load : function(){
         var _this = this;
+        const uri = '/api/mall/member/' + _this.userId + '/cart/list';
         $.ajax({
             type: 'GET',
-            url: '/api/mall/member/' + _this.userId + '/cart/list',
+            url: uri,
             dataType: 'json',
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
@@ -135,11 +137,12 @@ var cart = {
                 $('#cart-items').append(row);
             });
         }).fail(function (error) {
-            alert(JSON.stringify(error));
             if(_this.userId === undefined){
                 alert('로그인 후 이용해 주세요.');
-                location.href='/mall/login'
+            } else {
+                alert('오류가 발생했습니다. 관리자에게 문의하십시오. \n' + error.message );
             }
+            location.href='/mall/login';
         });
     },
     delete : function (id){

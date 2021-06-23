@@ -160,9 +160,10 @@ var myOrderDetail = {
     },
     cancelOrder : function(){
         const _this = this;
+        const uri = '/api/mall/member/' + _this.userId + '/order/' + _this.orderId + '/cancel';
         $.ajax({
             type: 'PATCH',
-            url: '/api/mall/member/' + _this.userId + '/order/' + _this.orderId + '/cancel',
+            url: uri,
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
             var data = response.response;
@@ -172,11 +173,12 @@ var myOrderDetail = {
             _this.div.find('.updateDelivery').addClass('d-none');
             _this.div.find('.deliverInfo').removeClass('d-none');
         }).fail(function (error) {
-            alert(JSON.stringify(error));
             if(_this.userId === undefined){
                 alert('로그인 후 이용해 주세요.');
-                location.href='/mall/login'
+            } else {
+                alert('오류가 발생했습니다. 관리자에게 문의하십시오. \n' + error.message );
             }
+            location.href='/mall/login';
         });
     },
     updateDelivery : function(deliveryId){
@@ -186,9 +188,10 @@ var myOrderDetail = {
         form.find('input[name="receiverTel"]').val(receiverTel);
         const data = form.serializeObject();
         //console.log(data);
+        const uri = '/api/mall/member/' + _this.userId + '/order/' + _this.orderId + '/delivery/' +deliveryId;
         $.ajax({
             type: 'PUT',
-            url: '/api/mall/member/' + _this.userId + '/order/' + _this.orderId + '/delivery/' +deliveryId,
+            url: uri,
             dataType: 'json',
             contentType:'application/json; charset=utf-8',
             data: JSON.stringify(data)
@@ -200,11 +203,12 @@ var myOrderDetail = {
             _this.div.find('.updateDelivery').addClass('d-none');
             _this.div.find('.deliverInfo').removeClass('d-none');
         }).fail(function (error) {
-            alert(JSON.stringify(error));
             if(_this.userId === undefined){
                 alert('로그인 후 이용해 주세요.');
-                location.href='/mall/login'
+            } else {
+                alert('오류가 발생했습니다. 관리자에게 문의하십시오. \n' + JSON.stringify(error) );
             }
+            location.href='/mall/login';
         });
     },
     clear : function(){

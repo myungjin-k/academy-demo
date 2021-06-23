@@ -2,22 +2,22 @@ package my.myungjin.academyDemo.configure;
 
 
 import lombok.RequiredArgsConstructor;
-import my.myungjin.academyDemo.security.AuthenticationInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.time.format.DateTimeFormatter;
 
 @Configuration
 @RequiredArgsConstructor
 public class WebMvcConfigure implements WebMvcConfigurer {
 //    private final String baseApiPath = "api";
-
-    private final AuthenticationInterceptor authenticationInterceptor;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -45,11 +45,13 @@ public class WebMvcConfigure implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(authenticationInterceptor)
-                .addPathPatterns("/")
-                .addPathPatterns("/mall/**")
-                .addPathPatterns("/admin/**")
-        ;
+        registry.addInterceptor(new HandlerInterceptorAdapter() {
+            @Override
+            public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+                response.sendRedirect("/mall/index");
+                return false;
+            }
+        }).addPathPatterns("/");
     }
 
 

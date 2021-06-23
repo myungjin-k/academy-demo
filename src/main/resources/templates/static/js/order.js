@@ -94,9 +94,10 @@ var order = {
     },
     loadCoupons :  function() {
         var _this = this;
+        const url = '/api/mall/member/me/coupon/list';
         $.ajax({
             type: 'GET',
-            url: '/api/mall/member/me/coupon/list',
+            url: url,
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
             var data = response.response;
@@ -110,11 +111,12 @@ var order = {
                }
             });
         }).fail(function (error) {
-            alert(JSON.stringify(error));
             if(_this.userId === undefined){
                 alert('로그인 후 이용해 주세요.');
-                location.href='/mall/login'
+            } else {
+                alert('오류가 발생했습니다. 관리자에게 문의하십시오. \n' + error.message );
             }
+            location.href='/mall/login';
         });
     },
     copyOrdererInfo : function(){
@@ -162,9 +164,10 @@ var order = {
     },
     loadOrderInfo : function(){
         var _this = this;
+        const url = '/api/mall/order/orderMemberInfo';
         $.ajax({
             type: 'GET',
-            url: '/api/mall/order/orderMemberInfo',
+            url: url,
             contentType:'application/json; charset=utf-8'
         }).done(function(response) {
             _this.clearForm();
@@ -186,8 +189,10 @@ var order = {
             alert(JSON.stringify(error));
             if(_this.userId === undefined){
                 alert('로그인 후 이용해 주세요.');
-                location.href='/mall/login'
+            } else {
+                alert('오류가 발생했습니다. 관리자에게 문의하십시오. \n' + JSON.stringify(error) );
             }
+            location.href='/mall/login';
         });
     },
     collectItemIds : function(){
@@ -218,9 +223,10 @@ var order = {
     save : function(data, paymentUid){
         const _this = this;
         data['paymentUid'] = paymentUid;
+        const uri= '/api/mall/member/' + _this.userId + '/order';
         $.ajax({
             type: 'POST',
-            url: '/api/mall/member/' + _this.userId + '/order',
+            url: uri,
             dataType: 'json',
             contentType:'application/json; charset=utf-8',
             data: JSON.stringify(data)
@@ -234,8 +240,10 @@ var order = {
             pay.cancel(paymentUid);
             if(_this.userId === undefined){
                 alert('로그인 후 이용해 주세요.');
-                location.href='/mall/login'
+            } else {
+                alert('오류가 발생했습니다. 관리자에게 문의하십시오. \n' + JSON.stringify(error) );
             }
+            location.href='/mall/login';
         });
     }
 };

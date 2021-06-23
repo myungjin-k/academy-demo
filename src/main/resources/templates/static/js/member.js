@@ -52,7 +52,7 @@ var main = {
     },
     auth : function () {
         var data = $('#form-login').serializeObject();
-        //console.log(data.groupId);
+        //console.log(data);
         $.ajax({
             type: 'POST',
             url: '/auth',
@@ -61,6 +61,9 @@ var main = {
             data: JSON.stringify(data)
         }).done(function(response) {
             //console.log(response);
+            const message = response.response.message;
+            if(message !== null && message.length > 0)
+                alert(message);
             location.href = data.redirectUri === undefined ? "/" : redirectUri;
         }).fail(function (error) {
             alert(JSON.stringify(error));
