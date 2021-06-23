@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 import static my.myungjin.academyDemo.web.Response.OK;
@@ -48,6 +49,7 @@ public class AuthenticationController {
                 sessionInfos.forEach(SessionInformation::expireNow);
                 authenticaionResult.setMessage("duplicate login session detected. expire last sessions");
             }
+            req.getSession(true);
             String sessionId = req.changeSessionId();
             mySessionRegistry.registerNewSession(sessionId, authentication.getPrincipal());
             Cookie cookie = new Cookie("JSESSIONID", sessionId);
