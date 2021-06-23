@@ -125,7 +125,8 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/mall/member/**").hasRole(Role.MEMBER.name())
                 .antMatchers("/api/admin/**").hasRole(Role.ADMIN.name())
                 .antMatchers("/admin/login")
-                    .access("hasIpAddress('127.0.0.1') or hasIpAddress('14.38.17.145') or hasIpAddress('221.145.101.36')")
+                    .access("hasIpAddress('127.0.0.1') or hasIpAddress('14.38.17.145/32') or hasIpAddress('221.145.101.36/32') " +
+                            "or hasIpAddress('221.145.101.76/32') or hasIpAddress('222.111.44.11/32')")
                 .antMatchers("/admin/**").hasRole(Role.ADMIN.name())
                 //.accessDecisionManager(accessDecisionManager())
                 .anyRequest().permitAll()
