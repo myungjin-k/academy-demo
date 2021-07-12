@@ -26,11 +26,14 @@ public class EntryPointUnauthorizedHandler implements AuthenticationEntryPoint {
   @Override
   public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
     throws IOException, ServletException {
-    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    String redirectURI = request.getRequestURI().contains("admin") ? "/admin/login" : "/mall/login";
+
+    response.sendRedirect(redirectURI);
+    /*response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     response.setHeader("content-type", "application/json");
     response.getWriter().write(om.writeValueAsString(E401));
     response.getWriter().flush();
-    response.getWriter().close();
+    response.getWriter().close();*/
   }
 
 }
