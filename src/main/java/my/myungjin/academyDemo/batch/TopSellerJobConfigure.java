@@ -110,7 +110,7 @@ public class TopSellerJobConfigure {
                 "\t\t\t\t\t on id.id = ido.display_id\n" +
                 "\t\t\t   inner join delivery d\n" +
                 "\t\t\t\t\t on d.id = di.delivery_id\n" +
-                "\t\t where (d.status = 4 or d.status is null) and di.create_at > :createAt\n" +
+                "\t\t where (d.status = 4 or d.status is null) and d.update_at is not null and d.update_at > :createAt\n" +
                 "\t\t group by id.id\n" +
                 "\t\t order by sum(di.count)\n" +
                 ") t\n" +

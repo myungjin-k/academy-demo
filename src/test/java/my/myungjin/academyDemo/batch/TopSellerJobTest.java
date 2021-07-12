@@ -46,6 +46,7 @@ public class TopSellerJobTest {
         LocalDateTime dateTime = LocalDate.now().atStartOfDay();
         JobParameters jobParameters = new JobParametersBuilder()
             .addString("createAt", dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+            .addString("today", dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
             .toJobParameters();
 
         log.info("# Job parameter: (createAt={})", jobParameters.getString("createAt"));
